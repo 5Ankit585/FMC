@@ -6,17 +6,19 @@ import RegistrationModal from "./RegistrationModal";
 // import FacebookAuth from '../components/FacebookAuth';
 import Axios from "axios";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const LoginModal = ({ closeModal }) => {
-  const [openResetModal, setOpenResetModal] = useState(false);
-  const [registerModal, setRegisterModal] = useState(false);
-
+const LoginModal = () => {
+  const success = (msg) => toast.success(msg);
+  const eer = (msg) => toast.error(msg);
   const [records, setRecords] = useState([]);
   const [userRegistration, setUserRegistration] = useState({
     UsernameorEmail: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   let name, value;
   const handleInput = (e) => {
     name = e.target.name;
@@ -36,8 +38,6 @@ const LoginModal = ({ closeModal }) => {
     setRecords([...records, newRecord]);
 
     setUserRegistration({ UsernameorEmail: "", password: "" });
-
-    closeModal(false);
   };
 
   function sendToNode() {
@@ -49,22 +49,31 @@ const LoginModal = ({ closeModal }) => {
         console.log(resp.data);
         let jwt = resp.data.jwtToken;
         Cookies.set("jwtToken", jwt, { expires: 7 });
+        // success('fdvhufvv');
+        // toast.success('dfghvf')
+        navigate("/");
+        alert("success");
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err);
+        navigate("/login");
+        alert("success");
       });
   }
 
   return (
     <>
       <section className="w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-black/70 z-20">
+        {/* <button onClick={sucess}>Notify!</button> */}
+        <ToastContainer />
         <div className="drop-shadow-lg  w-[20rem] sm:w-[30rem] h-[32rem] rounded-xl">
           <div className="bg-gray-100 w-full h-full flex items-center justify-center">
             <div className="absolute top-2 right-2 w-4 font-bold">
               <button
                 className="text-black"
                 onClick={() => {
-                  closeModal(false);
+                  navigate("/");
                 }}
               >
                 X
@@ -115,18 +124,12 @@ const LoginModal = ({ closeModal }) => {
 
               <div className=" flex flex-col items-center md:flex-row md:space-x-2 w-full ">
                 <button
-                  onClick={() => {
-                    setRegisterModal(true);
-                  }}
                   className="p-2 mb-2 md:mb-0 w-full bg-blue-600 hover:bg-transparent hover:text-black border-2 text-center text-white font-semibold drop-shadow-lg"
                   type="button"
                 >
                   {" "}
                   Register
                 </button>
-                {registerModal && (
-                  <RegistrationModal closeModal={setRegisterModal} />
-                )}
                 <button
                   className="p-2 w-full text-black border-2 bg-transparent hover:bg-blue-600 hover:text-white font-semibold drop-shadow-lg"
                   type="submit"
@@ -138,17 +141,9 @@ const LoginModal = ({ closeModal }) => {
               </div>
 
               <div className="text-gray-500 text-center mt-5">
-                <p
-                  onClick={() => {
-                    setOpenResetModal(true);
-                  }}
-                  className="text-sm sm:text-md cursor-pointer hover:text-gray-400"
-                >
+                <p className="text-sm sm:text-md cursor-pointer hover:text-gray-400">
                   Forgot Your Password
                 </p>
-                {openResetModal && (
-                  <ForgotPassword closeModal={setOpenResetModal} />
-                )}
               </div>
               <p className="text-center text-black mt-4">------- or -------</p>
 

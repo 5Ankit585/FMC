@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ContactHeroSection from '../components/ContactHeroSection'
 import Footer from '../components/Footer'
 import GoogleAuth from '../components/GoogleAuth';
 import FacebookAuth from '../components/FacebookAuth';
-
+import axios from 'axios';
+import { host } from '../helper';
 const Registeration = () => {
+
+  useEffect(()=>{
+    axios.post(`${host}register`,{})
+  })
+
+
+  const [register,setregister] = {
+    "username":""
+  }
   return (
     <>
     <ContactHeroSection title = "Register"/>
@@ -15,7 +25,7 @@ const Registeration = () => {
 
             <div className="flex flex-col my-5">
               <label className="p-0.5 text-sm font-semibold mb-1 text-gray-500 " htmlFor="">Username</label>
-              <input className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400" type="text" placeholder="E.g. @vishal" required/>
+              <input name = "username" className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400" type="text" placeholder="E.g. @vishal" required/>
             </div>
 
             <div className="flex flex-col my-5">

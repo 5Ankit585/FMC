@@ -4,12 +4,11 @@ import GoogleAuth from "../components/GoogleAuth";
 import FacebookAuth from "../components/FacebookAuth";
 import RegistrationModal from "./RegistrationModal";
 import Axios from "axios";
-
+import { Navigate, useNavigate } from "react-router-dom";
 const SignupModal = ({ closeRegModal }) => {
   const [registerModal, setRegisterModal] = useState(false);
 
   const [records, setRecords] = useState([]);
-
   const [userRegistration, setUserRegistration] = useState({
     username: "",
     firstname: "",
@@ -27,6 +26,7 @@ const SignupModal = ({ closeRegModal }) => {
     setUserRegistration({ ...userRegistration, [name]: value });
   };
 
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -47,7 +47,7 @@ const SignupModal = ({ closeRegModal }) => {
       cpassword: "",
     });
 
-    closeRegModal(false);
+    navigate('/');
   };
 
   function sendToNode() {
@@ -76,7 +76,7 @@ const SignupModal = ({ closeRegModal }) => {
               <button
                 className="text-black"
                 onClick={() => {
-                  closeRegModal(false);
+                navigate('/')
                 }}
               >
                 X
@@ -179,7 +179,6 @@ const SignupModal = ({ closeRegModal }) => {
                       onClick={() => {
                         // setRegisterModal(true);
                         sendToNode();
-                        closeRegModal(false);
                       }}
                       className="p-2 mb-3 md:mb-0 w-full bg-blue-600 hover:bg-transparent hover:text-black border-2 text-center text-white font-semibold drop-shadow-lg"
                       type="button"

@@ -15,12 +15,12 @@ import RegistrationModal from '../Modals/RegistrationModal';
 const Home = () => {
   const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowPopup(true);
-    }, 10000);
-    return () => clearTimeout(timeout);
-  }, []);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setShowPopup(true);
+  //   }, 10000);
+  //   return () => clearTimeout(timeout);
+  // }, []);
   return (
     <>
     {showPopup && (<RegistrationModal closeModal={setShowPopup}/>)}

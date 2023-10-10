@@ -22,23 +22,21 @@ const Navbar = () => {
 
       <div className="hidden sm:flex pr-4 font-semibold">
         <button
-          onClick={() => {
-            setOpenModal(true);
-          }}
           className="bg-transparent text-white px-4 py-2 mr-3 hover:text-yellow-300"
+          onClick={() => {
+            navigate("/login");
+          }}
         >
           LOGIN
         </button>
-        {openModal && <LoginModal closeModal={setOpenModal} />}
         <button
           onClick={() => {
-            setOpenRegModal(true);
+            navigate("/signup");
           }}
           className="px-3 py-2 hover:text-yellow-300"
         >
           SIGNUP
         </button>
-        {openRegModal && <SignupModal closeRegModal={setOpenRegModal} />}
 
         {/* university login added  */}
         <button
@@ -47,7 +45,7 @@ const Navbar = () => {
           }}
           className="px-3 py-2 hover:text-yellow-300"
         >
-          Login as Admin 
+          Login as Admin
         </button>
       </div>
 

@@ -10,6 +10,8 @@ import Companion from './FooterPages/Companion';
 import AdminLogin from './Pages/Admin/AdminLogin';
 import UserList from './Pages/Admin/UserList'
 import AdminHome from './Pages/Admin/AdminHome';
+import LoginModal from './Modals/LoginModal';
+import SignupModal from './Modals/SignupModal';
 function App() {
 
  
@@ -27,6 +29,9 @@ function App() {
          <Route  path="/adminlogin" element={<AdminLogin />} ></Route>
          <Route path="/users" element={<UserList />} />
          <Route path="/profile" element={<AdminHome />} />
+
+         <Route path='/login' element={<LoginModal/>}></Route>
+         <Route path='/signup' element={<SignupModal/>}></Route>
       </Routes>
     </BrowserRouter>
    </>
