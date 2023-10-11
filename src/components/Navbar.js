@@ -45,7 +45,7 @@ const Navbar = () => {
           }}
           className="px-3 py-2 hover:text-yellow-300"
         >
-          Login as Admin
+          Uload Your College
         </button>
       </div>
 
