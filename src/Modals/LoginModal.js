@@ -3,7 +3,7 @@ import GoogleAuth from "../components/GoogleAuth";
 // import PasswordReset from '../Pages/PasswordReset';
 import ForgotPassword from "./ForgotPassword";
 import RegistrationModal from "./RegistrationModal";
-// import FacebookAuth from '../components/FacebookAuth';
+import FacebookAuth from '../components/FacebookAuth';
 import Axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +40,8 @@ const LoginModal = () => {
     setUserRegistration({ UsernameorEmail: "", password: "" });
   };
 
-  function sendToNode() {
+  function sendToNode(e) {
+    e.preventDefault();
     Axios.post("http://localhost:5000/login", {
       UsernameorEmail: userRegistration.UsernameorEmail,
       password: userRegistration.password,
@@ -50,15 +51,15 @@ const LoginModal = () => {
         let jwt = resp.data.jwtToken;
         Cookies.set("jwtToken", jwt, { expires: 7 });
         // success('fdvhufvv');
-        // toast.success('dfghvf')
+        toast.success('dfghvf')
         navigate("/");
-        alert("success");
+        // alert("success");
       })
       .catch((err) => {
         console.log(err);
         toast.error(err);
         navigate("/login");
-        alert("success");
+        // alert("success");
       });
   }
 
@@ -133,7 +134,7 @@ const LoginModal = () => {
                 <button
                   className="p-2 w-full text-black border-2 bg-transparent hover:bg-blue-600 hover:text-white font-semibold drop-shadow-lg"
                   type="submit"
-                  onClick={() => sendToNode()}
+                  onClick={sendToNode}
                 >
                   {" "}
                   Login
