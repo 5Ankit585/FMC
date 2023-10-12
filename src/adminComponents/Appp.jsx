@@ -12,10 +12,13 @@ import { useState } from "react";
 import "./Appp.css";
 
 const formTemplate = {
+  image:"",
   name: "",
   email: "",
-  review: "",
   comment: "",
+  course:"",
+  AdmissionDetails:"",
+  exceldata:{}
 };
 
 function App() {
@@ -30,7 +33,7 @@ function App() {
   const formComponents = [
     <UserForm data={data} updateFieldHandler={updateFieldHandler} />,
     <ReviewForm data={data} updateFieldHandler={updateFieldHandler} />,
-    <Thanks data={data} />,
+    <Thanks data={data} updateFieldHandler={updateFieldHandler} />,
   ];
 
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } =

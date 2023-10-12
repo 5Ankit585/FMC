@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import './NewAdminData.css'
-function App() {
-  const [excelData, setExcelData] = useState([]);
-
+function App({data,updateFieldHandler}) {
+  const [excelData, setExcelData] = useState(null);
   // Function to handle the file upload
   function saveFileDataToLocalstorage(event) {
     const file = event.target.files[0];
-
+    
     if (file) {
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        const data = e.target.result;
+        const res = e.target.result;
 
         // Parse the Excel data using a library like SheetJS (xlsx)
-        const workbook = XLSX.read(data, { type: 'array' });
+        const workbook = XLSX.read(res, { type: 'array' });
 
         // Assuming the first sheet is the one you want to parse
         const sheetName = workbook.SheetNames[0];
@@ -26,7 +25,7 @@ function App() {
 
         // Store the JSON data in state
         setExcelData(jsonData);
-
+        updateFieldHandler("exceldata",jsonData);
         alert('Excel data stored in state.');
       };
 

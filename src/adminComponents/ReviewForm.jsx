@@ -16,18 +16,18 @@ const ReviewForm = ({ data, updateFieldHandler }) => {
       <div className="form-control">
         <label htmlFor="comment">Courses</label>
         <textarea
-          name="Course"
+          name="course"
           id="course"
           placeholder="Enter your Course details"
           required
-          onChange={(e) => updateFieldHandler("comment", e.target.value)}
+          onChange={(e) => updateFieldHandler("course", e.target.value)}
         ></textarea>
       </div>
       <div className="form-control">
         <label htmlFor="comment">Admission Details</label>
         <textarea
           name="AdmissionDetails"
-          id="admissionDetails"
+          id="AdmissionDetails"
           placeholder="Write your Admission details"
           required
           onChange={(e) => updateFieldHandler("AdmissionDetails", e.target.value)}

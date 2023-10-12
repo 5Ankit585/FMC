@@ -7,8 +7,6 @@ import SignupModal from "../Modals/SignupModal";
 const Navbar = () => {
   const navigate = useNavigate();
   const [navbar, setNavbar] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [openRegModal, setOpenRegModal] = useState(false);
 
   const handleNav = () => {
     setNavbar(!navbar);
@@ -41,11 +39,11 @@ const Navbar = () => {
         {/* university login added  */}
         <button
           onClick={() => {
-            navigate("adminlogin");
+            navigate("/profile");
           }}
           className="px-3 py-2 hover:text-yellow-300"
         >
-          Uload Your College
+          Upload Your College
         </button>
       </div>
 
@@ -76,14 +74,10 @@ const Navbar = () => {
             </li>{" "}
           </Link>
           <li
-            onClick={() => {
-              setOpenModal(true);
-            }}
             className="p-2 py-3 border-b border-b-gray-600 cursor-pointer hover:text-gray-400"
           >
             LogIn
           </li>
-          {openModal && <LoginModal closeModal={setOpenModal} />}
           <Link to={`/passwordreset`}>
             <li className="p-2 py-3 border-b border-b-gray-600 hover:text-gray-400">
               Password Reset

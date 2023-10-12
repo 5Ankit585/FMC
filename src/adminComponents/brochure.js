@@ -13,6 +13,7 @@ function FileUpload() {
   const handleUpload = () => {
     if (selectedFile) {
       // You can perform actions with the selected file here, such as sending it to a server.
+      
       console.log('Selected file:', selectedFile);
       // Reset the selected file
       setSelectedFile(null);

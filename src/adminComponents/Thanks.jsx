@@ -3,14 +3,14 @@ import "./Thanks.css";
 import NewAdminData from "../Pages/Admin/NewAdminData";
 import FileUpload from "./brochure";
 
-const Thanks = ({ data }) => {
+const Thanks = ({data, updateFieldHandler }) => {
 
   
   return (
     <div className="thanks-container">
       <h2>Upload Your Fee Structure</h2>
       <p>
-        <NewAdminData />
+        <NewAdminData data={data} updateFieldHandler={updateFieldHandler}/>
       </p>
       <p>
         <FileUpload />

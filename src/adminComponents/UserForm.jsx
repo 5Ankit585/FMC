@@ -1,53 +1,67 @@
 import React, { useState } from "react";
 
 const UserForm = ({ data, updateFieldHandler }) => {
-  const profilePIcDefault =
-    "https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg";
+  const [profilePIcDefault,uploadimage] = useState("https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg");
 
-  const [name, setname] = useState("");
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [gender, setgender] = useState("");
-  const [img, setimg] = useState(profilePIcDefault);
-  const [checked, setchecked] = useState(false);
+  // const [name, setname] = useState("");
+  // const [email, setemail] = useState("");
 
   //covert img
-  const getBase64 = (file) => {
+  // const getBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onabort = (error) => reject(error);
+  //     reader.readAsDataURL(file);
+  //   });
+
+  const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onabort = (error) => reject(error);
-      reader.readAsDataURL(file);
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
     });
-  };
+};
+
+const uploadImage = async (event) => {
+    const file = event.target.files[0];
+    const base64 = await convertBase64(file);
+    // avatar.src = base64;
+    uploadimage(base64);
+    updateFieldHandler("image",base64);
+};
+
   //handle img
-  const handleImg = (e) => {
-    const file = e.target.files[0];
-    getBase64(file).then((base64) => {
-      localStorage["img"] = base64;
-      console.debug("File Store", base64);
-    });
-  };
+  // const handleImg = (e) => {
+  //   const file = e.target.files[0];
+  //   getBase64(file).then((base64) => {
+  //     localStorage["img"] = base64;
+  //     console.debug("File Store", base64);
+  //     console.log(base64)
+  //   });
+  // };
 
   //form submit handler
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (name === "") {
-      //   toast.error("Name Is Required");
-    } else if (email === "") {
-      //   toast.error("Email Is Required");
-    } else if (password === "") {
-      //   toast.error("Password is Required");
-    } else {
-      localStorage.setItem("name", name);
-      localStorage.setItem("email", email);
-      localStorage.setItem("password", password);
-      // localStorage.setItem("img", img);
-      localStorage.setItem("gender", gender);
-      localStorage.setItem("terms", checked);
-      //   toast.success("User Saved!");
-    }
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (name === "") {
+  //       // toast.error("Name Is Required");
+  //   } else if (email === "") {
+  //     //   toast.error("Email Is Required");
+  //   } else {
+  //     localStorage.setItem("name", name);
+  //     localStorage.setItem("email", email);
+  //     // localStorage.setItem("img", img);
+  //     //   toast.success("User Saved!");
+  //   }
+  // };
 
   return (
     <div>
@@ -70,31 +84,34 @@ const UserForm = ({ data, updateFieldHandler }) => {
           <input
             className="form-control"
             type="file"
-            onChange={handleImg}
+            onChange={uploadImage}
             name="file"
             id="formFile"
+            required
           />
         </div>
 
         <label htmlFor="exampleInputName">University/College Name:</label>
         <input
           type="text"
-          value={name}
-          onChange={(e) => setname(e.target.value)}
+          // value={name}
+          onChange={(e) => updateFieldHandler("name",e.target.value)}
           className="form-control"
           id="exampleInputName"
           aria-describedby="emailHelp"
+          required
         />
       </div>
       <div className="form-control">
         <label htmlFor="email">University domain</label>
         <input
           type="email"
-          value={email}
-          onChange={(e) => setemail(e.target.value)}
+          // value={email}
+          onChange={(e) => updateFieldHandler("email",e.target.value)}
           className="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"
+          required
         />
       </div>
     </div>

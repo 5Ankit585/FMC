@@ -1,31 +1,36 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
 import React, { useState } from "react";
-import "./AdminLogin.css";
+// import "./AdminLogin.css";
 // import bgImg from '../assets/img1.jpg';
 
 export default function Form() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [mobile, setmobile] = useState("");
+  const [location, setlocation] = useState("");
   const navigate = useNavigate();
   //getting email password
-  const userName = localStorage.getItem("email")
-    ? localStorage.getItem("email")
-    : "admin@admin.com";
-  const userPassword = localStorage.getItem("password")
-    ? localStorage.getItem("password")
-    : "admin";
+  // const userName = localStorage.getItem("email")
+  //   ? localStorage.getItem("email")
+  //   : "admin@admin.com";
+  // const userPassword = localStorage.getItem("password")
+  //   ? localStorage.getItem("password")
+  //   : "admin";
+
+  // const 
+
+  
 
   //submit function
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email === userName && password === userPassword) {
-      alert("Login success");
-      navigate("/profile");
-    } else {
-      alert("something Wrong");
-    }
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (email === userName && password === userPassword) {
+  //     alert("Login success");
+  //     navigate("/profile");
+  //   } else {
+  //     alert("something Wrong");
+  //   }
+  // };
   return (
     <section>
       <div className="register">
@@ -43,15 +48,15 @@ export default function Form() {
               aria-describedby="emailHelp"
             />
             <input
-              type="password"
+              type="location"
               placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={location}
+              onChange={(e) => setlocation(e.target.value)}
               id="exampleInputPassword1"
             />
             {/* <input type="password" placeholder="confirm password" /> */}
-            <input type="text" placeholder="mobile number" />
-            <button className="btn" onClick={handleSubmit}>
+            <input type="mobile" placeholder="mobile number" onChange={(e) => setmobile(e.target.value)}/>
+            <button className="btn" >
               Sign In
             </button>
           </form>
