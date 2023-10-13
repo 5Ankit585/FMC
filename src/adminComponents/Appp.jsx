@@ -6,34 +6,50 @@ import ReviewForm from "./ReviewForm";
 import Thanks from "./Thanks";
 import Steps from "./Steps";
 
+import {host} from '../helper';
+
 // Hooks
 import { useForm } from "./hooks/useForm";
-import { useState } from "react";
+// import { useState } from "react";
+import axios from 'axios';
 import "./Appp.css";
 
-const formTemplate = {
-  image:"",
-  name: "",
-  email: "",
-  comment: "",
-  course:"",
-  AdmissionDetails:"",
-  exceldata:{}
-};
+// const formTemplate = {
+//   image:"",
+//   name: "",
+//   email: "",
+//   comment: "",
+//   course:"",
+//   AdmissionDetails:"",
+//   exceldata:{},
+//   bouchre:""
+// };
 
 function App() {
-  const [data, setData] = useState(formTemplate);
-
-  const updateFieldHandler = (key, value) => {
-    setData((prev) => {
-      return { ...prev, [key]: value };
-    });
-  };
+  // const [data, setData] = useState(formTemplate);
+  const data = new FormData();
+  // const updateFieldHandler = (key, value) => {
+  //   setData((prev) => {
+  //     return { ...prev, [key]: value };
+  //   });
+  // };
+  
+  const uploadManager = async()=>{
+    console.log(data);
+    axios.post(`${host}collegeinfo`,data,{"mode":"cors"},{
+      'Content-Type': 'application/json',
+      'Origin': 'http://localhost:3000/', // Set to your React app's domain
+    }).then((res)=>{
+      console.log(res.data);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
 
   const formComponents = [
-    <UserForm data={data} updateFieldHandler={updateFieldHandler} />,
-    <ReviewForm data={data} updateFieldHandler={updateFieldHandler} />,
-    <Thanks data={data} updateFieldHandler={updateFieldHandler} />,
+    <UserForm data={data}  />,
+    <ReviewForm data={data}  />,
+    <Thanks  data={data}  />,
   ];
 
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } =
@@ -62,7 +78,7 @@ function App() {
                 <GrFormNext />
               </button>
             ) : (
-              <button type="button">
+              <button type="button" onClick={uploadManager}>
                 <span>Submit</span>
                 <FiSend />
               </button>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function FileUpload() {
+function FileUpload({data}) {
   const [selectedFile, setSelectedFile] = useState(null);
 
   // Function to handle file selection
@@ -13,9 +13,9 @@ function FileUpload() {
   const handleUpload = () => {
     if (selectedFile) {
       // You can perform actions with the selected file here, such as sending it to a server.
-      
       console.log('Selected file:', selectedFile);
       // Reset the selected file
+      data.append("bouchre",selectedFile);
       setSelectedFile(null);
     } else {
       alert('Please select a file to upload.');

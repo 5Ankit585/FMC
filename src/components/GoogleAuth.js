@@ -2,9 +2,10 @@ import React from 'react'
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import Image1 from "../Images/google1.png"
-
+import {useNavigate} from 'react-router-dom'
 
 const GoogleAuth = () => {
+    const navigate = useNavigate();
     const login = useGoogleLogin({
         onSuccess: async respose => {
             try {
@@ -13,11 +14,12 @@ const GoogleAuth = () => {
                         "Authorization": `Bearer ${respose.access_token}`
                     }
                 })
-    
-                console.log(res.data)
+                localStorage.setItem('LoginWithGoogle',true);
+                
+                navigate('/');
+
             } catch (err) {
                 console.log(err)
-    
             }
     
         }

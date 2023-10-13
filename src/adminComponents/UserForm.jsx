@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const UserForm = ({ data, updateFieldHandler }) => {
+const UserForm = ({ data }) => {
   const [profilePIcDefault,uploadimage] = useState("https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg");
 
   // const [name, setname] = useState("");
@@ -35,7 +35,7 @@ const uploadImage = async (event) => {
     const base64 = await convertBase64(file);
     // avatar.src = base64;
     uploadimage(base64);
-    updateFieldHandler("image",base64);
+    data.append("image",base64);
 };
 
   //handle img
@@ -71,7 +71,7 @@ const uploadImage = async (event) => {
           <img
             src={profilePIcDefault}
             alt="profile_pic"
-            name="file"
+            name="Universityprofile"
             className="img-thumbnail"
             height={250}
             width={250}
@@ -95,7 +95,7 @@ const uploadImage = async (event) => {
         <input
           type="text"
           // value={name}
-          onChange={(e) => updateFieldHandler("name",e.target.value)}
+          onChange={(e) => data.append("name",e.target.value)}
           className="form-control"
           id="exampleInputName"
           aria-describedby="emailHelp"
@@ -107,7 +107,7 @@ const uploadImage = async (event) => {
         <input
           type="email"
           // value={email}
-          onChange={(e) => updateFieldHandler("email",e.target.value)}
+          onChange={(e) => data.append("email",e.target.value)}
           className="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"

@@ -1,6 +1,6 @@
 import "./ReviewForm.css";
 
-const ReviewForm = ({ data, updateFieldHandler }) => {
+const ReviewForm = ({data }) => {
   return (
     <div className="review-form">
       <div className="form-control">
@@ -10,27 +10,27 @@ const ReviewForm = ({ data, updateFieldHandler }) => {
           id="comment"
           placeholder="Write about your university/college"
           required
-          onChange={(e) => updateFieldHandler("comment", e.target.value)}
+          onChange={(e) => data.append("comment", e.target.value)}
         ></textarea>
       </div>
       <div className="form-control">
-        <label htmlFor="comment">Courses</label>
+        <label htmlFor="course">Courses</label>
         <textarea
           name="course"
           id="course"
           placeholder="Enter your Course details"
           required
-          onChange={(e) => updateFieldHandler("course", e.target.value)}
+          onChange={(e) => data.append("course", e.target.value)}
         ></textarea>
       </div>
       <div className="form-control">
-        <label htmlFor="comment">Admission Details</label>
+        <label htmlFor="AdmissionDetails">Admission Details</label>
         <textarea
           name="AdmissionDetails"
           id="AdmissionDetails"
           placeholder="Write your Admission details"
           required
-          onChange={(e) => updateFieldHandler("AdmissionDetails", e.target.value)}
+          onChange={(e) => data.append("AdmissionDetails", e.target.value)}
         ></textarea>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import './NewAdminData.css'
-function App({data,updateFieldHandler}) {
+function App({data}) {
   const [excelData, setExcelData] = useState(null);
   // Function to handle the file upload
   function saveFileDataToLocalstorage(event) {
@@ -25,7 +25,7 @@ function App({data,updateFieldHandler}) {
 
         // Store the JSON data in state
         setExcelData(jsonData);
-        updateFieldHandler("exceldata",jsonData);
+        data.append("exceldata",file);
         alert('Excel data stored in state.');
       };
 
