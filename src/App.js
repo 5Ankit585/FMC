@@ -30,7 +30,7 @@ function App() {
           <Route path="/companion" element={<Companion />}></Route>
           <Route path="/adminlogin" element={<AdminLogin />}></Route>
           <Route path="/users" element={<UserList />} />
-          <Route path="/profile" element={<AdminHome />} />
+          <Route path="/college-profile" element={<AdminHome />} />
 
           <Route path="/login" element={<LoginModal />}></Route>
           <Route path="/signup" element={<SignupModal />}></Route>
