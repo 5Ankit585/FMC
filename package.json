@@ -2,7 +2,6 @@
   "name": "findmycollege",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
   "dependencies": {
     "@auth0/auth0-react": "^1.12.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
