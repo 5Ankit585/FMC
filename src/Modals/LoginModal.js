@@ -3,7 +3,7 @@ import GoogleAuth from "../components/GoogleAuth";
 // import PasswordReset from '../Pages/PasswordReset';
 import ForgotPassword from "./ForgotPassword";
 import RegistrationModal from "./RegistrationModal";
-import FacebookAuth from '../components/FacebookAuth';
+import FacebookAuth from "../components/FacebookAuth";
 import Axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -51,9 +51,9 @@ const LoginModal = () => {
         let jwt = resp.data.jwtToken;
         Cookies.set("jwtToken", jwt, { expires: 7 });
 
-        localStorage.setItem('login',true);
+        localStorage.setItem("login", true);
         // success('fdvhufvv');
-        toast.success('dfghvf')
+        toast.success("dfghvf");
         navigate("/");
         // alert("success");
       })
@@ -144,7 +144,12 @@ const LoginModal = () => {
               </div>
 
               <div className="text-gray-500 text-center mt-5">
-                <p className="text-sm sm:text-md cursor-pointer hover:text-gray-400">
+                <p
+                  className="text-sm sm:text-md cursor-pointer hover:text-gray-400"
+                  onClick={() => {
+                    navigate("/passwordreset");
+                  }}
+                >
                   Forgot Your Password
                 </p>
               </div>
