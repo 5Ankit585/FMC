@@ -19,7 +19,7 @@ const Navbar = () => {
       </h1>
 
       <div className="hidden sm:flex pr-4 font-semibold">
-        <button
+        { !localStorage.getItem('login') ? <button
           className="bg-transparent text-white px-4 py-2 mr-3 hover:text-yellow-300"
           onClick={() => {
             navigate("/login");
@@ -27,6 +27,14 @@ const Navbar = () => {
         >
           LOGIN
         </button>
+        :
+        <button
+          className="bg-transparent text-white px-4 py-2 mr-3 hover:text-yellow-300"
+          onClick={() => {
+            localStorage.removeItem('login');
+            navigate("/login");
+          }}>LOGOUT</button>
+        }
         <button
           onClick={() => {
             navigate("/signup");

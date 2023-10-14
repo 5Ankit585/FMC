@@ -7,6 +7,7 @@ function FileUpload({data}) {
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
+    handleUpload();
   };
 
   // Function to handle file upload
@@ -26,7 +27,7 @@ function FileUpload({data}) {
     <div>
       <h2>Upload Your university brochure</h2>
       <input type="file" onChange={handleFileSelect} />
-      <button onClick={handleUpload}>Upload</button>
+      {/* <button onClick={handleUpload}>Upload</button> */}
     </div>
   );
 }

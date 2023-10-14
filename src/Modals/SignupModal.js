@@ -27,28 +27,27 @@ const SignupModal = ({ closeRegModal }) => {
   };
 
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
 
-    const newRecord = {
-      ...userRegistration,
-      id: new Date().getTime().toString(),
-    };
-    console.log(records);
-    setRecords([...records, newRecord]);
-    console.log(records);
+  //   const newRecord = {
+  //     ...userRegistration,
+  //     id: new Date().getTime().toString(),
+  //   };
+  //   console.log(records);
+  //   setRecords([...records, newRecord]);
+  //   console.log(records);
 
-    setUserRegistration({
-      username: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      cpassword: "",
-    });
+  //   setUserRegistration({
+  //     username: "",
+  //     firstname: "",
+  //     lastname: "",
+  //     email: "",
+  //     password: "",
+  //     cpassword: "",
+  //   });
 
-    navigate('/');
-  };
+  // };
 
   function sendToNode() {
     Axios.post("http://localhost:5000/signup", {
@@ -61,6 +60,16 @@ const SignupModal = ({ closeRegModal }) => {
     })
       .then((resp) => {
         console.log(resp.data);
+        setUserRegistration({
+          username: "",
+          firstname: "",
+          lastname: "",
+          email: "",
+          password: "",
+          cpassword: "",
+        });
+         navigate('/');
+
       })
       .catch((err) => {
         console.log(err);
@@ -89,7 +98,7 @@ const SignupModal = ({ closeRegModal }) => {
                   Sign Up
                 </h2>
 
-                <form className="px-6" onSubmit={handleSubmit}>
+                <form className="px-6">
                   <div className="flex flex-col my-5">
                     <label className="" htmlFor="username"></label>
                     <input

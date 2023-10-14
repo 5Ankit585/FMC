@@ -50,6 +50,8 @@ const LoginModal = () => {
         console.log(resp.data);
         let jwt = resp.data.jwtToken;
         Cookies.set("jwtToken", jwt, { expires: 7 });
+
+        localStorage.setItem('login',true);
         // success('fdvhufvv');
         toast.success('dfghvf')
         navigate("/");
