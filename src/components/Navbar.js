@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className=" flex justify-center items-center h-20  mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 text-white relative bg-black">
+    <div className=" flex justify-center items-center h-20  mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 text-white relative bg-[rgba(0,0,0,0.3)]">
       <h1
         className="w-full text-2xl font-bold text-yellow-300 hover:cursor-pointer"
         onClick={() => {

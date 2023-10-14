@@ -57,8 +57,8 @@ function App() {
     useForm(formComponents);
 
   return (
-    <div className="app">
-      <Navbar className=" bg-black" />
+    <div className="app bg-slate-200">
+      <Navbar/>
       <div className="header">
         <h2>Register your University/College</h2>
         <p>I am here to helping you to increasing your network</p>

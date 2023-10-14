@@ -5,7 +5,7 @@ import profile from '../Images/regpic.webp'
 const Marquee = () => {
   return (
     <section className='my-2'>
-        <div className='max-w-full px-48 py-8 h-[40rem] bg-[#141f33] hidden lg:flex items-center justify-evenly flex-wrap'>
+        <div className='max-w-full px-48 py-8 h-[40rem] bg-[#141f33] hidden lg:flex items-center justify-between flex-wrap'>
             {/* <marquee className=" text-white font-semibold text-xl mt-9"  direction="left">I grabbed multiple offers through campus placement drives held at Chandigarh University. I am very thankful to the university and faculty for putting in so much effort in training me for the placements.</marquee> */}
        
         <div  className="border-2 rounded-lg bg-white border-white w-[20rem] h-[8.5rem]  relative  ">
