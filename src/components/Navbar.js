@@ -14,8 +14,13 @@ const Navbar = () => {
   };
 
   return (
-    <div className=" flex justify-center items-center h-20  mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 text-white relative ">
-      <h1 className="w-full text-2xl font-bold text-yellow-300 hover:cursor-pointer">
+    <div className=" flex justify-center items-center h-20  mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 text-white relative bg-black">
+      <h1
+        className="w-full text-2xl font-bold text-yellow-300 hover:cursor-pointer"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
         FINDMYCOLLEGE
       </h1>
 
@@ -48,8 +53,11 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div onClick={handleNav} className="block hover:cursor-pointer ">
-        {!navbar ? <AiOutlineMenu size={20} /> : <AiOutlineClose size={20} />}
+      <div
+        onClick={handleNav}
+        className="block hover:cursor-pointer hover:text-yellow-400"
+      >
+        {!navbar ? <AiOutlineMenu size={30} /> : <AiOutlineClose size={30} />}
       </div>
 
       <div
@@ -64,7 +72,7 @@ const Navbar = () => {
         </h1>
 
         <ul className="p-3 uppercase ">
-          <li className="p-2 py-3 border-b border-b-gray-600 hover:text-gray-400 hover:cursor-pointer">
+          <li className="p-2 py-3 border-b border-b-gray-600 text-black hover:cursor-pointer">
             <UserProfile />
           </li>{" "}
           <Link to={`/contact`}>
@@ -72,12 +80,28 @@ const Navbar = () => {
               Ask Us
             </li>{" "}
           </Link>
+          <li className=" sm:disabled:">
+            <button
+              onClick={() => {
+                navigate("/college-profile");
+              }}
+              className="px-3 py-2 hover:text-yellow-300"
+            >
+              Upload Your College
+            </button>
+          </li>
+          <hr />
           <Link to={`/registeration`}>
             <li className="p-2 py-3 border-b border-b-gray-600 hover:text-gray-400">
               Register
             </li>{" "}
           </Link>
-          <li className="p-2 py-3 border-b border-b-gray-600 cursor-pointer hover:text-gray-400">
+          <li
+            className="p-2 py-3 border-b border-b-gray-600 cursor-pointer hover:text-gray-400"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
             LogIn
           </li>
           <Link to={`/passwordreset`}>
