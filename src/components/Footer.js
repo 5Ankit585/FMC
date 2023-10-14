@@ -80,10 +80,10 @@ const Footer = () => {
             <div className="p-2 md:px-6">
               <ul className="list-none md:flex md:space-x-9  sm:text-lg font-semibold text-gray-400 " >
                 <li><Link to="/">home</Link></li>
-                <li><Link to="/">privacy</Link></li>
-                <li><Link to="/">contact</Link></li>
-                <li><Link to="/">about</Link></li>
-                <li><Link to="/">services</Link></li>
+                <li><Link to="/privacy">privacy</Link></li>
+                <li><Link to="/contact">contact</Link></li>
+                <li><Link to="/about">about</Link></li>
+                <li><Link to="/services">services</Link></li>
               </ul> 
             </div>
 
