@@ -12,6 +12,7 @@ import UserList from "./Pages/Admin/UserList";
 import AdminHome from "./Pages/Admin/AdminHome";
 import LoginModal from "./Modals/LoginModal";
 import SignupModal from "./Modals/SignupModal";
+import UniversityDetails from "./Pages/UniversityDetails";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
           <Route
             path="/explorecollegespage"
             element={<ExploreCollegesPage />}
+          ></Route>
+          <Route
+            path="/universityDetails"
+            element={<UniversityDetails />}
           ></Route>
           <Route path="/counsellingpage" element={<Counsellingpage />}></Route>
           <Route path="/scholarship" element={<Scholarship />}></Route>
