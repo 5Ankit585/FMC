@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+body{
+  overflow-x: hidden;
+}
 .custom-alert {
     padding: 10px;
     margin: 10px;

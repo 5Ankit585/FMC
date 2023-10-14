@@ -134,7 +134,7 @@ const ExploreCollegesPage = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {collegeData[0].colleges.map((college, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-md p-4 flex">
+          <div key={index} className="bg-slate-200 rounded-lg shadow-md p-4 flex">
             <div className="w-1/3">
               <img src={college.image} alt="" className="w-full h-auto" />
             </div>
@@ -151,7 +151,7 @@ const ExploreCollegesPage = () => {
                 Established: {college.established}
               </p>
               <button
-                className="btn hover:bg-black hover:text-white"
+                className="btn hover:bg-black hover:text-white bg-yellow-300"
                 onClick={() => navigate("/universityDetails")}
               >
                 View More

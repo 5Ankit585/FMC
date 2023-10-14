@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
 import React, { useState } from "react";
+import Navbar from "../../components/Navbar";
 // import "./AdminLogin.css";
 // import bgImg from '../assets/img1.jpg';
 
@@ -33,6 +34,7 @@ export default function Form() {
   // };
   return (
     <section>
+      <Navbar />
       <div className="register">
         <div className="col-1">
           <h2>Register Your college</h2>

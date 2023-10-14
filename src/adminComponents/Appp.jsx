@@ -13,6 +13,7 @@ import { useForm } from "./hooks/useForm";
 // import { useState } from "react";
 import axios from 'axios';
 import "./Appp.css";
+import Navbar from "../components/Navbar";
 
 // const formTemplate = {
 //   image:"",
@@ -56,7 +57,8 @@ function App() {
     useForm(formComponents);
 
   return (
-    <div className="app">
+    <div className="app bg-slate-200">
+      <Navbar/>
       <div className="header">
         <h2>Register your University/College</h2>
         <p>I am here to helping you to increasing your network</p>
