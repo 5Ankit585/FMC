@@ -1,8 +1,11 @@
 import React from 'react'
+import MaintenancePage from '../../Pages/maintainnance/MaintenancePage'
 
 const Service = () => {
   return (
-    <div>Service</div>
+    <>
+    <MaintenancePage />
+    </>
   )
 }
 

@@ -1,8 +1,11 @@
 import React from 'react'
+import MaintenancePage from '../../Pages/maintainnance/MaintenancePage'
 
 const GreatLakes = () => {
   return (
-    <div>GreatLakes</div>
+    <>
+    <MaintenancePage />
+    </>
   )
 }
 
