@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import LoginModal from "../Modals/LoginModal";
-import SignupModal from "../Modals/SignupModal";
 import UserProfile from "./UserProfile";
+import axios from "axios";
+import { host } from "../helper";
 // import logo from "../Images/logo.png";
 const Navbar = () => {
   const navigate = useNavigate();
   const [navbar, setNavbar] = useState(false);
-
+  const [userid, setUserid] = useState(null);
   const handleNav = () => {
     setNavbar(!navbar);
   };
+  const [Profile,setProfile] = useState(null);
+  useEffect(()=>{
+    setUserid(localStorage.getItem('userid'));
+    console.log(userid)
+    axios.post(`${host}userprofile`,{userid:userid}).then((res)=>{
+      setProfile(res.data);
+  }).catch((err)=>console.log(err));
+  },[userid])
 
   return (
     <div className=" flex justify-center items-center h-20  mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 text-white relative bg-[rgba(0,0,0,0.3)]">
@@ -25,7 +33,7 @@ const Navbar = () => {
       </h1>
 
       <div className="hidden sm:flex pr-4 font-semibold">
-        { !localStorage.getItem('login') ? <button
+        { !localStorage.getItem('userid') ? <button
           className="bg-transparent text-white px-4 py-2 mr-3 hover:text-yellow-300"
           onClick={() => {
             navigate("/login");
@@ -37,7 +45,8 @@ const Navbar = () => {
         <button
           className="bg-transparent text-white px-4 py-2 mr-3 hover:text-yellow-300"
           onClick={() => {
-            localStorage.removeItem('login');
+            localStorage.removeItem('userid');
+            setUserid(null);
             navigate("/login");
           }}>LOGOUT</button>
         }
@@ -81,7 +90,7 @@ const Navbar = () => {
 
         <ul className="p-3 uppercase ">
           <li className="p-2 py-3 border-b border-b-gray-600 text-black hover:cursor-pointer">
-            <UserProfile />
+          {  <UserProfile Profile={Profile} />}
           </li>{" "}
           <Link to={`/contact`}>
             <li className="p-2 py-3 border-b border-b-gray-600 hover:text-gray-400">
@@ -99,11 +108,12 @@ const Navbar = () => {
             </button>
           </li>
           <hr />
-          <Link to={`/registeration`}>
+          <Link to={`/signup`}>
             <li className="p-2 py-3 border-b border-b-gray-600 hover:text-gray-400">
               Register
             </li>{" "}
-          </Link>
+            </Link>
+          {!localStorage.getItem('userid') ? 
           <li
             className="p-2 py-3 border-b border-b-gray-600 cursor-pointer hover:text-gray-400"
             onClick={() => {
@@ -111,15 +121,19 @@ const Navbar = () => {
             }}
           >
             LogIn
-          </li>
+          </li>:
+          <li className="p-2 py-3 border-b cursor-pointer border-b-gray-600 hover:text-gray-400" onClick={() => {
+            localStorage.removeItem('userid');
+            setUserid(null);
+            navigate("/login");
+          }}>
+            LogOut
+          </li>}
           <Link to={`/passwordreset`}>
             <li className="p-2 py-3 border-b border-b-gray-600 hover:text-gray-400">
               Password Reset
             </li>{" "}
           </Link>
-          <li className="p-2 py-3 border-b cursor-pointer border-b-gray-600 hover:text-gray-400">
-            LogOut
-          </li>
         </ul>
       </div>
     </div>

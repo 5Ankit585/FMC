@@ -115,7 +115,7 @@ const LoginModal = () => {
                 />
               </div>
 
-              <div className="flex   my-5">
+              {/* <div className="flex   my-5">
                 <input type="checkbox" id="vehicle1" name="" value="" />
                 <label
                   className=" ml-2 text-sm font-semibold mb-1 text-gray-500 "
@@ -123,23 +123,25 @@ const LoginModal = () => {
                 >
                   Keep me signed in
                 </label>
-              </div>
+              </div> */}
 
               <div className=" flex flex-col items-center md:flex-row md:space-x-2 w-full ">
+               
                 <button
-                  className="p-2 mb-2 md:mb-0 w-full bg-blue-600 hover:bg-transparent hover:text-black border-2 text-center text-white font-semibold drop-shadow-lg"
-                  type="button"
-                >
-                  {" "}
-                  Register
-                </button>
-                <button
-                  className="p-2 w-full text-black border-2 bg-transparent hover:bg-blue-600 hover:text-white font-semibold drop-shadow-lg"
+                  className="p-2 w-full text-white border-2  bg-blue-600  font-semibold drop-shadow-lg"
                   type="submit"
                   onClick={sendToNode}
                 >
                   {" "}
                   Login
+                </button>
+                <button
+                  className="p-2 mb-2 md:mb-0 w-full bg-transparent border-2 text-center text-black font-semibold drop-shadow-lg"
+                  type="button"
+                  onClick={()=>{navigate('/signup')}}
+                >
+                  {" "}
+                  Register
                 </button>
               </div>
 

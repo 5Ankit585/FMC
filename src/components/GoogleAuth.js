@@ -3,6 +3,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import Image1 from "../Images/google1.png"
 import {useNavigate} from 'react-router-dom'
+import {host} from '../helper';
 
 const GoogleAuth = () => {
     const navigate = useNavigate();
@@ -14,14 +15,15 @@ const GoogleAuth = () => {
                         "Authorization": `Bearer ${respose.access_token}`
                     }
                 })
-                localStorage.setItem('LoginWithGoogle',true);
-                
-                navigate('/');
+                const val = res.data;
+                axios.post(`${host}googleAuth`,{name:val.name,email:val.email,image:val.picture}).then((res)=>{
+                    localStorage.setItem('userid',res.data._id);
+                    navigate('/');
+                }).catch((err)=>console.log(err));
 
             } catch (err) {
                 console.log(err)
             }
-    
         }
     });
   return (
