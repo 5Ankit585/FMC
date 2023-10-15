@@ -156,7 +156,7 @@ const LoginModal = () => {
               <p className="text-center text-black mt-4">------- or -------</p>
 
               <div className="flex flex-col justify-center items-center mt-3">
-                {/* <FacebookAuth/> */}
+                <FacebookAuth/>
                 <GoogleAuth />
               </div>
             </form>
