@@ -3,12 +3,11 @@ import GoogleAuth from "../components/GoogleAuth";
 // import PasswordReset from '../Pages/PasswordReset';
 import ForgotPassword from "./ForgotPassword";
 import RegistrationModal from "./RegistrationModal";
-import FacebookAuth from '../components/FacebookAuth';
+// import FacebookAuth from "../components/FacebookAuth";
 import Axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const LoginModal = () => {
   const success = (msg) => toast.success(msg);
@@ -51,9 +50,9 @@ const LoginModal = () => {
         let jwt = resp.data.jwtToken;
         Cookies.set("jwtToken", jwt, { expires: 7 });
 
-        localStorage.setItem('login',true);
+        localStorage.setItem("login", true);
         // success('fdvhufvv');
-        toast.success('dfghvf')
+        toast.success("Login successfull");
         navigate("/");
         // alert("success");
       })
@@ -69,7 +68,7 @@ const LoginModal = () => {
     <>
       <section className="w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-black/70 z-20">
         {/* <button onClick={sucess}>Notify!</button> */}
-        <ToastContainer />
+      
         <div className="drop-shadow-lg  w-[20rem] sm:w-[30rem] h-[32rem] rounded-xl">
           <div className="bg-gray-100 w-full h-full flex items-center justify-center">
             <div className="absolute top-2 right-2 w-4 font-bold">
@@ -146,7 +145,12 @@ const LoginModal = () => {
               </div>
 
               <div className="text-gray-500 text-center mt-5">
-                <p className="text-sm sm:text-md cursor-pointer hover:text-gray-400">
+                <p
+                  className="text-sm sm:text-md cursor-pointer hover:text-gray-400"
+                  onClick={() => {
+                    navigate("/passwordreset");
+                  }}
+                >
                   Forgot Your Password
                 </p>
               </div>

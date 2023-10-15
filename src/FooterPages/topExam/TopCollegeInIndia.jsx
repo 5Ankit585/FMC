@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import MaintenancePage from "../../Pages/maintainnance/MaintenancePage";
 
 const TopCollegeInIndia = () => {
   return (
-    <div>TopCollegeInIndia</div>
-  )
-}
+    <>
+      <MaintenancePage />
+    </>
+  );
+};
 
-export default TopCollegeInIndia
+export default TopCollegeInIndia;

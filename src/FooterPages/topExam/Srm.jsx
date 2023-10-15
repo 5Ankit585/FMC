@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import MaintenancePage from "../../Pages/maintainnance/MaintenancePage";
 
 const Srm = () => {
   return (
-    <div>Srm</div>
-  )
-}
+    <>
+      <MaintenancePage />
+    </>
+  );
+};
 
-export default Srm
+export default Srm;
