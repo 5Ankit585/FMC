@@ -3,6 +3,7 @@ import ExploreColleges from "../Modals/ExploreColleges";
 import { useNavigate } from "react-router-dom";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SearchBar from "../components/SearchBar";
 const ExploreCollegesPage = () => {
   const [openModal, setOpenModal] = useState(true);
   const navigate = useNavigate();
@@ -124,7 +125,9 @@ const ExploreCollegesPage = () => {
                 type="text"
                 className="w-48 sm:w-64 p-2 pl-8 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Search Colleges"
-              />
+              >
+              </input>
+                <SearchBar />
               <div className="absolute top-3 left-3 text-gray-400">
               <FontAwesomeIcon icon={faSearch} />
               </div>
