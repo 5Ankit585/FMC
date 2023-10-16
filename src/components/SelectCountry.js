@@ -8,11 +8,11 @@ const SelectCountry = () => {
   };
   return (
     <>
-      <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+      <label className="p-0.5 text-xs text-gray-500 rounded-md" htmlFor="">
         Country
       </label>
       <select
-        className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
+        className="bg-[#EDEDED] rounded-md text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
         placeholder="Select Country"
         name="country"
         id="country" 

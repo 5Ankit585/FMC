@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import png from "../Images/speech-bubble-1.png";
 import GoogleAuth from "../components/GoogleAuth";
-import FacebookAuth from "../components/FacebookAuth";
 import RegistrationModal from "./RegistrationModal";
 import Axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -215,7 +214,6 @@ const SignupModal = ({ closeRegModal }) => {
                 </p>
                 <div className="flex flex-col justify-center items-center mt-2 w-[17rem]">
                   <GoogleAuth />
-                  <FacebookAuth />
                 </div>
               </div>
             </div>

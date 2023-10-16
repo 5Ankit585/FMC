@@ -38,129 +38,134 @@ function sendData(e) {
 
 const Form = () => {
   return (
-    <section className="p-8  box-border flex flex-col items-center lg:flex lg:flex-row lg:justify-around  lg:items-start">
+    <section className="p-8  box-border flex flex-col items-center lg:flex lg:flex-row lg:justify-around  lg:items-start bg-slate-200">
       <div className=" max-w-[18rem] sm:max-w-[26rem] lg:max-w-[30rem]  lg:mx-0 lg:p-4 flex flex-col">
         <h2 className=" text-xl sm:text-2xl font-bold break-words w-[18rem] sm:w-[26rem]">
           Want to secure your future and get more college options:
         </h2>
 
-        <form className="">
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              First Name <span>*</span>
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="name"
-              type="text"
-              placeholder="E.g. vishal"
-              required
-            />
-          </div>
+        <form className="max-w-[70vw]">
+          <div className="flex flex-col-2 ">
+            <div className="">
+              <div className="flex flex-col my-3">
+                <label className="text-xs text-gray-500 " htmlFor="">
+                  First Name <span>*</span>
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] rounded-md hover:border-blue-400"
+                  id="name"
+                  type="text"
+                  placeholder="E.g. vishal"
+                  required
+                />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              Email Address <span>*</span>
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="email"
-              type="email"
-              placeholder="E.g. vishal@123.com"
-              required
-            />
-          </div>
+              <div className="flex flex-col my-5">
+                <label className=" text-xs text-gray-500 " htmlFor="">
+                  Email Address <span>*</span>
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
+                  id="email"
+                  type="email"
+                  placeholder="E.g. vishal@123.com"
+                  required
+                />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              Phone Number
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="mobile"
-              type="tel"
-              placeholder="E.g. +91 1234556776"
-            />
-          </div>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  Phone Number
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
+                  id="mobile"
+                  type="tel"
+                  placeholder="E.g. +91 1234556776"
+                />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              Street Address
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="street"
-              type="text"
-              placeholder="E.g. 32Wallaby Way"
-            />
-          </div>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  Street Address
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
+                  id="street"
+                  type="text"
+                  placeholder="E.g. 32Wallaby Way"
+                />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              State/Province
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="state"
-              type="text"
-              placeholder="E.g. Haryana"
-            />
-          </div>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  State/Province
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
+                  id="state"
+                  type="text"
+                  placeholder="E.g. Haryana"
+                />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              ZIP/Postal Code
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="zip"
-              type="text"
-              placeholder="E.g. 123456"
-            />
-          </div>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  ZIP/Postal Code
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
+                  id="zip"
+                  type="text"
+                  placeholder="E.g. 123456"
+                />
+              </div>
+            </div>
 
-          <div className="flex flex-col my-5" id="country">
-            <SelectCountry />
-          </div>
+            <div>
+              <div className="flex flex-col my-5" id="country">
+                <SelectCountry />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              Select Level
-            </label>
-            <input
-              className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              id="level"
-              type="number"
-              placeholder="E.g. 10"
-            />
-          </div>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  Select Level
+                </label>
+                <input
+                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
+                  id="level"
+                  type="number"
+                  placeholder="E.g. 10"
+                />
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              Stream
-            </label>
-            <textarea
-              className="bg-[#EDEDED] text-[#000000]  font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              name=""
-              id="stream"
-              cols="30"
-              rows="6"
-            ></textarea>
-          </div>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  Stream
+                </label>
+                <textarea
+                  className="bg-[#EDEDED] text-[#000000]  rounded-md font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
+                  name=""
+                  id="stream"
+                  cols="30"
+                  rows="6"
+                ></textarea>
+              </div>
 
-          <div className="flex flex-col my-5">
-            <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-              Course
-            </label>
-            <textarea
-              className="bg-[#EDEDED] text-[#000000]  font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-              name=""
-              id="course"
-              cols="30"
-              rows="6"
-            ></textarea>
+              <div className="flex flex-col my-5">
+                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
+                  Course
+                </label>
+                <textarea
+                  className="bg-[#EDEDED] rounded-md text-[#000000]  font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
+                  name=""
+                  id="course"
+                  cols="30"
+                  rows="6"
+                ></textarea>
+              </div>
+            </div>
           </div>
-
           <div className="my-5 bg-blue-600 hover:bg-blue-700 text-center text-white font-semibold">
             <button className="p-2" type="submit" onClick={(e) => sendData(e)}>
               {" "}

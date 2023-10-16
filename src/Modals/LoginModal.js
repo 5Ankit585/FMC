@@ -68,7 +68,7 @@ const LoginModal = () => {
     <>
       <section className="w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-black/70 z-20">
         {/* <button onClick={sucess}>Notify!</button> */}
-      
+
         <div className="drop-shadow-lg  w-[20rem] sm:w-[30rem] h-[32rem] rounded-xl">
           <div className="bg-gray-100 w-full h-full flex items-center justify-center">
             <div className="absolute top-2 right-2 w-4 font-bold">
@@ -93,7 +93,9 @@ const LoginModal = () => {
                   value={userRegistration.UsernameorEmail}
                   onChange={handleInput}
                   id="UsernameorEmail"
-                  className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2   outline-0  border-2 border-b-[#777771] placeholder:font-serif font-thin  hover:border-b-gray-400 text-sm "
+                  className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2
+                     outline-0  border-2 border-b-[#777771] 
+                  placeholder:font-serif font-thin  hover:border-b-gray-400 text-sm "
                   type="text"
                   placeholder="Username or E-mail"
                   required
