@@ -35,18 +35,18 @@ const ExploreColleges = ({closeModal}) => {
     <>
        <section  className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-black/70 z-20'>
         <div className='drop-shadow-lg w-[37rem] h-[35rem] rounded-lg'>
-          <div className='bg-[#ffffff] w-full h-full flex items-center justify-center rounded-lg'>
+          <div className='bg-[#ffffff] w-full h-full flex items-center justify-center rounded-lg' >
            <div className='absolute top-2 right-2 w-4 font-bold '>
             <button className='text-black' onClick={()=>{closeModal(false)}}>X</button>
            </div>
 
              <div className='grid grid-cols-2 w-full h-full'>
-              <div className='p-3'>
+              <div className=''>
                 <h2 className='px-6 text-black  my-6 font-serif font-semibold text-lg tracking-wide'>Explore Universities</h2>
 
-                <form className='px-6' onSubmit={handleSubmit}>
+                <form className='px-5' onSubmit={handleSubmit}>
 
-                <div className="flex flex-col my-5">
+                <div className="flex flex-col my-2">
                     <label className="" htmlFor="location"></label>
                     <input name='location'
                      value={userRegistration.location}
