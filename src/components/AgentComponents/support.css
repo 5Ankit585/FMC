@@ -1,0 +1,21 @@
+.support-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ticket-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-card textarea {
+  resize: vertical;
+  min-height: 100px;
+  border-radius: 4px;
+}
+
+.ticket-card button {
+  transition: background-color 0.2s;
+}

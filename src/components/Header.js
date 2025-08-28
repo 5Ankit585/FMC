@@ -30,23 +30,6 @@ const Header = () => {
         </div>
 
         <div className="w-full h-[810px]  absolute top-0">
-          {/* contact */}
-          <div className="h-24 font-semibold text-sm sm:text-lg flex flex-col md:flex-row items-center justify-around py-1">
-            <div className="flex items-center space-x-2">
-              <BiMap />
-              <p>Our Head Office in Mohali Punjab </p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <BiPhone />
-              <p>
-                Contact Us Today{" "}
-                <span className="text-yellow-400  cursor-pointer ">
-                  1234567890
-                </span>
-              </p>
-            </div>
-          </div>
-          <hr />
           {/* navbar */}
           <div className="navbar z-10">
             <Navbar />

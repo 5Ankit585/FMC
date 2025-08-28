@@ -1,0 +1,117 @@
+.payments-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.payments-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-size: 0.875rem;
+}
+
+.payments-table th,
+.payments-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  color: #374151;
+}
+
+.payments-table th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.payments-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.status-select {
+  padding: 4px 24px 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'><path fill='%23475569' d='M0 0h8L4 5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.status-pending {
+  color: #d97706;
+  background-color: #fef3c7;
+}
+
+.status-completed {
+  color: #059669;
+  background-color: #d1fae5;
+}
+
+.status-refunded {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+select.status-pending,
+option.status-pending {
+  color: #d97706;
+  background-color: #fef3c7;
+}
+
+select.status-completed,
+option.status-completed {
+  color: #059669;
+  background-color: #d1fae5;
+}
+
+select.status-refunded,
+option.status-refunded {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: none;
+  background-color: #3b82f6;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.download-btn:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}

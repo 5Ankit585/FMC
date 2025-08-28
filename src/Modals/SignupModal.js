@@ -1,227 +1,394 @@
 import React, { useState } from "react";
-import png from "../Images/speech-bubble-1.png";
-import GoogleAuth from "../components/GoogleAuth";
-import RegistrationModal from "./RegistrationModal";
-import Axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
-const SignupModal = ({ closeRegModal }) => {
-  const [registerModal, setRegisterModal] = useState(false);
+import { auth, db, storage } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import FormInput from "../components/FormInput";
+import "./StudentSignup.css";
 
-  const [records, setRecords] = useState([]);
-  const [userRegistration, setUserRegistration] = useState({
-    username: "",
-    firstname: "",
-    lastname: "",
+
+const StudentSignup = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
     email: "",
     password: "",
-    cpassword: "",
+    address: "",
+    pincode: "",
+    university: "",
+    course: "",
+    branch: "",
+    academicDetails: "",
+    documents: null,
+    counsellingBook: "",
+    scholarshipDoc: null,
   });
 
-  let name, value;
-  const handleInput = (e) => {
-    name = e.target.name;
-    value = e.target.value;
-    console.log(name, value);
-    setUserRegistration({ ...userRegistration, [name]: value });
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const [info, setInfo] = useState("");
+
+  const universities = [
+    "Delhi University",
+    "Jawaharlal Nehru University",
+    "IIT Bombay",
+    "IIT Delhi",
+    "IIM Ahmedabad",
+    "Anna University",
+    "Amity University",
+  ];
+
+  const courses = ["B.Tech", "MBA", "B.Sc", "BBA", "M.Tech", "MCA", "Ph.D"];
+
+  const branches = [
+    "Computer Science",
+    "Electronics",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Marketing",
+    "Finance",
+    "Human Resources",
+  ];
+
+  const handleChange = (e) => {
+    const { name, value, files, type } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "file" ? (files && files[0]) : value,
+    }));
   };
 
-  const navigate = useNavigate();
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErr("");
+    setInfo("");
+    setLoading(true);
 
-  //   const newRecord = {
-  //     ...userRegistration,
-  //     id: new Date().getTime().toString(),
-  //   };
-  //   console.log(records);
-  //   setRecords([...records, newRecord]);
-  //   console.log(records);
+    try {
+      // 1) Create user
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
 
-  //   setUserRegistration({
-  //     username: "",
-  //     firstname: "",
-  //     lastname: "",
-  //     email: "",
-  //     password: "",
-  //     cpassword: "",
-  //   });
+      // 2) Upload files if any
+      let documentUrl = "";
+      let scholarshipUrl = "";
 
-  // };
+      if (formData.documents) {
+        const docRef = ref(storage, `students/${user.uid}/documents_${Date.now()}.pdf`);
+        await uploadBytes(docRef, formData.documents);
+        documentUrl = await getDownloadURL(docRef);
+      }
 
-  function sendToNode() {
-    Axios.post("http://localhost:5000/signup", {
-      username: userRegistration.username,
-      firstname: userRegistration.firstname,
-      lastname: userRegistration.lastname,
-      email: userRegistration.email,
-      password: userRegistration.password,
-      cpassword: userRegistration.cpassword,
-    })
-      .then((resp) => {
-        console.log(resp.data);
-        setUserRegistration({
-          username: "",
-          firstname: "",
-          lastname: "",
-          email: "",
-          password: "",
-          cpassword: "",
-        });
-         navigate('/');
+      if (formData.scholarshipDoc) {
+        const schRef = ref(storage, `students/${user.uid}/scholarship_${Date.now()}.pdf`);
+        await uploadBytes(schRef, formData.scholarshipDoc);
+        scholarshipUrl = await getDownloadURL(schRef);
+      }
 
-      })
-      .catch((err) => {
-        console.log(err);
+      // 3) Save to Firestore
+      await setDoc(doc(db, "students", user.uid), {
+        uid: user.uid,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        address: formData.address,
+        pincode: formData.pincode,
+        university: formData.university,
+        course: formData.course,
+        branch: formData.branch,
+        academicDetails: formData.academicDetails,
+        counsellingBook: formData.counsellingBook,
+        documents: documentUrl,
+        scholarshipDoc: scholarshipUrl,
+        createdAt: new Date(),
       });
-  }
+
+      setInfo("Student signed up successfully!");
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        password: "",
+        address: "",
+        pincode: "",
+        university: "",
+        course: "",
+        branch: "",
+        academicDetails: "",
+        documents: null,
+        counsellingBook: "",
+        scholarshipDoc: null,
+      });
+    } catch (error) {
+      console.error("Signup Error:", error);
+      setErr(error?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-      <section className="w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-black/70 z-20">
-        <div className="drop-shadow-lg w-[37rem] h-[38rem] rounded-lg">
-          <div className="bg-gray-100 w-full h-full flex items-center justify-center rounded-lg">
-            <div className="absolute top-2 right-2 w-4 font-bold ">
-              <button
-                className="text-black"
-                onClick={() => {
-                navigate('/')
-                }}
-              >
-                X
-              </button>
+    <div className="student-signup-container">
+      <div className="signup-grid">
+        {/* Left welcome panel */}
+        <div className="welcome-panel">
+          <div className="welcome-overlay"></div>
+          <div className="welcome-content">
+            <div className="welcome-icon-container">
+              <svg className="welcome-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M12 14l9-5-9-5-9 5 9 5z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5 12.083 12.083 0 015.84 10.578L12 14z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
-
-            <div className="grid grid-cols-2 w-full h-full">
-              <div className="p-3">
-                <h2 className="px-6 text-black my-6 font-serif font-semibold text-lg">
-                  Sign Up
-                </h2>
-
-                <form className="px-6">
-                  <div className="flex flex-col my-5">
-                    <label className="" htmlFor="username"></label>
-                    <input
-                      name="username"
-                      value={userRegistration.username}
-                      onChange={handleInput}
-                      id="username"
-                      className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2   outline-0  border-2 border-b-gray-500 placeholder:font-serif font-thin  hover:border-b-gray-700 text-sm focus:font-semibold"
-                      type="text"
-                      placeholder="Username"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="flex flex-col my-5">
-                    <label className="" htmlFor="firstname"></label>
-                    <input
-                      name="firstname"
-                      value={userRegistration.firstname}
-                      onChange={handleInput}
-                      id="firstname"
-                      className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2   outline-0  border-2 border-b-gray-500 placeholder:font-serif font-thin  hover:border-b-gray-700 text-sm focus:font-semibold "
-                      type="text"
-                      placeholder="First Name"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="flex flex-col my-5">
-                    <label className="" htmlFor="lastname"></label>
-                    <input
-                      name="lastname"
-                      value={userRegistration.lastname}
-                      onChange={handleInput}
-                      id="lastname"
-                      className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2   outline-0  border-2 border-b-gray-500 placeholder:font-serif font-thin  hover:border-b-gray-700 text-sm focus:font-semibold "
-                      type="text"
-                      placeholder="Last Name"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="flex flex-col my-5">
-                    <label className="" htmlFor="email"></label>
-                    <input
-                      name="email"
-                      value={userRegistration.email}
-                      onChange={handleInput}
-                      id="email"
-                      className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2   outline-0  border-2 border-b-gray-500 placeholder:font-serif font-thin  hover:border-b-gray-700 text-sm focus:font-semibold "
-                      type="email"
-                      placeholder=" Email"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className=" my-5">
-                    <label className="" htmlFor="password"></label>
-                    <input
-                      name="password"
-                      value={userRegistration.password}
-                      onChange={handleInput}
-                      id="password"
-                      className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2 w-full outline-0  border-2 border-b-gray-500 placeholder:font-serif font-thin hover:border-b-gray-700 text-sm focus:font-semibold"
-                      type="password"
-                      placeholder=" Password"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className=" my-5">
-                    <label className="" htmlFor="cpassword"></label>
-                    <input
-                      name="cpassword"
-                      value={userRegistration.cpassword}
-                      onChange={handleInput}
-                      id="cpassword"
-                      className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2 w-full outline-0  border-2 border-b-gray-500 placeholder:font-serif font-thin hover:border-b-gray-700 text-sm focus:font-semibold"
-                      type="password"
-                      placeholder="Confirm Password"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className=" flex flex-col items-center w-full ">
-                    <button
-                      onClick={() => {
-                        // setRegisterModal(true);
-                        sendToNode();
-                      }}
-                      className="p-2 mb-3 md:mb-0 w-full bg-blue-600 hover:bg-transparent hover:text-black border-2 text-center text-white font-semibold drop-shadow-lg"
-                      type="button"
-                    >
-                      {" "}
-                      Register
-                    </button>
-                    {registerModal && (
-                      <RegistrationModal closeModal={setRegisterModal} />
-                    )}
-                    <button
-                      className="p-2 w-full text-black border-2 bg-transparent hover:bg-blue-600 hover:text-white font-semibold drop-shadow-lg"
-                      type="submit"
-                    >
-                      {" "}
-                      Login
-                    </button>
-                  </div>
-                </form>
-              </div>
-              <div className="pt-4">
-                <img className="w-[13rem] mt-10" src={png} alt="/" />
-                <p className="text-center text-black mt-4">
-                  ------- or -------
-                </p>
-                <div className="flex flex-col justify-center items-center mt-2 w-[17rem]">
-                  <GoogleAuth />
-                </div>
-              </div>
+            <h1 className="welcome-title">Create your student account</h1>
+            <p className="welcome-text">
+              Sign up to manage your applications, upload documents, and access personalized counselling resources.
+            </p>
+            <ul className="welcome-list">
+              <li className="welcome-list-item">
+                <CheckIcon />
+                Secure authentication and cloud storage
+              </li>
+              <li className="welcome-list-item">
+                <CheckIcon />
+                Track academic details and preferences
+              </li>
+              <li className="welcome-list-item">
+                <CheckIcon />
+                Fast support from our counselling team
+              </li>
+            </ul>
+            <div className="welcome-footer">
+              <div className="welcome-divider"></div>
+              <p className="welcome-footer-text">
+                By creating an account, you agree to our Terms and Privacy Policy.
+              </p>
             </div>
           </div>
         </div>
-      </section>
-    </>
+
+        {/* Right form card */}
+        <div className="form-card">
+          <div className="form-header">
+            <h2 className="form-title">Student Signup</h2>
+            <p className="form-subtitle">
+              Enter your details to get started. Fields marked with an asterisk (*) are required.
+            </p>
+          </div>
+
+          {err && (
+            <div className="error-message">
+              {err}
+            </div>
+          )}
+          {info && (
+            <div className="success-message">
+              {info}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="form-content">
+            {/* Name & Phone */}
+            <div className="form-grid">
+              <FormInput
+                label="Full Name *"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your full name"
+                className="form-input"
+                required
+              />
+              <FormInput
+                label="Mobile No. *"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Your mobile number"
+                className="form-input"
+                required
+              />
+            </div>
+
+            {/* Email & Password */}
+            <div className="form-grid">
+              <FormInput
+                label="Email ID *"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                className="form-input"
+                required
+              />
+              <FormInput
+                label="Password *"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter password"
+                className="form-input"
+                required
+              />
+            </div>
+
+            {/* Address & Pincode */}
+            <FormInput
+              label="Address *"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="Your address"
+              className="form-input"
+              required
+            />
+
+            <FormInput
+              label="Pincode *"
+              name="pincode"
+              value={formData.pincode}
+              onChange={handleChange}
+              placeholder="6-digit pincode"
+              className="form-input"
+              required
+            />
+
+            {/* University & Course */}
+            <div className="form-grid">
+              <div>
+                <label className="form-label">University *</label>
+                <select
+                  name="university"
+                  value={formData.university}
+                  onChange={handleChange}
+                  className="form-select"
+                  required
+                >
+                  <option value="">Select University</option>
+                  {universities.map((uni, idx) => (
+                    <option key={idx} value={uni}>
+                      {uni}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="form-label">Course *</label>
+                <select
+                  name="course"
+                  value={formData.course}
+                  onChange={handleChange}
+                  className="form-select"
+                  required
+                >
+                  <option value="">Select Course</option>
+                  {courses.map((c, idx) => (
+                    <option key={idx} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Branch */}
+            <div>
+              <label className="form-label">Branch *</label>
+              <select
+                name="branch"
+                value={formData.branch}
+                onChange={handleChange}
+                className="form-select"
+                required
+              >
+                <option value="">Select Branch</option>
+                {branches.map((branch, idx) => (
+                  <option key={idx} value={branch}>
+                    {branch}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Academic Details */}
+            <div>
+              <label className="form-label">Academic Details</label>
+              <textarea
+                name="academicDetails"
+                value={formData.academicDetails}
+                onChange={handleChange}
+                placeholder="Previous academic records, grades, etc."
+                rows="3"
+                className="form-textarea"
+              ></textarea>
+            </div>
+
+            {/* Uploads */}
+            <div className="form-grid">
+              <div>
+                <label className="form-label">Documents (PDF)</label>
+                <input
+                  type="file"
+                  name="documents"
+                  accept="application/pdf"
+                  onChange={handleChange}
+                  className="form-file-input"
+                />
+                <p className="form-file-note">Max 10MB. Combine multiple pages into one PDF if possible.</p>
+              </div>
+
+              <FormInput
+                label="Counselling Book"
+                name="counsellingBook"
+                value={formData.counsellingBook}
+                onChange={handleChange}
+                placeholder="Enter counselling book details"
+                className="form-input"
+              />
+            </div>
+
+            <div>
+              <label className="form-label">Scholarship Document (PDF)</label>
+              <input
+                type="file"
+                name="scholarshipDoc"
+                accept="application/pdf"
+                onChange={handleChange}
+                className="form-file-input"
+              />
+              <p className="form-file-note">Optional. Upload only if applicable.</p>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="form-submit-button"
+            >
+              {loading ? "Submitting..." : "Create Account"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default SignupModal;
+export default StudentSignup;
+
+/* Icons */
+function CheckIcon() {
+  return (
+    <svg className="check-icon" viewBox="0 0 24 24" fill="none">
+      <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}

@@ -1,0 +1,98 @@
+.ad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-bg);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  z-index: 100;
+}
+
+.ad-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ad-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.ad-icon-btn:hover,
+.ad-icon-btn:focus {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.ad-sidebar-toggle svg {
+  display: block;
+}
+
+.ad-search input {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
+  color: var(--text-color);
+  background-color: var(--card-bg);
+  width: 200px;
+  transition: border-color 0.3s ease;
+}
+
+.ad-search input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.ad-header-center {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.ad-logo {
+  height: 32px;
+  object-fit: contain;
+}
+
+.ad-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-color);
+}
+
+.ad-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ad-theme-toggle {
+  font-size: 1.3rem;
+}
+
+.ad-profile {
+  background-color: var(--color-primary);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-profile:hover {
+  background-color: var(--color-accent);
+}
