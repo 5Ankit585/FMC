@@ -1,66 +1,82 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-const ForgotPassword = ({closeModal}) => {
-    const [records, setRecords] = useState([])
-    const [userRegistration, setUserRegistration] = useState({
-      UsernameorEmail: '',
-    });
-  
-    let name,value;
-    const handleInput = (e) => {
-      name = e.target.name;
-      value = e.target.value;
-      console.log(name, value);
-      setUserRegistration({...userRegistration,[name]: value,})
+const ForgotPassword = ({ closeModal }) => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ UsernameorEmail: email })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(data.message); // Password reset link sent
+      } else {
+        setMessage(data.message); // User not found
+      }
+
+    } catch (err) {
+      console.error(err);
+      setMessage('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+      setEmail('');
     }
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-  
-      const newRecord = {...userRegistration, id: new Date().getTime().toString()}
-      console.log(records)
-      setRecords([...records, newRecord])
-  
-      setUserRegistration({UsernameorEmail: ''})
-  
-      closeModal(false);
-    }
-    
+  };
+
   return (
-    <>
-      <section  className='w-full h-full  fixed top-0 left-0 flex items-center justify-center bg-black/70 z-30'>
-        <div className='drop-shadow-lg  w-[20rem] sm:w-[30rem] h-[20rem] rounded-xl '>
-            <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
-             <div className='absolute top-2 right-2 w-4 font-bold'>
-              <button className='text-black' onClick={()=>{closeModal(false)}} >X</button>
-             </div>
+    <section className='fixed inset-0 flex items-center justify-center bg-black/70 z-30'>
+      <div className='drop-shadow-lg w-[20rem] sm:w-[30rem] rounded-xl bg-gray-100 p-6 relative'>
+        <button
+          className='absolute top-2 right-2 text-black font-bold'
+          onClick={() => closeModal(false)}
+        >
+          ×
+        </button>
 
-             <div className=" mx-auto p-20">
-          <h2 className="font-semibold text-2xl text-center sm:font-bold p-2">
-            Password Reset
-          </h2>
+        <h2 className='text-2xl font-semibold text-center mb-4'>Password Reset</h2>
+        <p className='text-center text-gray-500 mb-6'>
+          Enter your email address below. A password reset link will be sent to your email.
+        </p>
 
-          <form action="" onSubmit={handleSubmit}>
-                    <div className="flex flex-col my-4 ">
-                    <p className="mb-4 text-gray-500 text-md text-center">To reset your password, please enter your email address or username below.</p>
-                    <label className="" htmlFor="UsernameorEmail"></label>
-                    <input name='UsernameorEmail'
-                    value={userRegistration.UsernameorEmail}
-                    onChange={handleInput}
-                    id='UsernameorEmail' className="bg-transparent outline-none border-x-0 border-t-0 text-[#000000] py-2   outline-0  border-2 border-b-[#777771] placeholder:font-serif font-thin  hover:border-b-gray-400 text-sm " type="text" placeholder='Username or E-mail' required/>
-                    </div>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+          <input
+            type='email'
+            name='UsernameorEmail'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder='Enter your email'
+            required
+            className='border-b-2 border-gray-400 py-2 px-1 outline-none placeholder-gray-400'
+          />
 
-            <div className="my-5 bg-blue-600 hover:bg-blue-700 text-center text-white font-semibold">
-            <button className="p-2" type="submit"> Reset Password</button>
-        </div>
+          <button
+            type='submit'
+            disabled={loading}
+            className='bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2'
+          >
+            {loading ? 'Sending...' : 'Reset Password'}
+          </button>
         </form>
 
-          </div>
-         </div>
-        </div>
-      </section>
-    </>
-  )
-}
+        {message && (
+          <p className='mt-4 text-center text-sm text-gray-700'>{message}</p>
+        )}
+      </div>
+    </section>
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;

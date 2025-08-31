@@ -1,0 +1,120 @@
+.ud-sidebar {
+  background-color: var(--card-bg);
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.ud-sidebar.closed {
+  transform: translateX(-240px);
+}
+
+.ud-brand {
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.ud-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.ud-menu-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-left: 4px solid transparent;
+  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+.ud-menu-item:hover,
+.ud-menu-item:focus {
+  background-color: var(--hover-bg);
+  border-left-color: var(--color-primary);
+}
+
+.ud-menu-item.active {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-left-color: var(--color-accent);
+}
+
+.ud-menu-label {
+  flex-grow: 1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.ud-sidebar {
+  background-color: var(--card-bg);
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.ud-sidebar.closed {
+  transform: translateX(-240px);
+}
+
+.ud-brand {
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.ud-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.ud-menu-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-left: 4px solid transparent;
+  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+.ud-menu-item:hover,
+.ud-menu-item:focus {
+  background-color: var(--hover-bg);
+  border-left-color: var(--color-primary);
+}
+
+.ud-menu-item.active {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-left-color: var(--color-accent);
+}
+
+.ud-menu-label {
+  flex-grow: 1;
+}

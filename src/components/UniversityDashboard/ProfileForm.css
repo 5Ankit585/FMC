@@ -1,0 +1,123 @@
+.profile-form {
+  font-size: 0.85rem;
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--text-color);
+}
+
+.profile-form section {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--card-bg);
+}
+
+.profile-form h3 {
+  margin-top: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: var(--color-primary);
+}
+
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.profile-form label small {
+  font-weight: 400;
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  margin-left: 0.25rem;
+}
+
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="url"],
+.profile-form input[type="password"],
+.profile-form input[type="date"],
+.profile-form input[type="number"],
+.profile-form select,
+.profile-form textarea,
+.profile-form input[type="file"] {
+  margin-top: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.profile-form input[type="file"] {
+  padding: 0.3rem;
+}
+
+.profile-form input[type="text"]:focus,
+.profile-form input[type="email"]:focus,
+.profile-form input[type="url"]:focus,
+.profile-form input[type="password"]:focus,
+.profile-form input[type="date"]:focus,
+.profile-form input[type="number"]:focus,
+.profile-form select:focus,
+.profile-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 3px var(--color-primary);
+}
+
+.additional-contacts {
+  margin-top: 1rem;
+}
+
+.additional-contact {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  background-color: var(--bg-color);
+}
+
+.additional-contact label {
+  margin-bottom: 0.6rem;
+}
+
+.remove-contact {
+  background-color: #ef4444;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-top: 0.4rem;
+}
+
+.remove-contact:hover {
+  background-color: #b91c1c;
+}
+
+.add-contact-btn {
+  background-color: var(--color-primary);
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.add-contact-btn:hover {
+  background-color: var(--color-primary-dark);
+}
+

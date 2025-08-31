@@ -1,0 +1,124 @@
+.about-us-container {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center; 
+  min-height: 100vh;
+}
+
+.about-us-content {
+  max-width: 50%;
+  flex: 1 1 400px;
+}
+
+.about-us-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.about-us-description {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  text-align: left;
+  max-width: 100%;
+}
+
+.theme-toggle-button {
+  background-color: var(--button-primary);
+  color: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--button-hover);
+}
+
+.about-us-image {
+  max-width: 50%;
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.image-carousel {
+  position: relative;
+  width: 80%; 
+  height: 200px;
+  overflow: hidden;
+}
+
+.carousel-images {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #9CA3AF;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.indicator.active {
+  background-color: #1D4ED8;
+}
+
+@media (max-width: 768px) {
+  .about-us-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .about-us-content,
+  .about-us-image {
+    max-width: 100%;
+  }
+
+  .about-us-image {
+    justify-content: center; 
+    align-items: center;
+  }
+
+  .image-carousel {
+    height: 150px;
+    width: 90%;
+  }
+
+  .carousel-image {
+    height: 150px;
+  }
+}

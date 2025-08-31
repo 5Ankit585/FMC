@@ -1,0 +1,51 @@
+.ud-welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ud-welcome-left h2 {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+}
+
+.ud-welcome-left p {
+  margin: 0 0 0.75rem 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.ud-progress {
+  width: 100%;
+  height: 12px;
+  background-color: var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ud-progress-bar {
+  background-color: var(--color-primary);
+  height: 100%;
+  border-radius: 6px 0 0 6px;
+  transition: width 0.4s ease;
+}
+
+.ud-btn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.55rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.ud-btn:hover,
+.ud-btn:focus {
+  background-color: var(--color-primary-dark);
+  outline: none;
+}

@@ -1,0 +1,294 @@
+.lower-blur {
+  backdrop-filter: blur(1px); /* Lower blur effect, 1px */
+  -webkit-backdrop-filter: blur(1px); /* for Safari support */
+}
+
+/* Navbar Styles */
+nav {
+  background-color: var(--navbar-bg);
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+nav img {
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+
+nav span {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+nav input {
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  border: 1px solid gray;
+  font-size: 0.75rem;
+  color: var(--text-color);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+nav input:focus {
+  border-color: var(--button-accent);
+}
+
+/* Button and Icon Styles */
+nav button {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  transition: background-color 0.3s;
+}
+
+nav button.rounded-full {
+  padding: 0.375rem;
+}
+
+nav button:hover {
+  background-color: var(--button-hover);
+}
+
+/* Reduce FontAwesome Icon Sizes */
+nav .fa-icon,
+nav .fa-compass,
+nav .fa-bell,
+nav .fa-moon,
+nav .fa-sun,
+nav .fa-user,
+nav .fa-right-to-bracket,
+nav .fa-user-plus,
+nav .fa-arrow-right-from-bracket,
+nav .fa-chevron-left,
+nav .fa-chevron-right {
+  font-size: 0.625rem; /* Reduced icon size */
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.25rem;
+  width: 9rem;
+  background-color: var(--dropdown-bg);
+  color: var(--dropdown-text);
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  z-index: 50;
+}
+
+.dropdown-menu p {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  font-size: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.dropdown-menu button:hover {
+  color: var(--button-hover);
+}
+
+/* Select Styles */
+nav select {
+  background-color: var(--button-primary);
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: white;
+}
+
+nav select:hover {
+  background-color: var(--button-hover);
+}
+
+/* University Banner Styles */
+.university-banner {
+  background-size: cover;
+  background-position: center;
+  height: 16rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.banner-content {
+  margin: 0 auto;
+  padding: 0.5rem;
+  color: white;
+}
+
+.lower-blur {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.lower-blur img {
+  height: 2.5rem;
+  border-radius: 0.25rem;
+}
+
+.lower-blur h1 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.lower-blur p {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.banner-tags {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner-tags span {
+  background-color: var(--button-primary);
+  padding: 0.25rem 0.5rem;
+  margin: 1rem 0.5rem 0.5rem 0;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  color: white;
+}
+
+.banner-tags .review {
+  background-color: var(--button-accent);
+  color: var(--text-color);
+}
+
+/* Tab Navigation Styles */
+/* Tab Navigation Styles */
+.tab-navigation {
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.tab-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Added to center the navigation */
+}
+
+.tab-scroll-button {
+  background-color: var(--button-primary);
+  margin: 6px; 
+  color: white;
+  padding: 2px 2px; 
+  border-radius: 9999px;
+  transition: background-color 0.3s;
+  font-size: 0.75rem; 
+  width: 20px;  
+  height: 20px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.tab-scroll-button:hover {
+  background-color: var(--button-hover);
+}
+
+.tab-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tab-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-button {
+  flex-shrink: 0;
+  width: 6rem;
+  height: 1.875rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.tab-button.active {
+  background-color: var(--button-primary);
+  color: white;
+}
+
+.tab-button:not(.active) {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.tab-button:hover {
+  background-color: var(--button-hover);
+}
+
+/* Action Buttons */
+.action-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.50rem;
+}
+
+.action-buttons button {
+  background-color: var(--button-accent);
+  color: var(--text-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  transition: background-color 0.3s;
+}
+
+.action-buttons button:hover {
+  background-color: var(--button-hover);
+}
+
+.action-buttons button.primary {
+  background-color: var(--button-primary);
+  color: white;
+}
+
+/* Content Section */
+.content-section {
+  margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+  margin-top: 5rem;
+}

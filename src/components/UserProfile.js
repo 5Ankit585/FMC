@@ -24,7 +24,7 @@ const UserProfile = ({Profile}) => {
        <div className="w-20 h-20 mx-auto  rounded-full flex items-center justify-center text-white font-bold text-2xl overflow-hidden">
             <img src="./candidate.png" alt="profile" className=" overflow-hidden" />
           </div> 
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full my-3" onClick={()=>navigate('/login')}>
+          <button "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full my-3" onClick={()=>navigate('/login')}>
   Login/Register
 </button>
           </div>

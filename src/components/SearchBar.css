@@ -1,0 +1,229 @@
+/* Overlay + Modal */
+.filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5%;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.filter-modal {
+  display: flex;
+  background: #fff;
+  border-radius: 1rem;
+  width: 95%;
+  max-width: 1000px;
+  min-height: 70vh;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+/* Accent strip on left */
+.filter-modal::before {
+  content: "";
+  background: linear-gradient(180deg, #007bff, #0056b3);
+  width: 8px;
+  flex-shrink: 0;
+}
+
+/* Scrollbar styling */
+.filter-content {
+  padding: 1.5rem;
+  flex: 1;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: linear-gradient(to bottom, #ffffff, #f9fbff);
+  scrollbar-width: thin;         /* Firefox */
+  scrollbar-color: #bbb #f1f1f1; /* thumb / track */
+}
+
+.filter-content::-webkit-scrollbar {
+  width: 6px;   /* thinner scrollbar */
+}
+.filter-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.filter-content::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 10px;
+}
+.filter-content::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+
+/* Header */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.8rem;
+}
+.filter-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a237e;
+}
+.filter-close {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  background: none;
+  border: none;
+  transition: color 0.2s;
+}
+.filter-close:hover {
+  color: #e74c3c;
+}
+
+/* Grid layout */
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  background: #f9f9fc;
+  padding: 0.9rem 1rem;
+  border-radius: 0.7rem;
+  border: 1px solid #eaeaea;
+}
+.filter-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+.filter-select,
+.filter-input {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 0.45rem;
+  font-size: 0.82rem;
+  width: 100%; /* prevent overflow */
+  min-width: 0; /* allow shrinking in grid */
+}
+
+/* Multi-select dropdown styling */
+.multi-select {
+  position: relative;
+  width: 100%;
+}
+
+.multi-select-toggle {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 0.45rem;
+  font-size: 0.82rem;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.multi-select-toggle:hover {
+  border-color: #007bff;
+}
+
+.multi-select-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.45rem;
+  margin-top: 0.3rem;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.multi-select-option {
+  padding: 0.5rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.multi-select-option:hover {
+  background: #eef4ff;
+}
+
+.multi-select-option.selected {
+  background: #eef4ff;
+  color: #0a58ca;
+  font-weight: 600;
+}
+
+.multi-select-option input {
+  margin: 0;
+}
+
+.multi-select-option span {
+  flex: 1;
+}
+
+.filter-select:focus,
+.filter-input:focus,
+.multi-select-toggle:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+.fees-flex {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Actions */
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  padding-top: 1.2rem;
+  background: #fff;
+}
+.filter-btn {
+  padding: 0.75rem 1.4rem;
+  border-radius: 0.6rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.filter-btn.search {
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 91, 187, 0.3);
+}
+.filter-btn.search:hover {
+  background: linear-gradient(90deg, #0056b3, #004080);
+}
+.filter-btn.reset {
+  background: #f3f3f3;
+  color: #444;
+}
+.filter-btn.reset:hover {
+  background: #e0e0e0;
+}

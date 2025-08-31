@@ -1,0 +1,66 @@
+.college-card-container {
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .college-card-container {
+    padding: 2rem;
+  }
+}
+
+.college-card-content {
+  padding: 2rem;
+  margin: 0.75rem 0;
+}
+
+@media (min-width: 1024px) {
+  .college-card-content {
+    margin: 1rem 0;
+  }
+}
+
+.college-card-title {
+  font-size: 1.125rem; /* text-lg */
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+  .college-card-title {
+    font-size: 1.875rem; /* text-3xl */
+  }
+}
+
+.college-card-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+@media (min-width: 768px) {
+  .college-card-grid {
+    flex-direction: row;
+    gap: 2.5rem; /* gap-10 */
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .college-card-grid {
+    margin-top: 0.5rem;
+    justify-content: space-around;
+  }
+}
+
+.college-card-item {
+  width: 280px;   /* increase width */
+  height: 360px;  /* increase height */
+  padding: 1rem;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}

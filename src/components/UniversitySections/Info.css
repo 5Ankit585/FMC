@@ -1,0 +1,77 @@
+.info-two-col-container {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.info-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-color, #222);
+  margin-bottom: 2rem;
+}
+
+.theme-toggle-btn {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: var(--button-bg, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.info-block {
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  gap: 1rem;
+  text-align: left;
+}
+
+.info-icon {
+  font-size: 1.5rem;
+  color: var(--text-color, #222);
+  min-width: 30px;
+  text-align: center;
+}
+
+.info-text h4 {
+  margin: 0 0 0.25rem 0;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-color, #222);
+}
+
+.info-text p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-color-secondary, #555);
+  white-space: normal;
+}
+
+.info-divider {
+  width: 1px;
+  background-color: var(--divider-color, #ccc);
+  height: 40px;
+  align-self: center;
+}

@@ -1,8 +1,4 @@
 import React, { useState } from "react";
-import { auth, db, storage } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import FormInput from "../components/FormInput";
 import "./StudentSignup.css";
 
@@ -58,78 +54,50 @@ const StudentSignup = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErr("");
-    setInfo("");
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErr("");
+  setInfo("");
+  setLoading(true);
 
-    try {
-      // 1) Create user
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
+  try {
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (formData[key]) formDataToSend.append(key, formData[key]);
+    });
 
-      // 2) Upload files if any
-      let documentUrl = "";
-      let scholarshipUrl = "";
+    const res = await fetch("http://localhost:5000/api/students", {
+      method: "POST",
+      body: formDataToSend,
+    });
 
-      if (formData.documents) {
-        const docRef = ref(storage, `students/${user.uid}/documents_${Date.now()}.pdf`);
-        await uploadBytes(docRef, formData.documents);
-        documentUrl = await getDownloadURL(docRef);
-      }
+    const data = await res.json();
 
-      if (formData.scholarshipDoc) {
-        const schRef = ref(storage, `students/${user.uid}/scholarship_${Date.now()}.pdf`);
-        await uploadBytes(schRef, formData.scholarshipDoc);
-        scholarshipUrl = await getDownloadURL(schRef);
-      }
+    if (!res.ok) throw new Error(data.error || "Signup failed");
 
-      // 3) Save to Firestore
-      await setDoc(doc(db, "students", user.uid), {
-        uid: user.uid,
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        address: formData.address,
-        pincode: formData.pincode,
-        university: formData.university,
-        course: formData.course,
-        branch: formData.branch,
-        academicDetails: formData.academicDetails,
-        counsellingBook: formData.counsellingBook,
-        documents: documentUrl,
-        scholarshipDoc: scholarshipUrl,
-        createdAt: new Date(),
-      });
+    setInfo("Student signed up successfully!");
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+      address: "",
+      pincode: "",
+      university: "",
+      course: "",
+      branch: "",
+      academicDetails: "",
+      documents: null,
+      counsellingBook: "",
+      scholarshipDoc: null,
+    });
+  } catch (error) {
+    setErr(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
-      setInfo("Student signed up successfully!");
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        password: "",
-        address: "",
-        pincode: "",
-        university: "",
-        course: "",
-        branch: "",
-        academicDetails: "",
-        documents: null,
-        counsellingBook: "",
-        scholarshipDoc: null,
-      });
-    } catch (error) {
-      console.error("Signup Error:", error);
-      setErr(error?.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="student-signup-container">

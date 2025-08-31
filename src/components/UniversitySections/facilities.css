@@ -1,0 +1,260 @@
+.facilities-container {
+  padding: 2rem;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  width: 90%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: stretch; 
+}
+
+.facilities-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  width: 50%;
+  justify-content: center;
+}
+
+.facility-card {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--dropdown-bg);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; 
+  transition: transform 0.2s;
+}
+
+.facility-card:hover {
+  transform: scale(1.05);
+}
+
+.facility-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.facility-icon {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+  color: #007bff;
+  transition: color 0.3s;
+}
+
+.facility-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.facility-description {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+
+.reviews {
+  flex-grow: 1; 
+}
+
+.reviews ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reviews li {
+  margin-bottom: 0.25rem;
+}
+
+.add-review {
+  margin-top: auto; 
+}
+
+.review-button {
+  display: flex;
+  align-items: center;
+  background-color: var(--button-primary);
+  color: #FFFFFF;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  width: 100%; 
+}
+
+.review-button:hover {
+  background-color: #ffcc00;
+  color: #000000;
+}
+
+.reviews-section {
+  margin-top: 2rem;
+  width: 50%;
+  text-align: center;
+}
+
+.reviews-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.review-item {
+  margin-bottom: 0.75rem;
+}
+
+.review-text {
+  font-size: 0.875rem;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+}
+
+.review-meta {
+  font-size: 0.7rem;
+  color: var(--border-color);
+}
+
+.no-reviews {
+  font-size: 0.875rem;
+  color: var(--border-color);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--dropdown-bg);
+  padding: 1rem;
+  border-radius: 6px;
+  width: 90%;
+  max-width: 400px;
+  color: var(--text-color);
+  position: relative;
+}
+
+.modal-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.modal-label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-color);
+}
+
+.rating {
+  margin-bottom: 0.75rem;
+}
+
+.star {
+  font-size: 1.2rem;
+  margin-right: 0.25rem;
+  cursor: pointer;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+  color: var(--input-text);
+  background-color: var(--dropdown-bg);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.cancel-button {
+  background-color: var(--border-color);
+  color: var(--text-color);
+  padding: 0.25rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: var(--button-primary);
+  color: #FFFFFF;
+  padding: 0.25rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: var(--button-hover);
+}
+
+.submit-button:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .facilities-grid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+
+  .reviews-section {
+    width: 100%;
+  }
+
+  .facility-title {
+    font-size: 0.75rem;
+  }
+
+  .facility-description {
+    font-size: 0.7rem;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+}

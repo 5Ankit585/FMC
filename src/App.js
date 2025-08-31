@@ -30,6 +30,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 // University & Dashboard
 import AgentDashboard from "./AgentDashboard/Agent";
+import UniversityDashboard from "./dashboard/UniversityDashboard";
+import UniversityPage from "./Pages/UniversityPage";
+import UniversityRegister from "./Pages/UniversityRegister";
+
 
 function App() {
   return (
@@ -55,6 +59,9 @@ function App() {
 
           {/* University & Dashboard Routes */}
           <Route path="/agent-dashboard/*" element={<AgentDashboard />} />
+          <Route path="/university-dashboard" element={<UniversityDashboard />} />
+          <Route path="/university-page" element={<UniversityPage />} />
+          <Route path="/university-register" element={<UniversityRegister />} />
 
           {/* footer page routes */}
           <Route path="/college-review" element={<CollegeReview />} />

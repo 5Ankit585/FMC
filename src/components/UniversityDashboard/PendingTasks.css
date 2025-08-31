@@ -1,0 +1,23 @@
+.ud-pending .ud-task-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ud-chip {
+  background-color: var(--color-muted);
+  border-radius: 9999px;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.85rem;
+  color: white;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.ud-chip:hover,
+.ud-chip:focus {
+  background-color: var(--color-primary);
+  outline: none;
+}

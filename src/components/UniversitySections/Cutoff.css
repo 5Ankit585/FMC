@@ -1,0 +1,73 @@
+.cutoff-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: var(--background-color, #f9f9f9);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: var(--text-color, #222);
+}
+
+.cutoff-container h2 {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color, #222);
+  margin-bottom: 12px;
+}
+
+.theme-toggle-btn {
+  margin: 0 auto 16px;
+  display: block;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  background-color: var(--button-bg, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.cutoff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  color: var(--text-color, #222);
+}
+
+.cutoff-table thead {
+  background-color: var(--primary-color, #2563eb);
+  color: #fff;
+}
+
+.cutoff-table th {
+  padding: 8px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.cutoff-table th:first-child {
+  text-align: left;
+}
+
+.cutoff-table tbody tr {
+  border-top: 1px solid var(--border-color, #ccc);
+}
+
+.cutoff-table tbody tr:hover {
+  background-color: #fbbf24;
+}
+
+.cutoff-table td {
+  padding: 8px;
+  text-align: center;
+}
+
+.cutoff-table td:first-child {
+  font-weight: 500;
+  text-align: left;
+}

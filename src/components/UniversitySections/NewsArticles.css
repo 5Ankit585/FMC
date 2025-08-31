@@ -1,0 +1,23 @@
+.news-header {
+  @apply bg-blue-800 text-white p-4 rounded-t-lg flex justify-between items-center mb-4;
+}
+
+.news-card {
+  @apply bg-white p-4 rounded-lg shadow border border-gray-200 mb-4;
+}
+
+.news-title {
+  @apply text-lg font-semibold text-gray-800;
+}
+
+.news-date {
+  @apply text-gray-500 text-sm;
+}
+
+.news-content {
+  @apply text-gray-600 mb-2;
+}
+
+.news-meta {
+  @apply flex justify-between items-center text-gray-500 text-sm;
+}

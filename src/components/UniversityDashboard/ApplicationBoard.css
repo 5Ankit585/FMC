@@ -1,0 +1,139 @@
+
+
+.ud-app-board h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.ud-search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--bg-color);
+  transition: border-color 0.3s ease;
+}
+
+.ud-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.ud-app-filters {
+  margin: 0.5rem 0 1.5rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ud-chip {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background-color: var(--bg-secondary);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.ud-chip:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.ud-chip-active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.ud-app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ud-app-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ud-app-row:hover {
+  background-color: var(--bg-secondary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ud-app-info {
+  flex: 1;
+}
+
+.ud-app-sub {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: 0.25rem;
+}
+
+.ud-app-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Status badges */
+.ud-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.ud-badge-new {
+  background-color: #10b981; 
+  color: white;
+}
+
+.ud-badge-review {
+  background-color: #3b82f6; 
+  color: white;
+}
+
+.ud-badge-shortlisted {
+  background-color: #f59e0b; 
+  color: white;
+}
+
+.ud-badge-accepted {
+  background-color: #2563eb;
+  color: white;
+}
+
+.ud-badge-rejected {
+  background-color: #ef4444; 
+  color: white;
+}
+
+.ud-status-select {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-color);
+  cursor: pointer;
+}
+
+.ud-no-results {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 1rem;
+}

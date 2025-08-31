@@ -1,0 +1,174 @@
+
+:root {
+  --background-color: #F9FAFB;
+  --text-color: #1E293B;
+  --button-primary: #1D4ED8;
+  --button-accent: #FBBF24;
+  --button-hover: #2563EB;
+  --input-border: #D1D5DB;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --border-color: #E5E7EB;
+  --focus-ring: rgba(29, 78, 216, 0.2);
+}
+
+.dark {
+  --background-color: #1E293B;
+  --text-color: #F9FAFB;
+  --button-primary: #1D4ED8;
+  --button-accent: #FBBF24;
+  --button-hover: #60A5FA;
+  --input-border: #4B5563;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --border-color: #4B5563;
+  --focus-ring: rgba(96, 165, 250, 0.2);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+input {
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--button-primary);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+input:disabled {
+  background-color: #E5E7EB;
+  color: #6B7280;
+  cursor: not-allowed;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--button-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+input {
+  border: 1px solid #D1D5DB;
+}
+
+button {
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.5;
+  transform: none;
+}
+
+.card {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.15);
+}
+
+.question-item {
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.question-item:hover {
+  transform: translateY(-2px);
+}
+
+.question-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.sidebar-link {
+  color: var(--button-accent);
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.sidebar-link:hover {
+  color: var(--button-hover);
+  text-decoration: underline;
+}
+
+img {
+  border-radius: 0.5rem;
+  object-fit: cover;
+  max-width: 100%;
+}
+
+/* Loading spinner animation */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Accessibility improvements */
+:focus-visible {
+  outline: 2px solid var(--button-primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  input {
+    padding: 0.75rem 1rem;
+  }
+}
+
+.shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
