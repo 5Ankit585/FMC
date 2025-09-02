@@ -15,6 +15,70 @@ const ExploreColleges = ({ closeModal }) => {
   // Sample data for locations
   const locations = ["India", "USA"];
 
+  // List of Indian states
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
+
+  // Sample city mapping for some Indian states
+  const cityMapping = {
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur"],
+    "Arunachal Pradesh": ["Itanagar", "Naharlagun"],
+    "Assam": ["Guwahati", "Dibrugarh", "Silchar"],
+    "Bihar": ["Patna", "Gaya", "Bhagalpur"],
+    "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur"],
+    "Goa": ["Panaji", "Margao"],
+    "Gujarat": ["Ahmedabad", "Surat", "Vadodara"],
+    "Haryana": ["Gurugram", "Faridabad", "Chandigarh"],
+    "Himachal Pradesh": ["Shimla", "Dharamshala"],
+    "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad"],
+    "Karnataka": ["Bengaluru", "Mysuru", "Hubli"],
+    "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode"],
+    "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+    "Manipur": ["Imphal"],
+    "Meghalaya": ["Shillong"],
+    "Mizoram": ["Aizawl"],
+    "Nagaland": ["Kohima", "Dimapur"],
+    "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela"],
+    "Punjab": ["Chandigarh", "Ludhiana", "Amritsar"],
+    "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur"],
+    "Sikkim": ["Gangtok"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+    "Telangana": ["Hyderabad", "Warangal"],
+    "Tripura": ["Agartala"],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi"],
+    "Uttarakhand": ["Dehradun", "Haridwar"],
+    "West Bengal": ["Kolkata", "Siliguri", "Durgapur"],
+  };
+
   // Course recommendations based on stream
   const courseRecommendations = {
     Engineering: ["Computer Science", "Mechanical", "Civil", "Electrical", "Electronics"],
@@ -33,6 +97,10 @@ const ExploreColleges = ({ closeModal }) => {
       // Reset Courses when Stream changes
       if (name === "Stream") {
         return { ...updated, Courses: "" };
+      }
+      // Reset City when State changes
+      if (name === "State") {
+        return { ...updated, City: "" };
       }
       return updated;
     });
@@ -60,6 +128,11 @@ const ExploreColleges = ({ closeModal }) => {
     ? courseRecommendations[userRegistration.Stream] || []
     : [];
 
+  // Get cities based on selected state
+  const availableCities = userRegistration.State
+    ? cityMapping[userRegistration.State] || []
+    : [];
+
   return (
     <section className="w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-black/70 z-50 px-4">
       <div className="bg-white shadow-2xl rounded-2xl w-auto max-w-[70vw] overflow-hidden flex flex-col md:flex-row items-center justify-center relative">
@@ -74,9 +147,7 @@ const ExploreColleges = ({ closeModal }) => {
             <form className="space-y-4 w-full max-w-[350px]" onSubmit={handleSubmit}>
               <select
                 name="location"
-                value={userRegistration.location
-
-}
+                value={userRegistration.location}
                 onChange={handleInput}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -88,25 +159,62 @@ const ExploreColleges = ({ closeModal }) => {
                 ))}
               </select>
 
-              <input
-                name="State"
-                value={userRegistration.State}
-                onChange={handleInput}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="text"
-                placeholder="State"
-                autoComplete="off"
-              />
+              {userRegistration.location === "India" && (
+                <>
+                  <select
+                    name="State"
+                    value={userRegistration.State}
+                    onChange={handleInput}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">State</option>
+                    {indianStates.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
 
-              <input
-                name="City"
-                value={userRegistration.City}
-                onChange={handleInput}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="text"
-                placeholder="City"
-                autoComplete="off"
-              />
+                  <select
+                    name="City"
+                    value={userRegistration.City}
+                    onChange={handleInput}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={!userRegistration.State}
+                  >
+                    <option value="">City</option>
+                    {availableCities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              )}
+
+              {userRegistration.location !== "India" && (
+                <>
+                  <input
+                    name="State"
+                    value={userRegistration.State}
+                    onChange={handleInput}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="text"
+                    placeholder="State"
+                    autoComplete="off"
+                  />
+
+                  <input
+                    name="City"
+                    value={userRegistration.City}
+                    onChange={handleInput}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="text"
+                    placeholder="City"
+                    autoComplete="off"
+                  />
+                </>
+              )}
 
               <select
                 name="Stream"
@@ -124,6 +232,19 @@ const ExploreColleges = ({ closeModal }) => {
                 <option value="Non-Medical">Non-Medical</option>
               </select>
 
+              <select
+                name="Diploma"
+                value={userRegistration.Diploma}
+                onChange={handleInput}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Diploma</option>
+                <option value="PHD">PHD</option>
+                <option value="Masters">Masters</option>
+                <option value="PG">PG</option>
+                <option value="UG">UG</option>
+              </select>
+
               <input
                 name="Courses"
                 value={userRegistration.Courses}
@@ -137,24 +258,6 @@ const ExploreColleges = ({ closeModal }) => {
                 }
                 autoComplete="off"
               />
-
-              <select
-                name="Diploma"
-                value={userRegistration.Diploma}
-                onChange={handleInput}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Diploma</option>
-                <option value="B.Tech">B.Tech</option>
-                <option value="M.Tech">M.Tech</option>
-                <option value="BBA">BBA</option>
-                <option value="PGDMA">PGDMA</option>
-                <option value="MBA">MBA</option>
-                <option value="B.COM">B.COM</option>
-                <option value="B.A">B.A</option>
-                <option value="M.A">M.A</option>
-                <option value="MBBS">MBBS</option>
-              </select>
 
               <button
                 className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md"
