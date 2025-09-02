@@ -19,7 +19,6 @@ const ExploreCollegesPage = () => {
   const tabs = {
     Admissions: "Search admission details, eligibility, dates...",
     Courses: "Search B.Tech, MBA, Nursing, etc...",
-    "New Updates": "Search latest university news & updates...",
     Research: "Search research papers, labs, projects...",
     Departments: "Search Engineering, Science, Arts, etc...",
     "Campus Life": "Search hostels, events, facilities...",

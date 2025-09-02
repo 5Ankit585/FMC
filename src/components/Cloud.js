@@ -9,7 +9,6 @@ const Cloud = () => {
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
 
-  // Full data for news, alerts, blogs
   const newsData = [
     { text: "University awarded top ranking for engineering program.", link: "#" },
     { text: "New research reveals breakthrough in renewable energy.", link: "#" },
@@ -42,34 +41,30 @@ const Cloud = () => {
 
   const data = { news: newsData, alerts: alertsData, blogs: blogsData };
 
-  // Scroll animation
   const scrollVariants = {
-    animate: {
-      y: ["0%", "-100%"],
-      transition: { y: { duration: 20, ease: "linear", repeat: Infinity } },
-    },
+    animate: { y: ["0%", "-100%"], transition: { y: { duration: 20, ease: "linear", repeat: Infinity } } },
     pause: { y: null, transition: { duration: 0 } },
   };
 
   return (
-    <section className="p-8 box-border">
-      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-around">
+    <section className="p-8 box-border bg-[#f0f4f8] min-h-screen">
+      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-around gap-12">
         {/* Left Section: News/Alerts/Blogs */}
-        <div className="space-y-4 lg:w-1/3">
-          <h2 className="text-xl md:text-2xl font-bold">
-            The latest Blogs from findmycollege:
+        <div className="space-y-6 lg:w-1/3">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            Latest Updates from University
           </h2>
 
           {/* Tabs */}
-          <div className="flex bg-[#a476a4] rounded-t-xl overflow-hidden shadow-md">
+          <div className="flex bg-white rounded-t-xl overflow-hidden shadow">
             {["news", "alerts", "blogs"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setNewsTab(tab)}
                 className={`flex-1 px-4 py-3 font-semibold text-sm transition-all ${
                   newsTab === tab
-                    ? "bg-[#a476a4] text-white border-b-2 border-purple-500"
-                    : "bg-[#a476a4] text-gray-400 hover:text-white"
+                    ? "bg-[#2563eb] text-white border-b-2 border-blue-400"
+                    : "bg-white text-gray-500 hover:text-blue-600"
                 }`}
               >
                 {tab.toUpperCase()}
@@ -80,7 +75,7 @@ const Cloud = () => {
           {/* Scrollable Content */}
           <div
             ref={containerRef}
-            className="bg-[#483248] border-t-2 border-purple-600 p-4 h-64 overflow-hidden relative rounded-b-xl"
+            className="bg-white border-t-2 border-blue-400 p-4 h-64 overflow-hidden relative rounded-b-xl shadow-sm"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -101,11 +96,11 @@ const Cloud = () => {
                   {data[newsTab].map((item, idx) => (
                     <div
                       key={idx}
-                      className="py-2 border-b border-dotted border-gray-600 last:border-0"
+                      className="py-2 border-b border-dotted border-gray-300 last:border-0"
                     >
                       <a
                         href={item.link}
-                        className="text-gray-300 hover:text-purple-500 transition-colors block leading-tight"
+                        className="text-gray-700 hover:text-blue-600 transition-colors block leading-tight"
                       >
                         {item.text}
                       </a>
@@ -120,7 +115,7 @@ const Cloud = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-[#a476a4] text-white px-6 py-3 mt-6 rounded-full font-semibold shadow-md hover:bg-purple-600 transition-colors flex items-center gap-2"
+            className="bg-[#2563eb] text-white px-6 py-3 mt-6 rounded-full font-semibold shadow hover:bg-blue-600 transition-colors flex items-center gap-2"
           >
             <span>View All</span>
             <svg
@@ -135,17 +130,24 @@ const Cloud = () => {
             </svg>
           </motion.button>
 
-          <p className="text-gray-400">lorem | {currentDate.toLocaleDateString()}</p>
+          <p className="text-gray-500 text-sm">{currentDate.toLocaleDateString()}</p>
         </div>
 
         {/* Right Section: Image & Blog */}
-        <div className="my-9 space-y-4 lg:w-1/3">
-          <img className="w-full h-96 object-cover rounded-lg" src={Image1} alt="cloud" />
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-bold">
-              Our Planned Upgrade to Cloud Servers
+        <div className="space-y-4 lg:w-1/3">
+          <img
+            className="w-full h-96 object-cover rounded-xl shadow-md border border-gray-200"
+            src={Image1}
+            alt="cloud"
+          />
+          <div className="space-y-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+              Planned Upgrade to Cloud Servers
             </h2>
-            <p className="text-gray-400">lorem | {currentDate.toLocaleDateString()}</p>
+            <p className="text-gray-500 text-sm">{currentDate.toLocaleDateString()}</p>
+            <p className="text-gray-600 text-sm">
+              Our IT department is upgrading cloud infrastructure to ensure faster access and improved reliability for all departments.
+            </p>
           </div>
         </div>
       </div>

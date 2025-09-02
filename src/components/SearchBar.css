@@ -190,6 +190,24 @@
   gap: 0.6rem;
 }
 
+/* Show More Button */
+.show-more-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin: 1rem 0;
+  display: block;
+  text-align: left;
+  padding: 0;
+}
+
+.show-more-btn:hover {
+  color: #0056b3;
+}
+
 /* Actions */
 .filter-actions {
   display: flex;
@@ -198,7 +216,7 @@
   margin-top: 2rem;
   border-top: 1px solid #eee;
   padding-top: 1.2rem;
-  background: #fff;
+  background: transparent; /* Removed white background */
 }
 .filter-btn {
   padding: 0.75rem 1.4rem;

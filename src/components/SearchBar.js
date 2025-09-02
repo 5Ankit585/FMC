@@ -94,6 +94,7 @@ const SearchBar = ({ onSearch, open, setOpen }) => {
   const [minPlacement, setMinPlacement] = useState("");
   const [facilities, setFacilities] = useState([]);
   const [sortBy, setSortBy] = useState("");
+  const [showMore, setShowMore] = useState(false);
 
   // reset
   const handleReset = () => {
@@ -115,6 +116,7 @@ const SearchBar = ({ onSearch, open, setOpen }) => {
     setMinPlacement("");
     setFacilities([]);
     setSortBy("");
+    setShowMore(false);
   };
 
   // search
@@ -154,7 +156,7 @@ const SearchBar = ({ onSearch, open, setOpen }) => {
                 </button>
               </div>
 
-              {/* Grid Filters */}
+              {/* Basic Filters Grid */}
               <div className="filter-grid">
                 {/* Study Level */}
                 <div className="filter-group">
@@ -314,118 +316,133 @@ const SearchBar = ({ onSearch, open, setOpen }) => {
                     <option value="Deemed">Deemed</option>
                   </select>
                 </div>
+              </div>
 
-                {/* Affiliation / Accreditation */}
-                <div className="filter-group">
-                  <label className="filter-label">Affiliation</label>
-                  <MultiSelect
-                    options={affiliationOptions}
-                    value={affiliations}
-                    onChange={setAffiliations}
-                    placeholder="Select Affiliations"
-                  />
-                </div>
+              {/* Show More Button */}
+              <button
+                className="show-more-btn"
+                onClick={() => setShowMore(!showMore)}
+              >
+                {showMore ? "Show Less" : "Show More Filters"}
+              </button>
 
-                {/* Fees */}
-                <div className="filter-group">
-                  <label className="filter-label">Fees</label>
-                  <div className="fees-flex">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={minFees}
-                      onChange={(e) => setMinFees(e.target.value)}
-                      className="filter-input"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={maxFees}
-                      onChange={(e) => setMaxFees(e.target.value)}
-                      className="filter-input"
+              {/* Advanced Filters */}
+              {showMore && (
+                <>
+                  <div className="filter-grid">
+                    {/* Affiliation / Accreditation */}
+                    <div className="filter-group">
+                      <label className="filter-label">Affiliation</label>
+                      <MultiSelect
+                        options={affiliationOptions}
+                        value={affiliations}
+                        onChange={setAffiliations}
+                        placeholder="Select Affiliations"
+                      />
+                    </div>
+
+                    {/* Fees */}
+                    <div className="filter-group">
+                      <label className="filter-label">Fees</label>
+                      <div className="fees-flex">
+                        <input
+                          type="number"
+                          placeholder="Min"
+                          value={minFees}
+                          onChange={(e) => setMinFees(e.target.value)}
+                          className="filter-input"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Max"
+                          value={maxFees}
+                          onChange={(e) => setMaxFees(e.target.value)}
+                          className="filter-input"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Entrance */}
+                    <div className="filter-group">
+                      <label className="filter-label">Entrance</label>
+                      <select
+                        value={entranceExam}
+                        onChange={(e) => setEntranceExam(e.target.value)}
+                        className="filter-select"
+                      >
+                        <option value="">Any</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                    </div>
+
+                    {/* Cut-off Marks */}
+                    <div className="filter-group">
+                      <label className="filter-label">Cut-off Marks (%)</label>
+                      <input
+                        type="number"
+                        placeholder="Min %"
+                        value={cutOffMarks}
+                        onChange={(e) => setCutOffMarks(e.target.value)}
+                        className="filter-input"
+                      />
+                    </div>
+
+                    {/* Ranking */}
+                    <div className="filter-group">
+                      <label className="filter-label">Ranking (Min)</label>
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        value={minRanking}
+                        onChange={(e) => setMinRanking(e.target.value)}
+                        className="filter-input"
+                      />
+                    </div>
+
+                    {/* Placement */}
+                    <div className="filter-group">
+                      <label className="filter-label">Placement %</label>
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        value={minPlacement}
+                        onChange={(e) => setMinPlacement(e.target.value)}
+                        className="filter-input"
+                      />
+                    </div>
+
+                    {/* Sort By */}
+                    <div className="filter-group">
+                      <label className="filter-label">Sort By</label>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="filter-select"
+                      >
+                        <option value="">Default</option>
+                        <option value="ranking">Ranking</option>
+                        <option value="fees">Lowest Fee</option>
+                        <option value="placement">Highest Placement %</option>
+                        <option value="popularity">Most Popular</option>
+                        <option value="roi">Best ROI</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Separator and Facilities */}
+                  <hr style={{ margin: '1.5rem 0', border: '1px solid #eee' }} />
+                  <div className="filter-group">
+                    <label className="filter-label">Facilities</label>
+                    <MultiSelect
+                      options={facilitiesOptions}
+                      value={facilities}
+                      onChange={setFacilities}
+                      placeholder="Select Facilities"
                     />
                   </div>
-                </div>
-
-                {/* Entrance */}
-                <div className="filter-group">
-                  <label className="filter-label">Entrance</label>
-                  <select
-                    value={entranceExam}
-                    onChange={(e) => setEntranceExam(e.target.value)}
-                    className="filter-select"
-                  >
-                    <option value="">Any</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-
-                {/* Cut-off Marks */}
-                <div className="filter-group">
-                  <label className="filter-label">Cut-off Marks (%)</label>
-                  <input
-                    type="number"
-                    placeholder="Min %"
-                    value={cutOffMarks}
-                    onChange={(e) => setCutOffMarks(e.target.value)}
-                    className="filter-input"
-                  />
-                </div>
-
-                {/* Ranking */}
-                <div className="filter-group">
-                  <label className="filter-label">Ranking (Min)</label>
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={minRanking}
-                    onChange={(e) => setMinRanking(e.target.value)}
-                    className="filter-input"
-                  />
-                </div>
-
-                {/* Placement */}
-                <div className="filter-group">
-                  <label className="filter-label">Placement %</label>
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={minPlacement}
-                    onChange={(e) => setMinPlacement(e.target.value)}
-                    className="filter-input"
-                  />
-                </div>
-
-                {/* Sort By */}
-                <div className="filter-group">
-                  <label className="filter-label">Sort By</label>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="filter-select"
-                  >
-                    <option value="">Default</option>
-                    <option value="ranking">Ranking</option>
-                    <option value="fees">Lowest Fee</option>
-                    <option value="placement">Highest Placement %</option>
-                    <option value="popularity">Most Popular</option>
-                    <option value="roi">Best ROI</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Separator and Facilities */}
-              <hr style={{ margin: '1.5rem 0', border: '1px solid #eee' }} />
-              <div className="filter-group">
-                <label className="filter-label">Facilities</label>
-                <MultiSelect
-                  options={facilitiesOptions}
-                  value={facilities}
-                  onChange={setFacilities}
-                  placeholder="Select Facilities"
-                />
-              </div>
+                </>
+              )}
 
               {/* Actions */}
               <div className="filter-actions">

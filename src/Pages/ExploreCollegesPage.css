@@ -80,14 +80,19 @@
   border-radius: 0.75rem 0.75rem 0 0;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   padding: 0.75rem 1rem;
-  gap: 1rem;
+  gap: 2rem;
   overflow-x: auto;
+
+  /* Match search bar width */
+  width: 100%;
+  max-width: 578px;
+  margin: 0 auto;
 }
 
 .explore-tab-btn {
   background: none;
   border: none;
-  font-size: 0.80rem;
+  font-size: 0.8rem;
   color: #555;
   padding-bottom: 0.3rem;
   cursor: pointer;
@@ -107,9 +112,9 @@
 
 /* ===== Search Bar ===== */
 .explore-search-bar {
-  max-width: 578px;
   width: 100%;
-  margin: 0 auto;
+  max-width: 578px; /* match tabs */
+  margin: 0 auto;   /* center horizontally */
   display: flex;
   align-items: center;
   background: #fff;
@@ -145,7 +150,6 @@
   outline: none;
 }
 
-
 .search-icon {
   border: none;
   background: transparent;
@@ -157,7 +161,6 @@
 .search-icon:hover {
   color: #000;
 }
-
 
 .search-btn {
   padding: 0.3rem 0.6rem;
@@ -193,12 +196,12 @@
   background: #e5e7eb;
   color: #111827;
 }
+
 /* ===== College Cards ===== */
 .college-list {
   max-width: 1000px;
   margin: 1.5rem auto;
   padding: 0.5rem;
-
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 1.5rem;
@@ -302,18 +305,11 @@
     margin-top: 0.6rem;
   }
 
-.explore-search-bar {
-  max-width: 578px;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  background: #fff;
-  padding: 0.4rem;
-  border-radius: 0 0 0.5rem 0.5rem;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-  gap: 0.5rem;
-}
+  .explore-tabs,
+  .explore-search-bar {
+    width: 100%;
+    max-width: 100%;
+  }
 
   .search-category,
   .search-input,
