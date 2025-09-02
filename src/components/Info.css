@@ -22,12 +22,14 @@
   margin-left: 0.5rem;
 }
 
-/* ====== Cards Grid ====== */
+/* ====== Cards Grid (3x3) ====== */
 .info-comp-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-rows: repeat(3, auto);   /* 3 rows, height adjusts automatically */
   gap: 1.5rem;
 }
+
 
 /* ====== Card Shape ====== */
 .info-comp-card,

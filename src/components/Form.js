@@ -17,16 +17,16 @@ function sendData(e) {
   const course = document.getElementById("course").value;
 
   Axios.post("http://localhost:5000/get-more-college-options", {
-    name: name,
-    email: email,
-    mobile: mobile,
-    street: street,
-    state: state,
-    zip: zip,
-    country: country,
-    level: level,
-    stream: stream,
-    course: course,
+    name,
+    email,
+    mobile,
+    street,
+    state,
+    zip,
+    country,
+    level,
+    stream,
+    course,
   })
     .then((resp) => {
       console.log(resp.data);
@@ -38,144 +38,137 @@ function sendData(e) {
 
 const Form = () => {
   return (
-    <section className="p-8  box-border flex flex-col items-center lg:flex lg:flex-row lg:justify-around  lg:items-start bg-slate-200">
-      <div className=" max-w-[18rem] sm:max-w-[26rem] lg:max-w-[30rem]  lg:mx-0 lg:p-4 flex flex-col">
-        <h2 className=" text-xl sm:text-2xl font-bold break-words w-[18rem] sm:w-[26rem]">
-          Want to secure your future and get more college options:
-        </h2>
+    <section className="p-8 box-border flex flex-col items-center lg:flex lg:flex-row lg:justify-around lg:items-start bg-slate-200">
+      {/* Form Container */}
+      <div className="w-full max-w-4xl lg:mx-0 lg:p-10 flex flex-col bg-white shadow-lg rounded-xl">
+        
+        {/* Centered Heading */}
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 leading-snug tracking-wide text-center mb-8">
+  <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+    Want to secure your future
+  </span>
+  <br />
+  <span className="text-gray-700">
+    and get more college options:
+  </span>
+</h2>
 
-        <form className="max-w-[70vw]">
-          <div className="flex flex-col-2 ">
-            <div className="">
-              <div className="flex flex-col my-3">
-                <label className="text-xs text-gray-500 " htmlFor="">
-                  First Name <span>*</span>
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 border-solid border-2 border-[#777771] rounded-md hover:border-blue-400"
-                  id="name"
-                  type="text"
-                  placeholder="E.g. vishal"
-                  required
-                />
-              </div>
 
-              <div className="flex flex-col my-5">
-                <label className=" text-xs text-gray-500 " htmlFor="">
-                  Email Address <span>*</span>
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
-                  id="email"
-                  type="email"
-                  placeholder="E.g. vishal@123.com"
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  Phone Number
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
-                  id="mobile"
-                  type="tel"
-                  placeholder="E.g. +91 1234556776"
-                />
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  Street Address
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
-                  id="street"
-                  type="text"
-                  placeholder="E.g. 32Wallaby Way"
-                />
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  State/Province
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
-                  id="state"
-                  type="text"
-                  placeholder="E.g. Haryana"
-                />
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  ZIP/Postal Code
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
-                  id="zip"
-                  type="text"
-                  placeholder="E.g. 123456"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex flex-col my-5" id="country">
-                <SelectCountry />
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  Select Level
-                </label>
-                <input
-                  className="bg-[#EDEDED] text-[#000000] p-2 font-semibold outline-0 rounded-md border-solid border-2 border-[#777771] hover:border-blue-400"
-                  id="level"
-                  type="number"
-                  placeholder="E.g. 10"
-                />
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  Stream
-                </label>
-                <textarea
-                  className="bg-[#EDEDED] text-[#000000]  rounded-md font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-                  name=""
-                  id="stream"
-                  cols="30"
-                  rows="6"
-                ></textarea>
-              </div>
-
-              <div className="flex flex-col my-5">
-                <label className="p-0.5 text-xs text-gray-500 " htmlFor="">
-                  Course
-                </label>
-                <textarea
-                  className="bg-[#EDEDED] rounded-md text-[#000000]  font-semibold outline-0 border-solid border-2 border-[#777771] hover:border-blue-400"
-                  name=""
-                  id="course"
-                  cols="30"
-                  rows="6"
-                ></textarea>
-              </div>
-            </div>
+        {/* Form */}
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          {/* Left Side */}
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">First Name <span>*</span></label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="name"
+              type="text"
+              placeholder="E.g. Vishal"
+              required
+            />
           </div>
-          <div className="my-5 bg-blue-600 hover:bg-blue-700 text-center text-white font-semibold">
-            <button className="p-2" type="submit" onClick={(e) => sendData(e)}>
-              {" "}
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">Email Address <span>*</span></label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="email"
+              type="email"
+              placeholder="E.g. vishal@123.com"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">Phone Number</label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="mobile"
+              type="tel"
+              placeholder="E.g. +91 1234556776"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">Street Address</label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="street"
+              type="text"
+              placeholder="E.g. 32 Wallaby Way"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">State/Province</label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="state"
+              type="text"
+              placeholder="E.g. Haryana"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">ZIP/Postal Code</label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="zip"
+              type="text"
+              placeholder="E.g. 123456"
+            />
+          </div>
+
+          <div className="flex flex-col md:col-span-2 space-y-2">
+            <SelectCountry />
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">Select Level</label>
+            <input
+              className="bg-[#EDEDED] text-sm text-black p-2.5 font-medium outline-0 border-2 border-[#777771] rounded-md hover:border-blue-400"
+              id="level"
+              type="number"
+              placeholder="E.g. 10"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-xs text-gray-500">Stream</label>
+            <textarea
+              className="bg-[#EDEDED] text-sm text-black p-2.5 rounded-md font-medium outline-0 border-2 border-[#777771] hover:border-blue-400"
+              id="stream"
+              rows="3"
+              placeholder="E.g. Science, Commerce"
+            ></textarea>
+          </div>
+
+          <div className="flex flex-col md:col-span-2 space-y-2">
+            <label className="text-xs text-gray-500">Course</label>
+            <textarea
+              className="bg-[#EDEDED] text-sm text-black p-2.5 rounded-md font-medium outline-0 border-2 border-[#777771] hover:border-blue-400"
+              id="course"
+              rows="3"
+              placeholder="E.g. B.Tech, MBA"
+            ></textarea>
+          </div>
+
+          {/* Submit Button */}
+          <div className="md:col-span-2">
+            <button
+              className="w-full p-3 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 hover:opacity-90 transition text-white font-semibold rounded-md shadow-md"
+              type="submit"
+              onClick={(e) => sendData(e)}
+            >
               Submit
             </button>
           </div>
         </form>
       </div>
-      <div className="mt-10 max-w-[18rem] sm:max-w-[26rem] lg:max-w-[29rem] lg:mt-[-1px]  lg:pt-4 ">
-        <img src={formImage} alt="person" />
+
+      {/* Side Image */}
+      <div className="mt-10 max-w-[18rem] sm:max-w-[26rem] lg:max-w-[29rem] lg:mt-[-1px] lg:pt-4">
+        <img src={formImage} alt="person" className="rounded-xl shadow-lg" />
       </div>
     </section>
   );
