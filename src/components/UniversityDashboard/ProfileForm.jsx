@@ -5,14 +5,14 @@ import axios from "axios";
 const universityTypes = ['Government', 'Private', 'Deemed', 'Central', 'State'];
 const affiliations = ['UGC', 'AICTE', 'NAAC', 'ICAR', 'BCI', 'MCI', 'Others'];
 const states = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
-  'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
-  'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
-  'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-  'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+  'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa',
+  'Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala',
+  'Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland',
+  'Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura',
+  'Uttar Pradesh','Uttarakhand','West Bengal'
 ];
 const countryCodes = ['+91', '+1', '+44', '+61', '+81', '+86', '+971'];
-const contactTypes = ['Director', 'Examiner', 'Vice Chancellor', 'MD', 'Owner', 'Registrar', 'Other'];
+const contactTypes = ['Director','Examiner','Vice Chancellor','MD','Owner','Registrar','Other'];
 
 export default function ProfileForm() {
   const [form, setForm] = useState({
@@ -46,10 +46,7 @@ export default function ProfileForm() {
   };
 
   const addContact = () => {
-    setForm(f => ({
-      ...f,
-      contacts: [...f.contacts, { type: "", countryCode: "", name: "", email: "", phone: "" }]
-    }));
+    setForm(f => ({ ...f, contacts: [...f.contacts, { type: "", countryCode: "", name: "", email: "", phone: "" }] }));
   };
 
   const handleContactChange = (index, e) => {
@@ -60,35 +57,7 @@ export default function ProfileForm() {
   };
 
   const removeContact = (index) => {
-    const updatedContacts = form.contacts.filter((_, i) => i !== index);
-    setForm(f => ({ ...f, contacts: updatedContacts }));
-  };
-
-  // Upload single file to Cloudinary
-  const uploadToCloudinary = async (file, folder) => {
-    if (!file) return null;
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "universityproject");
-    if (folder) formData.append("folder", folder);
-
-    try {
-      const res = await fetch(`https://api.cloudinary.com/v1_1/dapjccnab/${file.type.startsWith("image") ? "image" : file.type.startsWith("video") ? "video" : "raw"}/upload`, {
-        method: "POST",
-        body: formData
-      });
-      const data = await res.json();
-      return {
-        url: data.secure_url,
-        public_id: data.public_id,
-        folder: folder || "",
-        type: file.type.startsWith("image") ? "image" : file.type.startsWith("video") ? "video" : "raw",
-        name: data.original_filename + "." + data.format
-      };
-    } catch (err) {
-      console.error("Cloudinary upload error:", err);
-      return null;
-    }
+    setForm(f => ({ ...f, contacts: f.contacts.filter((_, i) => i !== index) }));
   };
 
   const handleSubmit = async (e) => {
@@ -96,27 +65,20 @@ export default function ProfileForm() {
     setUploading(true);
 
     try {
-      // Upload media
-      const logoData = await uploadToCloudinary(form.logo, "logos");
-      const brochureData = await uploadToCloudinary(form.brochure, "brochures");
-      const coursesData = await uploadToCloudinary(form.coursesFile, "courses");
+      const formData = new FormData();
+      if (form.logo) formData.append("logo", form.logo);
+      if (form.brochure) formData.append("brochure", form.brochure);
+      if (form.coursesFile) formData.append("coursesFile", form.coursesFile);
+      form.images.forEach(img => formData.append("images", img));
+      form.videos.forEach(vid => formData.append("videos", vid));
 
-      const imagesData = await Promise.all(form.images.map(img => uploadToCloudinary(img, "images")));
-      const videosData = await Promise.all(form.videos.map(vid => uploadToCloudinary(vid, "videos")));
+      // All other fields as JSON string
+      const { logo, brochure, coursesFile, images, videos, ...otherFields } = form;
+      formData.append("data", JSON.stringify(otherFields));
 
-      // Prepare payload
-      const payload = {
-        ...form,
-        createdAt: new Date(),
-        logo: logoData,
-        brochure: brochureData,
-        coursesFile: coursesData,
-        images: imagesData.filter(Boolean),
-        videos: videosData.filter(Boolean)
-      };
-
-      // Save to backend
-      const res = await axios.post("http://localhost:5000/api/universities", payload);
+      const res = await axios.post("http://localhost:5000/api/universities", formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
 
       if (res.data.success) {
         alert("University profile saved successfully!");
@@ -144,7 +106,6 @@ export default function ProfileForm() {
 
   return (
     <form className="profile-form" onSubmit={handleSubmit} noValidate>
-      {/* Basic Info */}
       <section>
         <h3>Basic Information</h3>
         <label>University Name <small>(required)</small>
@@ -170,7 +131,6 @@ export default function ProfileForm() {
         </label>
       </section>
 
-      {/* Location */}
       <section>
         <h3>Location Details</h3>
         <label>Address<input type="text" name="address" value={form.address} onChange={handleChange} /></label>
@@ -182,7 +142,6 @@ export default function ProfileForm() {
         </select></label>
       </section>
 
-      {/* Contact Info */}
       <section>
         <h3>Contact Information</h3>
         <label>Primary Contact<input type="text" name="contact" value={form.contact} onChange={handleChange} /></label>
@@ -216,33 +175,28 @@ export default function ProfileForm() {
         </div>
       </section>
 
-      {/* Academic & Media */}
       <section>
-        <h3>Academic Details</h3>
+        <h3>Academic Details & Media</h3>
         <label>Streams<input type="text" name="streams" value={form.streams} onChange={handleChange} /></label>
         <label>Total Students<input type="number" name="students" value={form.students} onChange={handleChange} /></label>
         <label>Total Faculty<input type="number" name="faculty" value={form.faculty} onChange={handleChange} /></label>
         <label>Hostel<input type="text" name="hostel" value={form.hostel} onChange={handleChange} /></label>
         <label>Campus Area<input type="number" name="campusArea" value={form.campusArea} onChange={handleChange} /></label>
-        <label>Courses Excel File<input type="file" name="coursesFile" onChange={handleChange} /></label>
 
-        <h3>Media</h3>
+        <label>Courses Excel File<input type="file" name="coursesFile" onChange={handleChange} /></label>
         <label>Logo<input type="file" name="logo" accept="image/*" onChange={handleChange} /></label>
         <label>Brochure<input type="file" name="brochure" accept="application/pdf" onChange={handleChange} /></label>
         <label>Images<input type="file" name="images" accept="image/*" multiple onChange={handleChange} /></label>
         <label>Videos<input type="file" name="videos" accept="video/mp4" multiple onChange={handleChange} /></label>
       </section>
 
-      {/* Placement & Admin */}
       <section>
-        <h3>Placement & Career</h3>
+        <h3>Placement & Admin</h3>
         <label>Placement Rate<input type="number" name="placementRate" value={form.placementRate} onChange={handleChange} /></label>
         <label>Top Recruiters<input type="text" name="topRecruiters" value={form.topRecruiters} onChange={handleChange} /></label>
         <label>Average Package<input type="text" name="averagePackage" value={form.averagePackage} onChange={handleChange} /></label>
         <label>Highest Package<input type="text" name="highestPackage" value={form.highestPackage} onChange={handleChange} /></label>
         <label>Placement Cell Email<input type="email" name="placementCellContactEmail" value={form.placementCellContactEmail} onChange={handleChange} /></label>
-
-        <h3>Admin Credentials</h3>
         <label>Admin Email<input type="email" name="adminEmail" required value={form.adminEmail} onChange={handleChange} /></label>
         <label>Password<input type="password" name="password" required value={form.password} onChange={handleChange} /></label>
         <label>Confirm Password<input type="password" name="confirmPassword" required value={form.confirmPassword} onChange={handleChange} /></label>
@@ -253,7 +207,9 @@ export default function ProfileForm() {
         <textarea name="about" rows="5" value={form.about} onChange={handleChange} />
       </section>
 
-      <button type="submit" className="ud-btn" disabled={uploading}>{uploading ? "Uploading..." : "Submit"}</button>
+      <button type="submit" className="ud-btn" disabled={uploading}>
+        {uploading ? "Uploading..." : "Submit"}
+      </button>
     </form>
   );
 }
