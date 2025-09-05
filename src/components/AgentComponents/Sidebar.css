@@ -1,9 +1,10 @@
+/* Sidebar base */
 .ad-sidebar {
-  background-color: var(--card-bg);
+  background-color: #FFFFFF;
   width: 260px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid #CBD5E1;
   flex-shrink: 0;
   overflow-y: auto;
   transition: transform 0.3s ease;
@@ -13,29 +14,34 @@
   transform: translateX(-260px);
 }
 
+/* Brand */
 .ad-brand {
   display: flex;
-  align-items: center;
+  align-items: center; /* centers text on Y-axis */
+  justify-content: flex-start; /* aligns to left */
   padding: 1rem;
-  gap: 0.75rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #CBD5E1;
 }
 
-.ad-logo {
-  color: var(--color-primary);
+/* Brand text */
+.ad-brand-text {  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .ad-brand-text strong {
   font-size: 1.25rem;
-  color: var(--color-primary);
+  color: #1a51dc;
 }
 
 .ad-brand-text small {
   display: block;
   font-size: 0.75rem;
-  color: var(--color-muted);
+  color: #F59E0B;
 }
 
+/* Menu */
 .ad-menu {
   display: flex;
   flex-direction: column;
@@ -43,31 +49,34 @@
   flex-grow: 1;
 }
 
+/* Menu items default */
 .ad-menu-item {
   background: none;
   border: none;
   text-align: left;
-  padding: 0.7rem 1rem;
-  font-size: 1rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  color: var(--text-color);
+  color: #000000; /* text black */
   display: flex;
   align-items: center;
-  gap: 0.6rem;
   border-left: 4px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
+/* Hover + Active */
 .ad-menu-item:hover,
 .ad-menu-item.active {
-  background-color: var(--color-primary);
-  color: #fff;
-  border-left-color: var(--color-accent);
+  background-color: #2563EB; /* primary blue */
+  color: #FFFFFF; /* text white */
+  border-left-color: #2563EB;
 }
 
+/* Footer */
 .ad-sidebar-footer {
   padding: 1rem;
   font-size: 0.75rem;
-  color: var(--color-muted);
-  border-top: 1px solid var(--border-color);
+  color: #6B7280;
+  border-top: 1px solid #CBD5E1;
   text-align: center;
 }

@@ -1,0 +1,227 @@
+/* UniversityRegister.css */
+
+/* Global text color */
+* {
+  color: #000 !important;
+}
+
+/* Container for the entire app */
+.univ-app-container {
+  max-width: 90%; /* Form takes 90% width */
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #ffffff; /* Light background */
+}
+
+/* Header styling */
+.univ-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.univ-header-title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.univ-header-subtitle {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Stepper styling */
+.univ-stepper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.univ-stepper-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.univ-stepper-circle.active {
+  background-color: #007bff;
+  color: #fff !important;
+}
+
+.univ-stepper-circle.completed {
+  background-color: #28a745;
+  color: #fff !important;
+}
+
+/* Main form container */
+.univ-main-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styling */
+.univ-multi-step-form.wide-form {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Grid layout for form steps */
+.univ-form-step.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.univ-form-step h3 {
+  grid-column: 1 / -1;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* Input, select, and textarea styling */
+.univ-form-step input,
+.univ-form-step select,
+.univ-form-step textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #fff;
+  color: #000 !important;
+  transition: border-color 0.3s ease;
+}
+
+.univ-form-step input:focus,
+.univ-form-step select:focus,
+.univ-form-step textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Tooltip for input descriptions */
+.univ-form-step input[title]:hover::after,
+.univ-form-step select[title]:hover::after,
+.univ-form-step textarea[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff !important;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* File input styling */
+.univ-form-step input[type="file"] {
+  padding: 5px;
+  border: none;
+  background-color: transparent;
+}
+
+/* Labels */
+.univ-form-step label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Checkbox styling */
+.univ-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+/* Branch group styling */
+.branch-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.univ-nav-btn,
+.univ-submit-btn,
+.univ-add-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #fff !important;
+}
+
+.univ-nav-btn {
+  background-color: #6c757d;
+}
+
+.univ-nav-btn:hover {
+  background-color: #5a6268;
+}
+
+.univ-submit-btn {
+  background-color: #28a745;
+}
+
+.univ-submit-btn:hover {
+  background-color: #218838;
+}
+
+.univ-add-btn {
+  background-color: #007bff;
+  grid-column: 1 / -1;
+}
+
+.univ-add-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Form navigation */
+.univ-form-nav {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .univ-form-step.grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .univ-app-container {
+    padding: 10px;
+  }
+
+  .univ-stepper-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+
+  .branch-group {
+    grid-template-columns: 1fr;
+  }
+}

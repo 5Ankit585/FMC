@@ -1,879 +1,679 @@
-import React, { useState, useMemo } from 'react';
-import FormInput from '../components/FormInput'; // Custom input component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUniversity,
-  faMapMarkerAlt,
-  faPhone,
-  faBook,
-  faImage,
-  faUserShield,
-  faInfoCircle,
-  faSpinner,
-  faUpload,
-  faTimes,
-  faBriefcase,
-  faUsers,
-  faAward,
-  faGlobe,
-  faFileAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import "./UniversityRegister.css";
+import Navbar from "../components/Navbar";
 
-const UniversityRegister = () => {
-  // State to store form data (all input fields)
-  const [formData, setFormData] = useState({
-    name: '',
-    type: '',
-    ownership: '',
-    accreditation: '',
-    affiliation: '',
-    established: '',
-    website: '',
-    headOfficeAddress: '',
-    address: '', // Campus address
-    city: '',
-    state: '',
-    pincode: '',
-    altContact: { countryCode: '+91', phone: '' },
-    contacts: [{ type: 'chancellor', name: '', email: '', phone: '', countryCode: '+91', linkedin: '', photo: null }],
-    coursesFile: null,
-    courses: [{ name: '', level: '', specialization: '', duration: '', mode: '', eligibility: '', admissionProcess: '', seats: '', fees: '', scholarships: '', placementOptions: '' }],
-    streams: '',
-    students: '',
-    faculty: '',
-    hostel: '',
-    campusArea: '',
-    facilities: { library: '', labs: '', researchCenters: '', sports: '', cafeteria: '', auditorium: '', medical: '', transport: '', itFacilities: '' },
-    about: '',
-    logo: null,
-    brochure: null,
-    images: [],
-    videos: [],
-    socialMedia: { facebook: '', twitter: '', instagram: '', linkedin: '', youtube: '' },
-    adminEmail: '',
-    password: '',
-    confirmPassword: '',
-    placementRate: '',
-    topRecruiters: '',
-    averagePackage: '',
-    highestPackage: '',
-    placementCellContactEmail: '',
-    internshipTieUps: '',
-    alumniInIndustry: '',
-    rankings: '',
-    awards: '',
-    notableAlumni: '',
-    mediaCoverage: '',
-    intlStudentOffice: '',
-    countriesEnrolled: '',
-    foreignMoUs: '',
-    languageSupport: '',
-    visaSupport: '',
-    accreditationDocs: [],
-    affiliationDocs: [],
-    registrationDocs: [],
-    seal: null,
-    subscriptionPlan: 'free',
-    declaration: false,
-  });
+export default function MultiStepForm() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({});
+  const [files, setFiles] = useState({});
+  const [selectedFacilities, setSelectedFacilities] = useState([]);
+  const [branches, setBranches] = useState([]); // For branch-wise placements
 
-  // State for current step
-  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 9;
 
-  // State for form errors and submission status
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  // State for previewing uploaded images and videos
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [videoPreviews, setVideoPreviews] = useState([]);
-
-  // Lists for dropdown menus
-  const universityTypes = ['Government', 'Private', 'Deemed', 'Central', 'State'];
-  const ownershipTypes = ['Public', 'Private', 'Other'];
-  const affiliations = ['UGC', 'AICTE', 'NAAC', 'ICAR', 'BCI', 'MCI', 'Others'];
-  const states = [
-    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
-    'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
-    'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-    'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
-    'Uttarakhand', 'West Bengal'
-  ];
-  const countryCodes = ['+91', '+1', '+44', '+61', '+81', '+86', '+971'];
-  const contactTypes = ['Chancellor', 'Vice Chancellor', 'Registrar', 'Deans', 'Principal', 'Admission Officer', 'Placement Officer', 'Research Head', 'Intl. Relations Officer', 'Other'];
-  const requiredFields = ['name', 'type', 'ownership', 'adminEmail', 'password', 'confirmPassword', 'declaration'];
-
-  // Calculate form completion progress based on steps
-  const progress = useMemo(() => {
-    return Math.round((currentStep / 6) * 100);
-  }, [currentStep]);
-
-  // Validate form inputs
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = 'University name is required';
-    if (!formData.type) newErrors.type = 'University type is required';
-    if (!formData.ownership) newErrors.ownership = 'Ownership is required';
-    if (!formData.adminEmail) newErrors.adminEmail = 'Admin email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    if (!formData.declaration) newErrors.declaration = 'You must agree to the declaration';
-    if (formData.website && !/^https?:\/\/.+/.test(formData.website)) {
-      newErrors.website = 'Invalid URL format';
-    }
-    formData.contacts.forEach((contact, index) => {
-      if (contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) {
-        newErrors[`contactEmail${index}`] = 'Invalid email format';
-      }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
     });
-    if (formData.logo && !['image/png', 'image/jpeg', 'image/jpg'].includes(formData.logo.type)) {
-      newErrors.logo = 'Logo must be a PNG or JPEG image';
-    }
-    if (formData.brochure && formData.brochure.type !== 'application/pdf') {
-      newErrors.brochure = 'Brochure must be a PDF file';
-    }
-    if (formData.coursesFile && !['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].includes(formData.coursesFile.type)) {
-      newErrors.coursesFile = 'Courses file must be an Excel file';
-    }
-    if (formData.placementCellContactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.placementCellContactEmail)) {
-      newErrors.placementCellContactEmail = 'Invalid email format';
-    }
-    return newErrors;
   };
 
-  // Handle input changes
-  const handleChange = (e, index = null, subField = null) => {
-    const { name, value, files, type: inputType, checked } = e.target;
-    const val = inputType === 'checkbox' ? checked : (files ? files : value);
-
-    if (files) {
-      if (['images', 'videos'].includes(name)) {
-        const newFiles = Array.from(files);
-        setFormData((prev) => ({ ...prev, [name]: [...prev[name], ...newFiles] }));
-        if (name === 'images') {
-          setImagePreviews((prev) => [...prev, ...newFiles.map((file) => URL.createObjectURL(file))]);
-        } else if (name === 'videos') {
-          setVideoPreviews((prev) => [...prev, ...newFiles.map((file) => URL.createObjectURL(file))]);
-        }
-      } else if (['accreditationDocs', 'affiliationDocs', 'registrationDocs'].includes(name)) {
-        setFormData((prev) => ({ ...prev, [name]: Array.from(files) }));
-      } else if (subField === 'contactPhoto' && index !== null) {
-        setFormData((prev) => {
-          const newContacts = [...prev.contacts];
-          newContacts[index].photo = files[0];
-          return { ...prev, contacts: newContacts };
-        });
-      } else {
-        setFormData((prev) => ({ ...prev, [name]: files[0] }));
-      }
-    } else if (index !== null) {
-      if (subField === 'contact') {
-        setFormData((prev) => {
-          const newContacts = [...prev.contacts];
-          newContacts[index][name] = val;
-          return { ...prev, contacts: newContacts };
-        });
-      } else if (subField === 'course') {
-        setFormData((prev) => {
-          const newCourses = [...prev.courses];
-          newCourses[index][name] = val;
-          return { ...prev, courses: newCourses };
-        });
-      }
-    } else if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData((prev) => ({
-        ...prev,
-        [parent]: { ...prev[parent], [child]: val },
-      }));
+  const handleFileChange = (e) => {
+    const { name, files: uploadedFiles } = e.target;
+    if (name === "logo" || name === "bannerImage") {
+      setFiles({
+        ...files,
+        [name]: uploadedFiles[0], // single file
+      });
     } else {
-      setFormData((prev) => ({ ...prev, [name]: val }));
-    }
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  // Handle altContact changes
-  const handleAltContactChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      altContact: { ...prev.altContact, [name]: value },
-    }));
-    if (errors.altContact) {
-      setErrors((prev) => ({ ...prev, altContact: '' }));
+      setFiles({
+        ...files,
+        [name]: [...(files[name] || []), ...Array.from(uploadedFiles)],
+      });
     }
   };
 
-  // Add a new contact
-  const addContact = () => {
-    setFormData((prev) => ({
-      ...prev,
-      contacts: [...prev.contacts, { type: '', name: '', email: '', phone: '', countryCode: '+91', linkedin: '', photo: null }],
-    }));
+  const handleFacilityChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setSelectedFacilities([...selectedFacilities, value]);
+    } else {
+      setSelectedFacilities(selectedFacilities.filter((f) => f !== value));
+      // Remove corresponding description if unchecked
+      setFormData((prev) => {
+        const newData = { ...prev };
+        delete newData[`facility_${value}_desc`];
+        return newData;
+      });
+    }
   };
 
-  // Remove a contact
-  const removeContact = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      contacts: prev.contacts.filter((_, i) => i !== index),
-    }));
+  const addBranch = () => {
+    setBranches([...branches, { name: "", avgLPA: "", highestLPA: "" }]);
   };
 
-  // Add a new course
-  const addCourse = () => {
-    setFormData((prev) => ({
-      ...prev,
-      courses: [...prev.courses, { name: '', level: '', specialization: '', duration: '', mode: '', eligibility: '', admissionProcess: '', seats: '', fees: '', scholarships: '', placementOptions: '' }],
-    }));
+  const handleBranchChange = (index, field, value) => {
+    const newBranches = [...branches];
+    newBranches[index][field] = value;
+    setBranches(newBranches);
   };
 
-  // Remove a course
-  const removeCourse = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      courses: prev.courses.filter((_, i) => i !== index),
-    }));
+  const next = () => {
+    // Basic validation examples (expand as needed)
+    if (step === 1) {
+      if (files.bannerImages?.length < 3) {
+        alert("Please upload at least 3 banner images.");
+        return;
+      }
+    }
+    if (step === 2) {
+      if (files.aboutImages?.length < 5) {
+        alert("Please upload at least 5 about images.");
+        return;
+      }
+    }
+    setStep((s) => Math.min(totalSteps, s + 1));
   };
 
-  // Remove an uploaded image
-  const removeImage = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-  };
+  const prev = () => setStep((s) => Math.max(1, s - 1));
 
-  // Remove an uploaded video
-  const removeVideo = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      videos: prev.videos.filter((_, i) => i !== index),
-    }));
-    setVideoPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formErrors = validateForm();
-
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
     try {
-      const fileToBase64 = (file) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-
-      const contactsWithPhotos = await Promise.all(
-        formData.contacts.map(async (contact) => ({
-          ...contact,
-          photo: contact.photo ? await fileToBase64(contact.photo) : null,
-        }))
-      );
-
-      const newUniversity = {
-        id: Date.now(),
-        name: formData.name,
-        type: formData.type,
-        ownership: formData.ownership,
-        accreditation: formData.accreditation,
-        affiliation: formData.affiliation,
-        established: formData.established,
-        website: formData.website,
-        headOfficeAddress: formData.headOfficeAddress,
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        pincode: formData.pincode,
-        altContact: formData.altContact,
-        contacts: contactsWithPhotos,
-        streams: formData.streams,
-        students: formData.students,
-        faculty: formData.faculty,
-        hostel: formData.hostel,
-        campusArea: formData.campusArea,
-        facilities: formData.facilities,
-        about: formData.about,
-        logo: formData.logo ? await fileToBase64(formData.logo) : null,
-        brochure: formData.brochure ? await fileToBase64(formData.brochure) : null,
-        images: await Promise.all(formData.images.map(fileToBase64)),
-        videos: await Promise.all(formData.videos.map(fileToBase64)),
-        socialMedia: formData.socialMedia,
-        adminEmail: formData.adminEmail,
-        password: formData.password,
-        placementRate: formData.placementRate,
-        topRecruiters: formData.topRecruiters,
-        averagePackage: formData.averagePackage,
-        highestPackage: formData.highestPackage,
-        placementCellContactEmail: formData.placementCellContactEmail,
-        internshipTieUps: formData.internshipTieUps,
-        alumniInIndustry: formData.alumniInIndustry,
-        rankings: formData.rankings,
-        awards: formData.awards,
-        notableAlumni: formData.notableAlumni,
-        mediaCoverage: formData.mediaCoverage,
-        intlStudentOffice: formData.intlStudentOffice,
-        countriesEnrolled: formData.countriesEnrolled,
-        foreignMoUs: formData.foreignMoUs,
-        languageSupport: formData.languageSupport,
-        visaSupport: formData.visaSupport,
-        accreditationDocs: await Promise.all(formData.accreditationDocs.map(fileToBase64)),
-        affiliationDocs: await Promise.all(formData.affiliationDocs.map(fileToBase64)),
-        registrationDocs: await Promise.all(formData.registrationDocs.map(fileToBase64)),
-        seal: formData.seal ? await fileToBase64(formData.seal) : null,
-        subscriptionPlan: formData.subscriptionPlan,
-        declaration: formData.declaration,
-      };
-
-      const existingUniversities = JSON.parse(localStorage.getItem('universities')) || [];
-      existingUniversities.push(newUniversity);
-      localStorage.setItem('universities', JSON.stringify(existingUniversities));
-
-      alert('University registered successfully!');
-      // Reset form
-      setFormData({
-        name: '',
-        type: '',
-        ownership: '',
-        accreditation: '',
-        affiliation: '',
-        established: '',
-        website: '',
-        headOfficeAddress: '',
-        address: '',
-        city: '',
-        state: '',
-        pincode: '',
-        altContact: { countryCode: '+91', phone: '' },
-        contacts: [{ type: 'chancellor', name: '', email: '', phone: '', countryCode: '+91', linkedin: '', photo: null }],
-        coursesFile: null,
-        courses: [{ name: '', level: '', specialization: '', duration: '', mode: '', eligibility: '', admissionProcess: '', seats: '', fees: '', scholarships: '', placementOptions: '' }],
-        streams: '',
-        students: '',
-        faculty: '',
-        hostel: '',
-        campusArea: '',
-        facilities: { library: '', labs: '', researchCenters: '', sports: '', cafeteria: '', auditorium: '', medical: '', transport: '', itFacilities: '' },
-        about: '',
-        logo: null,
-        brochure: null,
-        images: [],
-        videos: [],
-        socialMedia: { facebook: '', twitter: '', instagram: '', linkedin: '', youtube: '' },
-        adminEmail: '',
-        password: '',
-        confirmPassword: '',
-        placementRate: '',
-        topRecruiters: '',
-        averagePackage: '',
-        highestPackage: '',
-        placementCellContactEmail: '',
-        internshipTieUps: '',
-        alumniInIndustry: '',
-        rankings: '',
-        awards: '',
-        notableAlumni: '',
-        mediaCoverage: '',
-        intlStudentOffice: '',
-        countriesEnrolled: '',
-        foreignMoUs: '',
-        languageSupport: '',
-        visaSupport: '',
-        accreditationDocs: [],
-        affiliationDocs: [],
-        registrationDocs: [],
-        seal: null,
-        subscriptionPlan: 'free',
-        declaration: false,
+      const payload = new FormData();
+      // Append text fields
+      Object.entries(formData).forEach(([key, val]) => {
+        payload.append(key, val);
       });
-      setImagePreviews([]);
-      setVideoPreviews([]);
-      setCurrentStep(1);
-    } catch (error) {
-      alert('Error submitting registration.');
-    } finally {
-      setIsSubmitting(false);
+      // Append branches as JSON
+      payload.append("branches", JSON.stringify(branches));
+      // Append selected facilities (descriptions are already in formData)
+      payload.append("facilities", JSON.stringify(selectedFacilities));
+      // Append files
+      Object.entries(files).forEach(([key, fileList]) => {
+        if (Array.isArray(fileList)) {
+          fileList.forEach((file) => payload.append(key, file));
+        } else {
+          payload.append(key, fileList);
+        }
+      });
+
+      const res = await fetch("http://localhost:5000/api/university-registration", {
+        method: "POST",
+        body: payload,
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ Registration submitted successfully!");
+        setStep(1);
+        setFormData({});
+        setFiles({});
+        setSelectedFacilities([]);
+        setBranches([]);
+      } else {
+        alert("❌ Error: " + (data.error || "Submission failed"));
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      alert("❌ Server error, check console");
     }
   };
 
-  // Render the current step
-  const renderStep = (step) => {
-    switch (step) {
-      case 1:
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-[#3656E5]">
-              <FontAwesomeIcon icon={faUniversity} className="text-xl" />
-              <h3 className="text-xl font-semibold">Step 1: Basic Information & Location</h3>
-            </div>
-            <p className="text-gray-600">Let's start with the essentials about your university. Take your time!</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormInput label="Institute Name" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter university name" error={errors.name} className="border-blue-300 focus:border-[#3656E5]" />
-              <div>
-                <label className="block text-sm font-medium text-gray-700">University Type</label>
-                <select name="type" value={formData.type} onChange={handleChange} className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50">
-                  <option value="">Select university type</option>
-                  {universityTypes.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-                {errors.type && <p className="text-red-600 text-sm mt-1">{errors.type}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Ownership</label>
-                <select name="ownership" value={formData.ownership} onChange={handleChange} className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50">
-                  <option value="">Select ownership</option>
-                  {ownershipTypes.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-                {errors.ownership && <p className="text-red-600 text-sm mt-1">{errors.ownership}</p>}
-              </div>
-              <FormInput label="Accreditation" name="accreditation" value={formData.accreditation} onChange={handleChange} placeholder="Enter accreditation details" className="border-blue-300 focus:border-[#3656E5]" />
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Affiliation</label>
-                <select name="affiliation" value={formData.affiliation} onChange={handleChange} className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50">
-                  <option value="">Select affiliation</option>
-                  {affiliations.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-              </div>
-              <FormInput label="Year Established" name="established" type="date" value={formData.established} onChange={handleChange} className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="No. of Students" name="students" type="number" value={formData.students} onChange={handleChange} placeholder="Enter number of students" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="No. of Faculty" name="faculty" type="number" value={formData.faculty} onChange={handleChange} placeholder="Enter number of faculty" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Popular Streams" name="streams" value={formData.streams} onChange={handleChange} placeholder="e.g., Engineering, Arts" className="border-blue-300 focus:border-[#3656E5]" />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Brief Description</label>
-                <textarea name="about" value={formData.about} onChange={handleChange} placeholder="Tell us about your university..." className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50" rows="4" />
-              </div>
-              <FormInput label="Head Office Address" name="headOfficeAddress" value={formData.headOfficeAddress} onChange={handleChange} placeholder="Enter head office address" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Campus Address" name="address" value={formData.address} onChange={handleChange} placeholder="Enter campus address" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="City" name="city" value={formData.city} onChange={handleChange} placeholder="Enter city" className="border-blue-300 focus:border-[#3656E5]" />
-              <div>
-                <label className="block text-sm font-medium text-gray-700">State</label>
-                <select name="state" value={formData.state} onChange={handleChange} className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50">
-                  <option value="">Select state</option>
-                  {states.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-              </div>
-              <FormInput label="Pincode" name="pincode" value={formData.pincode} onChange={handleChange} placeholder="Enter pincode" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Website" name="website" type="url" value={formData.website} onChange={handleChange} placeholder="https://example.com" error={errors.website} className="border-blue-300 focus:border-[#3656E5]" />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Alternate Contact</label>
-                <div className="mt-1 flex">
-                  <select name="countryCode" value={formData.altContact.countryCode} onChange={handleAltContactChange} className="w-1/4 px-3 py-3 border border-blue-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50">
-                    {countryCodes.map((code) => <option key={code} value={code}>{code}</option>)}
-                  </select>
-                  <input type="text" name="phone" value={formData.altContact.phone} onChange={handleAltContactChange} placeholder="Phone number" className="w-3/4 px-3 py-3 border border-l-0 border-blue-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50" />
-                </div>
-              </div>
-              <FormInput label="Facebook" name="socialMedia.facebook" value={formData.socialMedia.facebook} onChange={handleChange} placeholder="Facebook URL" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Twitter/X" name="socialMedia.twitter" value={formData.socialMedia.twitter} onChange={handleChange} placeholder="Twitter URL" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Instagram" name="socialMedia.instagram" value={formData.socialMedia.instagram} onChange={handleChange} placeholder="Instagram URL" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="LinkedIn" name="socialMedia.linkedin" value={formData.socialMedia.linkedin} onChange={handleChange} placeholder="LinkedIn URL" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="YouTube" name="socialMedia.youtube" value={formData.socialMedia.youtube} onChange={handleChange} placeholder="YouTube URL" className="border-blue-300 focus:border-[#3656E5]" />
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-[#3656E5]">
-              <FontAwesomeIcon icon={faUsers} className="text-xl" />
-              <h3 className="text-xl font-semibold">Step 2: Key Persons & Courses</h3>
-            </div>
-            <p className="text-gray-600">Add details about important people and the programs you offer. You can add as many as needed.</p>
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-lg font-medium text-gray-800 flex items-center space-x-2">
-                  <FontAwesomeIcon icon={faUserShield} className="text-[#3656E5]" />
-                  <span>Key Persons</span>
-                </h4>
-                <p className="text-sm text-gray-500 mt-1">Provide contact info for key staff members.</p>
-                {formData.contacts.map((contact, idx) => (
-                  <div key={idx} className="mt-4 p-4 bg-blue-50 rounded-lg shadow-md space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Type</label>
-                      <select name="type" value={contact.type} onChange={(e) => handleChange(e, idx, 'contact')} className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white">
-                        <option value="">Select type</option>
-                        {contactTypes.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                      </select>
-                    </div>
-                    <FormInput label="Name" name="name" value={contact.name} onChange={(e) => handleChange(e, idx, 'contact')} placeholder="Name" className="border-blue-300 focus:border-[#3656E5]" />
-                    <FormInput label="Email" name="email" value={contact.email} onChange={(e) => handleChange(e, idx, 'contact')} placeholder="Email" error={errors[`contactEmail${idx}`]} className="border-blue-300 focus:border-[#3656E5]" />
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Phone</label>
-                      <div className="mt-1 flex">
-                        <select name="countryCode" value={contact.countryCode} onChange={(e) => handleChange(e, idx, 'contact')} className="w-1/4 px-3 py-3 border border-blue-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white">
-                          {countryCodes.map((code) => <option key={code} value={code}>{code}</option>)}
-                        </select>
-                        <input type="text" name="phone" value={contact.phone} onChange={(e) => handleChange(e, idx, 'contact')} placeholder="Phone number" className="w-3/4 px-3 py-3 border border-l-0 border-blue-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                      </div>
-                    </div>
-                    <FormInput label="LinkedIn" name="linkedin" value={contact.linkedin} onChange={(e) => handleChange(e, idx, 'contact')} placeholder="LinkedIn URL" className="border-blue-300 focus:border-[#3656E5]" />
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Photo</label>
-                      <input type="file" onChange={(e) => handleChange(e, idx, 'contactPhoto')} accept="image/*" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                      {contact.photo && <p className="text-sm text-gray-500 mt-1">Selected: {contact.photo.name}</p>}
-                    </div>
-                    {formData.contacts.length > 1 && (
-                      <button type="button" onClick={() => removeContact(idx)} className="text-red-600 hover:text-red-800 text-sm">Remove Person</button>
-                    )}
-                  </div>
-                ))}
-                <button type="button" onClick={addContact} className="mt-4 text-[#3656E5] hover:text-[#466BE9] text-sm font-medium">+ Add Another Person</button>
-              </div>
-              <div>
-                <h4 className="text-lg font-medium text-gray-800 flex items-center space-x-2">
-                  <FontAwesomeIcon icon={faBook} className="text-[#3656E5]" />
-                  <span>Courses & Programs</span>
-                </h4>
-                <p className="text-sm text-gray-500 mt-1">List your courses. Upload an Excel file if you have many.</p>
-                {formData.courses.map((course, idx) => (
-                  <div key={idx} className="mt-4 p-4 bg-blue-50 rounded-lg shadow-md space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormInput label="Course Name" name="name" value={course.name} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Course Name" className="border-blue-300 focus:border-[#3656E5]" />
-                      <FormInput label="Level" name="level" value={course.level} onChange={(e) => handleChange(e, idx, 'course')} placeholder="UG/PG" className="border-blue-300 focus:border-[#3656E5]" />
-                      <FormInput label="Specialization" name="specialization" value={course.specialization} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Specialization" className="border-blue-300 focus:border-[#3656E5]" />
-                      <FormInput label="Duration" name="duration" value={course.duration} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Duration" className="border-blue-300 focus:border-[#3656E5]" />
-                      <FormInput label="Mode" name="mode" value={course.mode} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Full-time/Part-time" className="border-blue-300 focus:border-[#3656E5]" />
-                      <FormInput label="Seats" name="seats" type="number" value={course.seats} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Seats" className="border-blue-300 focus:border-[#3656E5]" />
-                      <FormInput label="Fees" name="fees" value={course.fees} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Fees" className="border-blue-300 focus:border-[#3656E5]" />
-                    </div>
-                    <label className="block text-sm font-medium text-gray-700">Eligibility</label>
-                    <textarea name="eligibility" value={course.eligibility} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Eligibility criteria" className="w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="2" />
-                    <label className="block text-sm font-medium text-gray-700">Admission Process</label>
-                    <textarea name="admissionProcess" value={course.admissionProcess} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Admission process" className="w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="2" />
-                    <label className="block text-sm font-medium text-gray-700">Scholarships</label>
-                    <textarea name="scholarships" value={course.scholarships} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Scholarship details" className="w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="2" />
-                    <label className="block text-sm font-medium text-gray-700">Placement Options</label>
-                    <textarea name="placementOptions" value={course.placementOptions} onChange={(e) => handleChange(e, idx, 'course')} placeholder="Placement options" className="w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="2" />
-                    {formData.courses.length > 1 && (
-                      <button type="button" onClick={() => removeCourse(idx)} className="text-red-600 hover:text-red-800 text-sm">Remove Course</button>
-                    )}
-                  </div>
-                ))}
-                <button type="button" onClick={addCourse} className="mt-4 text-[#3656E5] hover:text-[#466BE9] text-sm font-medium">+ Add Another Course</button>
-                <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700">Courses Excel File (Optional)</label>
-                  <input type="file" name="coursesFile" onChange={handleChange} accept=".xls,.xlsx" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                  {errors.coursesFile && <p className="text-red-600 text-sm mt-1">{errors.coursesFile}</p>}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case 3:
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-[#3656E5]">
-              <FontAwesomeIcon icon={faImage} className="text-xl" />
-              <h3 className="text-xl font-semibold">Step 3: Facilities & Placements</h3>
-            </div>
-            <p className="text-gray-600">Share what makes your campus special and your placement success.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormInput label="Campus Size (acres)" name="campusArea" type="number" value={formData.campusArea} onChange={handleChange} placeholder="Campus size in acres" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Hostel Details" name="hostel" value={formData.hostel} onChange={handleChange} placeholder="e.g., Yes, with capacity for 1000 students" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Library" name="facilities.library" value={formData.facilities.library} onChange={handleChange} placeholder="Library details" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Labs" name="facilities.labs" value={formData.facilities.labs} onChange={handleChange} placeholder="Labs details" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Research Centers" name="facilities.researchCenters" value={formData.facilities.researchCenters} onChange={handleChange} placeholder="Research centers details" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Sports Facilities" name="facilities.sports" value={formData.facilities.sports} onChange={handleChange} placeholder="Sports facilities" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Cafeteria" name="facilities.cafeteria" value={formData.facilities.cafeteria} onChange={handleChange} placeholder="Cafeteria details" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Auditorium" name="facilities.auditorium" value={formData.facilities.auditorium} onChange={handleChange} placeholder="Auditorium details" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Medical Facilities" name="facilities.medical" value={formData.facilities.medical} onChange={handleChange} placeholder="Medical facilities" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Transport" name="facilities.transport" value={formData.facilities.transport} onChange={handleChange} placeholder="Transport details" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="IT Facilities" name="facilities.itFacilities" value={formData.facilities.itFacilities} onChange={handleChange} placeholder="IT facilities" className="border-blue-300 focus:border-[#3656E5]" />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Brochure (PDF)</label>
-                <input type="file" name="brochure" onChange={handleChange} accept="application/pdf" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {errors.brochure && <p className="text-red-600 text-sm mt-1">{errors.brochure}</p>}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Images (Upload campus photos)</label>
-                <input type="file" name="images" onChange={handleChange} multiple accept="image/png,image/jpeg" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {imagePreviews.length > 0 && (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                    {imagePreviews.map((prev, idx) => (
-                      <div key={idx} className="relative">
-                        <img src={prev} alt="preview" className="h-32 w-full object-cover rounded-lg shadow" />
-                        <button onClick={() => removeImage(idx)} className="absolute top-1 right-1 bg-white rounded-full p-1 text-red-600 hover:text-red-800"><FontAwesomeIcon icon={faTimes} className="h-4 w-4" /></button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Videos (Upload promotional videos)</label>
-                <input type="file" name="videos" onChange={handleChange} multiple accept="video/mp4" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {videoPreviews.length > 0 && (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                    {videoPreviews.map((prev, idx) => (
-                      <div key={idx} className="relative">
-                        <video src={prev} className="h-32 w-full object-cover rounded-lg shadow" controls />
-                        <button onClick={() => removeVideo(idx)} className="absolute top-1 right-1 bg-white rounded-full p-1 text-red-600 hover:text-red-800"><FontAwesomeIcon icon={faTimes} className="h-4 w-4" /></button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <FormInput label="Placement Rate (%)" name="placementRate" type="number" value={formData.placementRate} onChange={handleChange} placeholder="e.g., 85" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Top Recruiters" name="topRecruiters" value={formData.topRecruiters} onChange={handleChange} placeholder="e.g., Google, Microsoft" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Average Package" name="averagePackage" value={formData.averagePackage} onChange={handleChange} placeholder="e.g., 10 LPA" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Highest Package" name="highestPackage" value={formData.highestPackage} onChange={handleChange} placeholder="e.g., 20 LPA" className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Placement Cell Email" name="placementCellContactEmail" type="email" value={formData.placementCellContactEmail} onChange={handleChange} placeholder="Placement email" error={errors.placementCellContactEmail} className="border-blue-300 focus:border-[#3656E5]" />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Internship Tie-ups</label>
-                <textarea name="internshipTieUps" value={formData.internshipTieUps} onChange={handleChange} placeholder="Describe internship partnerships..." className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Alumni in Industry</label>
-                <textarea name="alumniInIndustry" value={formData.alumniInIndustry} onChange={handleChange} placeholder="Highlight notable alumni..." className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-            </div>
-          </div>
-        );
-      case 4:
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-[#3656E5]">
-              <FontAwesomeIcon icon={faAward} className="text-xl" />
-              <h3 className="text-xl font-semibold">Step 4: Recognition, Awards & International</h3>
-            </div>
-            <p className="text-gray-600">Showcase your achievements and global reach.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Rankings</label>
-                <textarea name="rankings" value={formData.rankings} onChange={handleChange} placeholder="List rankings e.g., NIRF Rank 10" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Awards</label>
-                <textarea name="awards" value={formData.awards} onChange={handleChange} placeholder="List awards received" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Notable Alumni</label>
-                <textarea name="notableAlumni" value={formData.notableAlumni} onChange={handleChange} placeholder="Mention notable alumni" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Media Coverage</label>
-                <textarea name="mediaCoverage" value={formData.mediaCoverage} onChange={handleChange} placeholder="Highlight media mentions" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <FormInput label="International Student Office" name="intlStudentOffice" value={formData.intlStudentOffice} onChange={handleChange} placeholder="Details about international office" className="border-blue-300 focus:border-[#3656E5]" />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Countries Enrolled</label>
-                <textarea name="countriesEnrolled" value={formData.countriesEnrolled} onChange={handleChange} placeholder="List countries of enrolled students" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Foreign MoUs</label>
-                <textarea name="foreignMoUs" value={formData.foreignMoUs} onChange={handleChange} placeholder="Details of international partnerships" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Language Support</label>
-                <textarea name="languageSupport" value={formData.languageSupport} onChange={handleChange} placeholder="Language support services" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Visa Support</label>
-                <textarea name="visaSupport" value={formData.visaSupport} onChange={handleChange} placeholder="Visa assistance details" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" rows="4" />
-              </div>
-            </div>
-          </div>
-        );
-      case 5:
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-[#3656E5]">
-              <FontAwesomeIcon icon={faFileAlt} className="text-xl" />
-              <h3 className="text-xl font-semibold">Step 5: Account Setup & Subscription</h3>
-            </div>
-            <p className="text-gray-600">Set up your admin account and choose a plan. Almost done!</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormInput label="Admin Email" name="adminEmail" type="email" value={formData.adminEmail} onChange={handleChange} required placeholder="Admin email" error={errors.adminEmail} className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Password" name="password" type="password" value={formData.password} onChange={handleChange} required placeholder="Password" error={errors.password} className="border-blue-300 focus:border-[#3656E5]" />
-              <FormInput label="Confirm Password" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} required placeholder="Confirm password" error={errors.confirmPassword} className="border-blue-300 focus:border-[#3656E5]" />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Accreditation Documents</label>
-                <input type="file" name="accreditationDocs" onChange={handleChange} multiple className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {formData.accreditationDocs.length > 0 && <ul className="mt-2 text-sm text-gray-500">{formData.accreditationDocs.map((file, i) => <li key={i}>{file.name}</li>)}</ul>}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Affiliation Documents</label>
-                <input type="file" name="affiliationDocs" onChange={handleChange} multiple className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {formData.affiliationDocs.length > 0 && <ul className="mt-2 text-sm text-gray-500">{formData.affiliationDocs.map((file, i) => <li key={i}>{file.name}</li>)}</ul>}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Registration Documents</label>
-                <input type="file" name="registrationDocs" onChange={handleChange} multiple className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {formData.registrationDocs.length > 0 && <ul className="mt-2 text-sm text-gray-500">{formData.registrationDocs.map((file, i) => <li key={i}>{file.name}</li>)}</ul>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Logo</label>
-                <input type="file" name="logo" onChange={handleChange} accept="image/png,image/jpeg" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-                {errors.logo && <p className="text-red-600 text-sm mt-1">{errors.logo}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Seal</label>
-                <input type="file" name="seal" onChange={handleChange} accept="image/*" className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-white" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Subscription Plan</label>
-                <select name="subscriptionPlan" value={formData.subscriptionPlan} onChange={handleChange} className="mt-1 w-full px-3 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3656E5] focus:border-[#3656E5] bg-blue-50">
-                  <option value="free">Free</option>
-                  <option value="standard">Standard ₹999/mo</option>
-                  <option value="premium">Premium ₹1999/mo</option>
-                </select>
-                <p className="text-sm text-gray-500 mt-1">Payment will be processed securely after submission.</p>
-              </div>
-            </div>
-          </div>
-        );
-      case 6:
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-[#3656E5]">
-              <FontAwesomeIcon icon={faInfoCircle} className="text-xl" />
-              <h3 className="text-xl font-semibold">Step 6: Review & Submit</h3>
-            </div>
-            <p className="text-gray-600">Double-check your information before submitting. Great job getting this far!</p>
-            <div className="p-6 bg-blue-50 rounded-lg shadow-md space-y-4 overflow-y-auto max-h-96">
-              <h4 className="text-lg font-medium text-gray-800">Basic Information</h4>
-              <p className="text-sm"><strong>Name:</strong> {formData.name || 'Not provided'}</p>
-              <p className="text-sm"><strong>Type:</strong> {formData.type || 'Not provided'}</p>
-              <p className="text-sm"><strong>Ownership:</strong> {formData.ownership || 'Not provided'}</p>
-              <p className="text-sm"><strong>Accreditation:</strong> {formData.accreditation || 'Not provided'}</p>
-              <p className="text-sm"><strong>Affiliation:</strong> {formData.affiliation || 'Not provided'}</p>
-              <p className="text-sm"><strong>Established:</strong> {formData.established || 'Not provided'}</p>
-              <p className="text-sm"><strong>Students:</strong> {formData.students || 'Not provided'}</p>
-              <p className="text-sm"><strong>Faculty:</strong> {formData.faculty || 'Not provided'}</p>
-              <p className="text-sm"><strong>Streams:</strong> {formData.streams || 'Not provided'}</p>
-              <p className="text-sm"><strong>About:</strong> {formData.about || 'Not provided'}</p>
-              <h4 className="text-lg font-medium text-gray-800">Contact & Location</h4>
-              <p className="text-sm"><strong>Head Office:</strong> {formData.headOfficeAddress || 'Not provided'}</p>
-              <p className="text-sm"><strong>Campus:</strong> {formData.address}, {formData.city}, {formData.state} {formData.pincode || 'Not provided'}</p>
-              <p className="text-sm"><strong>Website:</strong> {formData.website || 'Not provided'}</p>
-              <p className="text-sm"><strong>Alt Contact:</strong> {formData.altContact.countryCode} {formData.altContact.phone || 'Not provided'}</p>
-              <p className="text-sm"><strong>Social Media:</strong> FB-{formData.socialMedia.facebook || 'N/A'}, X-{formData.socialMedia.twitter || 'N/A'}, IG-{formData.socialMedia.instagram || 'N/A'}, LI-{formData.socialMedia.linkedin || 'N/A'}, YT-{formData.socialMedia.youtube || 'N/A'}</p>
-              <h4 className="text-lg font-medium text-gray-800">Key Persons</h4>
-              {formData.contacts.map((c, i) => (
-                <p key={i} className="text-sm"><strong>{c.type}:</strong> {c.name || 'N/A'}, {c.email || 'N/A'}, {c.countryCode} {c.phone || 'N/A'}, LI-{c.linkedin || 'N/A'}, Photo-{c.photo?.name || 'None'}</p>
-              ))}
-              <h4 className="text-lg font-medium text-gray-800">Courses</h4>
-              {formData.courses.map((c, i) => (
-                <p key={i} className="text-sm"><strong>{c.name} ({c.level}, {c.specialization}):</strong> Duration: {c.duration || 'N/A'}, Mode: {c.mode || 'N/A'}, Seats: {c.seats || 'N/A'}, Fees: {c.fees || 'N/A'}</p>
-              ))}
-              <h4 className="text-lg font-medium text-gray-800">Facilities</h4>
-              <p className="text-sm"><strong>Campus Area:</strong> {formData.campusArea || 'Not provided'}</p>
-              <p className="text-sm"><strong>Hostel:</strong> {formData.hostel || 'Not provided'}</p>
-              <p className="text-sm"><strong>Library:</strong> {formData.facilities.library || 'Not provided'}</p>
-              {/* Add similar for other facilities */}
-              <h4 className="text-lg font-medium text-gray-800">Placements</h4>
-              <p className="text-sm"><strong>Rate:</strong> {formData.placementRate || 'Not provided'}%, <strong>Avg Package:</strong> {formData.averagePackage || 'Not provided'}, <strong>High Package:</strong> {formData.highestPackage || 'Not provided'}</p>
-              {/* Add more details as needed */}
-            </div>
-            <label className="flex items-center space-x-2 text-gray-700">
-              <input type="checkbox" name="declaration" checked={formData.declaration} onChange={handleChange} className="form-checkbox h-5 w-5 text-[#3656E5]" />
-              <span className="text-sm">I declare that the information provided is accurate and complete.</span>
-            </label>
-            {errors.declaration && <p className="text-red-600 text-sm">{errors.declaration}</p>}
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  // List of available facilities (hardcoded, icons in FE)
+  const facilityOptions = [
+    "hostel",
+    "library",
+    "labs",
+    "researchCenters",
+    "sports",
+    "cafeteria",
+    "auditorium",
+    "medical",
+    "transport",
+    "itFacilities",
+    "placementCell",
+    "internshipTieups",
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl p-8 lg:p-12">
-        <div className="relative mb-8">
-          <h2 className="text-3xl font-bold text-[#3656E5] text-center">
-            University Registration - Step {currentStep} of 6
-          </h2>
-          <p className="text-center text-gray-500 mt-2">We're here to help you showcase your institution. Fill in at your pace!</p>
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-12 h-12">
-            <svg className="w-full h-full" viewBox="0 0 100 100">
-              <circle
-                className="text-blue-100"
-                strokeWidth="8"
-                stroke="currentColor"
-                fill="transparent"
-                r="45"
-                cx="50"
-                cy="50"
-              />
-              <circle
-                className="text-[#3656E5]"
-                strokeWidth="8"
-                stroke="currentColor"
-                fill="transparent"
-                r="45"
-                cx="50"
-                cy="50"
-                strokeDasharray="283"
-                strokeDashoffset={283 - (progress * 2.83)}
-                transform="rotate(-90 50 50)"
-              />
-              <text
-                x="50"
-                y="50"
-                fill="#3656E5"
-                fontSize="20"
-                textAnchor="middle"
-                dy=".3em"
-              >
-                {progress}%
-              </text>
-            </svg>
+    <div className="univ-app-container">
+      <Navbar />
+      <header className="univ-header">
+        <h1 className="univ-header-title">University Registration</h1>
+        <p className="univ-header-subtitle">Complete all 9 steps below</p>
+      </header>
+
+      {/* Stepper */}
+      <div className="univ-stepper">
+        {[...Array(totalSteps)].map((_, i) => (
+          <div
+            key={i}
+            className={`univ-stepper-circle ${step === i + 1 ? "active" : ""} ${step > i + 1 ? "completed" : ""}`}
+          >
+            {i + 1}
           </div>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-10">
-          {renderStep(currentStep)}
-          <div className="flex justify-between mt-8">
-            {currentStep > 1 && (
-              <button
-                type="button"
-                onClick={() => setCurrentStep((prev) => prev - 1)}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-200"
+        ))}
+      </div>
+
+      <main className="univ-main-container">
+        <form className="univ-multi-step-form wide-form" onSubmit={handleSubmit}> {/* Added wide-form for 90% width */}
+          {/* -------------------- Step 1: Basic Info + Hero Section -------------------- */}
+          {step === 1 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 1: Basic Info + Hero Section</h3>
+              <input
+                name="instituteName"
+                placeholder="Institute Name"
+                onChange={handleChange}
+                title="Enter the full name of the institute. This will appear in the hero section."
+              />
+              <select
+                name="type"
+                onChange={handleChange}
+                title="Select the type of institution. Used in hero display."
               >
-                Previous
+                <option value="">Select Type</option>
+                <option>University</option>
+                <option>College</option>
+                <option>Institute</option>
+              </select>
+              <input
+                name="year"
+                placeholder="Establishment Year"
+                onChange={handleChange}
+                title="Year the institute was established, e.g., 1998. Shown in hero."
+              />
+              <select
+                name="ownership"
+                onChange={handleChange}
+                title="Ownership type. Displayed in hero."
+              >
+                <option value="">Select Ownership</option>
+                <option>Private</option>
+                <option>Government</option>
+                <option>Deemed</option>
+                <option>Autonomous</option>
+              </select>
+              <input
+                name="accreditation"
+                placeholder="Accreditation (e.g., NAAC A+)"
+                onChange={handleChange}
+                title="Accreditation details like NAAC grade. Hero section."
+              />
+              <input
+                name="affiliation"
+                placeholder="Affiliation (e.g., UGC, AICTE)"
+                onChange={handleChange}
+                title="Affiliations and approvals. Shown in hero."
+              />
+              <input
+                name="students"
+                placeholder="No. of Students (e.g., 78234)"
+                onChange={handleChange}
+                title="Total number of students. Hero display."
+              />
+              <input
+                name="faculty"
+                placeholder="No. of Faculty (e.g., 234)"
+                onChange={handleChange}
+                title="Total faculty count. Hero section."
+              />
+              <label>Upload Logo</label>
+              <input
+                type="file"
+                name="logo"
+                onChange={handleFileChange}
+                title="Upload institute logo. Single image, used in hero."
+              />
+              <label>Upload Banner Images (at least 3)</label>
+              <input
+                type="file"
+                name="bannerImages"
+                multiple
+                onChange={handleFileChange}
+                title="Upload at least 3 banner images for hero carousel."
+              />
+            </div>
+          )}
+
+          {/* -------------------- Step 2: About Section -------------------- */}
+          {step === 2 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 2: About Section</h3>
+              <textarea
+                name="description"
+                placeholder="About the University (Detailed Description)"
+                rows={6}
+                onChange={handleChange}
+                title="Provide a detailed description about the university. This will be displayed in the about section."
+              />
+              <label>Upload About Images (at least 5)</label>
+              <input
+                type="file"
+                name="aboutImages"
+                multiple
+                onChange={handleFileChange}
+                title="Upload at least 5 images for the about section (e.g., campus views)."
+              />
+            </div>
+          )}
+
+          {/* -------------------- Step 3: Contact & Info Section -------------------- */}
+          {step === 3 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 3: Contact & Info Section</h3>
+              <input
+                name="address"
+                placeholder="Campus Address"
+                onChange={handleChange}
+                title="Full campus address. Used in info section."
+              />
+              <select
+                name="state"
+                onChange={handleChange}
+                title="Select state. Part of location in info."
+              >
+                <option value="">Select State</option>
+                <option>Maharashtra</option>
+                <option>Karnataka</option>
+                <option>Delhi</option>
+                <option>Tamil Nadu</option>
+                <option>Uttar Pradesh</option>
+                {/* Add more states as needed */}
+              </select>
+              <input
+                name="city"
+                placeholder="City (e.g., Gurgaon)"
+                onChange={handleChange}
+                title="City name. Displayed in hero and info."
+              />
+              <input
+                name="email"
+                placeholder="Email"
+                onChange={handleChange}
+                title="Contact email."
+              />
+              <input
+                name="phone"
+                placeholder="Phone"
+                onChange={handleChange}
+                title="Contact phone number."
+              />
+              <input
+                name="website"
+                placeholder="Website"
+                onChange={handleChange}
+                title="Institute website URL."
+              />
+              <input
+                name="socialMedia"
+                placeholder="Social Media Links (comma-separated)"
+                onChange={handleChange}
+                title="List social media links, separated by commas."
+              />
+              <input
+                name="topRecruiters"
+                placeholder="Top Recruiters (comma-separated)"
+                onChange={handleChange}
+                title="List top recruiters for info section."
+              />
+              <input
+                name="highestPackage"
+                placeholder="Highest Package (LPA)"
+                onChange={handleChange}
+                title="Highest placement package. Info section."
+              />
+              <input
+                name="avgPackage"
+                placeholder="Average Package (LPA)"
+                onChange={handleChange}
+                title="Average placement package. Info section."
+              />
+              <input
+                name="campusSize"
+                placeholder="Campus Size (e.g., 50 acres)"
+                onChange={handleChange}
+                title="Campus size details."
+              />
+              <input
+                name="hostelFee"
+                placeholder="Hostel Fee"
+                onChange={handleChange}
+                title="Hostel fee details."
+              />
+              <input
+                name="studentRating"
+                placeholder="Student Rating (e.g., 4.5/5)"
+                onChange={handleChange}
+                title="Overall student rating."
+              />
+              <input
+                name="nirfRank"
+                placeholder="NIRF Rank"
+                onChange={handleChange}
+                title="NIRF ranking."
+              />
+              <label>Upload Top Recruiters Logos</label>
+              <input
+                type="file"
+                name="recruitersLogos"
+                multiple
+                onChange={handleFileChange}
+                title="Upload logos of top recruiters."
+              />
+            </div>
+          )}
+
+          {/* -------------------- Step 4: Courses, Fees & Cutoffs -------------------- */}
+          {step === 4 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 4: Courses, Fees & Cutoffs</h3>
+              <label>Upload Courses & Fees Excel (courses.xlsx)</label>
+              <input
+                type="file"
+                name="coursesExcel"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel file with columns: Course Name, Total Fee, Yearly Fees, Duration, Intake."
+              />
+              <label>Upload Cutoffs Excel (cutoff.xlsx)</label>
+              <input
+                type="file"
+                name="cutoffExcel"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel file with columns: Courses, Open, General, EWS, OBC, SC, ST, PWD."
+              />
+              <input
+                name="popularCourses"
+                placeholder="Popular Courses (comma-separated)"
+                onChange={handleChange}
+                title="List popular courses for info section."
+              />
+            </div>
+          )}
+
+          {/* -------------------- Step 5: Placements -------------------- */}
+          {step === 5 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 5: Placements</h3>
+              <input
+                name="placementRate"
+                placeholder="Placement Rate (%)"
+                onChange={handleChange}
+                title="Overall placement rate."
+              />
+              <input
+                name="highestLPA"
+                placeholder="Highest LPA"
+                onChange={handleChange}
+                title="Highest LPA overall."
+              />
+              <input
+                name="avgLPA"
+                placeholder="Average LPA"
+                onChange={handleChange}
+                title="Average LPA overall."
+              />
+              <label>Upload Year-wise Placements Excel (placements.xlsx)</label>
+              <input
+                type="file"
+                name="placementsExcel"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel with columns: Year, Companies, Placed, Highest CTC, Avg CTC."
+              />
+              {/* Branch-wise */}
+              <h4>Branch-wise Placements</h4>
+              <button type="button" onClick={addBranch} className="univ-add-btn">
+                + Add Branch
+              </button>
+              {branches.map((branch, index) => (
+                <div key={index} className="branch-group">
+                  <input
+                    placeholder="Branch Name"
+                    value={branch.name}
+                    onChange={(e) => handleBranchChange(index, "name", e.target.value)}
+                    title="Enter branch name for dropdown."
+                  />
+                  <input
+                    placeholder="Avg LPA"
+                    value={branch.avgLPA}
+                    onChange={(e) => handleBranchChange(index, "avgLPA", e.target.value)}
+                    title="Average LPA for this branch."
+                  />
+                  <input
+                    placeholder="Highest LPA"
+                    value={branch.highestLPA}
+                    onChange={(e) => handleBranchChange(index, "highestLPA", e.target.value)}
+                    title="Highest LPA for this branch."
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* -------------------- Step 6: Facilities -------------------- */}
+          {step === 6 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 6: Facilities</h3>
+              <p>Select facilities (icons hardcoded in frontend):</p>
+              {facilityOptions.map((fac) => (
+                <label key={fac} className="univ-checkbox-label">
+                  <input
+                    type="checkbox"
+                    value={fac}
+                    onChange={handleFacilityChange}
+                    title={`Select if ${fac} is available. Description field will appear.`}
+                  />
+                  {fac.charAt(0).toUpperCase() + fac.slice(1)}
+                </label>
+              ))}
+              {selectedFacilities.map((fac) => (
+                <textarea
+                  key={fac}
+                  name={`facility_${fac}_desc`}
+                  placeholder={`Description for ${fac}`}
+                  rows={3}
+                  onChange={handleChange}
+                  title={`Provide details about the ${fac} facility.`}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* -------------------- Step 7: Gallery -------------------- */}
+          {step === 7 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 7: Gallery</h3>
+              <label>Upload Infrastructure Photos</label>
+              <input
+                type="file"
+                name="infraPhotos"
+                multiple
+                onChange={handleFileChange}
+                title="Upload photos related to infrastructure for gallery."
+              />
+              <label>Upload Event Photos</label>
+              <input
+                type="file"
+                name="eventPhotos"
+                multiple
+                onChange={handleFileChange}
+                title="Upload photos related to events for gallery."
+              />
+              <label>Upload Additional Gallery Images</label>
+              <input
+                type="file"
+                name="galleryImages"
+                multiple
+                onChange={handleFileChange}
+                title="Upload any additional images for the gallery section."
+              />
+            </div>
+          )}
+
+          {/* -------------------- Step 8: Admissions -------------------- */}
+          {step === 8 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 8: Admissions</h3>
+              <label>Upload Admissions Excel (admissions.xlsx)</label>
+              <input
+                type="file"
+                name="admissionsExcel"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel with columns: Course Name, Eligibility, Specialization, Fee, Highest Pack, Avg Package."
+              />
+              <textarea
+                name="admissionDetails"
+                placeholder="Overall Admission Details"
+                rows={4}
+                onChange={handleChange}
+                title="Provide general admission information."
+              />
+              <input
+                name="scholarships"
+                placeholder="Scholarships (comma-separated)"
+                onChange={handleChange}
+                title="List available scholarships."
+              />
+            </div>
+          )}
+
+          {/* -------------------- Step 9: Intl, Account & Submit -------------------- */}
+          {step === 9 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 9: International, Docs, Account & Submit</h3>
+              {/* International */}
+              <input
+                name="intlStudentOffice"
+                placeholder="Intl. Student Office"
+                onChange={handleChange}
+                title="Details about international student office."
+              />
+              <input
+                name="countriesEnrolled"
+                placeholder="Countries Enrolled (comma-separated)"
+                onChange={handleChange}
+                title="Countries from which students are enrolled."
+              />
+              <input
+                name="foreignMoUs"
+                placeholder="Foreign MoUs (comma-separated)"
+                onChange={handleChange}
+                title="List of foreign MoUs."
+              />
+              <input
+                name="languageSupport"
+                placeholder="Language Support"
+                onChange={handleChange}
+                title="Language support details."
+              />
+              <input
+                name="visaSupport"
+                placeholder="Visa Support"
+                onChange={handleChange}
+                title="Visa assistance details."
+              />
+              {/* Docs */}
+              <label>Upload Accreditation Doc</label>
+              <input
+                type="file"
+                name="accreditationDoc"
+                onChange={handleFileChange}
+                title="Upload accreditation document."
+              />
+              <label>Upload Affiliation Doc</label>
+              <input
+                type="file"
+                name="affiliationDoc"
+                onChange={handleFileChange}
+                title="Upload affiliation document."
+              />
+              <label>Upload Registration Doc</label>
+              <input
+                type="file"
+                name="registrationDoc"
+                onChange={handleFileChange}
+                title="Upload registration document."
+              />
+              {/* Videos & Others */}
+              <label>Upload Videos</label>
+              <input
+                type="file"
+                name="videos"
+                multiple
+                onChange={handleFileChange}
+                title="Upload promotional or campus videos."
+              />
+              <label>Upload Course Files</label>
+              <input
+                type="file"
+                name="courseFiles"
+                multiple
+                onChange={handleFileChange}
+                title="Upload additional course-related files."
+              />
+              {/* Auth */}
+              <input
+                name="emailUsername"
+                placeholder="Email (Username)"
+                onChange={handleChange}
+                title="Email to use as username for account."
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                title="Set a password for the account."
+              />
+              {/* Subscription */}
+              <select
+                name="subscriptionPlan"
+                onChange={handleChange}
+                title="Select subscription plan."
+              >
+                <option value="">Select Plan</option>
+                <option value="free">Free</option>
+                <option value="standard">Standard ₹999/mo</option>
+                <option value="premium">Premium ₹1999/mo</option>
+              </select>
+              {/* Declaration */}
+              <label className="univ-checkbox-label">
+                <input
+                  type="checkbox"
+                  name="declaration"
+                  checked={formData.declaration || false}
+                  onChange={handleChange}
+                />
+                I confirm all details are correct
+              </label>
+              {/* Submit */}
+              <button type="submit" className="univ-submit-btn">
+                Submit
+              </button>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div className="univ-form-nav">
+            {step > 1 && step <= totalSteps && (
+              <button type="button" onClick={prev} className="univ-nav-btn">
+                ⬅ Back
               </button>
             )}
-            {currentStep < 6 && (
-              <button
-                type="button"
-                onClick={() => setCurrentStep((prev) => prev + 1)}
-                className="bg-[#3656E5] hover:bg-[#466BE9] text-white font-medium py-3 px-6 rounded-lg transition duration-200"
-              >
-                Next
-              </button>
-            )}
-            {currentStep === 6 && (
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`bg-[#3656E5] hover:bg-[#466BE9] text-white font-medium py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
-              >
-                {isSubmitting ? (
-                  <>
-                    <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2 h-5 w-5" />
-                    Submitting...
-                  </>
-                ) : (
-                  'Submit Registration'
-                )}
+            {step < totalSteps && (
+              <button type="button" onClick={next} className="univ-nav-btn">
+                Next ➡
               </button>
             )}
           </div>
         </form>
-      </div>
+      </main>
     </div>
   );
-};
-
-export default UniversityRegister; 
+}

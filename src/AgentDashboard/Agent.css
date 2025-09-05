@@ -26,12 +26,6 @@
   min-width: 0;
 }
 
-@media (max-width: 1200px) {
-  .ad-main {
-    padding: 1rem;
-  }
-}
-
 @media (max-width: 900px) {
   .ad-sidebar {
     position: fixed;

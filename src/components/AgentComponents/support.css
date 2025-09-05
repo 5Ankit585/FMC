@@ -1,21 +1,117 @@
 .support-container {
-  padding: 20px;
-  max-width: 800px;
+  padding: 1.25rem;
+  max-width: 900px;
   margin: 0 auto;
+  background: var(--bg-color, #f9fafb);
+  min-height: 100vh;
 }
 
+/* Header */
+.support-header {
+  text-align: center;
+  margin-bottom: 2rem; /* smaller gap */
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  padding-bottom: 0.75rem;
+}
+
+.support-header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.support-subtext {
+  font-size: 0.8rem;
+  color: var(--color-muted, #6b7280);
+}
+
+/* Grid Layout */
+.tickets-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem; /* tighter spacing */
+}
+
+@media (max-width: 768px) {
+  .tickets-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Ticket Card */
 .ticket-card {
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.ticket-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-primary, #2563eb);
+}
+
+/* Ticket Header */
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ticket-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: var(--text-strong, #111827);
+}
+
+.ticket-info p {
+  font-size: 0.75rem;
+  color: var(--color-muted, #6b7280);
+  margin-bottom: 0.2rem;
+}
+
+/* Buttons */
+.ticket-btn {
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.ticket-btn:hover {
+  background: var(--color-primary-dark, #1d4ed8);
+  transform: translateY(-1px);
+}
+
+.response-btn {
+  background: #10b981;
+}
+
+.response-btn:hover {
+  background: #059669;
+}
+
+/* Textarea */
 .ticket-card textarea {
   resize: vertical;
-  min-height: 100px;
-  border-radius: 4px;
-}
-
-.ticket-card button {
-  transition: background-color 0.2s;
+  min-height: 70px;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 0.4rem;
+  padding: 0.4rem;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
 }

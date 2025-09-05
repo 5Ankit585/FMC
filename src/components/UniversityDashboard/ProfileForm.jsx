@@ -14,13 +14,21 @@ const states = [
 const countryCodes = ['+91', '+1', '+44', '+61', '+81', '+86', '+971'];
 const contactTypes = ['Director','Examiner','Vice Chancellor','MD','Owner','Registrar','Other'];
 
+// Axios instance with sensible defaults
+const API_BASE = import.meta?.env?.VITE_API_URL || process.env.REACT_APP_API_URL || "http://localhost:5000";
+const api = axios.create({
+  baseURL: API_BASE,
+  withCredentials: true,
+  timeout: 30000,
+});
+
 export default function ProfileForm() {
   const [form, setForm] = useState({
     name: "", established: "", website: "", type: "", affiliation: "",
     address: "", city: "", pincode: "", state: "", contact: "",
     altContact: { countryCode: "", phone: "" }, contacts: [],
     streams: "", students: "", faculty: "", hostel: "", campusArea: "",
-    coursesFile: null, logo: null, brochure: null, images: [], videos: [],
+    coursesFile: null, logo: null, seal: null, brochure: null, images: [], videos: [],
     placementRate: "", topRecruiters: "", averagePackage: "", highestPackage: "",
     placementCellContactEmail: "", adminEmail: "", password: "", confirmPassword: "",
     about: "",
@@ -46,62 +54,113 @@ export default function ProfileForm() {
   };
 
   const addContact = () => {
-    setForm(f => ({ ...f, contacts: [...f.contacts, { type: "", countryCode: "", name: "", email: "", phone: "" }] }));
+    setForm(f => ({
+      ...f,
+      contacts: [...f.contacts, { type: "", countryCode: "", name: "", email: "", phone: "", _photo: null }]
+    }));
   };
 
   const handleContactChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedContacts = [...form.contacts];
-    updatedContacts[index][name] = value;
-    setForm(f => ({ ...f, contacts: updatedContacts }));
+    const { name, value, files, type } = e.target;
+    const updated = [...form.contacts];
+    if (type === "file") {
+      updated[index]._photo = files?.[0] || null; // optional photo for this contact
+    } else {
+      updated[index][name] = value;
+    }
+    setForm(f => ({ ...f, contacts: updated }));
   };
 
   const removeContact = (index) => {
     setForm(f => ({ ...f, contacts: f.contacts.filter((_, i) => i !== index) }));
   };
 
+  const resetForm = () => {
+    setForm({
+      name: "", established: "", website: "", type: "", affiliation: "",
+      address: "", city: "", pincode: "", state: "", contact: "",
+      altContact: { countryCode: "", phone: "" }, contacts: [],
+      streams: "", students: "", faculty: "", hostel: "", campusArea: "",
+      coursesFile: null, logo: null, seal: null, brochure: null, images: [], videos: [],
+      placementRate: "", topRecruiters: "", averagePackage: "", highestPackage: "",
+      placementCellContactEmail: "", adminEmail: "", password: "", confirmPassword: "",
+      about: "",
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploading(true);
 
+    // Basic client-side checks to avoid backend 400s
+    if (!form.name || !form.type) {
+      alert("Please fill required fields: University Name and Type.");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      alert("Password and Confirm Password do not match.");
+      return;
+    }
+
+    setUploading(true);
     try {
       const formData = new FormData();
+
+      // Files
       if (form.logo) formData.append("logo", form.logo);
+      if (form.seal) formData.append("seal", form.seal);
       if (form.brochure) formData.append("brochure", form.brochure);
       if (form.coursesFile) formData.append("coursesFile", form.coursesFile);
       form.images.forEach(img => formData.append("images", img));
       form.videos.forEach(vid => formData.append("videos", vid));
 
-      // All other fields as JSON string
-      const { logo, brochure, coursesFile, images, videos, ...otherFields } = form;
-      formData.append("data", JSON.stringify(otherFields));
-
-      const res = await axios.post("http://localhost:5000/api/universities", formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      // Contact photos if any (matches backend organizeFiles: "contactPhoto_{index}")
+      form.contacts.forEach((c, idx) => {
+        if (c._photo) {
+          formData.append(`contactPhoto_${idx}`, c._photo);
+        }
       });
 
-      if (res.data.success) {
+      // Everything else as JSON string under "data"
+      const { logo, seal, brochure, coursesFile, images, videos, confirmPassword, ...otherFields } = form;
+
+      // (Optional) Convert numerics to numbers to keep DB clean
+      const normalized = {
+        ...otherFields,
+        students: otherFields.students ? Number(otherFields.students) : "",
+        faculty: otherFields.faculty ? Number(otherFields.faculty) : "",
+        campusArea: otherFields.campusArea ? Number(otherFields.campusArea) : "",
+        placementRate: otherFields.placementRate ? Number(otherFields.placementRate) : "",
+      };
+
+      formData.append("data", JSON.stringify(normalized));
+
+      // IMPORTANT: do NOT set Content-Type header manually; let Axios set the boundary.
+      const res = await api.post("/api/universities", formData);
+
+
+      if (res.data?.success) {
         alert("University profile saved successfully!");
-        setForm({
-          name: "", established: "", website: "", type: "", affiliation: "",
-          address: "", city: "", pincode: "", state: "", contact: "",
-          altContact: { countryCode: "", phone: "" }, contacts: [],
-          streams: "", students: "", faculty: "", hostel: "", campusArea: "",
-          coursesFile: null, logo: null, brochure: null, images: [], videos: [],
-          placementRate: "", topRecruiters: "", averagePackage: "", highestPackage: "",
-          placementCellContactEmail: "", adminEmail: "", password: "", confirmPassword: "",
-          about: "",
-        });
+        resetForm();
       } else {
-        alert("Failed to save profile.");
+        alert(res.data?.error || "Failed to save profile.");
       }
-
     } catch (err) {
-      console.error("Error saving profile:", err);
-      alert("Failed to save profile. Check console.");
+      // Rich error logging so you can see exactly what's wrong
+      console.error("Error saving profile:", err?.message || err);
+      if (err.response) {
+        console.error("Status:", err.response.status);
+        console.error("Response data:", err.response.data);
+        alert(err.response?.data?.error || err.response?.data?.message || "Server error. Check console.");
+      } else if (err.request) {
+        console.error("No response received:", err.request);
+        alert("No response from server (network/CORS). Check that the server is running and CORS is configured.");
+      } else {
+        console.error("Axios config error:", err.message);
+        alert("Request error. Check console for details.");
+      }
+    } finally {
+      setUploading(false);
     }
-
-    setUploading(false);
   };
 
   return (
@@ -168,6 +227,10 @@ export default function ProfileForm() {
               <label>Name<input type="text" name="name" value={c.name} onChange={e => handleContactChange(idx, e)} /></label>
               <label>Email<input type="email" name="email" value={c.email} onChange={e => handleContactChange(idx, e)} /></label>
               <label>Phone<input type="text" name="phone" value={c.phone} onChange={e => handleContactChange(idx, e)} /></label>
+              {/* Optional photo per contact; backend expects contactPhoto_{index} */}
+              <label>Photo (optional)
+                <input type="file" name={`contactPhoto_${idx}`} accept="image/*" onChange={e => handleContactChange(idx, e)} />
+              </label>
               <button type="button" onClick={() => removeContact(idx)}>Remove</button>
             </div>
           ))}
@@ -185,6 +248,7 @@ export default function ProfileForm() {
 
         <label>Courses Excel File<input type="file" name="coursesFile" onChange={handleChange} /></label>
         <label>Logo<input type="file" name="logo" accept="image/*" onChange={handleChange} /></label>
+        <label>Seal (optional)<input type="file" name="seal" accept="image/*" onChange={handleChange} /></label>
         <label>Brochure<input type="file" name="brochure" accept="application/pdf" onChange={handleChange} /></label>
         <label>Images<input type="file" name="images" accept="image/*" multiple onChange={handleChange} /></label>
         <label>Videos<input type="file" name="videos" accept="video/mp4" multiple onChange={handleChange} /></label>
@@ -210,6 +274,9 @@ export default function ProfileForm() {
       <button type="submit" className="ud-btn" disabled={uploading}>
         {uploading ? "Uploading..." : "Submit"}
       </button>
+      <p style={{fontSize:12, opacity:0.7, marginTop:8}}>
+        API: {API_BASE}/api/universities
+      </p>
     </form>
   );
 }

@@ -183,7 +183,6 @@ nav select:hover {
 }
 
 /* Tab Navigation Styles */
-/* Tab Navigation Styles */
 .tab-navigation {
   margin: 0 auto;
   padding: 1rem;
@@ -193,7 +192,7 @@ nav select:hover {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; /* Added to center the navigation */
+  justify-content: center; /* Added to center the navigation */
 }
 
 .tab-scroll-button {
@@ -210,7 +209,6 @@ nav select:hover {
   align-items: center;
   justify-content: center;
 }
-
 
 .tab-scroll-button:hover {
   background-color: var(--button-hover);
@@ -254,7 +252,7 @@ nav select:hover {
 }
 
 .tab-button:hover {
-  background-color: var(--button-hover);
+  background-color: #f59e0b;
 }
 
 /* Action Buttons */

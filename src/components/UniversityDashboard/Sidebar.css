@@ -1,24 +1,65 @@
+/* Define light and dark theme variables */
+:root {
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #1f2937;
+  --border-color-light: #e5e7eb;
+  --border-color-dark: #374151;
+  --text-color-light: #374151;
+  --text-color-dark: #d1d5db;
+  --hover-bg-light: #FBBF24; /* Original yellow for hover */
+  --hover-bg-dark: #FBBF24; /* Original yellow for hover */
+  --color-primary: #10b981; /* Emerald green for active state */
+  --color-accent: #059669; /* Darker shade for active border */
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Default to light theme */
+[data-theme="light"] {
+  --card-bg: var(--card-bg-light);
+  --border-color: var(--border-color-light);
+  --text-color: var(--text-color-light);
+  --hover-bg: var(--hover-bg-light);
+}
+
+[data-theme="dark"] {
+  --card-bg: var(--card-bg-dark);
+  --border-color: var(--border-color-dark);
+  --text-color: var(--text-color-dark);
+  --hover-bg: var(--hover-bg-dark);
+}
+
 .ud-sidebar {
   background-color: var(--card-bg);
-  width: 240px;
+  width: 250px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border-color);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
   flex-shrink: 0;
   overflow-y: auto;
+  box-shadow: var(--shadow);
+  height: 100vh;
+  position: sticky;
+  top: 0;
 }
 
 .ud-sidebar.closed {
-  transform: translateX(-240px);
+  transform: translateX(-250px);
 }
 
 .ud-brand {
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: bold;
+  padding: 1.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-color);
+  display: flex;
+  justify-content: flex-start;
+  transition: color 0.3s ease;
+}
+
+.ud-brand:hover {
+  color: #FBBF24; /* Original yellow on hover */
 }
 
 .ud-menu {
@@ -31,90 +72,68 @@
   background: none;
   border: none;
   text-align: left;
-  padding: 0.7rem 1rem;
+  padding: 0.75rem 1.25rem;
   font-size: 0.95rem;
   cursor: pointer;
   color: var(--text-color);
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  justify-content: flex-start;
   border-left: 4px solid transparent;
-  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .ud-menu-item:hover,
 .ud-menu-item:focus {
-  background-color: var(--hover-bg);
-  border-left-color: var(--color-primary);
+  background-color: #2563EB; /* Blue background */
+  border-left-color: #FBBF24; /* Match border with background */
+  color: #ffffff; /* White text for contrast */
+}
+
+.ud-menu-item:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1.25rem;
+  width: calc(100% - 2.5rem);
+  height: 2px;
+  background-color: #FBBF24; /* Original yellow underline */
+  opacity: 0.3;
 }
 
 .ud-menu-item.active {
-  background-color: var(--color-primary);
-  color: #fff;
-  border-left-color: var(--color-accent);
+  background-color: #2563EB; /* Blue background */
+  color: #ffffff; /* White text */
+  border-left-color: #FBBF24; /* Blue border */
+  font-weight: 600;
 }
 
 .ud-menu-label {
   flex-grow: 1;
   font-size: 1rem;
-  font-weight: 500;
-}
-.ud-sidebar {
-  background-color: var(--card-bg);
-  width: 240px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--border-color);
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-  overflow-y: auto;
+  font-weight: bold; /* Updated to bold text */
+  transition: color 0.2s ease;
 }
 
-.ud-sidebar.closed {
-  transform: translateX(-240px);
+/* Smooth transitions */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.ud-brand {
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-color);
+/* Scrollbar styling */
+.ud-sidebar::-webkit-scrollbar {
+  width: 8px;
 }
 
-.ud-menu {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 0;
+.ud-sidebar::-webkit-scrollbar-track {
+  background: var(--card-bg);
 }
 
-.ud-menu-item {
-  background: none;
-  border: none;
-  text-align: left;
-  padding: 0.7rem 1rem;
-  font-size: 0.95rem;
-  cursor: pointer;
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-left: 4px solid transparent;
-  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+.ud-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
 }
 
-.ud-menu-item:hover,
-.ud-menu-item:focus {
-  background-color: var(--hover-bg);
-  border-left-color: var(--color-primary);
-}
-
-.ud-menu-item.active {
-  background-color: var(--color-primary);
-  color: #fff;
-  border-left-color: var(--color-accent);
-}
-
-.ud-menu-label {
-  flex-grow: 1;
+.ud-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #FBBF24; /* Original yellow scrollbar thumb on hover */
 }

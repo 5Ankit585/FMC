@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 import "./settings.css";
 
-
 export default function Settings() {
   const settingsOptions = [
     {
@@ -47,7 +46,7 @@ export default function Settings() {
   return (
     <div className="settings-page">
       <header className="settings-header">
-        <h2>⚙️ Settings</h2>
+        <h2>Settings</h2>
         <p className="settings-subtext">
           Manage your account, preferences, and integrations easily.
         </p>
@@ -55,7 +54,13 @@ export default function Settings() {
 
       <div className="settings-grid">
         {settingsOptions.map((item, idx) => (
-          <div key={idx} className="settings-card" onClick={item.action}>
+          <div
+            key={idx}
+            className="settings-card"
+            onClick={item.action}
+            role="button"
+            tabIndex={0}
+          >
             <div className="settings-icon">{item.icon}</div>
             <div className="settings-info">
               <h3>{item.title}</h3>

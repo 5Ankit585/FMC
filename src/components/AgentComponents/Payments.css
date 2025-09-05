@@ -1,5 +1,6 @@
 .payments-container {
-  max-width: 1000px;
+    max-width: 1600px;
+  width: 90%;
   margin: 0 auto;
   padding: 16px;
   background-color: #f8fafc;

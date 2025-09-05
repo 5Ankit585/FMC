@@ -1,0 +1,70 @@
+/* Navbar.css */
+:root {
+  --background-color: #F5F7FA;
+  --text-color: #1F2937;
+  --border-color: #CBD5E1;
+  --divider-color: #E2E8F0;
+  --navbar-bg: linear-gradient(to right, #4F86F7, #1E40AF);
+  --button-primary: #2563EB;
+  --button-accent: #F59E0B; /* yellow */
+  --input-border: #94A3B8;
+  --input-text: #1F2937;
+  --dropdown-bg: #000000e6; /* 90% black */
+  --dropdown-text: #FFFFFF;
+}
+
+/* ---- Links (desktop & mobile) ---- */
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding-bottom: 2px;
+  transition: color .15s ease, border-color .15s ease;
+}
+.nav-link:hover {
+  color: var(--button-accent);
+}
+.nav-link.active {
+  color: var(--button-accent);
+  border-bottom: 2px solid var(--button-accent);
+}
+
+/* ---- User icon ---- */
+.user-icon {
+  color: #ffffff;
+  transition: color .15s ease;
+}
+.user-icon:hover {
+  color: var(--button-accent);
+}
+
+/* ---- Dropdown ---- */
+.dropdown-panel {
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+}
+.dropdown-item {
+  color: #ffffff;
+  transition: color .15s ease, background-color .15s ease;
+}
+.dropdown-item:hover {
+  color: var(--button-accent);
+}
+
+/* ---- Buttons (login/signup/account) ---- */
+.btn-accent {
+  background: var(--button-accent);
+  color: #ffffff;
+  transition: filter .15s ease, opacity .15s ease;
+}
+.btn-accent:hover {
+  filter: brightness(0.95);
+}
+
+/* ---- Mobile toggler ---- */
+.nav-toggle {
+  color: #ffffff;
+  transition: color .15s ease;
+}
+.nav-toggle:hover {
+  color: var(--button-accent);
+}

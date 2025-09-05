@@ -1,4 +1,3 @@
-
 import React from "react";
 import "./Subscription.css";
 
@@ -12,10 +11,10 @@ export default function Subscription() {
         </div>
 
         <div className="sub-actions">
-          <button className="btn btn-outline" aria-label="Manage Licenses">
+          <button className="btn btn-outline" aria-label="Manage Licenses" type="button">
             Manage Licenses
           </button>
-          <button className="btn btn-primary" aria-label="Upgrade Plan">
+          <button className="btn btn-primary" aria-label="Upgrade Plan" type="button">
             Upgrade Plan
           </button>
         </div>
@@ -29,7 +28,9 @@ export default function Subscription() {
               Yearly Subscription
               <span className="plan-badge">Main</span>
             </div>
-           <div className="plan-price">₹14,400.00 <span className="per">+ VAT</span></div>
+            <div className="plan-price">
+              ₹14,400.00 <span className="per">+ VAT</span>
+            </div>
           </div>
 
           <div className="meta">
@@ -44,9 +45,13 @@ export default function Subscription() {
           </div>
 
           <div className="card-footer">
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button className="btn btn-secondary" aria-label="Renew Now">Renew Now</button>
-              <a href="#" className="link">View Invoices</a>
+            <div style={{ display: "flex", gap: 12 }}>
+              <button className="btn btn-secondary" aria-label="Renew Now" type="button">
+                Renew Now
+              </button>
+              <button className="btn btn-outline" aria-label="View Invoices" type="button">
+                View Invoices
+              </button>
             </div>
             <div className="small-muted">Active since 2019</div>
           </div>
@@ -55,17 +60,31 @@ export default function Subscription() {
         {/* Additional License Card */}
         <div className="subscription-card additional-license card">
           <div className="license-header">
-            <div className="license-icon" aria-hidden>
-              
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <path d="M3 7h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="#EEF2FF"/>
-                <path d="M7 7V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2" stroke="#5B7CFF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            <div className="license-icon" aria-hidden="true">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path d="M3 7h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="#EEF2FF" />
+                <path
+                  d="M7 7V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2"
+                  stroke="#5B7CFF"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
             <h3>Additional License</h3>
           </div>
 
-          <div className="price-large">₹85 <span className="per">/mo</span></div>
+          <div className="price-large">
+            ₹85 <span className="per">/mo</span>
+          </div>
 
           <ul className="features-list">
             <li>Unlimited accounts</li>
@@ -74,7 +93,9 @@ export default function Subscription() {
             <li>No update fees</li>
           </ul>
 
-          <button className="buy-button btn-primary" aria-label="Buy Additional License">Buy Additional License</button>
+          <button className="buy-button btn-primary" aria-label="Buy Additional License" type="button">
+            Buy Additional License
+          </button>
         </div>
 
         {/* Payment Section */}
@@ -93,15 +114,21 @@ export default function Subscription() {
           <div className="next-payment">
             <div>
               <small>Next Payment</small>
-              <div><strong>28 March 2020</strong></div>
+              <div>
+                <strong>28 March 2020</strong>
+              </div>
             </div>
 
             <div className="amount">₹131.00</div>
           </div>
 
           <div className="payment-actions">
-            <a href="#" className="link">Change Payment Method</a>
-            <a href="#" className="link">Payment History</a>
+            <button className="btn btn-outline" aria-label="Change Payment Method" type="button">
+              Change Payment Method
+            </button>
+            <button className="btn btn-outline" aria-label="Payment History" type="button">
+              Payment History
+            </button>
           </div>
         </div>
       </div>
@@ -116,7 +143,7 @@ export default function Subscription() {
             <p>XYZ</p>
           </div>
 
-          <div className="billing-item">
+        <div className="billing-item">
             <label>Address</label>
             <p>, No:4, I...</p>
           </div>
@@ -133,10 +160,15 @@ export default function Subscription() {
         </div>
 
         <div className="billing-actions">
-          <a href="#" className="btn btn-outline">Change Billing</a>
-          <a href="#" className="link">Download Invoice</a>
+          <button className="btn btn-outline" aria-label="Change Billing" type="button">
+            Change Billing
+          </button>
+          <button className="btn btn-outline" aria-label="Download Invoice" type="button">
+            Download Invoice
+          </button>
         </div>
       </div>
     </div>
   );
 }
+

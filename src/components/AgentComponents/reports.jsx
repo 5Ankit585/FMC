@@ -3,6 +3,7 @@ import './reports.css';
 
 const Reports = () => {
   const [filter, setFilter] = useState('All'); 
+
   const metrics = [
     { label: 'Total Applications', value: 150 },
     { label: 'Admissions Confirmed', value: 85 },
@@ -23,7 +24,7 @@ const Reports = () => {
 
   return (
     <div className="reports-container">
-      <h1 className="text-3xl font-bold mb-6">Agent Panel - Reports & Analytics</h1>
+      <h1 className="page-title">Agent Panel - Reports & Analytics</h1>
 
       {/* Metrics Summary */}
       <div className="reports-metrics">
@@ -36,8 +37,8 @@ const Reports = () => {
       </div>
 
       {/* Filter Controls */}
-      <div className="filter-controls mt-8">
-        <h2 className="text-xl font-semibold mb-4">Detailed Reports</h2>
+      <div className="filter-controls">
+        <h2 className="section-title">Detailed Reports</h2>
         <select 
           className="filter-select"
           value={filter}
@@ -51,7 +52,7 @@ const Reports = () => {
       </div>
 
       {/* Reports Table */}
-      <div className="overflow-x-auto mt-4">
+      <div className="table-wrapper">
         <table className="reports-table">
           <thead>
             <tr>
@@ -70,7 +71,11 @@ const Reports = () => {
                 <td>{report.id}</td>
                 <td>{report.student}</td>
                 <td>{report.course}</td>
-                <td>{report.applicationStatus}</td>
+                <td>
+                  <span className={`status-badge ${report.applicationStatus.toLowerCase()}`}>
+                    {report.applicationStatus}
+                  </span>
+                </td>
                 <td>{report.paymentStatus}</td>
                 <td>{report.commission.toFixed(2)}</td>
                 <td>{report.date}</td>

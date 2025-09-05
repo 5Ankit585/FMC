@@ -1,83 +1,120 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
-  faBell,
-  faMoon,
-  faSun,
-  faCompass,
-  faRightToBracket,
-  faUserPlus,
-  faArrowRightFromBracket,
-  faChevronLeft,
-  faChevronRight
-} from '@fortawesome/free-solid-svg-icons';
-import { applyTheme } from '../utils/themeUtils';
-import AboutUs from '../components/UniversitySections/AboutUs';
-import Info from '../components/UniversitySections/Info';
-import CoursesAndFees from '../components/UniversitySections/CoursesAndFees';
-import Cutoff from '../components/UniversitySections/Cutoff';
-import Placement from '../components/UniversitySections/Placements';
-import Facilities from '../components/UniversitySections/Facilities';
-import Admission from '../components/UniversitySections/Admission';
-import QA from '../components/UniversitySections/QA';
-import Gallery from '../components/UniversitySections/Gallery';
-import Footer from '../components/Footer';
-import './UniversityPage.css';
-import Rankings from '../components/UniversitySections/Rankings';
-import NewsArticles from '../components/UniversitySections/NewsArticles';
-import Reviews from '../components/UniversitySections/Reviews';
+  faUser, faBell, faMoon, faSun, faCompass,
+  faRightToBracket, faUserPlus, faArrowRightFromBracket,
+  faChevronLeft, faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
+import AboutUs from "../components/UniversitySections/AboutUs";
+import Info from "../components/UniversitySections/Info";
+import CoursesAndFees from "../components/UniversitySections/CoursesAndFees";
+import Cutoff from "../components/UniversitySections/Cutoff";
+import Placement from "../components/UniversitySections/Placements";
+import Facilities from "../components/UniversitySections/Facilities";
+import Admission from "../components/UniversitySections/Admission";
+import QA from "../components/UniversitySections/QA";
+import Gallery from "../components/UniversitySections/Gallery";
+import Rankings from "../components/UniversitySections/Rankings";
+import NewsArticles from "../components/UniversitySections/NewsArticles";
+import Reviews from "../components/UniversitySections/Reviews";
+import Footer from "../components/Footer";
+
+import logo from "../../src/Images/logoo.png"; // static UniHub logo (navbar)
+import "./UniversityPage.css";
+
+const API_BASE = import.meta?.env?.VITE_API_BASE || "http://localhost:5000";
+const FALLBACK_BANNER =
+  "https://www.shutterstock.com/image-photo/ucla-los-angeles-usa-may-600nw-2397826809.jpg";
+const FALLBACK_LOGO = "https://placehold.co/96x96?text=Logo";
 
 function UniversityPage() {
+  const { id } = useParams();
   const [darkMode, setDarkMode] = useState(false);
   const [user, setUser] = useState(null);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [activeSection, setActiveSection] = useState('About');
+  const [activeSection, setActiveSection] = useState("About");
+  const [university, setUniversity] = useState(null);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+
   const dropdownRef = useRef(null);
   const scrollRef = useRef(null);
 
-  const toggleTheme = () => setDarkMode(!darkMode);
+  // Horizontal scroll
+  const scrollLeft = () =>
+    scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
+  const scrollRight = () =>
+    scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
 
+  // Dark mode
+  const toggleTheme = () => setDarkMode((v) => !v);
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) setDarkMode(savedTheme === 'dark');
-  }, []);
-
-  useEffect(() => {
-    applyTheme(darkMode);
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+    if (darkMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
   }, [darkMode]);
 
-  const scrollLeft = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: -100, behavior: 'smooth' });
-  };
+  // Fetch university
+  useEffect(() => {
+    (async () => {
+      try {
+        setStatus("loading");
+        const res = await fetch(`${API_BASE}/api/universities/${id}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || "Failed to fetch");
+        setUniversity(data?.uni || data);
+        setStatus("ready");
+      } catch (e) {
+        setError(e.message);
+        setStatus("error");
+      }
+    })();
+  }, [id]);
 
-  const scrollRight = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: 100, behavior: 'smooth' });
-  };
+  // Chips
+  const chips = [
+    university?.type,
+    university?.ownership,
+    university?.accreditation,
+    university?.affiliation,
+  ].filter(Boolean);
 
-  const handleButtonClick = (section) => setActiveSection(section);
+  // Banner & Logo (schema aligned)
+  const bannerImage =
+    university?.bannerImages?.[0] ||
+    university?.photos?.[0] ||
+    university?.galleryImages?.[0] ||
+    FALLBACK_BANNER;
+
+  const uniLogo = university?.logo?.[0] || FALLBACK_LOGO;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--background-color)', color: 'var(--text-color)' }}>
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "var(--background-color)",
+        color: "var(--text-color)",
+      }}
+    >
       {/* Navbar */}
       <nav>
         <div className="flex items-center">
           <img
-            src="https://marketplace.canva.com/EAGSIcoid00/1/0/1600w/canva-blue-white-modern-school-logo-ZBxBTP6Lc-E.jpg"
-            alt="Logo"
-            className="h-8 mr-2"
+            src={logo}
+            alt="Company Logo"
+            className="h-8 w-8 mr-2 object-cover rounded-full bg-white"
           />
-          <span className={`font-bold ${!darkMode ? 'text-black' : ''}`}>Uni Hub</span>
+          <span className={`font-bold ${!darkMode ? "text-black" : ""}`}>
+            Uni Hub
+          </span>
         </div>
 
         <div className="flex-1 mx-10">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full"
-          />
+          <input type="text" placeholder="Search..." className="w-full" />
         </div>
 
         <div className="flex items-center space-x-2 relative">
@@ -85,47 +122,51 @@ function UniversityPage() {
             Write a Review
           </button>
           <button className="flex items-center bg-[var(--button-primary)] text-white hover:bg-[var(--button-hover)]">
-            <FontAwesomeIcon icon={faCompass} className="fa-compass mr-1 text-white" />
+            <FontAwesomeIcon icon={faCompass} className="mr-1 text-white" />
             Explore
           </button>
           <button className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]">
-            <FontAwesomeIcon icon={faBell} className="fa-bell text-white" />
+            <FontAwesomeIcon icon={faBell} className="text-white" />
           </button>
-          <button className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]" onClick={toggleTheme}>
-            <FontAwesomeIcon icon={darkMode ? faSun : faMoon} className={`${darkMode ? 'fa-sun' : 'fa-moon'} text-white`} />
+          <button
+            className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]"
+            onClick={toggleTheme}
+          >
+            <FontAwesomeIcon icon={darkMode ? faSun : faMoon} className="text-white" />
           </button>
 
           {/* User dropdown */}
           <div className="dropdown" ref={dropdownRef}>
             <button
               className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]"
-              onClick={() => setShowUserDropdown(!showUserDropdown)}
+              onClick={() => setShowUserDropdown((v) => !v)}
             >
-              <FontAwesomeIcon icon={faUser} className="fa-user text-white" />
+              <FontAwesomeIcon icon={faUser} className="text-white" />
             </button>
-
 
             {showUserDropdown && (
               <div className="dropdown-menu">
                 {user ? (
                   <>
-                    <p className="text-[var(--dropdown-text)]">Signed in as <br /><strong>{user.name}</strong></p>
+                    <p className="text-[var(--dropdown-text)]">
+                      Signed in as <br /> <strong>{user.name}</strong>
+                    </p>
                     <button
                       className="flex items-center w-full text-left text-[var(--dropdown-text)] hover:text-[var(--button-hover)]"
                       onClick={() => setUser(null)}
                     >
-                      <FontAwesomeIcon icon={faArrowRightFromBracket} className="fa-arrow-right-from-bracket mr-1" />
+                      <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-1" />
                       Logout
                     </button>
                   </>
                 ) : (
                   <>
                     <button className="flex items-center w-full text-left text-[var(--dropdown-text)] mb-1 hover:text-[var(--button-hover)]">
-                      <FontAwesomeIcon icon={faRightToBracket} className="fa-right-to-bracket mr-1" />
+                      <FontAwesomeIcon icon={faRightToBracket} className="mr-1" />
                       Login
                     </button>
                     <button className="flex items-center w-full text-left text-[var(--dropdown-text)] hover:text-[var(--button-hover)]">
-                      <FontAwesomeIcon icon={faUserPlus} className="fa-user-plus mr-1" />
+                      <FontAwesomeIcon icon={faUserPlus} className="mr-1" />
                       Sign Up
                     </button>
                   </>
@@ -146,114 +187,115 @@ function UniversityPage() {
         </div>
       </nav>
 
-      {/* University Details Banner */}
-      <div
-        className="university-banner"
-        style={{
-          backgroundImage:
-            "url('https://sustainability.umd.edu/sites/default/files/styles/optimized/public/2024-08/HornbakePlaza_10242017_9203-7%20%281%29.jpg?itok=k2UhA8Xt')",
-        }}
-      >
-        <div className="banner-content">
-          <div className="lower-blur">
-            <img
-              src="https://marketplace.canva.com/EAGSIcoid00/1/0/1600w/canva-blue-white-modern-school-logo-ZBxBTP6Lc-E.jpg"
-              alt="University Logo"
-            />
-            <div className="text-center">
-              <h1>Your University Name</h1>
-              <p>© City, Country | Est 1952</p>
-            </div>
-          </div>
+      {/* Loading / Error */}
+      {status === "loading" && (
+        <div className="p-8 text-center opacity-80">Loading university…</div>
+      )}
+      {status === "error" && (
+        <div className="p-8 text-center text-red-500">Error: {error}</div>
+      )}
 
-          <div className="banner-tags">
-            <div className="flex space-x-1">
-              <span>AICTE</span>
-              <span>NAAC Grade A</span>
-              <span>NIRF</span>
-              <span>NBA</span>
-              <span>Government</span>
-            </div>
-            <div className="flex space-x-1">
-              <span className="review">8 / 10 reviews</span>
-              <span className="review">1 reviews</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tab Navigation */}
-      <div className="tab-navigation">
-        <div className="tab-container">
-          <button
-            className="tab-scroll-button"
-            onClick={scrollLeft}
-            title="Scroll Left"
-          >
-            <FontAwesomeIcon icon={faChevronLeft} className="fa-chevron-left text-xs" />
-          </button>
-
+      {status === "ready" && (
+        <>
+          {/* University Banner */}
           <div
-            ref={scrollRef}
-            className="tab-scroll"
+            className="university-banner"
+            style={{ backgroundImage: `url(${bannerImage})` }}
           >
-            {[
-              'About',
-              'Info',
-              'Courses & Fees',
-              'Cutoff',
-              'Placements',
-              'Facilities',
-              'Rankings',
-              'Gallery',
-              'Admission',
-              'Reviews',
-              'News & Articles',
-              'Scholarship',
-              'Q&A',
-            ].map((section, index) => (
-              <button
-                key={index}
-                className={`tab-button ${activeSection === section ? 'active' : ''}`}
-                onClick={() => handleButtonClick(section)}
-              >
-                {section}
-              </button>
-            ))}
+            <div className="banner-content">
+              <div className="lower-blur">
+                <img src={uniLogo} alt="University Logo" />
+                <div className="text-center">
+                  <h1>{university?.instituteName || "—"}</h1>
+                  <p>
+                    © {university?.city || "City"},{" "}
+                    {university?.state || "State"} &nbsp;|&nbsp; Est.{" "}
+                    {university?.year || "—"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="banner-tags">
+                <div className="flex space-x-1 flex-wrap">
+                  {chips.map((c, i) => (
+                    <span key={i}>{c}</span>
+                  ))}
+                </div>
+
+                <div className="flex space-x-1">
+                  {university?.students && (
+                    <span className="review">{university.students} students</span>
+                  )}
+                  {university?.faculty && (
+                    <span className="review">{university.faculty} faculty</span>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <button
-            className="tab-scroll-button"
-            onClick={scrollRight}
-            title="Scroll Right"
-          >
-            <FontAwesomeIcon icon={faChevronRight} className="fa-chevron-right" />
-          </button>
-        </div>
+          {/* Tabs */}
+          <div className="tab-navigation">
+            <div className="tab-container">
+              <button className="tab-scroll-button" onClick={scrollLeft} title="Scroll Left">
+                <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
+              </button>
 
-        <div className="action-buttons">
-          <button>Apply For Admission</button>
-          <button className="primary">Download Brochure</button>
-          <button className="primary">More Nearby Colleges</button>
-        </div>
+              <div ref={scrollRef} className="tab-scroll">
+                {[
+                  "About",
+                  "Info",
+                  "Courses & Fees",
+                  "Cutoff",
+                  "Placements",
+                  "Facilities",
+                  "Rankings",
+                  "Gallery",
+                  "Admission",
+                  "Reviews",
+                  "News & Articles",
+                  "Scholarship",
+                  "Q&A",
+                ].map((section) => (
+                  <button
+                    key={section}
+                    className={`tab-button ${activeSection === section ? "active" : ""}`}
+                    onClick={() => setActiveSection(section)}
+                  >
+                    {section}
+                  </button>
+                ))}
+              </div>
 
-        {/* Render dynamic section based on selection */}
-        <div className="content-section">
-          {activeSection === 'About' && <AboutUs />}
-          {activeSection === 'Info' && <Info />}
-          {activeSection === 'Courses & Fees' && <CoursesAndFees />}
-          {activeSection === 'Cutoff' && <Cutoff />}
-          {activeSection === 'Placements' && <Placement />}
-          {activeSection === 'Facilities' && <Facilities />}
-          {activeSection === 'Admission' && <Admission />}
-          {activeSection === 'Q&A' && <QA />}
-          {activeSection === 'Gallery' && <Gallery />}
-          {activeSection === 'Reviews' && <Reviews />}
-          {activeSection === 'News & Articles' && <NewsArticles />}
-          {activeSection === 'Rankings' && <Rankings />}
+              <button className="tab-scroll-button" onClick={scrollRight} title="Scroll Right">
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </div>
 
-        </div>
-      </div>
+            <div className="action-buttons">
+              <button>Apply For Admission</button>
+              <button className="primary">Download Brochure</button>
+              <button className="primary">More Nearby Colleges</button>
+            </div>
+
+            {/* Dynamic sections */}
+            <div className="content-section">
+              {activeSection === "About" && <AboutUs university={university} />}
+              {activeSection === "Info" && <Info university={university} />}
+              {activeSection === "Courses & Fees" && <CoursesAndFees university={university} />}
+              {activeSection === "Cutoff" && <Cutoff university={university} />}
+              {activeSection === "Placements" && <Placement university={university} />}
+              {activeSection === "Facilities" && <Facilities university={university} />}
+              {activeSection === "Admission" && <Admission university={university} />}
+              {activeSection === "Q&A" && <QA university={university} />}
+              {activeSection === "Gallery" && <Gallery university={university} />}
+              {activeSection === "Reviews" && <Reviews university={university} />}
+              {activeSection === "News & Articles" && <NewsArticles university={university} />}
+              {activeSection === "Rankings" && <Rankings university={university} />}
+            </div>
+          </div>
+        </>
+      )}
 
       <Footer />
     </div>

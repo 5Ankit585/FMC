@@ -62,8 +62,8 @@ const Students = ({ students, addStudent, updateStudent, deleteStudent }) => {
     <div className="page-wrap">
       <div className="students-container">
         {/* Header */}
-        <div className="header">
-          <div className="header-left">
+        <div className="students-header">
+          <div className="students-header-left">
             <div className="logo-chip" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="currentColor" strokeWidth="1.4" />
@@ -79,49 +79,25 @@ const Students = ({ students, addStudent, updateStudent, deleteStudent }) => {
             </div>
           </div>
 
-          <div className="header-actions">
+          <div className="students-header-actions">
             {/* Search */}
-            <div className="input-wrap" role="search">
-              <span className="input-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <circle cx="11" cy="11" r="7.25" stroke="currentColor" strokeWidth="1.5" />
-                  <path d="M20 20l-3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </span>
-              <input
-                className="input"
-                type="search"
-                placeholder="Search by name, email, status…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                aria-label="Search students"
-              />
-            </div>
+<div className="students-input-wrap" role="search">
+  <span className="students-input-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none">
+      <circle cx="11" cy="11" r="7.25" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M20 20l-3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  </span>
+  <input
+    className="students-input"
+    type="search"
+    placeholder="Search by name, email, status…"
+    value={query}
+    onChange={(e) => setQuery(e.target.value)}
+    aria-label="Search students"
+  />
+</div>
 
-            {/* Theme toggle */}
-            <button className="btn btn-ghost btn-icon" onClick={toggleTheme} aria-label="Toggle theme">
-              {theme === "dark" ? (
-                <svg viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.5" />
-                  <path
-                    d="M12 2v2M12 20v2M2 12h2M20 12h2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M21 12.75A8.25 8.25 0 1111.25 3a7 7 0 109.75 9.75z"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              )}
-            </button>
 
             {/* Add button */}
             <button

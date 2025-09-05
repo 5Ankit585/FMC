@@ -7,7 +7,7 @@
 }
 
 .trending-header {
-  background: linear-gradient(90deg, #1a5ae2, #2575fc);
+  background: linear-gradient(90deg, #141f33);
   color: white;
   padding: 0.8rem;
   border-radius: 10px;
@@ -28,7 +28,7 @@
 }
 
 .marquee-wrapper.marquee-upcoming {
-  background-color: #e0f7fa;
+  background-color: #f3f4f6;
 }
 
 .marquee {
@@ -47,7 +47,7 @@
 }
 
 .marquee-wrapper.marquee-upcoming span {
-  color: #00796b;
+  color: #F59E0B;
   font-weight: 400;
 }
 

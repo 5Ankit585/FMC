@@ -110,6 +110,7 @@
   border: 1px solid #ddd;
   border-radius: 0.45rem;
   font-size: 0.82rem;
+  background-color: #f9fafb;
   width: 100%; /* prevent overflow */
   min-width: 0; /* allow shrinking in grid */
 }
@@ -182,30 +183,13 @@
 .filter-input:focus,
 .multi-select-toggle:focus {
   border-color: #007bff;
+  background-color: #f9fafb;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
   outline: none;
 }
 .fees-flex {
   display: flex;
   gap: 0.6rem;
-}
-
-/* Show More Button */
-.show-more-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.9rem;
-  cursor: pointer;
-  text-decoration: underline;
-  margin: 1rem 0;
-  display: block;
-  text-align: left;
-  padding: 0;
-}
-
-.show-more-btn:hover {
-  color: #0056b3;
 }
 
 /* Actions */
@@ -216,7 +200,7 @@
   margin-top: 2rem;
   border-top: 1px solid #eee;
   padding-top: 1.2rem;
-  background: transparent; /* Removed white background */
+  background: #fff;
 }
 .filter-btn {
   padding: 0.75rem 1.4rem;
@@ -244,4 +228,33 @@
 }
 .filter-btn.reset:hover {
   background: #e0e0e0;
+}
+
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  width: 60%;        /* 60% width */
+  gap: 0.5rem;
+  margin: 1rem auto; /* center horizontally */
+}
+
+.search-label {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.search-input {
+  flex: 1;            /* take remaining width */
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.filter-btn-trigger {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }

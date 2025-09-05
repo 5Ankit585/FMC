@@ -1,27 +1,16 @@
 import React from "react";
-import {
-  FaTachometerAlt,
-  FaUniversity,
-  FaUserGraduate,
-  FaInbox,
-  FaFileInvoiceDollar,
-  FaWallet,
-  FaChartLine,
-  FaBullhorn,
-  FaCog
-} from "react-icons/fa";
 import "./Sidebar.css";
 
 const MENU = [
-  { id: "dashboard", label: "Dashboard", icon: FaTachometerAlt },
-  { id: "My Profile", label: "My Profile", icon: FaUniversity },
-  { id: "Courses & Fees", label: "Courses & Fees", icon: FaUserGraduate },
-  { id: "News", label: "News", icon: FaInbox },
-  { id: "Applications", label: "Applications", icon: FaFileInvoiceDollar },
-  { id: "Documents", label: "Documents", icon: FaWallet },
-  { id: "analytics", label: "Analytics", icon: FaChartLine }, 
-  { id: "Subscription", label: "Subscription", icon: FaBullhorn },
-  { id: "settings", label: "Settings", icon: FaCog }
+  { id: "dashboard", label: "Dashboard" },
+  { id: "My Profile", label: "My Profile" },
+  { id: "Courses & Fees", label: "Courses & Fees" },
+  { id: "News", label: "News" },
+  { id: "Applications", label: "Applications" },
+  { id: "Documents", label: "Documents" },
+  { id: "analytics", label: "Analytics" },
+  { id: "Subscription", label: "Subscription" },
+  { id: "settings", label: "Settings" },
 ];
 
 export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {
@@ -31,6 +20,9 @@ export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {
         className="ud-brand"
         onClick={() => setRoute("dashboard")}
         style={{ cursor: "pointer" }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setRoute("dashboard")}
       >
         <div className="ud-logo">
           <strong>University Dashboard</strong>
@@ -38,14 +30,14 @@ export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {
       </div>
 
       <nav className="ud-menu" role="menu">
-        {MENU.map(({ id, label, icon: Icon }) => (
+        {MENU.map(({ id, label }) => (
           <button
             key={id}
             className={`ud-menu-item ${currentRoute === id ? "active" : ""}`}
             onClick={() => setRoute(id)}
             role="menuitem"
+            aria-current={currentRoute === id ? "page" : undefined}
           >
-            <Icon size={18} />
             <span className="ud-menu-label">{label}</span>
           </button>
         ))}

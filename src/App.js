@@ -60,7 +60,7 @@ function App() {
           {/* University & Dashboard Routes */}
           <Route path="/agent-dashboard/*" element={<AgentDashboard />} />
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
-          <Route path="/university-page" element={<UniversityPage />} />
+          <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
 
           {/* footer page routes */}

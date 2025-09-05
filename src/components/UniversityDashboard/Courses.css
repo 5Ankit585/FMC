@@ -141,3 +141,35 @@
     font-size: 0.7rem;
   }
 }
+
+/* Select File button */
+.file-upload-btn {
+  background-color: #facc15; /* yellow */
+  color: #111827;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  transition: background 0.2s;
+}
+
+.file-upload-btn:hover {
+  background-color: #eab308; /* darker yellow */
+}
+
+/* Submit button */
+.btn-submit {
+  background-color: #374151; /* neutral gray by default */
+  color: white;
+  margin-left: 10px;
+}
+
+.btn-submit:hover {
+  background-color: #3b82f6; /* blue on hover */
+}
+

@@ -44,7 +44,6 @@ const Wallet = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [note, setNote] = useState('');
 
-  // Withdraw form state
   const [form, setForm] = useState({
     amount: '',
     method: 'Bank Transfer',
@@ -56,7 +55,6 @@ const Wallet = () => {
     attachment: null,
   });
 
-  // For focusing the first input when modal opens
   const amountInputRef = useRef(null);
   useEffect(() => {
     if (isModalOpen && amountInputRef.current) {
@@ -138,7 +136,6 @@ const Wallet = () => {
         ? { upiId: form.upiId }
         : { paypalEmail: form.paypalEmail };
 
-    // Simulate withdrawal success
     setBalance((b) => b - amount);
     setTransactions((prev) => [
       ...prev,
@@ -167,80 +164,6 @@ const Wallet = () => {
     resetForm();
   };
 
-  const downloadReceipt = (transaction) => {
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-      alert('Error: jsPDF library is not loaded. Please ensure the jsPDF script is included.');
-      return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Header
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(18);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Withdrawal Receipt', 105, 20, { align: 'center' });
-
-    // Transaction Details
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(12);
-    let y = 40;
-
-    doc.text('Transaction Details', 20, y);
-    doc.setLineWidth(0.5);
-    doc.line(20, y + 2, 190, y + 2); // Underline
-    y += 10;
-
-    doc.text(`Transaction ID: ${transaction.id || 'N/A'}`, 20, y);
-    y += 8;
-    doc.text(`Date: ${transaction.date || 'N/A'}`, 20, y);
-    y += 8;
-    doc.text(`Amount: $${transaction.amount ? transaction.amount.toFixed(2) : '0.00'}`, 20, y);
-    y += 8;
-    doc.text(`Status: ${transaction.status || 'N/A'}`, 20, y);
-    y += 8;
-    doc.text(`Payment Method: ${transaction.paymentMethod || 'N/A'}`, 20, y);
-    y += 12;
-
-    // Payment Details
-    doc.setFont('helvetica', 'bold');
-    doc.text('Payment Details', 20, y);
-    doc.line(20, y + 2, 190, y + 2); // Underline
-    doc.setFont('helvetica', 'normal');
-    y += 10;
-
-    if (transaction.paymentMethod === 'Bank Transfer') {
-      doc.text(`Account Holder: ${transaction.paymentDetails.accountHolder || 'N/A'}`, 20, y);
-      y += 8;
-      doc.text(`Account Number: ${transaction.paymentDetails.accountNumber || 'N/A'}`, 20, y);
-      y += 8;
-      doc.text(`IFSC Code: ${transaction.paymentDetails.ifsc || 'N/A'}`, 20, y);
-    } else if (transaction.paymentMethod === 'UPI') {
-      doc.text(`UPI ID: ${transaction.paymentDetails.upiId || 'N/A'}`, 20, y);
-    } else if (transaction.paymentMethod === 'PayPal') {
-      doc.text(`PayPal Email: ${transaction.paymentDetails.paypalEmail || 'N/A'}`, 20, y);
-    } else {
-      doc.text('No additional payment details available.', 20, y);
-    }
-    y += 12;
-
-    // Footer
-    doc.setFontSize(10);
-    doc.setTextColor(100, 100, 100);
-    doc.text('Thank you for using Commission Wallet!', 105, y, { align: 'center' });
-    y += 8;
-    doc.text('Contact: support@commissionwallet.com', 105, y, { align: 'center' });
-
-    // Save PDF
-    try {
-      doc.save(`withdrawal_receipt_${transaction.id.slice(0, 8)}.pdf`);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Failed to generate receipt. Please try again.');
-    }
-  };
-
   const shortId = (id) => (id ? id.slice(0, 8) + '…' : '');
 
   const sortedTransactions = useMemo(() => {
@@ -252,28 +175,26 @@ const Wallet = () => {
       <h1 className="wallet-title">Agent Panel – Commission Wallet</h1>
       <p className="wallet-subtitle">Track credits & withdrawals, and manage your payout preferences.</p>
 
-      {/* Hero with centered balance card */}
       <section className="wallet-hero">
         <div className="wallet-balance-card" role="region" aria-label="Current balance">
           <p className="wallet-balance-title">Current Balance</p>
           <p className="wallet-balance-amount">${balance.toFixed(2)}</p>
-          <p className="card-hint">Withdraw to Bank / UPI / PayPal</p>
+          <p className="wallet-card-hint">Withdraw to Bank / UPI / PayPal</p>
 
-          <button className="action-btn withdraw-btn" onClick={openWithdrawModal}>
+          <button className="wallet-btn" onClick={openWithdrawModal}>
             Withdraw Funds
           </button>
 
           {note ? (
-            <div className="inline-note" role="status">
+            <div className="wallet-inline-note" role="status">
               {note}
             </div>
           ) : null}
         </div>
       </section>
 
-      {/* Transactions */}
       <section className="wallet-table-container">
-        <h2 className="wallet-title" style={{ fontSize: '1.25rem', marginBottom: '0.75rem', textAlign: 'left' }}>
+        <h2 className="wallet-title" style={{ fontSize: '1rem', marginBottom: '0.5rem', textAlign: 'left' }}>
           Transaction History
         </h2>
         <div className="wallet-table-wrapper">
@@ -300,8 +221,8 @@ const Wallet = () => {
                   <td>{tx.amount.toFixed(2)}</td>
                   <td>
                     <span
-                      className={`status-badge ${
-                        tx.status === 'Credited' ? 'status-credited' : 'status-withdrawn'
+                      className={`wallet-status ${
+                        tx.status === 'Credited' ? 'wallet-status-credited' : 'wallet-status-withdrawn'
                       }`}
                     >
                       {tx.status}
@@ -311,8 +232,8 @@ const Wallet = () => {
                   <td>
                     {tx.status === 'Withdrawn' && (
                       <button
-                        className="download-btn"
-                        onClick={() => downloadReceipt(tx)}
+                        className="wallet-btn"
+                        onClick={() => alert("Receipt download stub (jsPDF needs to be included)")}
                         aria-label={`Download receipt for transaction ${tx.id}`}
                       >
                         Download Receipt
@@ -326,44 +247,33 @@ const Wallet = () => {
         </div>
       </section>
 
-      {/* Withdraw Modal */}
       {isModalOpen && (
-        <div
-          className="modal-overlay"
-          onClick={(e) => {
-            e.stopPropagation();
-            closeWithdrawModal();
-          }}
-        >
+        <div className="wallet-modal-overlay" onClick={closeWithdrawModal}>
           <div
-            className="modal"
+            className="wallet-modal"
             role="dialog"
             aria-modal="true"
             aria-label="Withdraw funds"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-header">
-              <h3 className="modal-title">Withdraw Funds</h3>
-              <button
-                className="modal-close"
-                aria-label="Close withdraw modal"
-                onClick={closeWithdrawModal}
-              >
+            <div className="wallet-modal-header">
+              <h3 className="wallet-modal-title">Withdraw Funds</h3>
+              <button className="wallet-modal-close" aria-label="Close withdraw modal" onClick={closeWithdrawModal}>
                 ×
               </button>
             </div>
 
             <form onSubmit={handleSubmitWithdraw}>
-              <div className="modal-body">
-                <div className="input-group">
-                  <label htmlFor="amount" className="input-label">Withdrawal Amount ($)</label>
+              <div className="wallet-modal-body">
+                <div className="wallet-input-group">
+                  <label htmlFor="amount" className="wallet-input-label">Withdrawal Amount ($)</label>
                   <input
                     id="amount"
                     name="amount"
                     type="number"
                     min="0"
                     step="0.01"
-                    className="text-input"
+                    className="wallet-text-input"
                     value={form.amount}
                     onChange={onChange}
                     ref={amountInputRef}
@@ -371,12 +281,12 @@ const Wallet = () => {
                   />
                 </div>
 
-                <div className="input-group">
-                  <label htmlFor="method" className="input-label">Payment Method</label>
+                <div className="wallet-input-group">
+                  <label htmlFor="method" className="wallet-input-label">Payment Method</label>
                   <select
                     id="method"
                     name="method"
-                    className="select-input"
+                    className="wallet-select-input"
                     value={form.method}
                     onChange={onChange}
                   >
@@ -388,37 +298,37 @@ const Wallet = () => {
 
                 {form.method === 'Bank Transfer' && (
                   <>
-                    <div className="input-group">
-                      <label htmlFor="accountHolder" className="input-label">Account Holder Name</label>
+                    <div className="wallet-input-group">
+                      <label htmlFor="accountHolder" className="wallet-input-label">Account Holder Name</label>
                       <input
                         id="accountHolder"
                         name="accountHolder"
                         type="text"
-                        className="text-input"
+                        className="wallet-text-input"
                         value={form.accountHolder}
                         onChange={onChange}
                         placeholder="As per bank records"
                       />
                     </div>
-                    <div className="input-group">
-                      <label htmlFor="accountNumber" className="input-label">Account Number</label>
+                    <div className="wallet-input-group">
+                      <label htmlFor="accountNumber" className="wallet-input-label">Account Number</label>
                       <input
                         id="accountNumber"
                         name="accountNumber"
                         type="text"
-                        className="text-input"
+                        className="wallet-text-input"
                         value={form.accountNumber}
                         onChange={onChange}
                         placeholder="Enter account number"
                       />
                     </div>
-                    <div className="input-group">
-                      <label htmlFor="ifsc" className="input-label">IFSC Code</label>
+                    <div className="wallet-input-group">
+                      <label htmlFor="ifsc" className="wallet-input-label">IFSC Code</label>
                       <input
                         id="ifsc"
                         name="ifsc"
                         type="text"
-                        className="text-input"
+                        className="wallet-text-input"
                         value={form.ifsc}
                         onChange={onChange}
                         placeholder="e.g., HDFC0001234"
@@ -428,13 +338,13 @@ const Wallet = () => {
                 )}
 
                 {form.method === 'UPI' && (
-                  <div className="input-group">
-                    <label htmlFor="upiId" className="input-label">UPI ID</label>
+                  <div className="wallet-input-group">
+                    <label htmlFor="upiId" className="wallet-input-label">UPI ID</label>
                     <input
                       id="upiId"
                       name="upiId"
                       type="text"
-                      className="text-input"
+                      className="wallet-text-input"
                       value={form.upiId}
                       onChange={onChange}
                       placeholder="e.g., name@bank"
@@ -443,13 +353,13 @@ const Wallet = () => {
                 )}
 
                 {form.method === 'PayPal' && (
-                  <div className="input-group">
-                    <label htmlFor="paypalEmail" className="input-label">PayPal Email</label>
+                  <div className="wallet-input-group">
+                    <label htmlFor="paypalEmail" className="wallet-input-label">PayPal Email</label>
                     <input
                       id="paypalEmail"
                       name="paypalEmail"
                       type="email"
-                      className="text-input"
+                      className="wallet-text-input"
                       value={form.paypalEmail}
                       onChange={onChange}
                       placeholder="your@email.com"
@@ -457,31 +367,31 @@ const Wallet = () => {
                   </div>
                 )}
 
-                <div className="input-group">
-                  <label htmlFor="attachment" className="input-label">
+                <div className="wallet-input-group">
+                  <label htmlFor="attachment" className="wallet-input-label">
                     Optional Attachment (Proof/Receipt – PDF/PNG/JPG)
                   </label>
                   <input
                     id="attachment"
                     name="attachment"
                     type="file"
-                    className="file-input"
+                    className="wallet-file-input"
                     accept=".pdf,.png,.jpg,.jpeg"
                     onChange={onFileChange}
                   />
                   {form.attachment && (
-                    <small style={{ display: 'block', marginTop: '0.375rem', color: '#6b7280' }}>
+                    <small style={{ display: 'block', marginTop: '0.25rem', color: '#6b7280' }}>
                       Selected: {form.attachment.name}
                     </small>
                   )}
                 </div>
               </div>
 
-              <div className="modal-footer">
-                <button type="button" className="btn-secondary" onClick={closeWithdrawModal}>
+              <div className="wallet-modal-footer">
+                <button type="button" className="wallet-btn-secondary" onClick={closeWithdrawModal}>
                   Cancel
                 </button>
-                <button type="submit" className="action-btn withdraw-btn">
+                <button type="submit" className="wallet-btn">
                   Submit Withdrawal
                 </button>
               </div>
