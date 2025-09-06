@@ -1,42 +1,107 @@
-import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faMapMarkerAlt, faBriefcase, faUsers, faHome, faUniversity, faStar,
-  faBook, faFutbol, faGraduationCap,
-} from '@fortawesome/free-solid-svg-icons';
-import './Info.css';
-import { applyTheme } from '../../utils/themeUtils';
+  faMapMarkerAlt,
+  faBriefcase,
+  faUsers,
+  faHome,
+  faUniversity,
+  faStar,
+  faBook,
+  faFutbol,
+  faGraduationCap,
+} from "@fortawesome/free-solid-svg-icons";
+import "./Info.css";
+import { applyTheme } from "../../utils/themeUtils";
 
-const leftItems = [
-  { icon: faMapMarkerAlt, title: 'Location', value: 'Delhi, India' },
-  { icon: faBriefcase, title: 'Highest Package', value: '₹85.3 LPA' },
-  { icon: faBriefcase, title: 'Average Package', value: '₹15.45 LPA' },
-  { icon: faUsers, title: 'Students Placed', value: '1934+' },
-  { icon: faHome, title: 'Hostel Fees', value: '₹72,000/year' },
-  { icon: faUniversity, title: 'NIRF 2024 Rank', value: '29' },
-];
-
-const rightItems = [
-  { icon: faBriefcase, title: 'Top Recruiters', value: 'Amazon, Google, Microsoft, TCS' },
-  { icon: faGraduationCap, title: 'Popular Courses', value: 'B.Tech (CSE, ECE), M.Tech, MBA' },
-  { icon: faUniversity, title: 'Campus Size', value: '164 Acres' },
-  { icon: faBook, title: 'Library', value: '2,00,000+ Books, E-Resources' },
-  { icon: faFutbol, title: 'Sports Facilities', value: 'Cricket Ground, Gym, Indoor Courts' },
-  { icon: faStar, title: 'Student Rating', value: '⭐ 4.2/5 (843 Reviews)' },
-];
-
-const Info = () => {
+const Info = ({ university }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     applyTheme(darkMode);
   }, [darkMode]);
 
-  const toggleTheme = () => setDarkMode(prev => !prev);
+  const toggleTheme = () => setDarkMode((prev) => !prev);
+
+  if (!university) {
+    return <p className="p-4">Loading Info...</p>;
+  }
+
+  // Convert CSV fields to readable string
+  const formatCSV = (csv) =>
+    csv ? csv.split(",").map((item) => item.trim()).join(", ") : "N/A";
+
+  const leftItems = [
+    {
+      icon: faMapMarkerAlt,
+      title: "Location",
+      value: `${university.city}, ${university.state}`,
+    },
+    {
+      icon: faBriefcase,
+      title: "Highest Package",
+      value: university.highestPackage || "N/A",
+    },
+    {
+      icon: faBriefcase,
+      title: "Average Package",
+      value: university.avgPackage || "N/A",
+    },
+    {
+      icon: faUsers,
+      title: "Students Placed",
+      value: university.students || "N/A",
+    },
+    {
+      icon: faHome,
+      title: "Hostel Fees",
+      value: university.hostelFee || "N/A",
+    },
+    {
+      icon: faUniversity,
+      title: "NIRF Rank",
+      value: university.nirfRank || "N/A",
+    },
+  ];
+
+  const rightItems = [
+    {
+      icon: faBriefcase,
+      title: "Top Recruiters",
+      value: formatCSV(university.topRecruiters),
+    },
+    {
+      icon: faGraduationCap,
+      title: "Popular Courses",
+      value: formatCSV(university.popularCourses),
+    },
+    {
+      icon: faUniversity,
+      title: "Campus Size",
+      value: university.campusSize || "N/A",
+    },
+    {
+      icon: faBook,
+      title: "Library",
+      value: "2,00,000+ Books, E-Resources", // static for now
+    },
+    {
+      icon: faFutbol,
+      title: "Sports Facilities",
+      value: "Cricket Ground, Gym, Indoor Courts", // static for now
+    },
+    {
+      icon: faStar,
+      title: "Student Rating",
+      value: university.studentRating || "N/A",
+    },
+  ];
 
   return (
-    <div className={`info-two-col-container ${darkMode ? 'dark' : ''}`}>
-      <h2 className="info-title">Delhi Technological University (DTU) Details</h2>
+    <div className={`info-two-col-container ${darkMode ? "dark" : ""}`}>
+      <h2 className="info-title">
+        {university.instituteName} Details
+      </h2>
       <div className="info-grid">
         {leftItems.map((leftItem, idx) => {
           const rightItem = rightItems[idx];

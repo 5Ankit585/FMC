@@ -2,14 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser, faBell, faMoon, faSun, faCompass,
-  faRightToBracket, faUserPlus, faArrowRightFromBracket,
-  faChevronLeft, faChevronRight,
+  faUser,
+  faBell,
+  faMoon,
+  faSun,
+  faCompass,
+  faRightToBracket,
+  faUserPlus,
+  faArrowRightFromBracket,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 import AboutUs from "../components/UniversitySections/AboutUs";
 import Info from "../components/UniversitySections/Info";
-import CoursesAndFees from "../components/UniversitySections/CoursesAndFees";
 import Cutoff from "../components/UniversitySections/Cutoff";
 import Placement from "../components/UniversitySections/Placements";
 import Facilities from "../components/UniversitySections/Facilities";
@@ -21,7 +27,7 @@ import NewsArticles from "../components/UniversitySections/NewsArticles";
 import Reviews from "../components/UniversitySections/Reviews";
 import Footer from "../components/Footer";
 
-import logo from "../../src/Images/logoo.png"; // static UniHub logo (navbar)
+import logo from "../../src/Images/logoo.png";
 import "./UniversityPage.css";
 
 const API_BASE = import.meta?.env?.VITE_API_BASE || "http://localhost:5000";
@@ -66,6 +72,8 @@ function UniversityPage() {
         const res = await fetch(`${API_BASE}/api/universities/${id}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to fetch");
+        console.log("Fetched University Data:", data);
+        console.log("Courses:", data?.uni?.courses || data?.courses);
         setUniversity(data?.uni || data);
         setStatus("ready");
       } catch (e) {
@@ -83,7 +91,7 @@ function UniversityPage() {
     university?.affiliation,
   ].filter(Boolean);
 
-  // Banner & Logo (schema aligned)
+  // Banner & Logo
   const bannerImage =
     university?.bannerImages?.[0] ||
     university?.photos?.[0] ||
@@ -132,7 +140,10 @@ function UniversityPage() {
             className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]"
             onClick={toggleTheme}
           >
-            <FontAwesomeIcon icon={darkMode ? faSun : faMoon} className="text-white" />
+            <FontAwesomeIcon
+              icon={darkMode ? faSun : faMoon}
+              className="text-white"
+            />
           </button>
 
           {/* User dropdown */}
@@ -155,7 +166,10 @@ function UniversityPage() {
                       className="flex items-center w-full text-left text-[var(--dropdown-text)] hover:text-[var(--button-hover)]"
                       onClick={() => setUser(null)}
                     >
-                      <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-1" />
+                      <FontAwesomeIcon
+                        icon={faArrowRightFromBracket}
+                        className="mr-1"
+                      />
                       Logout
                     </button>
                   </>
@@ -177,12 +191,9 @@ function UniversityPage() {
 
           <select className="bg-[var(--button-primary)] text-[var(--text-color)] hover:bg-[var(--button-hover)]">
             <option>All Courses</option>
-            <option>B.Tech</option>
-            <option>MBA</option>
-            <option>BAMS</option>
-            <option>BPharma</option>
-            <option>BCA</option>
-            <option>BBA</option>
+            {university?.courses?.map((c, i) => (
+              <option key={i}>{c.name}</option>
+            ))}
           </select>
         </div>
       </nav>
@@ -197,7 +208,7 @@ function UniversityPage() {
 
       {status === "ready" && (
         <>
-          {/* University Banner */}
+          {/* Banner */}
           <div
             className="university-banner"
             style={{ backgroundImage: `url(${bannerImage})` }}
@@ -237,7 +248,7 @@ function UniversityPage() {
           {/* Tabs */}
           <div className="tab-navigation">
             <div className="tab-container">
-              <button className="tab-scroll-button" onClick={scrollLeft} title="Scroll Left">
+              <button className="tab-scroll-button" onClick={scrollLeft}>
                 <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
               </button>
 
@@ -259,7 +270,9 @@ function UniversityPage() {
                 ].map((section) => (
                   <button
                     key={section}
-                    className={`tab-button ${activeSection === section ? "active" : ""}`}
+                    className={`tab-button ${
+                      activeSection === section ? "active" : ""
+                    }`}
                     onClick={() => setActiveSection(section)}
                   >
                     {section}
@@ -267,7 +280,7 @@ function UniversityPage() {
                 ))}
               </div>
 
-              <button className="tab-scroll-button" onClick={scrollRight} title="Scroll Right">
+              <button className="tab-scroll-button" onClick={scrollRight}>
                 <FontAwesomeIcon icon={faChevronRight} />
               </button>
             </div>
@@ -282,16 +295,67 @@ function UniversityPage() {
             <div className="content-section">
               {activeSection === "About" && <AboutUs university={university} />}
               {activeSection === "Info" && <Info university={university} />}
-              {activeSection === "Courses & Fees" && <CoursesAndFees university={university} />}
+              {activeSection === "Courses & Fees" && (
+                <div className="p-4">
+                  <h2 className="text-xl font-bold mb-3">Courses Offered</h2>
+                  <table className="w-full border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-200">
+                        <th className="border p-2">Course Name</th>
+                        <th className="border p-2">Total Fees</th>
+                        <th className="border p-2">Yearly Fees</th>
+                        <th className="border p-2">Duration</th>
+                        <th className="border p-2">Intake</th>
+                        <th className="border p-2">Apply</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {university?.courses?.map((course, i) => (
+                        <tr key={i} className="text-center">
+                          <td className="border p-2">{course.name}</td>
+                          <td className="border p-2">₹{course.totalFees}</td>
+                          <td className="border p-2">₹{course.yearlyFees}</td>
+                          <td className="border p-2">{course.duration}</td>
+                          <td className="border p-2">{course.intake}</td>
+                          <td className="border p-2">
+                            {course.applyLink ? (
+                              <a
+                                href={course.applyLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 underline"
+                              >
+                                Apply Now
+                              </a>
+                            ) : (
+                              <span className="text-gray-500">N/A</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
               {activeSection === "Cutoff" && <Cutoff university={university} />}
-              {activeSection === "Placements" && <Placement university={university} />}
-              {activeSection === "Facilities" && <Facilities university={university} />}
-              {activeSection === "Admission" && <Admission university={university} />}
+              {activeSection === "Placements" && (
+                <Placement university={university} />
+              )}
+              {activeSection === "Facilities" && (
+                <Facilities university={university} />
+              )}
+              {activeSection === "Admission" && (
+                <Admission university={university} />
+              )}
               {activeSection === "Q&A" && <QA university={university} />}
               {activeSection === "Gallery" && <Gallery university={university} />}
               {activeSection === "Reviews" && <Reviews university={university} />}
-              {activeSection === "News & Articles" && <NewsArticles university={university} />}
-              {activeSection === "Rankings" && <Rankings university={university} />}
+              {activeSection === "News & Articles" && (
+                <NewsArticles university={university} />
+              )}
+              {activeSection === "Rankings" && (
+                <Rankings university={university} />
+              )}
             </div>
           </div>
         </>

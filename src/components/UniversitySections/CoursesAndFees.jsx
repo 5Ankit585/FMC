@@ -22,24 +22,30 @@ const CoursesAndFees = ({ universityId }) => {
   }, []);
 
   useEffect(() => {
-    // Fetch courses from backend
-    const fetchCourses = async () => {
-      try {
-        const res = await fetch(`/api/universities/${universityId}`);
-        const data = await res.json();
-        if (data.courses && Array.isArray(data.courses)) {
-          setCourses(data.courses);
-        } else {
-          setCourses([]);
-        }
-      } catch (err) {
-        console.error("Error fetching courses:", err);
-      } finally {
-        setLoading(false);
+  // Fetch courses from backend
+  const fetchCourses = async () => {
+    try {
+      const res = await fetch(`/api/universities/${universityId}`);
+      const data = await res.json();
+
+      // Debugging logs
+      console.log("📌 Fetched University Data:", data);
+      console.log("📌 Courses:", data.courses);
+
+      if (data.courses && Array.isArray(data.courses)) {
+        setCourses(data.courses);
+      } else {
+        setCourses([]);
       }
-    };
-    fetchCourses();
-  }, [universityId]);
+    } catch (err) {
+      console.error("❌ Error fetching courses:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchCourses();
+}, [universityId]);
+
 
   if (loading) {
     return <p className="loading-text">Loading courses...</p>;
@@ -61,43 +67,44 @@ const CoursesAndFees = ({ universityId }) => {
             </tr>
           </thead>
           <tbody>
-            {courses.length > 0 ? (
-              courses.map((course, index) => (
-                <tr
-                  key={index}
-                  className={`courses-row ${
-                    index === hoveredIndex ? "highlight-row" : ""
-                  }`}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <td className="courses-td">{course.name}</td>
-                  <td className="courses-td">{course.totalFees}</td>
-                  <td className="courses-td">{course.yearlyFees}</td>
-                  <td className="courses-td">{course.duration}</td>
-                  <td className="courses-td">{course.intake}</td>
-                  <td className="courses-td">
-                    <a
-                      href={course.applyLink || "#"}
-                      className="apply-button"
-                      aria-label={`Apply for ${course.name}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <span>Apply</span>
-                      <FontAwesomeIcon icon={faArrowRight} />
-                    </a>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="courses-td no-data">
-                  No courses available for this university.
-                </td>
-              </tr>
-            )}
-          </tbody>
+  {courses.length > 0 ? (
+    courses.map((course, index) => (
+      <tr
+        key={index}
+        className={`courses-row ${
+          index === hoveredIndex ? "highlight-row" : ""
+        }`}
+        onMouseEnter={() => setHoveredIndex(index)}
+        onMouseLeave={() => setHoveredIndex(null)}
+      >
+       <td className="courses-td">{course.name}</td>
+        <td className="courses-td">{course.totalFees}</td>
+        <td className="courses-td">{course.yearlyFees}</td>
+        <td className="courses-td">{course.duration}</td>
+        <td className="courses-td">{course.intake}</td>
+        <td className="courses-td">
+          <a
+            href={course.applyLink || "#"}
+            className="apply-button"
+            aria-label={`Apply for ${course.courseName}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Apply</span>
+            <FontAwesomeIcon icon={faArrowRight} />
+          </a>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="6" className="courses-td no-data">
+        No courses available for this university.
+      </td>
+    </tr>
+  )}
+</tbody>
+
         </table>
       </div>
     </div>

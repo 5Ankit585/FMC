@@ -367,33 +367,37 @@ export default function MultiStepForm() {
           )}
 
           {/* -------------------- Step 4: Courses, Fees & Cutoffs -------------------- */}
-          {step === 4 && (
-            <div className="univ-form-step grid-3">
-              <h3 className="univ-step-title">Step 4: Courses, Fees & Cutoffs</h3>
-              <label>Upload Courses & Fees Excel (courses.xlsx)</label>
-              <input
-                type="file"
-                name="coursesExcel"
-                onChange={handleFileChange}
-                accept=".xlsx"
-                title="Upload Excel file with columns: Course Name, Total Fee, Yearly Fees, Duration, Intake."
-              />
-              <label>Upload Cutoffs Excel (cutoff.xlsx)</label>
-              <input
-                type="file"
-                name="cutoffExcel"
-                onChange={handleFileChange}
-                accept=".xlsx"
-                title="Upload Excel file with columns: Courses, Open, General, EWS, OBC, SC, ST, PWD."
-              />
-              <input
-                name="popularCourses"
-                placeholder="Popular Courses (comma-separated)"
-                onChange={handleChange}
-                title="List popular courses for info section."
-              />
-            </div>
-          )}
+{step === 4 && (
+  <div className="univ-form-step grid-3">
+    <h3 className="univ-step-title">Step 4: Courses, Fees & Cutoffs</h3>
+
+    <label>Upload Courses & Fees Excel (courses.xlsx)</label>
+    <input
+      type="file"
+      name="file"   // 👈 MUST be "file" to match backend multer
+      onChange={handleFileChange}
+      accept=".xlsx"
+      title="Upload Excel file with columns: Course Name, Total Fee, Yearly Fees, Duration, Intake."
+    />
+
+    <label>Upload Cutoffs Excel (cutoff.xlsx)</label>
+    <input
+      type="file"
+      name="cutoffExcel"
+      onChange={handleFileChange}
+      accept=".xlsx"
+      title="Upload Excel file with columns: Courses, Open, General, EWS, OBC, SC, ST, PWD."
+    />
+
+    <input
+      name="popularCourses"
+      placeholder="Popular Courses (comma-separated)"
+      onChange={handleChange}
+      title="List popular courses for info section."
+    />
+  </div>
+)}
+
 
           {/* -------------------- Step 5: Placements -------------------- */}
           {step === 5 && (
