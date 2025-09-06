@@ -7,7 +7,7 @@ export default function MultiStepForm() {
   const [formData, setFormData] = useState({});
   const [files, setFiles] = useState({});
   const [selectedFacilities, setSelectedFacilities] = useState([]);
-  const [branches, setBranches] = useState([]); // For branch-wise placements
+  const [branches, setBranches] = useState([]);
 
   const totalSteps = 9;
 
@@ -21,15 +21,24 @@ export default function MultiStepForm() {
 
   const handleFileChange = (e) => {
     const { name, files: uploadedFiles } = e.target;
-    if (name === "logo" || name === "bannerImage") {
+    if (
+      name === "logo" ||
+      name === "accreditationDoc" ||
+      name === "affiliationDoc" ||
+      name === "registrationDoc" ||
+      name === "file" ||
+      name === "cutoffExcel" ||
+      name === "admissionsExcel" ||
+      name === "placementsExcel"
+    ) {
       setFiles({
         ...files,
-        [name]: uploadedFiles[0], // single file
+        [name]: uploadedFiles[0], // Single file
       });
     } else {
       setFiles({
         ...files,
-        [name]: [...(files[name] || []), ...Array.from(uploadedFiles)],
+        [name]: Array.from(uploadedFiles), // Multiple files
       });
     }
   };
@@ -40,7 +49,6 @@ export default function MultiStepForm() {
       setSelectedFacilities([...selectedFacilities, value]);
     } else {
       setSelectedFacilities(selectedFacilities.filter((f) => f !== value));
-      // Remove corresponding description if unchecked
       setFormData((prev) => {
         const newData = { ...prev };
         delete newData[`facility_${value}_desc`];
@@ -60,15 +68,14 @@ export default function MultiStepForm() {
   };
 
   const next = () => {
-    // Basic validation examples (expand as needed)
     if (step === 1) {
-      if (files.bannerImages?.length < 3) {
+      if (!files.bannerImages || files.bannerImages.length < 3) {
         alert("Please upload at least 3 banner images.");
         return;
       }
     }
     if (step === 2) {
-      if (files.aboutImages?.length < 5) {
+      if (!files.aboutImages || files.aboutImages.length < 5) {
         alert("Please upload at least 5 about images.");
         return;
       }
@@ -79,49 +86,134 @@ export default function MultiStepForm() {
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const payload = new FormData();
-      // Append text fields
-      Object.entries(formData).forEach(([key, val]) => {
-        payload.append(key, val);
-      });
-      // Append branches as JSON
-      payload.append("branches", JSON.stringify(branches));
-      // Append selected facilities (descriptions are already in formData)
-      payload.append("facilities", JSON.stringify(selectedFacilities));
-      // Append files
-      Object.entries(files).forEach(([key, fileList]) => {
-        if (Array.isArray(fileList)) {
-          fileList.forEach((file) => payload.append(key, file));
-        } else {
-          payload.append(key, fileList);
-        }
-      });
+  e.preventDefault();
+  try {
+    const payload = new FormData();
 
-      const res = await fetch("http://localhost:5000/api/university-registration", {
-        method: "POST",
-        body: payload,
-      });
+    // Append text fields and branch data
+    Object.entries(formData).forEach(([key, val]) => {
+      payload.append(key, val);
+    });
+    payload.append("branches", JSON.stringify(branches));
 
-      const data = await res.json();
-      if (data.success) {
-        alert("✅ Registration submitted successfully!");
-        setStep(1);
-        setFormData({});
-        setFiles({});
-        setSelectedFacilities([]);
-        setBranches([]);
-      } else {
-        alert("❌ Error: " + (data.error || "Submission failed"));
+    // Append files
+    Object.entries(files).forEach(([key, fileList]) => {
+      if (Array.isArray(fileList)) {
+        fileList.forEach((file) => payload.append(key, file));
+      } else if (fileList) {
+        payload.append(key, fileList);
       }
-    } catch (err) {
-      console.error("Error submitting form:", err);
-      alert("❌ Server error, check console");
-    }
-  };
+    });
 
-  // List of available facilities (hardcoded, icons in FE)
+    // Step 1: Register university
+    const res = await fetch("http://localhost:5000/api/university-registration", {
+      method: "POST",
+      body: payload,
+    });
+
+    console.log("📡 Response status:", res.status);
+    console.log("📡 Response URL:", res.url);
+
+    const text = await res.text();
+    console.log("📡 Raw response:", text);
+
+    let data;
+    try {
+      data = JSON.parse(text); // parse JSON if possible
+    } catch {
+      alert("❌ Invalid response from server. Check backend logs.");
+      return;
+    }
+
+    console.log("✅ University registered:", data);
+
+    if (!data.data || !data.data._id) {
+      alert("❌ University not created!");
+      return;
+    }
+
+    const universityId = data.data._id;
+
+    // Step 2: Upload Courses Excel
+    if (files.file) {
+      const courseForm = new FormData();
+      courseForm.append("file", files.file);
+      const courseRes = await fetch(
+        `http://localhost:5000/api/universities/${universityId}/courses/upload`,
+        {
+          method: "POST",
+          body: courseForm,
+        }
+      );
+      if (!courseRes.ok) {
+        console.error("❌ Courses upload failed:", await courseRes.text());
+        alert("❌ Courses upload failed!");
+        return;
+      }
+    }
+
+    // Step 3: Upload Cutoff Excel
+    if (files.cutoffExcel) {
+      const cutoffForm = new FormData();
+      cutoffForm.append("file", files.cutoffExcel);
+      const cutoffRes = await fetch(
+        `http://localhost:5000/api/universities/${universityId}/cutoff/upload`,
+        {
+          method: "POST",
+          body: cutoffForm,
+        }
+      );
+      if (!cutoffRes.ok) {
+        console.error("❌ Cutoff upload failed:", await cutoffRes.text());
+        alert("❌ Cutoff upload failed!");
+        return;
+      }
+    }
+
+    // Step 4: Upload Admissions Excel
+    if (files.admissionsExcel) {
+      const admissionsForm = new FormData();
+      admissionsForm.append("file", files.admissionsExcel);
+      const admissionsRes = await fetch(
+        `http://localhost:5000/api/universities/${universityId}/admissions/upload`,
+        {
+          method: "POST",
+          body: admissionsForm,
+        }
+      );
+      if (!admissionsRes.ok) {
+        console.error("❌ Admissions upload failed:", await admissionsRes.text());
+        alert("❌ Admissions upload failed!");
+        return;
+      }
+    }
+
+    // Step 5: Upload Placements Excel
+    if (files.placementsExcel) {
+      const placementsForm = new FormData();
+      placementsForm.append("file", files.placementsExcel);
+      const placementsRes = await fetch(
+        `http://localhost:5000/api/universities/${universityId}/placements/upload`,
+        {
+          method: "POST",
+          body: placementsForm,
+        }
+      );
+      if (!placementsRes.ok) {
+        console.error("❌ Placements upload failed:", await placementsRes.text());
+        alert("❌ Placements upload failed!");
+        return;
+      }
+    }
+
+    alert("🎉 University Registered Successfully!");
+  } catch (err) {
+    console.error("❌ Error submitting form:", err);
+    alert("❌ Form submission failed!");
+  }
+};
+
+
   const facilityOptions = [
     "hostel",
     "library",
@@ -145,12 +237,13 @@ export default function MultiStepForm() {
         <p className="univ-header-subtitle">Complete all 9 steps below</p>
       </header>
 
-      {/* Stepper */}
       <div className="univ-stepper">
         {[...Array(totalSteps)].map((_, i) => (
           <div
             key={i}
-            className={`univ-stepper-circle ${step === i + 1 ? "active" : ""} ${step > i + 1 ? "completed" : ""}`}
+            className={`univ-stepper-circle ${
+              step === i + 1 ? "active" : ""
+            } ${step > i + 1 ? "completed" : ""}`}
           >
             {i + 1}
           </div>
@@ -158,8 +251,7 @@ export default function MultiStepForm() {
       </div>
 
       <main className="univ-main-container">
-        <form className="univ-multi-step-form wide-form" onSubmit={handleSubmit}> {/* Added wide-form for 90% width */}
-          {/* -------------------- Step 1: Basic Info + Hero Section -------------------- */}
+        <form className="univ-multi-step-form wide-form" onSubmit={handleSubmit}>
           {step === 1 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 1: Basic Info + Hero Section</h3>
@@ -238,7 +330,6 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 2: About Section -------------------- */}
           {step === 2 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 2: About Section</h3>
@@ -260,7 +351,6 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 3: Contact & Info Section -------------------- */}
           {step === 3 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 3: Contact & Info Section</h3>
@@ -281,7 +371,6 @@ export default function MultiStepForm() {
                 <option>Delhi</option>
                 <option>Tamil Nadu</option>
                 <option>Uttar Pradesh</option>
-                {/* Add more states as needed */}
               </select>
               <input
                 name="city"
@@ -366,40 +455,34 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 4: Courses, Fees & Cutoffs -------------------- */}
-{step === 4 && (
-  <div className="univ-form-step grid-3">
-    <h3 className="univ-step-title">Step 4: Courses, Fees & Cutoffs</h3>
+          {step === 4 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 4: Courses, Fees & Cutoffs</h3>
+              <label>Upload Courses & Fees Excel (courses.xlsx)</label>
+              <input
+                type="file"
+                name="file"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel file with columns: Course Name, Total Fee, Yearly Fees, Duration, Intake."
+              />
+              <label>Upload Cutoffs Excel (cutoff.xlsx)</label>
+              <input
+                type="file"
+                name="cutoffExcel"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel file with columns: Courses, Open, General, EWS, OBC, SC, ST, PWD."
+              />
+              <input
+                name="popularCourses"
+                placeholder="Popular Courses (comma-separated)"
+                onChange={handleChange}
+                title="List popular courses for info section."
+              />
+            </div>
+          )}
 
-    <label>Upload Courses & Fees Excel (courses.xlsx)</label>
-    <input
-      type="file"
-      name="file"   // 👈 MUST be "file" to match backend multer
-      onChange={handleFileChange}
-      accept=".xlsx"
-      title="Upload Excel file with columns: Course Name, Total Fee, Yearly Fees, Duration, Intake."
-    />
-
-    <label>Upload Cutoffs Excel (cutoff.xlsx)</label>
-    <input
-      type="file"
-      name="cutoffExcel"
-      onChange={handleFileChange}
-      accept=".xlsx"
-      title="Upload Excel file with columns: Courses, Open, General, EWS, OBC, SC, ST, PWD."
-    />
-
-    <input
-      name="popularCourses"
-      placeholder="Popular Courses (comma-separated)"
-      onChange={handleChange}
-      title="List popular courses for info section."
-    />
-  </div>
-)}
-
-
-          {/* -------------------- Step 5: Placements -------------------- */}
           {step === 5 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 5: Placements</h3>
@@ -429,7 +512,6 @@ export default function MultiStepForm() {
                 accept=".xlsx"
                 title="Upload Excel with columns: Year, Companies, Placed, Highest CTC, Avg CTC."
               />
-              {/* Branch-wise */}
               <h4>Branch-wise Placements</h4>
               <button type="button" onClick={addBranch} className="univ-add-btn">
                 + Add Branch
@@ -439,19 +521,25 @@ export default function MultiStepForm() {
                   <input
                     placeholder="Branch Name"
                     value={branch.name}
-                    onChange={(e) => handleBranchChange(index, "name", e.target.value)}
+                    onChange={(e) =>
+                      handleBranchChange(index, "name", e.target.value)
+                    }
                     title="Enter branch name for dropdown."
                   />
                   <input
                     placeholder="Avg LPA"
                     value={branch.avgLPA}
-                    onChange={(e) => handleBranchChange(index, "avgLPA", e.target.value)}
+                    onChange={(e) =>
+                      handleBranchChange(index, "avgLPA", e.target.value)
+                    }
                     title="Average LPA for this branch."
                   />
                   <input
                     placeholder="Highest LPA"
                     value={branch.highestLPA}
-                    onChange={(e) => handleBranchChange(index, "highestLPA", e.target.value)}
+                    onChange={(e) =>
+                      handleBranchChange(index, "highestLPA", e.target.value)
+                    }
                     title="Highest LPA for this branch."
                   />
                 </div>
@@ -459,7 +547,6 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 6: Facilities -------------------- */}
           {step === 6 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 6: Facilities</h3>
@@ -488,7 +575,6 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 7: Gallery -------------------- */}
           {step === 7 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 7: Gallery</h3>
@@ -519,7 +605,6 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 8: Admissions -------------------- */}
           {step === 8 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 8: Admissions</h3>
@@ -547,11 +632,9 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          {/* -------------------- Step 9: Intl, Account & Submit -------------------- */}
           {step === 9 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 9: International, Docs, Account & Submit</h3>
-              {/* International */}
               <input
                 name="intlStudentOffice"
                 placeholder="Intl. Student Office"
@@ -582,7 +665,6 @@ export default function MultiStepForm() {
                 onChange={handleChange}
                 title="Visa assistance details."
               />
-              {/* Docs */}
               <label>Upload Accreditation Doc</label>
               <input
                 type="file"
@@ -604,7 +686,6 @@ export default function MultiStepForm() {
                 onChange={handleFileChange}
                 title="Upload registration document."
               />
-              {/* Videos & Others */}
               <label>Upload Videos</label>
               <input
                 type="file"
@@ -621,7 +702,6 @@ export default function MultiStepForm() {
                 onChange={handleFileChange}
                 title="Upload additional course-related files."
               />
-              {/* Auth */}
               <input
                 name="emailUsername"
                 placeholder="Email (Username)"
@@ -635,7 +715,6 @@ export default function MultiStepForm() {
                 onChange={handleChange}
                 title="Set a password for the account."
               />
-              {/* Subscription */}
               <select
                 name="subscriptionPlan"
                 onChange={handleChange}
@@ -646,7 +725,6 @@ export default function MultiStepForm() {
                 <option value="standard">Standard ₹999/mo</option>
                 <option value="premium">Premium ₹1999/mo</option>
               </select>
-              {/* Declaration */}
               <label className="univ-checkbox-label">
                 <input
                   type="checkbox"
@@ -656,14 +734,12 @@ export default function MultiStepForm() {
                 />
                 I confirm all details are correct
               </label>
-              {/* Submit */}
               <button type="submit" className="univ-submit-btn">
                 Submit
               </button>
             </div>
           )}
 
-          {/* Navigation */}
           <div className="univ-form-nav">
             {step > 1 && step <= totalSteps && (
               <button type="button" onClick={prev} className="univ-nav-btn">

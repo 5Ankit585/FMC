@@ -189,10 +189,11 @@ function UniversityPage() {
             )}
           </div>
 
+          {/* ✅ Course dropdown */}
           <select className="bg-[var(--button-primary)] text-[var(--text-color)] hover:bg-[var(--button-hover)]">
             <option>All Courses</option>
             {university?.courses?.map((c, i) => (
-              <option key={i}>{c.name}</option>
+              <option key={i}>{c.courseName || c.name}</option>
             ))}
           </select>
         </div>
@@ -312,7 +313,9 @@ function UniversityPage() {
                     <tbody>
                       {university?.courses?.map((course, i) => (
                         <tr key={i} className="text-center">
-                          <td className="border p-2">{course.name}</td>
+                          <td className="border p-2">
+                            {course.courseName || course.name}
+                          </td>
                           <td className="border p-2">₹{course.totalFees}</td>
                           <td className="border p-2">₹{course.yearlyFees}</td>
                           <td className="border p-2">{course.duration}</td>
