@@ -178,12 +178,13 @@ if (files.cutoffExcel) {
       const admissionsForm = new FormData();
       admissionsForm.append("file", files.admissionsExcel);
       const admissionsRes = await fetch(
-        `http://localhost:5000/api/universities/${universityId}/admissions/upload`,
-        {
-          method: "POST",
-          body: admissionsForm,
-        }
-      );
+  `http://localhost:5000/api/admissions/${universityId}/admissions/upload`,   // ✅ NAYA ROUTE
+  {
+    method: "POST",
+    body: admissionsForm,
+  }
+);
+
       if (!admissionsRes.ok) {
         console.error("❌ Admissions upload failed:", await admissionsRes.text());
         alert("❌ Admissions upload failed!");
