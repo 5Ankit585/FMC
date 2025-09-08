@@ -86,137 +86,169 @@ export default function MultiStepForm() {
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const payload = new FormData();
-
-    // Append text fields and branch data
-    Object.entries(formData).forEach(([key, val]) => {
-      payload.append(key, val);
-    });
-    payload.append("branches", JSON.stringify(branches));
-
-    // Append files
-    Object.entries(files).forEach(([key, fileList]) => {
-      if (Array.isArray(fileList)) {
-        fileList.forEach((file) => payload.append(key, file));
-      } else if (fileList) {
-        payload.append(key, fileList);
-      }
-    });
-
-    // Step 1: Register university
-    const res = await fetch("http://localhost:5000/api/university-registration", {
-      method: "POST",
-      body: payload,
-    });
-
-    console.log("📡 Response status:", res.status);
-    console.log("📡 Response URL:", res.url);
-
-    const text = await res.text();
-    console.log("📡 Raw response:", text);
-
-    let data;
+    e.preventDefault();
     try {
-      data = JSON.parse(text); // parse JSON if possible
-    } catch {
-      alert("❌ Invalid response from server. Check backend logs.");
-      return;
-    }
+      const payload = new FormData();
 
-    console.log("✅ University registered:", data);
+      // Append text fields and branch data
+      Object.entries(formData).forEach(([key, val]) => {
+        payload.append(key, val);
+      });
+      payload.append("branches", JSON.stringify(branches));
 
-    if (!data.data || !data.data._id) {
-      alert("❌ University not created!");
-      return;
-    }
+      // Append files
+      Object.entries(files).forEach(([key, fileList]) => {
+        if (Array.isArray(fileList)) {
+          fileList.forEach((file) => payload.append(key, file));
+        } else if (fileList) {
+          payload.append(key, fileList);
+        }
+      });
 
-    const universityId = data.data._id;
-
-    // Step 2: Upload Courses Excel
-    if (files.file) {
-      const courseForm = new FormData();
-      courseForm.append("file", files.file);
-      const courseRes = await fetch(
-        `http://localhost:5000/api/universities/${universityId}/courses/upload`,
+      // Step 1: Register university
+      const res = await fetch(
+        "http://localhost:5000/api/university-registration",
         {
           method: "POST",
-          body: courseForm,
+          body: payload,
         }
       );
-      if (!courseRes.ok) {
-        console.error("❌ Courses upload failed:", await courseRes.text());
-        alert("❌ Courses upload failed!");
+
+      console.log("📡 Response status:", res.status);
+      console.log("📡 Response URL:", res.url);
+
+      const text = await res.text();
+      console.log("📡 Raw response:", text);
+
+      let data;
+      try {
+        data = JSON.parse(text); // parse JSON if possible
+      } catch {
+        alert("❌ Invalid response from server. Check backend logs.");
         return;
       }
-    }
 
-    // Step 3: Upload Cutoff Excel
-if (files.cutoffExcel) {
-  const cutoffForm = new FormData();
-  cutoffForm.append("file", files.cutoffExcel); // ✅ field name "file" hi rahe
+      console.log("✅ University registered:", data);
 
-  const cutoffRes = await fetch(
-    `http://localhost:5000/api/cutoff/${universityId}/cutoff/upload`,
-    {
-      method: "POST",
-      body: cutoffForm,   // ✅ yahan cutoffForm bhejna hai, na ki formData
-    }
-  );
-
-  if (!cutoffRes.ok) {
-    console.error("❌ Cutoff upload failed:", await cutoffRes.text());
-    alert("❌ Cutoff upload failed!");
-    return;
-  }
-}
-
-
-    // Step 4: Upload Admissions Excel
-    if (files.admissionsExcel) {
-      const admissionsForm = new FormData();
-      admissionsForm.append("file", files.admissionsExcel);
-      const admissionsRes = await fetch(
-  `http://localhost:5000/api/admissions/${universityId}/admissions/upload`,   // ✅ NAYA ROUTE
-  {
-    method: "POST",
-    body: admissionsForm,
-  }
-);
-
-      if (!admissionsRes.ok) {
-        console.error("❌ Admissions upload failed:", await admissionsRes.text());
-        alert("❌ Admissions upload failed!");
+      if (!data.data || !data.data._id) {
+        alert("❌ University not created!");
         return;
       }
-    }
 
-    // Step 5: Upload Placements Excel
-    if (files.placementsExcel) {
-      const placementsForm = new FormData();
-      placementsForm.append("file", files.placementsExcel);
-      const placementsRes = await fetch(
-        `http://localhost:5000/api/universities/${universityId}/placements/upload`,
-        {
-          method: "POST",
-          body: placementsForm,
+      const universityId = data.data._id;
+
+      // Step 2: Upload Courses Excel
+      if (files.file) {
+        const courseForm = new FormData();
+        courseForm.append("file", files.file);
+        const courseRes = await fetch(
+          `http://localhost:5000/api/universities/${universityId}/courses/upload`,
+          {
+            method: "POST",
+            body: courseForm,
+          }
+        );
+        if (!courseRes.ok) {
+          console.error("❌ Courses upload failed:", await courseRes.text());
+          alert("❌ Courses upload failed!");
+          return;
         }
-      );
-      if (!placementsRes.ok) {
-        console.error("❌ Placements upload failed:", await placementsRes.text());
-        alert("❌ Placements upload failed!");
-        return;
       }
+
+      // Step 3: Upload Cutoff Excel
+      if (files.cutoffExcel) {
+        const cutoffForm = new FormData();
+        cutoffForm.append("file", files.cutoffExcel); // ✅ field name "file" hi rahe
+
+        const cutoffRes = await fetch(
+          `http://localhost:5000/api/cutoff/${universityId}/cutoff/upload`,
+          {
+            method: "POST",
+            body: cutoffForm, // ✅ yahan cutoffForm bhejna hai, na ki formData
+          }
+        );
+
+        if (!cutoffRes.ok) {
+          console.error("❌ Cutoff upload failed:", await cutoffRes.text());
+          alert("❌ Cutoff upload failed!");
+          return;
+        }
+      }
+
+      // Step 4: Upload Admissions Excel
+      if (files.admissionsExcel) {
+        const admissionsForm = new FormData();
+        admissionsForm.append("file", files.admissionsExcel);
+        const admissionsRes = await fetch(
+          `http://localhost:5000/api/admissions/${universityId}/admissions/upload`, // ✅ NAYA ROUTE
+          {
+            method: "POST",
+            body: admissionsForm,
+          }
+        );
+
+        if (!admissionsRes.ok) {
+          console.error(
+            "❌ Admissions upload failed:",
+            await admissionsRes.text()
+          );
+          alert("❌ Admissions upload failed!");
+          return;
+        }
+      }
+
+      // Step 5: Upload Placements Excel
+      if (files.placementsExcel) {
+        const placementsForm = new FormData();
+        placementsForm.append("file", files.placementsExcel);
+        const placementsRes = await fetch(
+          `http://localhost:5000/api/universities/${universityId}/placements/upload`,
+          {
+            method: "POST",
+            body: placementsForm,
+          }
+        );
+        if (!placementsRes.ok) {
+          console.error(
+            "❌ Placements upload failed:",
+            await placementsRes.text()
+          );
+          alert("❌ Placements upload failed!");
+          return;
+        }
+      }
+
+      // ✅ Step 6: Upload Recruiters Logos
+      if (files.recruitersLogos && files.recruitersLogos.length > 0) {
+        const recruiterForm = new FormData();
+        files.recruitersLogos.forEach((file) =>
+          recruiterForm.append("recruitersLogos", file)
+        );
+
+        const recruiterRes = await fetch(
+          `http://localhost:5000/api/recruiters/${universityId}/recruiters/upload`,
+          {
+            method: "POST",
+            body: recruiterForm,
+          }
+        );
+
+        if (!recruiterRes.ok) {
+          console.error(
+            "❌ Recruiters logos upload failed:",
+            await recruiterRes.text()
+          );
+          alert("❌ Recruiters logos upload failed!");
+          return;
+        }
+      }
+
+      alert("🎉 University Registered Successfully!");
+    } catch (err) {
+      console.error("❌ Error submitting form:", err);
+      alert("❌ Form submission failed!");
     }
-
-    alert("🎉 University Registered Successfully!");
-  } catch (err) {
-    console.error("❌ Error submitting form:", err);
-    alert("❌ Form submission failed!");
-  }
-};
-
+  };
 
   const facilityOptions = [
     "hostel",
@@ -245,9 +277,9 @@ if (files.cutoffExcel) {
         {[...Array(totalSteps)].map((_, i) => (
           <div
             key={i}
-            className={`univ-stepper-circle ${
-              step === i + 1 ? "active" : ""
-            } ${step > i + 1 ? "completed" : ""}`}
+            className={`univ-stepper-circle ${step === i + 1 ? "active" : ""} ${
+              step > i + 1 ? "completed" : ""
+            }`}
           >
             {i + 1}
           </div>
@@ -255,10 +287,15 @@ if (files.cutoffExcel) {
       </div>
 
       <main className="univ-main-container">
-        <form className="univ-multi-step-form wide-form" onSubmit={handleSubmit}>
+        <form
+          className="univ-multi-step-form wide-form"
+          onSubmit={handleSubmit}
+        >
           {step === 1 && (
             <div className="univ-form-step grid-3">
-              <h3 className="univ-step-title">Step 1: Basic Info + Hero Section</h3>
+              <h3 className="univ-step-title">
+                Step 1: Basic Info + Hero Section
+              </h3>
               <input
                 name="instituteName"
                 placeholder="Institute Name"
@@ -357,7 +394,9 @@ if (files.cutoffExcel) {
 
           {step === 3 && (
             <div className="univ-form-step grid-3">
-              <h3 className="univ-step-title">Step 3: Contact & Info Section</h3>
+              <h3 className="univ-step-title">
+                Step 3: Contact & Info Section
+              </h3>
               <input
                 name="address"
                 placeholder="Campus Address"
@@ -448,20 +487,14 @@ if (files.cutoffExcel) {
                 onChange={handleChange}
                 title="NIRF ranking."
               />
-              <label>Upload Top Recruiters Logos</label>
-              <input
-                type="file"
-                name="recruitersLogos"
-                multiple
-                onChange={handleFileChange}
-                title="Upload logos of top recruiters."
-              />
             </div>
           )}
 
           {step === 4 && (
             <div className="univ-form-step grid-3">
-              <h3 className="univ-step-title">Step 4: Courses, Fees & Cutoffs</h3>
+              <h3 className="univ-step-title">
+                Step 4: Courses, Fees & Cutoffs
+              </h3>
               <label>Upload Courses & Fees Excel (courses.xlsx)</label>
               <input
                 type="file"
@@ -516,8 +549,19 @@ if (files.cutoffExcel) {
                 accept=".xlsx"
                 title="Upload Excel with columns: Year, Companies, Placed, Highest CTC, Avg CTC."
               />
+              <label>Upload Top Recruiters Logos</label>
+              <input
+                type="file"
+                name="recruitersLogos"
+                multiple
+                onChange={handleFileChange}
+              />
               <h4>Branch-wise Placements</h4>
-              <button type="button" onClick={addBranch} className="univ-add-btn">
+              <button
+                type="button"
+                onClick={addBranch}
+                className="univ-add-btn"
+              >
                 + Add Branch
               </button>
               {branches.map((branch, index) => (
@@ -638,7 +682,9 @@ if (files.cutoffExcel) {
 
           {step === 9 && (
             <div className="univ-form-step grid-3">
-              <h3 className="univ-step-title">Step 9: International, Docs, Account & Submit</h3>
+              <h3 className="univ-step-title">
+                Step 9: International, Docs, Account & Submit
+              </h3>
               <input
                 name="intlStudentOffice"
                 placeholder="Intl. Student Office"
