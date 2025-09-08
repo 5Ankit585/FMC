@@ -340,7 +340,12 @@ function UniversityPage() {
                   </table>
                 </div>
               )}
-              {activeSection === "Cutoff" && <Cutoff university={university} />}
+
+              {/* ✅ Correctly pass universityId */}
+              {activeSection === "Cutoff" && (
+                <Cutoff universityId={university?._id} />
+              )}
+
               {activeSection === "Placements" && (
                 <Placement university={university} />
               )}

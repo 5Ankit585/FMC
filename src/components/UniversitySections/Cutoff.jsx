@@ -1,51 +1,55 @@
 import React, { useEffect, useState } from "react";
 import "./Cutoff.css";
-import { applyTheme } from "../../utils/themeUtils";
 
 const Cutoff = ({ universityId }) => {
-  const [darkMode, setDarkMode] = useState(false);
   const [cutoffData, setCutoffData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    applyTheme(darkMode);
-  }, [darkMode]);
-
-  useEffect(() => {
     const fetchCutoffs = async () => {
       try {
+        if (!universityId) {
+          console.warn("⚠️ No universityId provided to Cutoff component");
+          return;
+        }
+
         setLoading(true);
+        setError(null);
+
+        console.log("🎯 Fetching cutoffs for universityId:", universityId);
+
         const res = await fetch(
-          `http://localhost:5000/api/cutoffs/${universityId}/cutoffs`
+          `http://localhost:5000/api/cutoff/${universityId}/cutoffs`
         );
+
+        if (!res.ok) {
+          throw new Error(`Server error: ${res.status}`);
+        }
+
         const data = await res.json();
+        console.log("📊 Cutoff API response:", data);
+
         if (data.success) {
           setCutoffData(data.cutoffs || []);
         } else {
           setError(data.message || "Failed to fetch cutoff data");
         }
       } catch (err) {
+        console.error("❌ Fetch error:", err);
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     };
 
-    if (universityId) {
-      fetchCutoffs();
-    }
+    fetchCutoffs();
   }, [universityId]);
 
-  const toggleTheme = () => setDarkMode((prev) => !prev);
-
   return (
-    <div className={`cutoff-container ${darkMode ? "dark" : ""}`}>
+    <div className="cutoff-container">
       <div className="cutoff-header">
         <h2>Cutoff for Year 2024</h2>
-        <button onClick={toggleTheme} className="theme-toggle-btn">
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
       </div>
 
       {loading ? (

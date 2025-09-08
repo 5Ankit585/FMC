@@ -153,22 +153,25 @@ export default function MultiStepForm() {
     }
 
     // Step 3: Upload Cutoff Excel
-    if (files.cutoffExcel) {
-      const cutoffForm = new FormData();
-      cutoffForm.append("file", files.cutoffExcel);
-      const cutoffRes = await fetch(
-        `http://localhost:5000/api/universities/${universityId}/cutoff/upload`,
-        {
-          method: "POST",
-          body: cutoffForm,
-        }
-      );
-      if (!cutoffRes.ok) {
-        console.error("❌ Cutoff upload failed:", await cutoffRes.text());
-        alert("❌ Cutoff upload failed!");
-        return;
-      }
+if (files.cutoffExcel) {
+  const cutoffForm = new FormData();
+  cutoffForm.append("file", files.cutoffExcel); // ✅ field name "file" hi rahe
+
+  const cutoffRes = await fetch(
+    `http://localhost:5000/api/cutoff/${universityId}/cutoff/upload`,
+    {
+      method: "POST",
+      body: cutoffForm,   // ✅ yahan cutoffForm bhejna hai, na ki formData
     }
+  );
+
+  if (!cutoffRes.ok) {
+    console.error("❌ Cutoff upload failed:", await cutoffRes.text());
+    alert("❌ Cutoff upload failed!");
+    return;
+  }
+}
+
 
     // Step 4: Upload Admissions Excel
     if (files.admissionsExcel) {
