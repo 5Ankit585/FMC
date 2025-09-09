@@ -218,7 +218,27 @@ export default function MultiStepForm() {
         }
       }
 
-      // ✅ Step 6: Upload Recruiters Logos
+      // Step 6: Upload Gallery
+if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
+  const galleryForm = new FormData();
+  if (files.infraPhotos) files.infraPhotos.forEach(f => galleryForm.append("infraPhotos", f));
+  if (files.eventPhotos) files.eventPhotos.forEach(f => galleryForm.append("eventPhotos", f));
+  if (files.galleryImages) files.galleryImages.forEach(f => galleryForm.append("galleryImages", f));
+
+  const galleryRes = await fetch(
+    `http://localhost:5000/api/universities/${universityId}/gallery/upload`
+,
+    { method: "POST", body: galleryForm }
+  );
+  if (!galleryRes.ok) {
+    console.error("❌ Gallery upload failed:", await galleryRes.text());
+    alert("❌ Gallery upload failed!");
+    return;
+  }
+}
+
+
+      // ✅ Step 7: Upload Recruiters Logos
       if (files.recruitersLogos && files.recruitersLogos.length > 0) {
         const recruiterForm = new FormData();
         files.recruitersLogos.forEach((file) =>

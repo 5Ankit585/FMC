@@ -33,7 +33,7 @@ const Admission = ({ university }) => {
           {admissionData.map((item, index) => (
             <div
               key={index}
-              className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300"
+              className="bg-gray-300 rounded-xl p-6 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300"
             >
               <h3 className="text-2xl font-semibold text-yellow-400 mb-2">
                 {item.courseName}

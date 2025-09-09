@@ -73,7 +73,6 @@ function UniversityPage() {
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to fetch");
         console.log("Fetched University Data:", data);
-        console.log("Courses:", data?.uni?.courses || data?.courses);
         setUniversity(data?.uni || data);
         setStatus("ready");
       } catch (e) {
@@ -189,7 +188,7 @@ function UniversityPage() {
             )}
           </div>
 
-          {/* ✅ Course dropdown */}
+          {/* Course dropdown */}
           <select className="bg-[var(--button-primary)] text-[var(--text-color)] hover:bg-[var(--button-hover)]">
             <option>All Courses</option>
             {university?.courses?.map((c, i) => (
@@ -342,28 +341,34 @@ function UniversityPage() {
               )}
 
               {/* ✅ Correctly pass universityId */}
-              {activeSection === "Cutoff" && (
-                <Cutoff universityId={university?._id} />
-              )}
+{activeSection === "Cutoff" && (
+  <Cutoff universityId={university?._id} />
+)}
 
-              {activeSection === "Placements" && (
-                <Placement university={university} />
-              )}
-              {activeSection === "Facilities" && (
-                <Facilities university={university} />
-              )}
-              {activeSection === "Admission" && (
-                <Admission university={university} />
-              )}
-              {activeSection === "Q&A" && <QA university={university} />}
-              {activeSection === "Gallery" && <Gallery university={university} />}
-              {activeSection === "Reviews" && <Reviews university={university} />}
-              {activeSection === "News & Articles" && (
-                <NewsArticles university={university} />
-              )}
-              {activeSection === "Rankings" && (
-                <Rankings university={university} />
-              )}
+{activeSection === "Placements" && (
+  <Placement university={university} />
+)}
+{activeSection === "Facilities" && (
+  <Facilities university={university} />
+)}
+{activeSection === "Admission" && (
+  <Admission university={university} />
+)}
+{activeSection === "Q&A" && <QA university={university} />}
+
+{/* 🔥 FIXED Gallery */}
+{activeSection === "Gallery" && (
+  <Gallery universityId={university?._id} darkMode={darkMode} />
+)}
+
+{activeSection === "Reviews" && <Reviews university={university} />}
+{activeSection === "News & Articles" && (
+  <NewsArticles university={university} />
+)}
+{activeSection === "Rankings" && (
+  <Rankings university={university} />
+)}
+
             </div>
           </div>
         </>
