@@ -75,7 +75,7 @@ export default function MultiStepForm() {
 
   const next = () => {
     if (step === 1) {
-      if (!files.bannerImages || files.bannerImages.length < 3) {
+      if (!files.bannerImage || files.bannerImage.length < 3) {
         alert("Please upload at least 3 banner images.");
         return;
       }
@@ -354,7 +354,7 @@ export default function MultiStepForm() {
               <label>Upload Banner Images (at least 3)</label>
               <input
                 type="file"
-                name="bannerImages"
+                name="bannerImage"
                 multiple
                 accept="image/*"
                 onChange={handleFileChange}

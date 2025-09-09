@@ -89,20 +89,31 @@ function UniversityPage() {
     university?.affiliation,
   ].filter(Boolean);
 
-  // Banner auto-slide
-  // Reset index when university changes
-  useEffect(() => {
-    setBannerIndex(0);
-  }, [university]);
+// Banner sources (merge)
+const bannerSources = [
+  ...(university?.bannerImage || []),
+  ...(university?.photos || []),
+  ...(university?.galleryImages || []),
+].filter(Boolean);
 
-  // Safe banner merge
-  const bannerSources = [
-    ...(university?.bannerImage || []),
-    ...(university?.photos || []),
-    ...(university?.galleryImages || []),
-  ].filter(Boolean);
+// Banner auto-slide
+useEffect(() => {
+  if (!bannerSources.length) return;
 
-  const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
+  const interval = setInterval(() => {
+    setBannerIndex((prev) =>
+      prev + 1 < bannerSources.length ? prev + 1 : 0
+    );
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, [bannerSources]);
+
+// Current banner
+const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
+
+
+
 
   // Safe logo handling
   const uniLogo =
