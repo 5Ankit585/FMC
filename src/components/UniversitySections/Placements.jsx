@@ -31,10 +31,16 @@ const Placement = ({ darkMode, university }) => {
           Empowering Futures with Top Recruiters and Record-Breaking Packages
         </p>
         <div className="hero-stats">
-          <div>🎯 {university?.placementRate || "95%"} Placement Rate</div>
-          <div>💼 {university?.placements?.length || "120+"} Companies</div>
-          <div>🏆 {university?.highestLPA || "₹45 LPA"} Highest</div>
-          <div>📊 {university?.avgLPA || "₹7.8 LPA"} Average</div>
+          <div>🎯 {university?.placementRate || "NA"} Placement Rate</div>
+          <div>
+            💼{" "}
+            {university?.placements?.length > 0
+              ? university.placements[0].companies
+              : "NA"}{" "}
+            Companies
+          </div>
+          <div>🏆 {university?.highestPackage || "NA"} Highest</div>
+          <div>📊 {university?.avgPackage || "NA"} Average</div>
         </div>
       </section>
 

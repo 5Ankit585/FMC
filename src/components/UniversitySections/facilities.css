@@ -1,21 +1,11 @@
 .facilities-container {
   padding: 2rem;
-  color: var(--text-color);
+  color: #333;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--background-color);
+  background-color: #f9f9f9;
   min-height: 100vh;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  width: 90%;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: stretch; 
 }
 
 .facilities-title {
@@ -30,20 +20,23 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;
-  width: 50%;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
   justify-content: center;
 }
 
 .facility-card {
-  border: 1px solid var(--border-color);
+  border: 1px solid #ddd;
   border-radius: 6px;
-  background-color: var(--dropdown-bg);
+  background-color: #fff;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%; 
+  height: 100%;
   transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .facility-card:hover {
@@ -63,6 +56,10 @@
   transition: color 0.3s;
 }
 
+.facility-card:hover .facility-icon {
+  color: #ffcc00;
+}
+
 .facility-title {
   font-size: 0.875rem;
   font-weight: 600;
@@ -73,10 +70,11 @@
   font-size: 0.75rem;
   margin-bottom: 0.25rem;
   line-height: 1.2;
+  color: #666;
 }
 
 .reviews {
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .reviews ul {
@@ -86,41 +84,48 @@
 
 .reviews li {
   margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  color: #666;
 }
 
-.add-review {
-  margin-top: auto; 
+.no-reviews {
+  font-size: 0.75rem;
+  color: #999;
+  text-align: center;
 }
 
 .review-button {
   display: flex;
   align-items: center;
-  background-color: var(--button-primary);
-  color: #FFFFFF;
+  justify-content: center;
+  background-color: #007bff;
+  color: #fff;
   padding: 0.25rem 0.5rem;
   border: none;
   border-radius: 4px;
   font-size: 0.75rem;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: 100%; 
+  width: 100%;
+  margin-top: 0.5rem;
 }
 
 .review-button:hover {
   background-color: #ffcc00;
-  color: #000000;
+  color: #000;
 }
 
 .reviews-section {
   margin-top: 2rem;
   width: 50%;
   text-align: center;
+  max-width: 600px;
 }
 
 .reviews-title {
   font-size: 1rem;
   font-weight: bold;
-  color: var(--text-color);
+  color: #333;
   margin-bottom: 1rem;
 }
 
@@ -130,18 +135,13 @@
 
 .review-text {
   font-size: 0.875rem;
-  color: var(--text-color);
+  color: #333;
   margin-bottom: 0.25rem;
 }
 
 .review-meta {
   font-size: 0.7rem;
-  color: var(--border-color);
-}
-
-.no-reviews {
-  font-size: 0.875rem;
-  color: var(--border-color);
+  color: #999;
 }
 
 .modal-overlay {
@@ -159,47 +159,54 @@
 }
 
 .modal-content {
-  background-color: var(--dropdown-bg);
+  background-color: #fff;
   padding: 1rem;
   border-radius: 6px;
   width: 90%;
   max-width: 400px;
-  color: var(--text-color);
+  color: #333;
   position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .modal-title {
   font-size: 1rem;
   font-weight: bold;
   margin-bottom: 0.75rem;
-  color: var(--text-color);
+  color: #333;
 }
 
 .modal-label {
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
-  color: var(--text-color);
+  color: #333;
 }
 
 .rating {
   margin-bottom: 0.75rem;
+  display: flex;
 }
 
 .star {
   font-size: 1.2rem;
   margin-right: 0.25rem;
   cursor: pointer;
+  color: #ccc;
+}
+
+.star.active {
+  color: #ffcc00;
 }
 
 .textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid var(--input-border);
+  border: 1px solid #ddd;
   border-radius: 4px;
   resize: vertical;
   margin-bottom: 0.75rem;
-  color: var(--input-text);
-  background-color: var(--dropdown-bg);
+  color: #333;
+  background-color: #fff;
 }
 
 .modal-buttons {
@@ -209,8 +216,8 @@
 }
 
 .cancel-button {
-  background-color: var(--border-color);
-  color: var(--text-color);
+  background-color: #ddd;
+  color: #333;
   padding: 0.25rem 0.75rem;
   border: none;
   border-radius: 4px;
@@ -218,8 +225,8 @@
 }
 
 .submit-button {
-  background-color: var(--button-primary);
-  color: #FFFFFF;
+  background-color: #007bff;
+  color: #fff;
   padding: 0.25rem 0.75rem;
   border: none;
   border-radius: 4px;
@@ -228,11 +235,11 @@
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: var(--button-hover);
+  background-color: #0056b3;
 }
 
 .submit-button:disabled {
-  background-color: var(--border-color);
+  background-color: #ddd;
   cursor: not-allowed;
 }
 
