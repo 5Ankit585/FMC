@@ -175,7 +175,10 @@ function UniversityPage() {
                 ) : (
                   <>
                     <button className="flex items-center w-full text-left text-[var(--dropdown-text)] mb-1 hover:text-[var(--button-hover)]">
-                      <FontAwesomeIcon icon={faRightToBracket} className="mr-1" />
+                      <FontAwesomeIcon
+                        icon={faRightToBracket}
+                        className="mr-1"
+                      />
                       Login
                     </button>
                     <button className="flex items-center w-full text-left text-[var(--dropdown-text)] hover:text-[var(--button-hover)]">
@@ -235,7 +238,9 @@ function UniversityPage() {
 
                 <div className="flex space-x-1">
                   {university?.students && (
-                    <span className="review">{university.students} students</span>
+                    <span className="review">
+                      {university.students} students
+                    </span>
                   )}
                   {university?.faculty && (
                     <span className="review">{university.faculty} faculty</span>
@@ -260,7 +265,7 @@ function UniversityPage() {
                   "Cutoff",
                   "Placements",
                   "Facilities",
-                  "Rankings",
+                  // "Rankings",  // ❌ isse hide karna hai
                   "Gallery",
                   "Admission",
                   "Reviews",
@@ -341,34 +346,35 @@ function UniversityPage() {
               )}
 
               {/* ✅ Correctly pass universityId */}
-{activeSection === "Cutoff" && (
-  <Cutoff universityId={university?._id} />
-)}
+              {activeSection === "Cutoff" && (
+                <Cutoff universityId={university?._id} />
+              )}
 
-{activeSection === "Placements" && (
-  <Placement university={university} />
-)}
-{activeSection === "Facilities" && (
-  <Facilities university={university} />
-)}
-{activeSection === "Admission" && (
-  <Admission university={university} />
-)}
-{activeSection === "Q&A" && <QA university={university} />}
+              {activeSection === "Placements" && (
+                <Placement university={university} />
+              )}
+              {activeSection === "Facilities" && (
+                <Facilities university={university} />
+              )}
+              {activeSection === "Admission" && (
+                <Admission university={university} />
+              )}
+              {activeSection === "Q&A" && <QA university={university} />}
 
-{/* 🔥 FIXED Gallery */}
-{activeSection === "Gallery" && (
-  <Gallery universityId={university?._id} darkMode={darkMode} />
-)}
+              {/* 🔥 FIXED Gallery */}
+              {activeSection === "Gallery" && (
+                <Gallery universityId={university?._id} darkMode={darkMode} />
+              )}
 
-{activeSection === "Reviews" && <Reviews university={university} />}
-{activeSection === "News & Articles" && (
-  <NewsArticles university={university} />
-)}
-{activeSection === "Rankings" && (
-  <Rankings university={university} />
-)}
-
+              {activeSection === "Reviews" && (
+                <Reviews university={university} />
+              )}
+              {activeSection === "News & Articles" && (
+                <NewsArticles university={university} />
+              )}
+             {/* {activeSection === "Rankings" && (
+                <Rankings university={university} />
+              )} */}
             </div>
           </div>
         </>

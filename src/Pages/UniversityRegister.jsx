@@ -47,13 +47,16 @@ export default function MultiStepForm() {
     const { value, checked } = e.target;
     if (checked) {
       setSelectedFacilities([...selectedFacilities, value]);
+      setFormData((prev) => ({
+        ...prev,
+        facilities: [...(prev.facilities || []), { name: value, description: "" }],
+      }));
     } else {
       setSelectedFacilities(selectedFacilities.filter((f) => f !== value));
-      setFormData((prev) => {
-        const newData = { ...prev };
-        delete newData[`facility_${value}_desc`];
-        return newData;
-      });
+      setFormData((prev) => ({
+        ...prev,
+        facilities: (prev.facilities || []).filter((f) => f.name !== value),
+      }));
     }
   };
 
@@ -90,10 +93,19 @@ export default function MultiStepForm() {
     try {
       const payload = new FormData();
 
-      // Append text fields and branch data
+      // Append normal text fields
       Object.entries(formData).forEach(([key, val]) => {
-        payload.append(key, val);
+        if (key !== "facilities") {
+          payload.append(key, val);
+        }
       });
+
+      // Append facilities array
+      if (formData.facilities && formData.facilities.length > 0) {
+        payload.append("facilities", JSON.stringify(formData.facilities));
+      }
+
+      // Append branches
       payload.append("branches", JSON.stringify(branches));
 
       // Append files
@@ -219,23 +231,23 @@ export default function MultiStepForm() {
       }
 
       // Step 6: Upload Gallery
-if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
-  const galleryForm = new FormData();
-  if (files.infraPhotos) files.infraPhotos.forEach(f => galleryForm.append("infraPhotos", f));
-  if (files.eventPhotos) files.eventPhotos.forEach(f => galleryForm.append("eventPhotos", f));
-  if (files.galleryImages) files.galleryImages.forEach(f => galleryForm.append("galleryImages", f));
+      if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
+        const galleryForm = new FormData();
+        if (files.infraPhotos) files.infraPhotos.forEach(f => galleryForm.append("infraPhotos", f));
+        if (files.eventPhotos) files.eventPhotos.forEach(f => galleryForm.append("eventPhotos", f));
+        if (files.galleryImages) files.galleryImages.forEach(f => galleryForm.append("galleryImages", f));
 
-  const galleryRes = await fetch(
-    `http://localhost:5000/api/universities/${universityId}/gallery/upload`
+        const galleryRes = await fetch(
+          `http://localhost:5000/api/universities/${universityId}/gallery/upload`
 ,
-    { method: "POST", body: galleryForm }
-  );
-  if (!galleryRes.ok) {
-    console.error("❌ Gallery upload failed:", await galleryRes.text());
-    alert("❌ Gallery upload failed!");
-    return;
-  }
-}
+          { method: "POST", body: galleryForm }
+        );
+        if (!galleryRes.ok) {
+          console.error("❌ Gallery upload failed:", await galleryRes.text());
+          alert("❌ Gallery upload failed!");
+          return;
+        }
+      }
 
 
       // ✅ Step 7: Upload Recruiters Logos
@@ -615,33 +627,58 @@ if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
             </div>
           )}
 
-          {step === 6 && (
-            <div className="univ-form-step grid-3">
-              <h3 className="univ-step-title">Step 6: Facilities</h3>
-              <p>Select facilities (icons hardcoded in frontend):</p>
-              {facilityOptions.map((fac) => (
-                <label key={fac} className="univ-checkbox-label">
-                  <input
-                    type="checkbox"
-                    value={fac}
-                    onChange={handleFacilityChange}
-                    title={`Select if ${fac} is available. Description field will appear.`}
-                  />
-                  {fac.charAt(0).toUpperCase() + fac.slice(1)}
-                </label>
-              ))}
-              {selectedFacilities.map((fac) => (
-                <textarea
-                  key={fac}
-                  name={`facility_${fac}_desc`}
-                  placeholder={`Description for ${fac}`}
-                  rows={3}
-                  onChange={handleChange}
-                  title={`Provide details about the ${fac} facility.`}
-                />
-              ))}
-            </div>
-          )}
+          // Step6.jsx
+const facilityOptions = [
+  "Hostel",
+  "Library",
+  "Labs",
+  "Research Centers",
+  "Sports",
+  "Cafeteria",
+  "Auditorium",
+  "Medical",
+  "Transport",
+  "IT Facilities",
+  "Placement Cell",
+  "Internship Tieups",
+];
+
+{step === 6 && (
+  <div className="univ-form-step grid-3">
+    <h3 className="univ-step-title">Step 6: Facilities</h3>
+    <p>Select facilities (icons hardcoded in frontend):</p>
+
+    {facilityOptions.map((fac) => (
+      <label key={fac} className="univ-checkbox-label">
+        <input
+          type="checkbox"
+          value={fac}
+          checked={selectedFacilities.includes(fac)}
+          onChange={handleFacilityChange}
+        />
+        {fac}
+      </label>
+    ))}
+
+    {selectedFacilities.map((fac) => (
+      <textarea
+        key={fac}
+        placeholder={`Description for ${fac}`}
+        rows={3}
+        onChange={(e) =>
+          setFormData((prev) => ({
+            ...prev,
+            facilities: [
+              ...(prev.facilities || []).filter((f) => f.name !== fac),
+              { name: fac, description: e.target.value },
+            ],
+          }))
+        }
+      />
+    ))}
+  </div>
+)}
+
 
           {step === 7 && (
             <div className="univ-form-step grid-3">
