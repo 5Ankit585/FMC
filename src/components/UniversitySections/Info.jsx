@@ -7,8 +7,6 @@ import {
   faHome,
   faUniversity,
   faStar,
-  faBook,
-  faFutbol,
   faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Info.css";
@@ -27,15 +25,19 @@ const Info = ({ university }) => {
     return <p className="p-4">Loading Info...</p>;
   }
 
-  // Convert CSV fields to readable string
-  const formatCSV = (csv) =>
-    csv ? csv.split(",").map((item) => item.trim()).join(", ") : "N/A";
+  // Helper for array / CSV formatting
+  const formatList = (value) => {
+    if (!value) return "N/A";
+    if (Array.isArray(value)) return value.join(", ");
+    return value.split(",").map((i) => i.trim()).join(", ");
+  };
 
-  const leftItems = [
+  // Combine all items into a single array for consistent rendering
+  const items = [
     {
       icon: faMapMarkerAlt,
       title: "Location",
-      value: `${university.city}, ${university.state}`,
+      value: `${university.city || "N/A"}, ${university.state || ""}`,
     },
     {
       icon: faBriefcase,
@@ -49,7 +51,7 @@ const Info = ({ university }) => {
     },
     {
       icon: faUsers,
-      title: "Students Placed",
+      title: "Students",
       value: university.students || "N/A",
     },
     {
@@ -62,33 +64,20 @@ const Info = ({ university }) => {
       title: "NIRF Rank",
       value: university.nirfRank || "N/A",
     },
-  ];
-
-  const rightItems = [
     {
       icon: faBriefcase,
       title: "Top Recruiters",
-      value: formatCSV(university.topRecruiters),
+      value: formatList(university.topRecruiters),
     },
     {
       icon: faGraduationCap,
       title: "Popular Courses",
-      value: formatCSV(university.popularCourses),
+      value: formatList(university.popularCourses),
     },
     {
       icon: faUniversity,
       title: "Campus Size",
       value: university.campusSize || "N/A",
-    },
-    {
-      icon: faBook,
-      title: "Library",
-      value: "2,00,000+ Books, E-Resources", // static for now
-    },
-    {
-      icon: faFutbol,
-      title: "Sports Facilities",
-      value: "Cricket Ground, Gym, Indoor Courts", // static for now
     },
     {
       icon: faStar,
@@ -97,39 +86,38 @@ const Info = ({ university }) => {
     },
   ];
 
+  // Split items into pairs for two-column layout
+  const pairedItems = [];
+  for (let i = 0; i < items.length; i += 2) {
+    pairedItems.push([items[i], items[i + 1] || null]);
+  }
+
   return (
     <div className={`info-two-col-container ${darkMode ? "dark" : ""}`}>
-      <h2 className="info-title">
-        {university.instituteName} Details
-      </h2>
+      <h2 className="info-title">{university.instituteName} Details</h2>
       <div className="info-grid">
-        {leftItems.map((leftItem, idx) => {
-          const rightItem = rightItems[idx];
-          return (
-            <div key={idx} className="info-row">
-              {/* Left Item */}
-              <div className="info-block">
-                <FontAwesomeIcon icon={leftItem.icon} className="info-icon" />
-                <div className="info-text">
-                  <h4>{leftItem.title}</h4>
-                  <p>{leftItem.value}</p>
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div className="info-divider" />
-
-              {/* Right Item */}
-              <div className="info-block">
-                <FontAwesomeIcon icon={rightItem.icon} className="info-icon" />
-                <div className="info-text">
-                  <h4>{rightItem.title}</h4>
-                  <p>{rightItem.value}</p>
-                </div>
+        {pairedItems.map((pair, idx) => (
+          <div key={idx} className="info-row">
+            {/* Left Item */}
+            <div className="info-block">
+              <FontAwesomeIcon icon={pair[0].icon} className="info-icon" />
+              <div className="info-text">
+                <h4>{pair[0].title}</h4>
+                <p>{pair[0].value}</p>
               </div>
             </div>
-          );
-        })}
+            {/* Right Item (render only if exists) */}
+            {pair[1] && (
+              <div className="info-block">
+                <FontAwesomeIcon icon={pair[1].icon} className="info-icon" />
+                <div className="info-text">
+                  <h4>{pair[1].title}</h4>
+                  <p>{pair[1].value}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

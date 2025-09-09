@@ -1,7 +1,7 @@
 .info-two-col-container {
   margin-top: 2rem;
   padding: 1rem 2rem;
-  max-width: 600px;
+  max-width: 900px; /* thoda bada kiya taki 2 column acche se aaye */
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -10,20 +10,9 @@
 
 .info-title {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: var(--text-color, #222);
   margin-bottom: 2rem;
-}
-
-.theme-toggle-btn {
-  margin-bottom: 1.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  background-color: var(--button-bg, #007bff);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
 }
 
 .info-grid {
@@ -34,44 +23,46 @@
 
 .info-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1.5rem;
 }
 
 .info-block {
+  flex: 1; /* ✅ dono cards equal width lenge */
   display: flex;
   align-items: center;
-  max-width: 400px;
-  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  background: var(--card-bg, #fff);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   gap: 1rem;
   text-align: left;
+  min-height: 80px; /* ✅ uniform height fix */
 }
 
 .info-icon {
   font-size: 1.5rem;
   color: var(--text-color, #222);
-  min-width: 30px;
+  min-width: 35px;
   text-align: center;
 }
 
 .info-text h4 {
   margin: 0 0 0.25rem 0;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1rem;
   color: var(--text-color, #222);
 }
 
 .info-text p {
   margin: 0;
-  font-size: 0.8rem;
-  color: var(--text-color-secondary, #555);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color-secondary, #444);
   white-space: normal;
 }
 
+/* Divider hataya (ab zarurat nahi hai) */
 .info-divider {
-  width: 1px;
-  background-color: var(--divider-color, #ccc);
-  height: 40px;
-  align-self: center;
+  display: none;
 }
