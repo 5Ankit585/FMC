@@ -92,7 +92,7 @@ function UniversityPage() {
 
   // Banner & Logo
   const bannerImage =
-    university?.bannerImages?.[0] ||
+    university?.bannerImage?.[0] ||
     university?.photos?.[0] ||
     university?.galleryImages?.[0] ||
     FALLBACK_BANNER;

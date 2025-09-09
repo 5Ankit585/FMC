@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./Aboutus.css";
 
+const API_BASE = import.meta?.env?.VITE_API_BASE || "http://localhost:5000";
+
+const getImageUrl = (src) => {
+  if (!src) return "";
+  const clean = src.replace(/\\/g, "/");
+  return clean.startsWith("http") ? clean : `${API_BASE}/${clean}`;
+};
+
 const AboutUs = ({ university }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Collect only aboutImages (5 required)
+  // Collect only aboutImages (max 5)
   const images = useMemo(() => {
     if (!university) return [];
-    return (university.aboutImages || []).slice(0, 5); // enforce max 5
+    return (university.aboutImages || []).slice(0, 5);
   }, [university]);
 
   // Auto-slide
@@ -43,7 +51,7 @@ const AboutUs = ({ university }) => {
               {images.map((src, index) => (
                 <img
                   key={index}
-                  src={src}
+                  src={getImageUrl(src)}
                   alt={`About Slide ${index + 1}`}
                   className="carousel-image"
                 />
@@ -54,9 +62,7 @@ const AboutUs = ({ university }) => {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`indicator ${
-                    currentSlide === index ? "active" : ""
-                  }`}
+                  className={`indicator ${currentSlide === index ? "active" : ""}`}
                 />
               ))}
             </div>
