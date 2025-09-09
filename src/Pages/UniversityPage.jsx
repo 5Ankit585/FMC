@@ -354,7 +354,7 @@ function UniversityPage() {
                 <Placement university={university} />
               )}
               {activeSection === "Facilities" && (
-                <Facilities university={university} />
+                <Facilities universityId={university?._id} />
               )}
               {activeSection === "Admission" && (
                 <Admission university={university} />
@@ -372,7 +372,7 @@ function UniversityPage() {
               {activeSection === "News & Articles" && (
                 <NewsArticles university={university} />
               )}
-             {/* {activeSection === "Rankings" && (
+              {/* {activeSection === "Rankings" && (
                 <Rankings university={university} />
               )} */}
             </div>

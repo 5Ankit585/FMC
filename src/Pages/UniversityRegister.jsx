@@ -170,16 +170,14 @@ export default function MultiStepForm() {
       // Step 3: Upload Cutoff Excel
       if (files.cutoffExcel) {
         const cutoffForm = new FormData();
-        cutoffForm.append("file", files.cutoffExcel); // ✅ field name "file" hi rahe
-
+        cutoffForm.append("file", files.cutoffExcel);
         const cutoffRes = await fetch(
           `http://localhost:5000/api/cutoff/${universityId}/cutoff/upload`,
           {
             method: "POST",
-            body: cutoffForm, // ✅ yahan cutoffForm bhejna hai, na ki formData
+            body: cutoffForm,
           }
         );
-
         if (!cutoffRes.ok) {
           console.error("❌ Cutoff upload failed:", await cutoffRes.text());
           alert("❌ Cutoff upload failed!");
@@ -192,13 +190,12 @@ export default function MultiStepForm() {
         const admissionsForm = new FormData();
         admissionsForm.append("file", files.admissionsExcel);
         const admissionsRes = await fetch(
-          `http://localhost:5000/api/admissions/${universityId}/admissions/upload`, // ✅ NAYA ROUTE
+          `http://localhost:5000/api/admissions/${universityId}/admissions/upload`,
           {
             method: "POST",
             body: admissionsForm,
           }
         );
-
         if (!admissionsRes.ok) {
           console.error(
             "❌ Admissions upload failed:",
@@ -238,8 +235,7 @@ export default function MultiStepForm() {
         if (files.galleryImages) files.galleryImages.forEach(f => galleryForm.append("galleryImages", f));
 
         const galleryRes = await fetch(
-          `http://localhost:5000/api/universities/${universityId}/gallery/upload`
-,
+          `http://localhost:5000/api/universities/${universityId}/gallery/upload`,
           { method: "POST", body: galleryForm }
         );
         if (!galleryRes.ok) {
@@ -249,8 +245,7 @@ export default function MultiStepForm() {
         }
       }
 
-
-      // ✅ Step 7: Upload Recruiters Logos
+      // Step 7: Upload Recruiters Logos
       if (files.recruitersLogos && files.recruitersLogos.length > 0) {
         const recruiterForm = new FormData();
         files.recruitersLogos.forEach((file) =>
@@ -264,7 +259,6 @@ export default function MultiStepForm() {
             body: recruiterForm,
           }
         );
-
         if (!recruiterRes.ok) {
           console.error(
             "❌ Recruiters logos upload failed:",
@@ -627,58 +621,43 @@ export default function MultiStepForm() {
             </div>
           )}
 
-          // Step6.jsx
-const facilityOptions = [
-  "Hostel",
-  "Library",
-  "Labs",
-  "Research Centers",
-  "Sports",
-  "Cafeteria",
-  "Auditorium",
-  "Medical",
-  "Transport",
-  "IT Facilities",
-  "Placement Cell",
-  "Internship Tieups",
-];
-
-{step === 6 && (
-  <div className="univ-form-step grid-3">
-    <h3 className="univ-step-title">Step 6: Facilities</h3>
-    <p>Select facilities (icons hardcoded in frontend):</p>
-
-    {facilityOptions.map((fac) => (
-      <label key={fac} className="univ-checkbox-label">
-        <input
-          type="checkbox"
-          value={fac}
-          checked={selectedFacilities.includes(fac)}
-          onChange={handleFacilityChange}
-        />
-        {fac}
-      </label>
-    ))}
-
-    {selectedFacilities.map((fac) => (
-      <textarea
-        key={fac}
-        placeholder={`Description for ${fac}`}
-        rows={3}
-        onChange={(e) =>
-          setFormData((prev) => ({
-            ...prev,
-            facilities: [
-              ...(prev.facilities || []).filter((f) => f.name !== fac),
-              { name: fac, description: e.target.value },
-            ],
-          }))
-        }
-      />
-    ))}
-  </div>
-)}
-
+          {step === 6 && (
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 6: Facilities</h3>
+              <p>Select facilities (icons hardcoded in frontend):</p>
+              {facilityOptions.map((fac) => (
+                <label key={fac} className="univ-checkbox-label">
+                  <input
+                    type="checkbox"
+                    value={fac}
+                    checked={selectedFacilities.includes(fac)}
+                    onChange={handleFacilityChange}
+                  />
+                  {fac.charAt(0).toUpperCase() + fac.slice(1)}
+                </label>
+              ))}
+              {selectedFacilities.map((fac) => (
+                <textarea
+                  key={fac}
+                  name={`facility_${fac}_desc`}
+                  placeholder={`Description for ${fac.charAt(0).toUpperCase() + fac.slice(1)}`}
+                  rows={3}
+                  value={
+                    (formData.facilities || []).find((f) => f.name === fac)?.description || ""
+                  }
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      facilities: [
+                        ...(prev.facilities || []).filter((f) => f.name !== fac),
+                        { name: fac, description: e.target.value },
+                      ],
+                    }))
+                  }
+                />
+              ))}
+            </div>
+          )}
 
           {step === 7 && (
             <div className="univ-form-step grid-3">
