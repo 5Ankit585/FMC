@@ -49,7 +49,10 @@ export default function MultiStepForm() {
       setSelectedFacilities([...selectedFacilities, value]);
       setFormData((prev) => ({
         ...prev,
-        facilities: [...(prev.facilities || []), { name: value, description: "" }],
+        facilities: [
+          ...(prev.facilities || []),
+          { name: value, description: "" },
+        ],
       }));
     } else {
       setSelectedFacilities(selectedFacilities.filter((f) => f !== value));
@@ -89,130 +92,153 @@ export default function MultiStepForm() {
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    // -----------------------------
-    // 1. Prepare main payload
-    // -----------------------------
-    const payload = new FormData();
+    e.preventDefault();
+    try {
+      // -----------------------------
+      // 1. Prepare main payload
+      // -----------------------------
+      const payload = new FormData();
 
-    // Append text fields except facilities
-    Object.entries(formData).forEach(([key, val]) => {
-      if (key !== "facilities") {
-        payload.append(key, val);
+      // Append text fields except facilities
+      Object.entries(formData).forEach(([key, val]) => {
+        if (key !== "facilities") {
+          payload.append(key, val);
+        }
+      });
+
+      // Facilities (stringify array)
+      if (formData.facilities?.length) {
+        payload.append("facilities", JSON.stringify(formData.facilities));
       }
-    });
 
-    // Facilities (stringify array)
-    if (formData.facilities?.length) {
-      payload.append("facilities", JSON.stringify(formData.facilities));
-    }
-
-    // Branches
-    if (branches?.length) {
-      payload.append("branches", JSON.stringify(branches));
-    }
-
-    // File fields
-    Object.entries(files).forEach(([key, fileList]) => {
-      if (!fileList) return;
-      if (Array.isArray(fileList)) {
-        fileList.forEach((f) => payload.append(key, f));
-      } else {
-        payload.append(key, fileList);
+      // Branches
+      if (branches?.length) {
+        payload.append("branches", JSON.stringify(branches));
       }
-    });
 
-    // -----------------------------
-    // 2. Register university
-    // -----------------------------
-    const baseUrl = "http://localhost:5000";
+      // File fields
+      Object.entries(files).forEach(([key, fileList]) => {
+        if (!fileList) return;
+        if (Array.isArray(fileList)) {
+          fileList.forEach((f) => payload.append(key, f));
+        } else {
+          payload.append(key, fileList);
+        }
+      });
 
-    const res = await fetch(`${baseUrl}/api/university-registration`, {
-      method: "POST",
-      body: payload,
-    });
+      // -----------------------------
+      // 2. Register university
+      // -----------------------------
+      const baseUrl = "http://localhost:5000";
 
-    if (!res.ok) {
-      console.error("❌ Registration failed:", await res.text());
-      alert("❌ University registration failed!");
-      return;
-    }
+      const res = await fetch(`${baseUrl}/api/university-registration`, {
+        method: "POST",
+        body: payload,
+      });
 
-    const data = await res.json();
-    console.log("✅ University registered:", data);
-
-    if (!data?.data?._id) {
-      alert("❌ University not created!");
-      return;
-    }
-
-    const universityId = data.data._id;
-
-    // -----------------------------
-    // 3. Helper for uploads
-    // -----------------------------
-    const uploadFile = async (url, formData, label) => {
-      const r = await fetch(url, { method: "POST", body: formData });
-      if (!r.ok) {
-        console.error(`❌ ${label} upload failed:`, await r.text());
-        alert(`❌ ${label} upload failed!`);
-        throw new Error(`${label} upload failed`);
+      if (!res.ok) {
+        console.error("❌ Registration failed:", await res.text());
+        alert("❌ University registration failed!");
+        return;
       }
-      console.log(`✅ ${label} uploaded`);
-    };
 
-    // -----------------------------
-    // 4. Upload extras (if provided)
-    // -----------------------------
-    if (files.file) {
-      const fd = new FormData();
-      fd.append("file", files.file);
-      await uploadFile(`${baseUrl}/api/universities/${universityId}/courses/upload`, fd, "Courses");
+      const data = await res.json();
+      console.log("✅ University registered:", data);
+
+      if (!data?.data?._id) {
+        alert("❌ University not created!");
+        return;
+      }
+
+      const universityId = data.data._id;
+
+      // -----------------------------
+      // 3. Helper for uploads
+      // -----------------------------
+      const uploadFile = async (url, formData, label) => {
+        const r = await fetch(url, { method: "POST", body: formData });
+        if (!r.ok) {
+          console.error(`❌ ${label} upload failed:`, await r.text());
+          alert(`❌ ${label} upload failed!`);
+          throw new Error(`${label} upload failed`);
+        }
+        console.log(`✅ ${label} uploaded`);
+      };
+
+      // -----------------------------
+      // 4. Upload extras (if provided)
+      // -----------------------------
+      if (files.file) {
+        const fd = new FormData();
+        fd.append("file", files.file);
+        await uploadFile(
+          `${baseUrl}/api/universities/${universityId}/courses/upload`,
+          fd,
+          "Courses"
+        );
+      }
+
+      if (files.cutoffExcel) {
+        const fd = new FormData();
+        fd.append("file", files.cutoffExcel);
+        await uploadFile(
+          `${baseUrl}/api/cutoff/${universityId}/cutoff/upload`,
+          fd,
+          "Cutoff"
+        );
+      }
+
+      if (files.admissionsExcel) {
+        const fd = new FormData();
+        fd.append("file", files.admissionsExcel);
+        await uploadFile(
+          `${baseUrl}/api/admissions/${universityId}/admissions/upload`,
+          fd,
+          "Admissions"
+        );
+      }
+
+      if (files.placementsExcel) {
+        const fd = new FormData();
+        fd.append("file", files.placementsExcel);
+        await uploadFile(
+          `${baseUrl}/api/universities/${universityId}/placements/upload`,
+          fd,
+          "Placements"
+        );
+      }
+
+      if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
+        const fd = new FormData();
+        files.infraPhotos?.forEach((f) => fd.append("infraPhotos", f));
+        files.eventPhotos?.forEach((f) => fd.append("eventPhotos", f));
+        files.galleryImages?.forEach((f) => fd.append("galleryImages", f));
+        await uploadFile(
+          `${baseUrl}/api/universities/${universityId}/gallery/upload`,
+          fd,
+          "Gallery"
+        );
+      }
+
+      if (files.recruitersLogos?.length) {
+        const fd = new FormData();
+        files.recruitersLogos.forEach((f) => fd.append("recruitersLogos", f));
+        await uploadFile(
+          `${baseUrl}/api/recruiters/${universityId}/recruiters/upload`,
+          fd,
+          "Recruiters logos"
+        );
+      }
+
+      // -----------------------------
+      // 5. Success
+      // -----------------------------
+      alert("🎉 University Registered Successfully!");
+    } catch (err) {
+      console.error("❌ Error submitting form:", err);
+      alert("❌ Form submission failed!");
     }
-
-    if (files.cutoffExcel) {
-      const fd = new FormData();
-      fd.append("file", files.cutoffExcel);
-      await uploadFile(`${baseUrl}/api/cutoff/${universityId}/cutoff/upload`, fd, "Cutoff");
-    }
-
-    if (files.admissionsExcel) {
-      const fd = new FormData();
-      fd.append("file", files.admissionsExcel);
-      await uploadFile(`${baseUrl}/api/admissions/${universityId}/admissions/upload`, fd, "Admissions");
-    }
-
-    if (files.placementsExcel) {
-      const fd = new FormData();
-      fd.append("file", files.placementsExcel);
-      await uploadFile(`${baseUrl}/api/universities/${universityId}/placements/upload`, fd, "Placements");
-    }
-
-    if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
-      const fd = new FormData();
-      files.infraPhotos?.forEach((f) => fd.append("infraPhotos", f));
-      files.eventPhotos?.forEach((f) => fd.append("eventPhotos", f));
-      files.galleryImages?.forEach((f) => fd.append("galleryImages", f));
-      await uploadFile(`${baseUrl}/api/universities/${universityId}/gallery/upload`, fd, "Gallery");
-    }
-
-    if (files.recruitersLogos?.length) {
-      const fd = new FormData();
-      files.recruitersLogos.forEach((f) => fd.append("recruitersLogos", f));
-      await uploadFile(`${baseUrl}/api/recruiters/${universityId}/recruiters/upload`, fd, "Recruiters logos");
-    }
-
-    // -----------------------------
-    // 5. Success
-    // -----------------------------
-    alert("🎉 University Registered Successfully!");
-  } catch (err) {
-    console.error("❌ Error submitting form:", err);
-    alert("❌ Form submission failed!");
-  }
-};
-
+  };
 
   const facilityOptions = [
     "hostel",
@@ -321,16 +347,17 @@ export default function MultiStepForm() {
               <input
                 type="file"
                 name="logo"
+                accept="image/*"
                 onChange={handleFileChange}
-                title="Upload institute logo. Single image, used in hero."
               />
+
               <label>Upload Banner Images (at least 3)</label>
               <input
                 type="file"
                 name="bannerImages"
                 multiple
+                accept="image/*"
                 onChange={handleFileChange}
-                title="Upload at least 3 banner images for hero carousel."
               />
             </div>
           )}
@@ -485,95 +512,99 @@ export default function MultiStepForm() {
           )}
 
           {step === 5 && (
-  <div className="univ-form-step grid-3">
-    <h3 className="univ-step-title">Step 5: Placements</h3>
+            <div className="univ-form-step grid-3">
+              <h3 className="univ-step-title">Step 5: Placements</h3>
 
-    {/* Placement Rate */}
-    <input
-      name="placementRate"
-      placeholder="Placement Rate (%)"
-      value={formData.placementRate || ""}
-      onChange={handleChange}
-      title="Overall placement rate."
-    />
+              {/* Placement Rate */}
+              <input
+                name="placementRate"
+                placeholder="Placement Rate (%)"
+                value={formData.placementRate || ""}
+                onChange={handleChange}
+                title="Overall placement rate."
+              />
 
-    {/* Highest Package */}
-    <input
-      name="highestPackage"
-      placeholder="Highest Package (₹ LPA)"
-      value={formData.highestPackage || ""}
-      onChange={handleChange}
-      title="Highest package overall."
-    />
+              {/* Highest Package */}
+              <input
+                name="highestPackage"
+                placeholder="Highest Package (₹ LPA)"
+                value={formData.highestPackage || ""}
+                onChange={handleChange}
+                title="Highest package overall."
+              />
 
-    {/* Average Package */}
-    <input
-      name="avgPackage"
-      placeholder="Average Package (₹ LPA)"
-      value={formData.avgPackage || ""}
-      onChange={handleChange}
-      title="Average package overall."
-    />
+              {/* Average Package */}
+              <input
+                name="avgPackage"
+                placeholder="Average Package (₹ LPA)"
+                value={formData.avgPackage || ""}
+                onChange={handleChange}
+                title="Average package overall."
+              />
 
-    {/* Upload Year-wise Placements */}
-    <label>Upload Year-wise Placements Excel (placements.xlsx)</label>
-    <input
-      type="file"
-      name="placementsExcel"
-      onChange={handleFileChange}
-      accept=".xlsx"
-      title="Upload Excel with columns: Year, Companies, Placed, Highest CTC, Avg CTC."
-    />
+              {/* Upload Year-wise Placements */}
+              <label>Upload Year-wise Placements Excel (placements.xlsx)</label>
+              <input
+                type="file"
+                name="placementsExcel"
+                onChange={handleFileChange}
+                accept=".xlsx"
+                title="Upload Excel with columns: Year, Companies, Placed, Highest CTC, Avg CTC."
+              />
 
-    {/* Upload Recruiters Logos */}
-    <label>Upload Top Recruiters Logos</label>
-    <input
-      type="file"
-      name="recruitersLogos"
-      multiple
-      onChange={handleFileChange}
-    />
+              {/* Upload Recruiters Logos */}
+              <label>Upload Top Recruiters Logos</label>
+              <input
+                type="file"
+                name="recruitersLogos"
+                multiple
+                onChange={handleFileChange}
+              />
 
-    {/* Branch-wise Placements */}
-    <h4>Branch-wise Placements</h4>
-    <button
-      type="button"
-      onClick={addBranch}
-      className="univ-add-btn"
-    >
-      + Add Branch
-    </button>
+              {/* Branch-wise Placements */}
+              <h4>Branch-wise Placements</h4>
+              <button
+                type="button"
+                onClick={addBranch}
+                className="univ-add-btn"
+              >
+                + Add Branch
+              </button>
 
-    {branches.map((branch, index) => (
-      <div key={index} className="branch-group">
-        <input
-          placeholder="Branch Name"
-          value={branch.name}
-          onChange={(e) =>
-            handleBranchChange(index, "name", e.target.value)
-          }
-          title="Enter branch name for dropdown."
-        />
-        <input
-          placeholder="Avg Package (₹ LPA)"
-          value={branch.avgPackage || ""}
-          onChange={(e) =>
-            handleBranchChange(index, "avgPackage", e.target.value)
-          }
-          title="Average package for this branch."
-        />
-        <input
-          placeholder="Highest Package (₹ LPA)"
-          value={branch.highestPackage || ""}
-          onChange={(e) =>
-            handleBranchChange(index, "highestPackage", e.target.value)
-          }
-          title="Highest package for this branch."
-        />
-      </div>
-    ))}
-  </div>
-)}
+              {branches.map((branch, index) => (
+                <div key={index} className="branch-group">
+                  <input
+                    placeholder="Branch Name"
+                    value={branch.name}
+                    onChange={(e) =>
+                      handleBranchChange(index, "name", e.target.value)
+                    }
+                    title="Enter branch name for dropdown."
+                  />
+                  <input
+                    placeholder="Avg Package (₹ LPA)"
+                    value={branch.avgPackage || ""}
+                    onChange={(e) =>
+                      handleBranchChange(index, "avgPackage", e.target.value)
+                    }
+                    title="Average package for this branch."
+                  />
+                  <input
+                    placeholder="Highest Package (₹ LPA)"
+                    value={branch.highestPackage || ""}
+                    onChange={(e) =>
+                      handleBranchChange(
+                        index,
+                        "highestPackage",
+                        e.target.value
+                      )
+                    }
+                    title="Highest package for this branch."
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
           {step === 6 && (
             <div className="univ-form-step grid-3">
@@ -594,16 +625,21 @@ export default function MultiStepForm() {
                 <textarea
                   key={fac}
                   name={`facility_${fac}_desc`}
-                  placeholder={`Description for ${fac.charAt(0).toUpperCase() + fac.slice(1)}`}
+                  placeholder={`Description for ${
+                    fac.charAt(0).toUpperCase() + fac.slice(1)
+                  }`}
                   rows={3}
                   value={
-                    (formData.facilities || []).find((f) => f.name === fac)?.description || ""
+                    (formData.facilities || []).find((f) => f.name === fac)
+                      ?.description || ""
                   }
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
                       facilities: [
-                        ...(prev.facilities || []).filter((f) => f.name !== fac),
+                        ...(prev.facilities || []).filter(
+                          (f) => f.name !== fac
+                        ),
                         { name: fac, description: e.target.value },
                       ],
                     }))

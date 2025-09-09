@@ -48,6 +48,9 @@ function UniversityPage() {
   const dropdownRef = useRef(null);
   const scrollRef = useRef(null);
 
+  // Banner slider index
+  const [bannerIndex, setBannerIndex] = useState(0);
+
   // Horizontal scroll
   const scrollLeft = () =>
     scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
@@ -57,11 +60,7 @@ function UniversityPage() {
   // Dark mode
   const toggleTheme = () => setDarkMode((v) => !v);
   useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
+    document.body.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
   // Fetch university
@@ -90,14 +89,26 @@ function UniversityPage() {
     university?.affiliation,
   ].filter(Boolean);
 
-  // Banner & Logo
-  const bannerImage =
-    university?.bannerImage?.[0] ||
-    university?.photos?.[0] ||
-    university?.galleryImages?.[0] ||
-    FALLBACK_BANNER;
+  // Banner auto-slide
+  // Reset index when university changes
+  useEffect(() => {
+    setBannerIndex(0);
+  }, [university]);
 
-  const uniLogo = university?.logo?.[0] || FALLBACK_LOGO;
+  // Safe banner merge
+  const bannerSources = [
+    ...(university?.bannerImage || []),
+    ...(university?.photos || []),
+    ...(university?.galleryImages || []),
+  ].filter(Boolean);
+
+  const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
+
+  // Safe logo handling
+  const uniLogo =
+    university?.logo && university.logo.length > 0
+      ? university.logo[0]
+      : FALLBACK_LOGO;
 
   return (
     <div
@@ -125,7 +136,7 @@ function UniversityPage() {
         </div>
 
         <div className="flex items-center space-x-2 relative">
-          <button className="bg-[var(--button-accent)] text-[var(--text-color)] hover:bg-[var(--button-hover)]">
+          <button className="bg-[var(--button-accent)] hover:bg-[var(--button-hover)]">
             Write a Review
           </button>
           <button className="flex items-center bg-[var(--button-primary)] text-white hover:bg-[var(--button-hover)]">
@@ -265,7 +276,6 @@ function UniversityPage() {
                   "Cutoff",
                   "Placements",
                   "Facilities",
-                  // "Rankings",  // ❌ isse hide karna hai
                   "Gallery",
                   "Admission",
                   "Reviews",
@@ -345,7 +355,6 @@ function UniversityPage() {
                 </div>
               )}
 
-              {/* ✅ Correctly pass universityId */}
               {activeSection === "Cutoff" && (
                 <Cutoff universityId={university?._id} />
               )}
@@ -360,21 +369,15 @@ function UniversityPage() {
                 <Admission university={university} />
               )}
               {activeSection === "Q&A" && <QA university={university} />}
-
-              {/* 🔥 FIXED Gallery */}
               {activeSection === "Gallery" && (
                 <Gallery universityId={university?._id} darkMode={darkMode} />
               )}
-
               {activeSection === "Reviews" && (
                 <Reviews university={university} />
               )}
               {activeSection === "News & Articles" && (
                 <NewsArticles university={university} />
               )}
-              {/* {activeSection === "Rankings" && (
-                <Rankings university={university} />
-              )} */}
             </div>
           </div>
         </>
