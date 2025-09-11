@@ -1,19 +1,19 @@
 .facilities-container {
   padding: 2rem;
-  color: #333;
+  color: #000000; /* main text black */
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: #fffefc; /* cream background */
   min-height: 100vh;
 }
 
 .facilities-title {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #007bff;
-  margin-bottom: 1rem;
-  text-align: center;
+  font-size: 2rem;       /* increased font size */
+  font-weight: 700;
+  color: #000000;        /* amber-700 for headings */
+  margin-bottom: 2rem;   /* spacing below heading */
+  text-align: center;    /* center align */
 }
 
 .facilities-grid {
@@ -27,20 +27,22 @@
 }
 
 .facility-card {
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: #fff;
-  padding: 0.5rem;
+  border: 2px solid #fde047; /* amber-400 border */
+  border-radius: 8px;
+  background-color: #fffefc; /* cream card */
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  transition: transform 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
 }
 
 .facility-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-3px);
+  border-color: #f59e0b; /* amber-500 on hover */
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
 }
 
 .facility-header {
@@ -52,25 +54,26 @@
 .facility-icon {
   margin-right: 0.5rem;
   font-size: 1.5rem;
-  color: #007bff;
+  color: #f59e0b; /* amber-500 */
   transition: color 0.3s;
 }
 
 .facility-card:hover .facility-icon {
-  color: #ffcc00;
+  color: #b45309; /* amber-700 */
 }
 
 .facility-title {
   font-size: 0.875rem;
   font-weight: 600;
   margin-left: 0.5rem;
+  color: #000000;
 }
 
 .facility-description {
   font-size: 0.75rem;
   margin-bottom: 0.25rem;
   line-height: 1.2;
-  color: #666;
+  color: #374151; /* gray-700 */
 }
 
 .reviews {
@@ -85,12 +88,12 @@
 .reviews li {
   margin-bottom: 0.25rem;
   font-size: 0.75rem;
-  color: #666;
+  color: #374151;
 }
 
 .no-reviews {
   font-size: 0.75rem;
-  color: #999;
+  color: #9ca3af; /* gray-400 */
   text-align: center;
 }
 
@@ -98,21 +101,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #facc15; /* yellow-400 */
+  color: #000000;
   padding: 0.25rem 0.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.75rem;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s;
   width: 100%;
   margin-top: 0.5rem;
 }
 
 .review-button:hover {
-  background-color: #ffcc00;
-  color: #000;
+  background-color: #f59e0b; /* amber-500 hover */
+  color: #000000;
 }
 
 .reviews-section {
@@ -124,8 +127,8 @@
 
 .reviews-title {
   font-size: 1rem;
-  font-weight: bold;
-  color: #333;
+  font-weight: 700;
+  color: #b45309; /* amber-700 for headings */
   margin-bottom: 1rem;
 }
 
@@ -135,13 +138,13 @@
 
 .review-text {
   font-size: 0.875rem;
-  color: #333;
+  color: #000000;
   margin-bottom: 0.25rem;
 }
 
 .review-meta {
   font-size: 0.7rem;
-  color: #999;
+  color: #9ca3af; /* gray-400 */
 }
 
 .modal-overlay {
@@ -150,7 +153,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
@@ -159,27 +162,27 @@
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: #fffefc; /* cream modal */
   padding: 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   width: 90%;
   max-width: 400px;
-  color: #333;
+  color: #000000;
   position: relative;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 .modal-title {
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 0.75rem;
-  color: #333;
+  color: #b45309;
 }
 
 .modal-label {
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
-  color: #333;
+  color: #374151;
 }
 
 .rating {
@@ -191,22 +194,22 @@
   font-size: 1.2rem;
   margin-right: 0.25rem;
   cursor: pointer;
-  color: #ccc;
+  color: #fde047; /* amber-400 */
 }
 
 .star.active {
-  color: #ffcc00;
+  color: #f59e0b; /* amber-500 */
 }
 
 .textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #fde047;
+  border-radius: 6px;
   resize: vertical;
   margin-bottom: 0.75rem;
-  color: #333;
-  background-color: #fff;
+  color: #000000;
+  background-color: #fffefc;
 }
 
 .modal-buttons {
@@ -216,30 +219,35 @@
 }
 
 .cancel-button {
-  background-color: #ddd;
-  color: #333;
+  background-color: #fde047; /* amber-400 */
+  color: #000000;
   padding: 0.25rem 0.75rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+.cancel-button:hover {
+  background-color: #f59e0b; /* amber-500 */
 }
 
 .submit-button {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #facc15; /* yellow-400 */
+  color: #000000;
   padding: 0.25rem 0.75rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: #f59e0b; /* amber-500 */
 }
 
 .submit-button:disabled {
-  background-color: #ddd;
+  background-color: #fde047; /* lighter amber */
   cursor: not-allowed;
 }
 

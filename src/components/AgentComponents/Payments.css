@@ -1,118 +1,131 @@
+/* ===== Payments Panel Container ===== */
 .payments-container {
-    max-width: 1600px;
-  width: 90%;
-  margin: 0 auto;
-  padding: 16px;
-  background-color: #f8fafc;
+  max-width: 1400px;
+  width: 95%;
+  margin: 20px auto;
+  padding: 2rem;
+  background-color: #fff;
+  border: 3px solid #fefce8;
   border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  font-size: 12px;
+  color: #000;
+}
+
+/* ===== Header ===== */
+.payments-header {
+  margin-bottom: 0.8rem;
+  text-align: left;
 }
 
 .payments-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
 }
 
-.table-wrapper {
+.payments-subtitle {
+  font-size: 0.75rem;
+  color: #444;
+}
+
+/* ===== Table Wrapper ===== */
+.payment-table-wrapper {
   overflow-x: auto;
+  border: 3px solid #fefce8;
   border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: #fff;
 }
 
+/* ===== Table ===== */
 .payments-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.7rem;
   background-color: #fff;
-  font-size: 0.875rem;
 }
 
 .payments-table th,
 .payments-table td {
-  padding: 8px 12px;
+  padding: 0.45rem 0.6rem;
   text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-  color: #374151;
+  border-bottom: 1px solid #fef3c7;
+  color: #000;
 }
 
 .payments-table th {
-  background-color: #f1f5f9;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  color: #475569;
+  background-color: #fef9c3;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: #000;
+  text-transform: none;
 }
 
-.payments-table tr:hover {
-  background-color: #f8fafc;
+/* Row Stripes (same as Application) */
+.payments-table tbody tr:nth-child(even) td {
+  background: #fff;
+}
+.payments-table tbody tr:nth-child(odd) td {
+  background: #fffef7;
+}
+.payments-table tbody tr:hover td {
+  background: #fef08a;
 }
 
+/* ===== Status Select ===== */
 .status-select {
-  padding: 4px 24px 4px 8px;
+  padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+  border: 2px solid #fefce8;
   border-radius: 4px;
-  border: 1px solid #d1d5db;
-  background-color: #fff;
-  cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   font-weight: 500;
+  background: #fff;
+  cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'><path fill='%23475569' d='M0 0h8L4 5z'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'><path fill='%23000000' d='M0 0h8L4 5z'/></svg>");
   background-repeat: no-repeat;
-  background-position: right 8px center;
+  background-position: right 6px center;
+  background-size: 10px;
+}
+.status-select:focus {
+  outline: none;
+  border-color: #facc15;
+  box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.25);
 }
 
+/* ===== Status Colors ===== */
 .status-pending {
-  color: #d97706;
-  background-color: #fef3c7;
+  color: #92400e;
+  background: #fef3c7;
 }
-
 .status-completed {
-  color: #059669;
-  background-color: #d1fae5;
+  color: #166534;
+  background: #dcfce7;
 }
-
 .status-refunded {
-  color: #dc2626;
-  background-color: #fee2e2;
+  color: #b91c1c;
+  background: #fee2e2;
 }
 
-select.status-pending,
-option.status-pending {
-  color: #d97706;
-  background-color: #fef3c7;
-}
-
-select.status-completed,
-option.status-completed {
-  color: #059669;
-  background-color: #d1fae5;
-}
-
-select.status-refunded,
-option.status-refunded {
-  color: #dc2626;
-  background-color: #fee2e2;
-}
-
+/* ===== Download Button ===== */
 .download-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  border: none;
-  background-color: #3b82f6;
-  color: #fff;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #fefce8;
+  border-radius: 6px;
+  background-color: #facc15;
+  color: #000;
+  font-size: 0.7rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
 }
 
-.download-btn:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-.download-btn:disabled {
-  background-color: #d1d5db;
-  cursor: not-allowed;
+.download-btn:hover {
+  background: #f59e0b;
+  color: #fff;
+  transform: translateY(-1px);
 }

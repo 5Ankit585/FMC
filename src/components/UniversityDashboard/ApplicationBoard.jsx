@@ -17,7 +17,6 @@ export default function ApplicationBoard() {
   const [activeFilter, setActiveFilter] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
- 
   const statusCounts = statuses.reduce((acc, status) => {
     acc[status] = applications.filter(app => app.status === status).length;
     return acc;
@@ -45,7 +44,6 @@ export default function ApplicationBoard() {
     <section className="ud-card ud-app-board">
       <h3>Application Status Board</h3>
       
-      
       <input 
         type="text" 
         className="ud-search-input"
@@ -54,10 +52,9 @@ export default function ApplicationBoard() {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       
-      
-      <div className="ud-app-filters">
+      <div className="ab-app-filters">
         <button 
-          className={`ud-chip ${!activeFilter ? 'ud-chip-active' : ''}`} 
+          className={`ab-filter-chip ${!activeFilter ? 'ab-filter-chip-active' : ''}`} 
           onClick={() => setActiveFilter(null)}
         >
           All ({applications.length})
@@ -65,7 +62,7 @@ export default function ApplicationBoard() {
         {statuses.map((s) => (
           <button 
             key={s} 
-            className={`ud-chip ${activeFilter === s ? 'ud-chip-active' : ''}`} 
+            className={`ab-filter-chip ${activeFilter === s ? 'ab-filter-chip-active' : ''}`} 
             onClick={() => handleFilterClick(s)}
           >
             {s} ({statusCounts[s] || 0})
@@ -73,7 +70,6 @@ export default function ApplicationBoard() {
         ))}
       </div>
 
-      
       <div className="ud-app-list">
         {filteredApps.length === 0 ? (
           <p className="ud-no-results">No applications match your search or filter.</p>

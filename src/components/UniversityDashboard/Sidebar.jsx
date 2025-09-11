@@ -24,8 +24,9 @@ export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {
         tabIndex={0}
         onKeyDown={(e) => e.key === "Enter" && setRoute("dashboard")}
       >
-        <div className="ud-logo">
+        <div className="ud-brand-text">
           <strong>University Dashboard</strong>
+          <small>Admin</small>
         </div>
       </div>
 

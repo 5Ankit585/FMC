@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import "./settings.css";
 
-export default function Settings() {
+export default function AdSettings() {
   const settingsOptions = [
     {
       title: "Profile Settings",
@@ -44,29 +44,29 @@ export default function Settings() {
   ];
 
   return (
-    <div className="settings-page">
-      <header className="settings-header">
+    <div className="ad-settings-page">
+      <header className="ad-settings-header">
         <h2>Settings</h2>
-        <p className="settings-subtext">
+        <p className="ad-settings-subtext">
           Manage your account, preferences, and integrations easily.
         </p>
       </header>
 
-      <div className="settings-grid">
+      <div className="ad-settings-grid">
         {settingsOptions.map((item, idx) => (
           <div
             key={idx}
-            className="settings-card"
+            className="ad-settings-card"
             onClick={item.action}
             role="button"
             tabIndex={0}
           >
-            <div className="settings-icon">{item.icon}</div>
-            <div className="settings-info">
+            <div className="ad-settings-icon">{item.icon}</div>
+            <div className="ad-settings-info">
               <h3>{item.title}</h3>
               <p>{item.description}</p>
             </div>
-            <button className="settings-btn">Manage</button>
+            <button className="ad-settings-btn">Manage</button>
           </div>
         ))}
       </div>

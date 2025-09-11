@@ -1,176 +1,165 @@
+/* ================= MAIN CONTENT ================= */
 .ud-main {
   flex: 1;
   overflow-y: auto;
-  padding: 0.8rem 1rem; /* smaller padding */
+  padding: 0.6rem 0.8rem; /* reduced padding */
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
   min-width: 0;
-  scrollbar-width: thin; 
-  scrollbar-color: var(--color-muted) transparent; 
+  background: #fefce8; /* Changed to off-white */
+  scrollbar-width: thin;
+  scrollbar-color: #facc15 transparent;
 }
-
 .ud-main::-webkit-scrollbar {
-  width: 2px; 
-}
-.ud-main::-webkit-scrollbar-track {
-  background: transparent; 
+  width: 5px;
 }
 .ud-main::-webkit-scrollbar-thumb {
-  background-color: var(--color-muted); 
-  border-radius: 3px;
+  background-color: #facc15;
+  border-radius: 5px;
 }
 .ud-main::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primary); 
+  background-color: #eab308;
 }
 
-/* Page Titles */
+/* ================= PAGE TITLES ================= */
 .ud-page h2 {
-  font-size: 1.4rem; /* shrunk from 1.8rem */
+  font-size: 1.1rem;
   font-weight: 600;
   text-align: center;
-  margin: 15px auto 8px;
-  color: #333;
+  margin: 10px auto 6px;
+  color: #000;
 }
-
 .ud-page p {
-  font-size: 0.9rem; /* smaller */
-  line-height: 1.4;
-  text-align: center;
-  margin: 0 auto 16px;
-  color: #666;
-  max-width: 550px;
-}
-
-/* Stat Cards */
-.ud-stat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.7rem;
-  border-radius: 0.75rem;
-  background: var(--card-bg);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.ud-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-.ud-stat-value {
-  font-size: 1.2rem; /* smaller */
-  font-weight: bold;
-}
-.ud-stat-label {
   font-size: 0.75rem;
-  color: var(--color-muted);
-}
-
-/* Footer */
-.ud-footer {
-  margin-top: auto;
-  padding: 0.8rem 0;
-  font-size: 0.7rem;
-  color: var(--color-muted);
+  line-height: 1.3;
   text-align: center;
-  border-top: 1px solid var(--border-color);
-  background: var(--footer-bg);
+  margin: 0 auto 12px;
+  color: #333;
+  max-width: 480px;
 }
 
-.agent-dashboard {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Stat Cards Grid */
+/* ================= STAT CARDS ================= */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* tighter min */
-  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem;
 }
 .stat-card {
-  background: var(--card-bg);
-  padding: 1rem; /* reduced from 2rem */
-  border-radius: 10px;
-  border: 1px solid var(--border-color);
+  background: #f5f5f5; /* Changed to off-white */
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #fde047;
+  font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
-  box-shadow: var(--shadow-sm);
-  min-height: 110px; 
-  font-size: 0.9rem; 
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
+  min-height: 85px;
+  color: #000;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Actions Row */
+/* ================= ACTIONS ================= */
 .actions-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
 }
 .button-group {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.4rem;
 }
 .primary-btn {
-  background: var(--color-primary);
-  color: #fff;
-  padding: 0.45rem 0.9rem; /* smaller */
-  border-radius: 5px;
+  background: #facc15;
+  color: #000;
+  padding: 0.35rem 0.7rem;
+  border-radius: 4px;
   border: none;
-  cursor: pointer;
+  font-size: 0.75rem;
   font-weight: 500;
-  font-size: 0.85rem;
+  cursor: pointer;
 }
 .primary-btn:hover {
-  background: var(--color-accent);
+  background: #ca8a04;
+  color: #fff;
 }
 .link-group {
   display: flex;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 .link-btn {
   background: none;
   border: none;
-  color: var(--color-primary);
+  color: #facc15;
   cursor: pointer;
+  font-size: 0.75rem;
   text-decoration: underline;
-  font-size: 0.85rem;
 }
 
-/* Tables Grid */
+/* ================= TABLES ================= */
 .tables-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* reduced */
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.8rem;
+  margin-top: 0.8rem;
 }
 .table-card {
-  background: var(--card-bg);
-  border-radius: 8px;
-  padding: 0.7rem;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
+  background: #f5f5f5; /* Changed to off-white */
+  border: 1px solid #fde047;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  color: #000;
 }
 .table-card h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1rem; /* shrunk */
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #000;
 }
 .table-card table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
 }
 .table-card th,
 .table-card td {
-  padding: 0.4rem;
-  border-bottom: 1px solid var(--border-color);
+  padding: 0.35rem;
+  border-bottom: 1px solid #fde047;
   text-align: left;
+}
+.table-card th {
+  background: #fef9c3; /* Kept for contrast, can change to #f5f5f5 if preferred */
+  font-weight: 600;
+  color: #eab308;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+/* ✅ Row Striping (Agent Dashboard Style) */
+.table-card tbody tr:nth-child(even) td {
+  background: #f5f5f5; /* Changed to off-white */
+}
+.table-card tbody tr:nth-child(odd) td {
+  background: #f0f0f0; /* Slightly darker off-white for striping */
+}
+.table-card tbody tr:hover td {
+  background: #fef08a; /* Kept hover highlight for visibility */
+}
+
+/* ================= FOOTER ================= */
+.ud-footer {
+  margin-top: auto;
+  padding: 0.6rem 0;
+  font-size: 0.65rem;
+  text-align: center;
+  color: #000;
+  border-top: 1px solid #fde047;
+  background: #f5f5f5; /* Changed to off-white */
 }

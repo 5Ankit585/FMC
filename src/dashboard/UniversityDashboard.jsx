@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/UniversityDashboard/Header";
 import Sidebar from "../components/UniversityDashboard/Sidebar";
 import MainView from "../components/UniversityDashboard/MainView";
-import Subscription from "../components/UniversityDashboard/Subscription";
-import AnalyticsDashboard from "../components/UniversityDashboard/AnalyticsDashboard";
-import Documents from "../components/UniversityDashboard/Documents";
-import ApplicationBoard from "../components/UniversityDashboard/ApplicationBoard";
-import "../components/UniversityDashboard/variables.css"; 
 import "./UniversityDashboard.css";
-
 
 export default function UniversityDashboard() {
   const [route, setRoute] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [theme, setTheme] = useState(() => {  
+  const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("uni_theme") || "light";
     } catch {
@@ -54,7 +48,6 @@ export default function UniversityDashboard() {
             <div>© {new Date().getFullYear()} University Admin • Support • Help Docs • Contact</div>
           </footer>
         </main>
-        
       </div>
     </div>
   );

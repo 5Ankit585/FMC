@@ -2,97 +2,111 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--card-bg);
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+  background: #fefce8; /* yellow-50 */
+  padding: 0.60rem 0.75rem; /* smaller padding */
+  border-bottom: 1px solid #fde047; /* yellow-300 */
   box-shadow: var(--shadow-sm);
   z-index: 100;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #000; /* default text color black */
 }
 
+/* Left Section */
 .ad-header-left {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem; /* tighter spacing */
 }
 
+/* Buttons (icons) */
 .ad-icon-btn {
   background: none;
   border: none;
-  color: var(--text-color);
+  color: #000; /* black icons */
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  padding: 0.2rem 0.3rem; /* smaller padding */
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.7rem; /* smaller */
 }
 
 .ad-icon-btn:hover,
 .ad-icon-btn:focus {
-  background-color: var(--color-primary);
-  color: #fff;
+  background-color: #fef9c3; /* yellow-100 */
+  color: #555; /* dark gray on hover */
 }
 
+/* Sidebar toggle svg */
 .ad-sidebar-toggle svg {
   display: block;
+  width: 16px; /* smaller */
+  height: 16px;
 }
 
+/* Search bar */
 .ad-search input {
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 0.3rem 0.6rem;
-  font-size: 1rem;
-  color: var(--text-color);
-  background-color: var(--card-bg);
-  width: 200px;
-  transition: border-color 0.3s ease;
+  border: 1px solid #fde047; /* yellow-300 */
+  border-radius: 8px;
+  padding: 0.2rem 0.4rem; /* smaller */
+  font-size: 0.75rem; /* smaller */
+  color: #000; /* black text */
+  background-color: #fff; /* cleaner look */
+  width: 140px; /* more compact */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ad-search input:focus {
-  border-color: var(--color-primary);
+  border-color: #ca8a04; /* yellow-600 */
   outline: none;
+  box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.2); /* soft yellow glow */
 }
 
+/* Center Section */
 .ad-header-center {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem; /* tighter */
   flex-grow: 1;
   justify-content: center;
 }
 
 .ad-logo {
-  height: 32px;
+  height: 20px; /* smaller */
   object-fit: contain;
 }
 
 .ad-title {
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.9rem; /* smaller */
+  color: #000; /* black title */
 }
 
+/* Right Section */
 .ad-header-right {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem; /* tighter */
 }
 
 .ad-theme-toggle {
-  font-size: 1.3rem;
+  font-size: 0.9rem; /* smaller icon */
 }
 
+/* Profile circle */
 .ad-profile {
-  background-color: var(--color-primary);
+  background-color: #000; /* black profile circle */
   color: white;
-  width: 36px;
-  height: 36px;
+  width: 28px; /* slightly smaller */
+  height: 28px;
   border-radius: 50%;
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 0.7rem; /* smaller */
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
 .ad-profile:hover {
-  background-color: var(--color-accent);
+  background-color: #333; /* dark gray hover */
 }

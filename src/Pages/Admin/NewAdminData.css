@@ -1,4 +1,4 @@
-tr {
+/* tr {
   background-color: gray;
 }
 
@@ -10,11 +10,11 @@ tr:nth-child(2n) {
 label {
   display: block;
   font:
-      1rem 'Fira Sans',
+      0.80rem 'Fira Sans', 
       sans-serif;
 }
 
 input,
 label {
   margin: 0.4rem 0;
-}
+} */

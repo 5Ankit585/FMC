@@ -5,87 +5,88 @@
   padding: 0;
 }
 
-/* Root variables for light mode */
+/* Root variables with Yellow Theme */
 :root {
-  --background-color: #F9FAFB;
-  --text-color: #1E293B;
-  --button-primary: #1D4ED8;
-  --button-accent: #FBBF24;
-  --button-hover: #2563EB;
-  --input-border: #D1D5DB;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --border-color: #E5E7EB;
-  --focus-ring: rgba(29, 78, 216, 0.2);
-  --text-secondary: #6B7280;
+  --background-color: #fefce8;   /* yellow-50 */
+  --background-alt: #fef9c3;     /* yellow-100 */
+  --text-color: #eab308;         /* yellow-500 */
+  --button-primary: #eab308;     /* yellow-500 */
+  --button-hover: #ca8a04;       /* yellow-700 */
+  --input-border: #fef9c3;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --border-color: #fef9c3;
+  --focus-ring: rgba(234, 179, 8, 0.25);
+  --text-secondary: #ca8a04;
+
+  /* New Theme Additions */
+  --soft-bg: #faf9f6;
+  --highlight-bg: #fef08a;   /* yellow-200 */
+  --highlight-hover: #f59e0b; /* amber-500 */
 }
 
-/* Dark mode variables */
+/* Dark mode override */
 .dark {
   --background-color: #1E293B;
-  --text-color: #F9FAFB;
-  --button-primary: #1D4ED8;
-  --button-accent: #FBBF24;
-  --button-hover: #60A5FA;
+  --text-color: #fef9c3;       /* soft yellow in dark mode */
+  --button-primary: #eab308;
+  --button-hover: #ca8a04;
   --input-border: #4B5563;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+                 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --border-color: #4B5563;
-  --focus-ring: rgba(96, 165, 250, 0.2);
-  --text-secondary: #9CA3AF;
+  --focus-ring: rgba(234, 179, 8, 0.25);
+  --text-secondary: #fef9c3;
 }
 
 /* Container */
 .container {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
+  background-color: var(--soft-bg); /* added off-white */
+  border: 3px solid var(--background-color);
 }
 
 /* Inputs */
 input {
   border: 1px solid var(--input-border);
   border-radius: 0.5rem;
-  padding: 0.875rem 1.25rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-  font-size: clamp(0.875rem, 2.5vw, 1rem);
-  line-height: 1.5;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus {
   outline: none;
   border-color: var(--button-primary);
-  box-shadow: 0 0 0 4px var(--focus-ring);
-}
-
-input:disabled {
-  background-color: var(--input-border);
-  color: var(--text-secondary);
-  opacity: 0.5;
-  cursor: not-allowed;
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 /* Buttons */
 button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 0.5rem;
   font-weight: 600;
-  transition-property: background-color, transform, box-shadow;
-  transition-duration: 0.3s, 0.2s, 0.3s;
-  transition-timing-function: ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--highlight-bg);
+  color: black;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
 }
 
 button:hover:not(:disabled) {
-  background-color: var(--button-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--highlight-hover);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-  transform: none;
 }
 
 /* Cards */
@@ -93,37 +94,32 @@ button:disabled {
   background-color: var(--background-color);
   color: var(--text-color);
   border-radius: 0.75rem;
-  padding: 2rem;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem;
   box-shadow: var(--card-shadow);
-}
-
-.card:hover {
-  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
 }
 
 /* Question Items */
 .question-item {
-  border-bottom: 1px solid var(--border-color);
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-alt);
+  padding: 1rem;
   border-radius: 0.5rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .question-item:hover {
   transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.question-item:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
+.question-item p {
+  color: var(--text-color);
 }
 
 /* Sidebar Links */
 .sidebar-link {
-  color: var(--button-accent);
-  transition: color 0.3s ease;
+  color: var(--text-color);
   font-weight: 500;
 }
 
@@ -132,66 +128,22 @@ button:disabled {
   text-decoration: underline;
 }
 
-/* Images */
-img {
-  border-radius: 0.5rem;
-  object-fit: cover;
-  max-width: 100%;
-}
-
-/* Loading spinner animation */
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Accessibility improvements */
-:focus-visible {
-  outline: 2px solid var(--button-primary);
-  outline-offset: 2px;
-}
-
-/* Responsive design */
-@media (max-width: 640px) {
-  .container {
-    padding: 1rem;
-  }
-
-  .card {
-    padding: 1.5rem;
-  }
-
-  button {
-    width: 100%;
-  }
-
-  input {
-    padding: 0.75rem 1rem;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 1024px) {
-  .container {
-    max-width: 90%;
-    padding: 1.5rem;
-  }
-}
-
-/* Utility classes */
+/* Utility */
 .flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.shadow {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* Dashboard Action Buttons */
+.dashboard-content .action-button {
+  background: var(--highlight-bg);
+  color: black;
+  border: 1px solid var(--border-color);
+}
+
+.dashboard-content .action-button:hover {
+  background: var(--highlight-hover);
+  color: #fff;
+  transform: translateY(-1px);
 }

@@ -28,9 +28,7 @@ const CoursesAndFees = ({ universityId }) => {
         const res = await fetch(`/api/universities/${universityId}/courses`);
         const data = await res.json();
 
-        // Debugging logs
         console.log("📌 Fetched University Data:", data);
-        console.log("📌 Courses:", data.courses);
 
         if (data.courses && Array.isArray(data.courses)) {
           setCourses(data.courses);
@@ -47,22 +45,22 @@ const CoursesAndFees = ({ universityId }) => {
   }, [universityId]);
 
   if (loading) {
-    return <p className="loading-text">Loading courses...</p>;
+    return <p className="uni-courses-loading">Loading courses...</p>;
   }
 
   return (
-    <div className={`courses-container ${darkMode ? "dark" : ""}`}>
-      <h2 className="courses-title">Courses & Fees</h2>
-      <div className="courses-table-wrapper">
-        <table className="courses-table">
+    <div className={`uni-courses-container ${darkMode ? "dark" : ""}`}>
+      <h2 className="uni-courses-title">Courses & Fees</h2>
+      <div className="uni-courses-table-wrapper">
+        <table className="uni-courses-table">
           <thead>
-            <tr className="courses-header">
-              <th className="courses-th">Course Name</th>
-              <th className="courses-th">Total Fees</th>
-              <th className="courses-th">Yearly Fees</th>
-              <th className="courses-th">Duration</th>
-              <th className="courses-th">Intake</th>
-              <th className="courses-th">Action</th>
+            <tr className="uni-courses-header">
+              <th className="uni-courses-th">Course Name</th>
+              <th className="uni-courses-th">Total Fees</th>
+              <th className="uni-courses-th">Yearly Fees</th>
+              <th className="uni-courses-th">Duration</th>
+              <th className="uni-courses-th">Intake</th>
+              <th className="uni-courses-th">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -70,21 +68,21 @@ const CoursesAndFees = ({ universityId }) => {
               courses.map((course, index) => (
                 <tr
                   key={index}
-                  className={`courses-row ${
-                    index === hoveredIndex ? "highlight-row" : ""
+                  className={`uni-courses-row ${
+                    index === hoveredIndex ? "uni-courses-highlight-row" : ""
                   }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  <td className="courses-td">{course.courseName}</td>
-                  <td className="courses-td">{course.totalFees}</td>
-                  <td className="courses-td">{course.yearlyFees}</td>
-                  <td className="courses-td">{course.duration}</td>
-                  <td className="courses-td">{course.intake}</td>
-                  <td className="courses-td">
+                  <td className="uni-courses-td">{course.courseName}</td>
+                  <td className="uni-courses-td">{course.totalFees}</td>
+                  <td className="uni-courses-td">{course.yearlyFees}</td>
+                  <td className="uni-courses-td">{course.duration}</td>
+                  <td className="uni-courses-td">{course.intake}</td>
+                  <td className="uni-courses-td">
                     <a
                       href={course.applyLink || "#"}
-                      className="apply-button"
+                      className="uni-courses-apply-button"
                       aria-label={`Apply for ${course.courseName}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -97,7 +95,7 @@ const CoursesAndFees = ({ universityId }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="courses-td no-data">
+                <td colSpan="6" className="uni-courses-td uni-courses-no-data">
                   No courses available for this university.
                 </td>
               </tr>

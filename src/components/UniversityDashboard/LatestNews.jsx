@@ -9,7 +9,7 @@ export default function LatestNews() {
       title: "New AI & Data Science Course Launched for 2025",
       date: "August 12, 2025",
       description: "Introducing our new B.Tech in AI & Data Science. Admissions open now!",
-      image: "https://source.unsplash.com/300x200/?education,technology",
+      image: "https://media.licdn.com/dms/image/v2/D5612AQFhbGfQlTwJQA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1684380897420?e=2147483647&v=beta&t=I4lAsx34IinhnlidHiisPJy4P7TYl65j1pes6IvzJ8M",
     },
     {
       id: 2,
@@ -17,7 +17,7 @@ export default function LatestNews() {
       title: "Scholarship Applications Open",
       date: "August 10, 2025",
       description: "Merit-based scholarships for 2025-26 academic year. Deadline: September 15, 2025.",
-      image: "https://source.unsplash.com/300x200/?scholarship,study",
+      image: "https://cfbmc.org/wp-content/uploads/2021/02/scholarships-open-1200-%C3%97-640-px.png",
     },
     {
       id: 3,
@@ -25,7 +25,7 @@ export default function LatestNews() {
       title: "Mid-Term Exam Schedule Released",
       date: "August 8, 2025",
       description: "Exams for all undergraduate programs start September 20, 2025.",
-      image: "https://source.unsplash.com/300x200/?exam,study",
+      image: "https://blog.ipleaders.in/wp-content/uploads/2021/05/online-course-blog-header.jpg",
     },
     {
       id: 4,
@@ -33,7 +33,7 @@ export default function LatestNews() {
       title: "AI Innovation Workshop",
       date: "August 15, 2025",
       description: "Join Dr. Jane Smith for a workshop on AI advancements. Register by August 13.",
-      image: "https://source.unsplash.com/300x200/?workshop,technology",
+      image: "https://media.istockphoto.com/id/1588288383/photo/back-view-of-student-raising-his-hand-to-answer-teachers-question-during-education-training.jpg?s=612x612&w=0&k=20&c=ZSyPrLqe6WdE81WXiESD5AqIVw1a7hKv85UI5I-Vwco=",
     },
     {
       id: 5,
@@ -41,7 +41,7 @@ export default function LatestNews() {
       title: "Annual Cultural Fest: Vibrance 2025",
       date: "August 20, 2025",
       description: "Celebrate with music, dance, and art. Open to all students!",
-      image: "https://source.unsplash.com/300x200/?festival,culture",
+      image: "https://media.licdn.com/dms/image/v2/D5612AQGPXUBLeOloxQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1697206845236?e=2147483647&v=beta&t=eDcSu52WVSEgaXt_FeqU-e6m-jCSdU8ABziKByI3fqI",
     },
     {
       id: 6,

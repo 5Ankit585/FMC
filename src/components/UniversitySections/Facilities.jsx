@@ -17,12 +17,12 @@ const iconMap = {
   "civil lab": <FaBuilding style={{ color: "#007bff" }} />,
   "electrical lab": <FaBolt style={{ color: "#007bff" }} />,
   "digital classroom": <FaChalkboardTeacher style={{ color: "#007bff" }} />,
-  "auditorium": <MdMeetingRoom style={{ color: "#007bff" }} />,
-  "transport": <FaBus style={{ color: "#007bff" }} />,
-  "canteen": <FaUtensils style={{ color: "#007bff" }} />,
-  "gym": <FaDumbbell style={{ color: "#007bff" }} />,
-  "clinic": <FaClinicMedical style={{ color: "#007bff" }} />,
-  "hospital": <FaHospital style={{ color: "#007bff" }} />,
+  auditorium: <MdMeetingRoom style={{ color: "#007bff" }} />,
+  transport: <FaBus style={{ color: "#007bff" }} />,
+  canteen: <FaUtensils style={{ color: "#007bff" }} />,
+  gym: <FaDumbbell style={{ color: "#007bff" }} />,
+  clinic: <FaClinicMedical style={{ color: "#007bff" }} />,
+  hospital: <FaHospital style={{ color: "#007bff" }} />,
   "cricket ground": <GiCricketBat style={{ color: "#007bff" }} />,
   "football ground": <GiSoccerBall style={{ color: "#007bff" }} />,
   "boys hostel": <FaUsers style={{ color: "#007bff" }} />,
@@ -45,20 +45,20 @@ const Facilities = ({ universityId }) => {
   }, [universityId]);
 
   return (
-    <div>
-      <h2>Campus Facilities</h2>
+    <div className="facilities-container">
+      <h2 className="facilities-title">Campus Facilities</h2>
       <div className="facilities-grid">
         {facilities.length > 0 ? (
           facilities.map((fac, idx) => {
             const key = fac.name?.toLowerCase();
-            const icon = iconMap[key] || <FaBuilding style={{ color: "#007bff" }} />; // default icon
+            const icon = iconMap[key] || <FaBuilding style={{ color: "#007bff" }} />;
             return (
               <div key={idx} className="facility-card">
                 <div className="facility-header">
                   <span className="facility-icon">{icon}</span>
-                  <h3>{fac.name}</h3>
+                  <h3 className="facility-title">{fac.name}</h3>
                 </div>
-                <p>{fac.description || "No description available"}</p>
+                <p className="facility-description">{fac.description || "No description available"}</p>
               </div>
             );
           })

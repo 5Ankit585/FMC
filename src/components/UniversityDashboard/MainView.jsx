@@ -10,6 +10,19 @@ import Settings from "./Settings";
 import "./MainView.css";
 
 export default function MainView({ route }) {
+  // 🔹 Sample data
+  const recentApplications = [
+    { id: 1, student: "John Doe", institute: "MIT", course: "Computer Science", stage: "Submitted" },
+    { id: 2, student: "Jane Smith", institute: "Stanford", course: "Mathematics", stage: "Under Review" },
+    { id: 3, student: "Alice Johnson", institute: "Harvard", course: "Physics", stage: "Approved" },
+  ];
+
+  const recentReceipts = [
+    { id: "R-1001", student: "John Doe", institute: "MIT", amount: "$1200" },
+    { id: "R-1002", student: "Jane Smith", institute: "Stanford", amount: "$900" },
+    { id: "R-1003", student: "Alice Johnson", institute: "Harvard", amount: "$1500" },
+  ];
+
   switch (route) {
     case "My Profile":
       return (
@@ -93,6 +106,7 @@ export default function MainView({ route }) {
 
           {/* Tables */}
           <div className="tables-grid">
+            {/* Recent Applications */}
             <div className="table-card">
               <h3>Recent Applications</h3>
               <table>
@@ -105,16 +119,19 @@ export default function MainView({ route }) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>—</td>
-                    <td>—</td>
-                    <td>—</td>
-                    <td>—</td>
-                  </tr>
+                  {recentApplications.map((app) => (
+                    <tr key={app.id}>
+                      <td>{app.student}</td>
+                      <td>{app.institute}</td>
+                      <td>{app.course}</td>
+                      <td>{app.stage}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
+            {/* Recent Receipts */}
             <div className="table-card">
               <h3>Recent Receipts</h3>
               <table>
@@ -128,13 +145,19 @@ export default function MainView({ route }) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>—</td>
-                    <td>—</td>
-                    <td>—</td>
-                    <td>—</td>
-                    <td>—</td>
-                  </tr>
+                  {recentReceipts.map((rec) => (
+                    <tr key={rec.id}>
+                      <td>{rec.id}</td>
+                      <td>{rec.student}</td>
+                      <td>{rec.institute}</td>
+                      <td>{rec.amount}</td>
+                      <td>
+                        <button className="primary-btn" style={{ padding: "0.25rem 0.5rem", fontSize: "0.7rem" }}>
+                          ⬇
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

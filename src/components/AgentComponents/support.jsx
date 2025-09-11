@@ -19,6 +19,55 @@ const Support = () => {
       date: "2025-08-16",
       details: "Error processing tuition payment.",
     },
+    {
+      id: 3,
+      user: "professor@university.com",
+      issue: "Grade submission not working",
+      status: "Pending",
+      date: "2025-08-18",
+      details: "System not saving entered grades for students.",
+    },
+    {
+      id: 4,
+      user: "admin@university.com",
+      issue: "Email notifications delayed",
+      status: "Open",
+      date: "2025-08-19",
+      details: "Students reporting delays in receiving system emails.",
+    },
+    {
+      id: 5,
+      user: "student2@university.com",
+      issue: "Unable to reset password",
+      status: "Closed",
+      date: "2025-08-20",
+      details: "Password reset link expired before use.",
+    },
+    {
+      id: 6,
+      user: "staff3@university.com",
+      issue: "Course enrollment issue",
+      status: "Open",
+      date: "2025-08-21",
+      details: "Student enrollment not reflecting in system.",
+    },
+    {
+      id: 7,
+      user: "student3@university.com",
+      issue: "Library access denied",
+      status: "Pending",
+      date: "2025-08-22",
+      details: "ID card not recognized by library entry system.",
+    },
+    {
+      id: 8,
+      user: "it.support@university.com",
+      issue: "VPN not connecting",
+      status: "Open",
+      date: "2025-08-23",
+      details: "Staff unable to connect to university VPN remotely.",
+    },
+
   ]);
 
   const [response, setResponse] = useState("");

@@ -1,9 +1,11 @@
+/* ===== Placement Section (Yellow Theme) ===== */
+
 /* Container */
 .placement-container {
-  background-color: var(--background-color);
+  background-color: #fffefc; /* soft yellowish background */
   min-height: 100vh;
   padding: 1rem;
-  color: var(--text-color);
+  color: #000 !important; /* black text */
 }
 
 /* Hero Section */
@@ -16,12 +18,12 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: var(--text-color);
+  color: #000 !important; /* force black */
 }
 
 .hero-subtitle {
   font-size: 0.875rem;
-  color: var(--border-color); 
+  color: #000 !important; /* force black */
   margin-bottom: 0.75rem;
 }
 
@@ -35,19 +37,14 @@
 }
 
 .hero-stats div {
-  background-color: var(--button-primary); 
+  background-color: #fcd34d; /* amber */
   padding: 0.5rem;
   border-radius: 0.25rem;
-  color: #FFFFFF;
+  color: #000 !important; /* black text */
   flex: 1;
-  min-width: 120px; 
-  max-width: 150px; 
+  min-width: 120px;
+  max-width: 150px;
   text-align: center;
-}
-
-.dark .hero-stats div {
-  background-color: var(--dropdown-bg); 
-  color: var(--dropdown-text); 
 }
 
 /* Recruiters Section */
@@ -60,7 +57,7 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 0.75rem;
-  color: var(--text-color);
+  color: #000 !important; /* black */
 }
 
 .recruiters-grid {
@@ -71,28 +68,25 @@
 }
 
 .recruiter-card {
-  background-color: var(--button-primary); 
-  padding: 0.4rem; 
+  background-color: #fde68a; /* lighter amber */
+  padding: 0.4rem;
   border-radius: 0.25rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50px; 
-}
-
-.dark .recruiter-card {
-  background-color: var(--dropdown-bg); 
+  height: 50px;
 }
 
 .recruiter-card:hover {
-  transform: scale(1.03); 
+  transform: scale(1.03);
+  background-color: #fcd34d; /* stronger amber on hover */
 }
 
 .recruiter-logo {
-  width: 50px; 
-  height: 30px; 
+  width: 50px;
+  height: 30px;
   object-fit: contain;
 }
 
@@ -120,25 +114,34 @@
 .stats-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--background-color);
+  background-color: #fffefc;
+  border: 1px solid #fcd34d;
+  color: #000 !important; /* force black */
 }
 
 .stats-th,
 .stats-td {
   padding: 0.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid #fcd34d;
   font-size: 0.75rem;
   text-align: center;
-}
-
-.dark .stats-th,
-.dark .stats-td {
-  border-color: var(--border-color);
+  color: #000 !important; /* force black */
 }
 
 .stats-th {
-  background-color: var(--button-primary);
-  color: #FFFFFF;
+  background-color: #fcd34d;
+  font-weight: 600;
+}
+
+/* ✅ Zebra Stripe Rows (like app-table) */
+.stats-table tbody tr:nth-child(even) td {
+  background: #fff; /* white */
+}
+.stats-table tbody tr:nth-child(odd) td {
+  background: #fffef7; /* light cream */
+}
+.stats-table tbody tr:hover td {
+  background: #fef08a; /* hover highlight */
 }
 
 /* Branch Section */
@@ -158,45 +161,37 @@
 
 .accordion-item {
   flex: 1;
-  min-width: 120px; 
-  max-width: 150px; 
+  min-width: 120px;
+  max-width: 150px;
 }
 
 .accordion-toggle {
   width: 100%;
-  background-color: var(--button-primary);
+  background-color: #fcd34d;
   padding: 0.5rem;
   border-radius: 0.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.875rem;
-  color: #FFFFFF;
-}
-
-.dark .accordion-toggle {
-  background-color: var(--dropdown-bg); 
-  color: var(--dropdown-text); 
-}
-
-.accordion-title {
+  color: #000 !important;
   font-weight: 600;
+}
+
+.accordion-toggle:hover {
+  background-color: #fde68a;
 }
 
 .accordion-icon {
   font-size: 0.75rem;
+  color: #000 !important;
 }
 
 .accordion-content {
-  background-color: var(--button-accent); 
+  background-color: #fef9c3; /* lightest amber */
   padding: 0.5rem;
   border-bottom-left-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
   font-size: 0.75rem;
-  color: var(--text-color); 
-}
-
-.dark .accordion-content {
-  background-color: var(--dropdown-bg);
-  color: var(--dropdown-text); 
+  color: #000 !important;
 }

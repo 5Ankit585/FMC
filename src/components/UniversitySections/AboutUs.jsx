@@ -34,13 +34,13 @@ const AboutUs = ({ university }) => {
 
   return (
     <div className="about-us-container">
-      {/* Title */}
-      <h2 className="about-us-title">About {university.instituteName}</h2>
+      {/* Left Side: About Content */}
+      <div className="about-us-content">
+        <h2 className="about-us-title">About {university.instituteName}</h2>
+        <p className="about-us-description">{university.description}</p>
+      </div>
 
-      {/* Description */}
-      <p className="about-us-description">{university.description}</p>
-
-      {/* Image Carousel */}
+      {/* Right Side: Image Carousel */}
       <div className="about-us-image">
         {images.length > 0 ? (
           <div className="image-carousel">
@@ -62,7 +62,9 @@ const AboutUs = ({ university }) => {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`indicator ${currentSlide === index ? "active" : ""}`}
+                  className={`indicator ${
+                    currentSlide === index ? "active" : ""
+                  }`}
                 />
               ))}
             </div>

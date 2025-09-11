@@ -194,7 +194,7 @@ const Wallet = () => {
       </section>
 
       <section className="wallet-table-container">
-        <h2 className="wallet-title" style={{ fontSize: '1rem', marginBottom: '0.5rem', textAlign: 'left' }}>
+        <h2 className="wallet-title">
           Transaction History
         </h2>
         <div className="wallet-table-wrapper">

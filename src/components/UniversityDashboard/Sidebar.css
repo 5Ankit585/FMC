@@ -1,139 +1,106 @@
-/* Define light and dark theme variables */
-:root {
-  --card-bg-light: #ffffff;
-  --card-bg-dark: #1f2937;
-  --border-color-light: #e5e7eb;
-  --border-color-dark: #374151;
-  --text-color-light: #374151;
-  --text-color-dark: #d1d5db;
-  --hover-bg-light: #FBBF24; /* Original yellow for hover */
-  --hover-bg-dark: #FBBF24; /* Original yellow for hover */
-  --color-primary: #10b981; /* Emerald green for active state */
-  --color-accent: #059669; /* Darker shade for active border */
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+/* Sidebar base */
+.ud-sidebar {
+  background-color: #ffffff; /* changed to white */
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #facc15; /* yellow accent */
+  flex-shrink: 0;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #111827; /* black text as default */
 }
 
-/* Default to light theme */
-[data-theme="light"] {
-  --card-bg: var(--card-bg-light);
-  --border-color: var(--border-color-light);
-  --text-color: var(--text-color-light);
-  --hover-bg: var(--hover-bg-light);
+/* ===== Custom Yellow Scrollbar ===== */
+.ud-sidebar::-webkit-scrollbar {
+  width: 6px;
 }
 
-[data-theme="dark"] {
-  --card-bg: var(--card-bg-dark);
-  --border-color: var(--border-color-dark);
-  --text-color: var(--text-color-dark);
-  --hover-bg: var(--hover-bg-dark);
+.ud-sidebar::-webkit-scrollbar-thumb {
+  background: #facc15; /* yellow */
+  border-radius: 6px;
+}
+
+.ud-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #eab308; /* darker yellow */
 }
 
 .ud-sidebar {
-  background-color: var(--card-bg);
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--border-color);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  flex-shrink: 0;
-  overflow-y: auto;
-  box-shadow: var(--shadow);
-  height: 100vh;
-  position: sticky;
-  top: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #facc15 transparent; /* Firefox support */
 }
 
 .ud-sidebar.closed {
-  transform: translateX(-250px);
+  transform: translateX(-240px);
 }
 
+/* ===== Brand ===== */
 .ud-brand {
-  padding: 1.5rem 1rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-color);
   display: flex;
+  align-items: center;
   justify-content: flex-start;
-  transition: color 0.3s ease;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #fde047;
+  background: #ffffff; /* changed to white */
 }
 
-.ud-brand:hover {
-  color: #FBBF24; /* Original yellow on hover */
+.ud-brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+.ud-brand-text strong {
+  font-size: 1rem;
+  color: #111827; /* black title */
+}
+
+.ud-brand-text small {
+  font-size: 0.7rem;
+  color: #444; /* dark gray subtitle */
+}
+
+/* ===== Menu ===== */
 .ud-menu {
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 0;
+  padding: 1rem 0;
+  flex-grow: 1;
+  gap: 0.4rem;
 }
 
+/* ===== Menu Items ===== */
 .ud-menu-item {
   background: none;
   border: none;
   text-align: left;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
   cursor: pointer;
-  color: var(--text-color);
+  color: #111827; /* black base text */
   display: flex;
-  justify-content: flex-start;
-  border-left: 4px solid transparent;
-  transition: all 0.2s ease;
-  position: relative;
+  align-items: center;
+  border-left: 3px solid transparent;
+  border-radius: 0.25rem;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
+/* Hover + Active */
 .ud-menu-item:hover,
-.ud-menu-item:focus {
-  background-color: #2563EB; /* Blue background */
-  border-left-color: #FBBF24; /* Match border with background */
-  color: #ffffff; /* White text for contrast */
-}
-
-.ud-menu-item:hover::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 1.25rem;
-  width: calc(100% - 2.5rem);
-  height: 2px;
-  background-color: #FBBF24; /* Original yellow underline */
-  opacity: 0.3;
-}
-
 .ud-menu-item.active {
-  background-color: #2563EB; /* Blue background */
-  color: #ffffff; /* White text */
-  border-left-color: #FBBF24; /* Blue border */
+  background-color: #fef9c3;
+  color: #000; /* stronger black when active */
+  border-left-color: #facc15; /* yellow accent */
   font-weight: 600;
 }
 
-.ud-menu-label {
-  flex-grow: 1;
-  font-size: 1rem;
-  font-weight: bold; /* Updated to bold text */
-  transition: color 0.2s ease;
-}
-
-/* Smooth transitions */
-html {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Scrollbar styling */
-.ud-sidebar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.ud-sidebar::-webkit-scrollbar-track {
-  background: var(--card-bg);
-}
-
-.ud-sidebar::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-
-.ud-sidebar::-webkit-scrollbar-thumb:hover {
-  background: #FBBF24; /* Original yellow scrollbar thumb on hover */
+/* ===== Footer ===== */
+.ud-sidebar-footer {
+  padding: 0.75rem;
+  font-size: 0.7rem;
+  color: #444; /* dark gray text */
+  border-top: 1px solid #fde047;
+  text-align: center;
+  background: #ffffff; /* changed to white */
 }

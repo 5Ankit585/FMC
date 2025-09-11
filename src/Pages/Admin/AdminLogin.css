@@ -1,116 +1,98 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap"); */
-/* body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background: #000;
-    color: #eee719;
-  } */
-  
-  .form__container {
-    min-height: 100vh;
-    background: linear-gradient(90deg, #323c3e 0%, #0a5612 100%);
-  }
-  .form__container form {
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    padding: 20px;
-  }
-  .form__heading {
-    font-family: "Dancing Script", cursive;
-    margin-bottom: 10px;
-  }
-  .form__button {
-    width: 100%;
-    background-color: black;
-    color: white;
-    padding: 5px;
-  }
-  .form__button:hover {
-    background-color: rgba(0, 0, 0, 0.795);
-  }
-  .form__submit-btn {
-    margin-top: 20px;
-    width: 100%;
-    color: white;
-    background-color: black;
-    padding: 10px 0px;
-  }
-  .form__submit-btn:hover {
-    opacity: 0.9;
-  }
-  .content {
-    min-height: 73vh !important;
-  }
- 
-  
+/* Import font */
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap");
 
+/* Container */
+.admin-login__container {
+  min-height: 100vh;
+  background: linear-gradient(90deg, #323c3e 0%, #0a5612 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  .register{
+/* Register Box */
+.admin-login__register {
   max-width: 978px;
-  width: 100vw;
-  display:flex;
+  width: 100%;
+  display: flex;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Left Column */
+.admin-login__col-1 {
+  margin: auto;
+  padding: 3em;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.admin-login__heading {
+  font-family: "Dancing Script", cursive;
+  font-size: 2rem;
+  margin-bottom: 0.5em;
+  color: #0a5612;
+}
+
+.admin-login__subtitle {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 1.5em;
+}
+
+/* Form */
+.admin-login__form {
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.admin-login__form input {
   border: 1px solid #e9ecef;
   border-radius: 5px;
-  /* box-shadow: 1px 3px 10px #e9ecef; */
-  background-color: white;
+  padding: 0.9em 1em;
+  margin-bottom: 1em;
+  font-size: 1rem;
 }
 
-.register span{
-  color: #adb5bd;
-}
-
-#form{
-  max-width: 320px;
-  width: 100vw;
-  margin: 2em auto;
-}
-
-#form >  input, .btn{
-  border: 1px solid #e9ecef;
-  padding: .9em 1em;
-}
-
-#form > input:focus{
+.admin-login__form input:focus {
   outline: none;
+  border-color: #0a5612;
+  box-shadow: 0 0 0 3px rgba(10, 86, 18, 0.2);
 }
 
-#form > .btn{
+/* Button */
+.admin-login__btn {
   background-color: #003049;
-  color: #e9ecef;
-  font-size: 1em;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.9em 1em;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  width: 100%;
 }
 
-.flex{
-  display: flex;
-  gap: 1em;
+.admin-login__btn:hover {
+  background-color: #002537;
 }
 
-/* .flex-col{
-  flex-direction: column;
-} */
-
-.register .col-1{
-  margin: auto;
-  padding: 3em 0;
-}
-
-.register .col-2 img{
+/* Right Column */
+.admin-login__col-2 img {
   width: 480px;
   height: 100%;
   object-fit: cover;
-  align-self: flex-end;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
   display: none;
 }
 
-@media screen and (min-width: 860px)  {
-  .register .col-2 img{
-    display: initial;
+@media screen and (min-width: 860px) {
+  .admin-login__col-2 img {
+    display: block;
   }
 }

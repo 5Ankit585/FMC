@@ -11,7 +11,7 @@ import Announcements from "./Announcements";
 import Support from "./support";
 import Settings from "./settings";
 
-export default function MainView({ route }) {
+export default function MainView({ route, sidebarOpen }) {
   const [students, setStudents] = useState([
     {
       id: 1,
@@ -72,17 +72,16 @@ export default function MainView({ route }) {
   const addStudent = (newStudent) => {
     const studentWithId = {
       ...newStudent,
-      id: students.length ? Math.max(...students.map(s => s.id)) + 1 : 1,
+      id: students.length ? Math.max(...students.map((s) => s.id)) + 1 : 1,
     };
     setStudents((prev) => [...prev, studentWithId]);
-    // Add payment entry for the new student
     setPayments((prev) => [
       ...prev,
       {
-        id: prev.length ? Math.max(...prev.map(p => p.id)) + 1 : 1,
+        id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1,
         studentName: newStudent.name,
         course: newStudent.details?.course || "Not Assigned",
-        amount: 5000, // Default amount, adjust as needed
+        amount: 5000,
         status: "Pending",
         date: new Date().toISOString().split("T")[0],
         email: newStudent.email || "N/A",
@@ -92,9 +91,10 @@ export default function MainView({ route }) {
 
   const updateStudent = (id, updatedStudent) => {
     setStudents((prev) =>
-      prev.map((student) => (student.id === id ? { ...student, ...updatedStudent } : student))
+      prev.map((student) =>
+        student.id === id ? { ...student, ...updatedStudent } : student
+      )
     );
-    // Update payment entry for the student
     setPayments((prev) =>
       prev.map((payment) =>
         payment.id === id
@@ -111,7 +111,6 @@ export default function MainView({ route }) {
 
   const deleteStudent = (id) => {
     setStudents((prev) => prev.filter((student) => student.id !== id));
-    // Optionally, remove payment entry for the student
     setPayments((prev) => prev.filter((payment) => payment.id !== id));
   };
 
@@ -120,7 +119,7 @@ export default function MainView({ route }) {
       ...prev,
       {
         ...payment,
-        id: prev.length ? Math.max(...prev.map(p => p.id)) + 1 : 1,
+        id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1,
         date: new Date().toISOString().split("T")[0],
       },
     ]);
@@ -128,82 +127,69 @@ export default function MainView({ route }) {
 
   const updatePayment = (id, updated) => {
     setPayments((prev) =>
-      prev.map((payment) => (payment.id === id ? { ...payment, ...updated } : payment))
+      prev.map((payment) =>
+        payment.id === id ? { ...payment, ...updated } : payment
+      )
     );
   };
 
+  let content;
   switch (route) {
     case "dashboard":
-      return (
-        <div className="main-view">
-          <DashboardAgent />
-        </div>
-      );
+      content = <DashboardAgent />;
+      break;
     case "PartnerInstitutes":
-      return (
-        <div className="main-view">
-          <PartnerInstitutes />
-        </div>
-      );
+      content = <PartnerInstitutes />;
+      break;
     case "students":
-      return (
-        <div className="main-view">
-          <Students
-            students={students}
-            addStudent={addStudent}
-            updateStudent={updateStudent}
-            deleteStudent={deleteStudent}
-          />
-        </div>
+      content = (
+        <Students
+          students={students}
+          addStudent={addStudent}
+          updateStudent={updateStudent}
+          deleteStudent={deleteStudent}
+        />
       );
+      break;
     case "Applications":
-      return (
-        <div className="main-view">
-          <Applications students={students} addPayment={addPayment} />
-        </div>
-      );
+      content = <Applications students={students} addPayment={addPayment} />;
+      break;
     case "Payments":
-      return (
-        <div className="main-view">
-          <Payments payments={payments} addPayment={addPayment} updatePayment={updatePayment} />
-        </div>
+      content = (
+        <Payments
+          payments={payments}
+          addPayment={addPayment}
+          updatePayment={updatePayment}
+        />
       );
+      break;
     case "commission-wallet":
-      return (
-        <div className="main-view">
-          <Wallet />
-        </div>
-      );
+      content = <Wallet />;
+      break;
     case "reports":
-      return (
-        <div className="main-view">
-          <Reports />
-        </div>
-      );
+      content = <Reports />;
+      break;
     case "Announcements":
-      return (
-        <div className="main-view">
-          <Announcements />
-        </div>
-      );
+      content = <Announcements />;
+      break;
     case "Support":
-      return (
-        <div className="main-view">
-          <Support />
-        </div>
-      );
+      content = <Support />;
+      break;
     case "Settings":
-      return (
-        <div className="main-view">
-          <Settings />
-        </div>
-      );
+      content = <Settings />;
+      break;
     default:
-      return (
-        <div className="main-view">
+      content = (
+        <>
           <h2>Welcome to DashboardAgent</h2>
           <p>Please select a valid route.</p>
-        </div>
+        </>
       );
   }
+
+  return (
+    <div className={`main-view ${!sidebarOpen ? "full-width" : ""}`}>
+      {content}
+    </div>
+  );
 }

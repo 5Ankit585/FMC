@@ -2,10 +2,15 @@ import React from "react";
 import "./DashboardAgent.css";
 
 function RecentApplications() {
-  const data = [
-    { student: "John Doe", institute: "ABC University", course: "MBA", stage: "Interview" },
-    { student: "Jane Smith", institute: "XYZ College", course: "B.Tech", stage: "Submitted" },
-  ];
+const data = [
+  { student: "John Doe", institute: "ABC University", course: "MBA", stage: "Interview" },
+  { student: "Jane Smith", institute: "XYZ College", course: "B.Tech", stage: "Submitted" },
+  { student: "Alice Johnson", institute: "Global Institute", course: "MCA", stage: "Shortlisted" },
+  { student: "Michael Brown", institute: "Stanford University", course: "MS Computer Science", stage: "Offer Letter" },
+  { student: "Emily Davis", institute: "Harvard College", course: "BBA", stage: "Submitted" },
+  { student: "Daniel Wilson", institute: "Cambridge Institute", course: "PhD Physics", stage: "Interview" },
+  { student: "Sophia Lee", institute: "MIT", course: "Data Science", stage: "Shortlisted" },
+];
 
   return (
     <div className="ad-table-card">

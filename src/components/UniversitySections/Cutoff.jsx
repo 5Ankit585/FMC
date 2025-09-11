@@ -17,8 +17,6 @@ const Cutoff = ({ universityId }) => {
         setLoading(true);
         setError(null);
 
-        console.log("🎯 Fetching cutoffs for universityId:", universityId);
-
         const res = await fetch(
           `http://localhost:5000/api/cutoff/${universityId}/cutoffs`
         );
@@ -28,7 +26,6 @@ const Cutoff = ({ universityId }) => {
         }
 
         const data = await res.json();
-        console.log("📊 Cutoff API response:", data);
 
         if (data.success) {
           setCutoffData(data.cutoffs || []);
@@ -36,7 +33,6 @@ const Cutoff = ({ universityId }) => {
           setError(data.message || "Failed to fetch cutoff data");
         }
       } catch (err) {
-        console.error("❌ Fetch error:", err);
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
@@ -47,20 +43,20 @@ const Cutoff = ({ universityId }) => {
   }, [universityId]);
 
   return (
-    <div className="cutoff-container">
-      <div className="cutoff-header">
+    <div className="uni-cutoff-container">
+      <div className="uni-cutoff-header">
         <h2>Cutoff for Year 2024</h2>
       </div>
 
       {loading ? (
-        <p>Loading cutoffs...</p>
+        <p className="uni-cutoff-loading">Loading cutoffs...</p>
       ) : error ? (
-        <p className="error">{error}</p>
+        <p className="uni-cutoff-error">{error}</p>
       ) : cutoffData.length === 0 ? (
-        <p>No cutoff data available.</p>
+        <p className="uni-cutoff-no-data">No cutoff data available.</p>
       ) : (
-        <div className="table-wrapper">
-          <table className="cutoff-table">
+        <div className="uni-cutoff-table-wrapper">
+          <table className="uni-cutoff-table">
             <thead>
               <tr>
                 <th>Course</th>

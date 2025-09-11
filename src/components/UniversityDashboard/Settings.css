@@ -1,68 +1,104 @@
-.settings-page {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  padding: 0.6rem; /* very compact padding */
+/* Root Settings Page */
+.ud-settings-page {
+  background: #faf9f6; /* new light background */
+  color: #000;
+  padding: 1rem 0.8rem;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.75rem; /* compact font */
 }
 
-.settings-subtext {
-  color: var(--color-muted);
-  margin-bottom: 0.6rem; 
-  font-size: 0.7rem; /* smaller subtext */
+/* Header */
+.ud-settings-header {
+  margin-bottom: 1rem;
+  text-align: center;
+  border-bottom: 1px dashed #facc15; /* yellow accent */
+  padding-bottom: 0.5rem;
 }
 
-.settings-grid {
+.ud-settings-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  color: #000;
+}
+
+.ud-settings-subtext {
+  color: #444;
+  font-size: 0.7rem;
+}
+
+/* Grid Layout */
+.ud-settings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* tighter cards */
-  gap: 0.6rem; /* reduced gap */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.settings-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 0.6rem; /* smaller rounding */
-  padding: 0.6rem; /* very compact padding */
+/* Card */
+.ud-settings-card {
+  background: #fffefc;
+  border: 3px solid #fefce8; /* updated border */
+  border-radius: 0.5rem;
+  padding: 0.8rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  /* hover effects removed */
 }
 
-.settings-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.settings-icon {
-  font-size: 1.2rem; /* smaller icon */
-  color: var(--color-primary);
+/* Icon Badge */
+.ud-settings-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fef9c3; /* pale yellow */
+  border: 1px solid #facc15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
   margin-bottom: 0.5rem;
+  color: #000;
 }
 
-.settings-info h3 {
-  font-size: 0.85rem;  /* smaller heading */
-  margin-bottom: 0.15rem;
+/* Card Content */
+.ud-settings-info h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: #000;
 }
 
-.settings-info p {
-  font-size: 0.65rem; /* very compact description */
-  color: var(--color-muted);
+.ud-settings-info p {
+  font-size: 0.65rem;
+  color: #000;
+  line-height: 1.3;
+  margin-bottom: auto;
 }
 
-.settings-btn {
-  margin-top: 0.4rem;
-  align-self: flex-start;
-  padding: 0.2rem 0.5rem; /* tiny button */
-  background-color: var(--color-primary);
-  color: white;
+/* Button */
+.ud-settings-btn {
+  margin-top: 0.6rem;
+  align-self: flex-end;
+  padding: 0.25rem 0.6rem;
+  background: #fef08a; /* updated bg */
+  color: #000; /* black text */
   border: none;
-  border-radius: 0.3rem;
-  font-size: 0.65rem; /* tiny text */
+  border-radius: 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 
-.settings-btn:hover {
-  background-color: var(--color-primary-dark);
+.ud-settings-btn:hover,
+.dashboard-content .action-button:hover {
+  background: #f59e0b; /* hover color */
+  color: #fff;
+  transform: translateY(-1px);
 }

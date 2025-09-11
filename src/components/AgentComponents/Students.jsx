@@ -101,15 +101,14 @@ const Students = ({ students, addStudent, updateStudent, deleteStudent }) => {
 
             {/* Add button */}
             <button
-              className="btn btn-primary"
+              className="btn btn-add-student"
               onClick={() => {
                 setEditingStudent(null);
                 setIsModalOpen(true);
               }}
             >
-              <span className="sr-only">Add</span>
-              <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", marginRight: ".5rem" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", marginRight: ".3rem" }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                   <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
               </span>

@@ -3,13 +3,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import "./Documents.css";
 import { db } from "../../firebase";
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, deleteDoc, doc as firestoreDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp,
+  deleteDoc,
+  doc as firestoreDoc,
+} from "firebase/firestore";
 
 export default function Documents() {
-  const [documents, setDocuments] = useState([]); // Uploaded documents
+  const [documents, setDocuments] = useState([]);
   const [previewDoc, setPreviewDoc] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [file, setFile] = useState(null);
 
-  // Fetch existing documents from Firestore
+  // Fetch docs from Firestore
   useEffect(() => {
     const fetchDocuments = async () => {
       const q = query(collection(db, "documents"), orderBy("createdAt", "desc"));
@@ -20,97 +31,111 @@ export default function Documents() {
       }));
       setDocuments(docsArray);
     };
-
     fetchDocuments();
   }, []);
 
-  // Save Cloudinary file metadata to Firestore
-  const saveToFirestore = async (fileInfo) => {
+  // Upload file to Cloudinary
+  const uploadToCloudinary = async () => {
+    if (!file) return;
+
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "universityproject"); // your preset
+    data.append("cloud_name", "dapjccnab"); // your cloud name
+
     try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dapjccnab/auto/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+      const uploaded = await res.json();
+      console.log("Uploaded:", uploaded);
+
+      // Save metadata to Firestore
       const docRef = await addDoc(collection(db, "documents"), {
-        name: fileInfo.original_filename + "." + fileInfo.format,
-        type: fileInfo.resource_type,
-        url: fileInfo.secure_url,
-        cloudinaryId: fileInfo.public_id,
-        folder: fileInfo.folder || "",
+        name: uploaded.original_filename + "." + uploaded.format,
+        type: uploaded.resource_type,
+        url: uploaded.secure_url,
+        cloudinaryId: uploaded.public_id,
         createdAt: serverTimestamp(),
       });
-      console.log("Saved in Firestore with ID:", docRef.id);
-    } catch (error) {
-      console.error("Error saving to Firestore:", error);
+
+      setDocuments((prev) => [
+        {
+          id: docRef.id,
+          name: uploaded.original_filename + "." + uploaded.format,
+          type: uploaded.resource_type,
+          url: uploaded.secure_url,
+        },
+        ...prev,
+      ]);
+
+      setShowPopup(false);
+      setFile(null);
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Upload failed!");
     }
   };
 
-  // Open Cloudinary Upload Widget
-  const handleUpload = () => {
-    const myWidget = window.cloudinary.createUploadWidget(
-      {
-        cloudName: "dapjccnab",           // replace with your Cloudinary cloud name
-        uploadPreset: "universityproject",     // your unsigned preset
-        multiple: true,
-        resourceType: "auto",
-      },
-      (error, result) => {
-        if (!error && result && result.event === "success") {
-          console.log("Uploaded:", result.info);
-
-          // Save metadata in Firestore
-          saveToFirestore(result.info);
-
-          // Update local state for immediate UI
-          const newDoc = {
-            id: result.info.public_id,
-            name: result.info.original_filename + "." + result.info.format,
-            type: result.info.resource_type,
-            url: result.info.secure_url,
-          };
-          setDocuments((prev) => [newDoc, ...prev]);
-        } else if (error) {
-          console.error("Upload error:", error);
-          alert("Failed to upload document");
-        }
-      }
-    );
-
-    myWidget.open();
-  };
-
-  // Delete document from Firestore (files remain in Cloudinary)
+  // Delete doc
   const handleDelete = async (docItem) => {
     if (!window.confirm("Delete this document?")) return;
-
     try {
-      // Delete from Firestore
       await deleteDoc(firestoreDoc(db, "documents", docItem.id));
-
-      // Remove from local state
       setDocuments((prev) => prev.filter((doc) => doc.id !== docItem.id));
     } catch (error) {
-      console.error("Error deleting document:", error);
-      alert("Failed to delete document");
+      console.error("Error deleting", error);
     }
   };
 
   return (
     <div className="documents-page">
       <div className="upload-section">
-        <button className="upload-btn" onClick={handleUpload}>
-          <FontAwesomeIcon icon={faUpload} /> Select Documents
+        <button className="upload-btn" onClick={() => setShowPopup(true)}>
+          <FontAwesomeIcon icon={faUpload} /> Upload Document
         </button>
       </div>
 
-      {/* Display uploaded documents */}
+      {/* Small custom popup */}
+      {showPopup && (
+        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Upload Document</h3>
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+            <div className="popup-actions">
+              <button onClick={uploadToCloudinary} disabled={!file}>
+                Upload
+              </button>
+              <button onClick={() => setShowPopup(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Documents list */}
       {documents.length > 0 ? (
         <div className="documents-grid">
           {documents.map((doc) => (
             <div key={doc.id} className="document-card">
-              <div className="doc-icon">{doc.type === "image" ? "🖼️" : "📄"}</div>
+              <div className="doc-icon">
+                {doc.type === "image" ? "🖼️" : "📄"}
+              </div>
               <p className="doc-name">{doc.name}</p>
               <div className="doc-actions">
                 <button className="btn view" onClick={() => setPreviewDoc(doc)}>
                   <FontAwesomeIcon icon={faEye} /> View
                 </button>
-                <button className="btn delete" onClick={() => handleDelete(doc)}>
+                <button
+                  className="btn delete"
+                  onClick={() => handleDelete(doc)}
+                >
                   <FontAwesomeIcon icon={faTrash} /> Delete
                 </button>
               </div>
@@ -125,12 +150,18 @@ export default function Documents() {
       {previewDoc && (
         <div className="modal-overlay" onClick={() => setPreviewDoc(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setPreviewDoc(null)}>✖</button>
+            <button className="modal-close" onClick={() => setPreviewDoc(null)}>
+              ✖
+            </button>
             <h3>{previewDoc.name}</h3>
             {previewDoc.type === "image" ? (
               <img src={previewDoc.url} alt="Preview" className="doc-preview" />
             ) : (
-              <iframe src={previewDoc.url} title="Document Preview" className="doc-preview"></iframe>
+              <iframe
+                src={previewDoc.url}
+                title="Document Preview"
+                className="doc-preview"
+              ></iframe>
             )}
           </div>
         </div>

@@ -1,175 +1,182 @@
-/* Root variables fallback */
+/* ===== Theme Variables (Amber / Yellow) ===== */
 :root {
-  --bg-color: #ffffff;
-  --text-color: #111827;
-  --card-bg: #f9fafb;
-  --border-color: #e5e7eb;
-  --color-primary: #3b82f6;
+  --analytics-primary: #f59e0b;   /* amber-500 */
+  --analytics-hover: #b45309;     /* amber-700 */
+  --analytics-text: #78350f;      /* amber-900 */
+  --analytics-bg: #ffffff;        /* white */
+  --analytics-bg-alt: #f9fafb;    /* off-white (tailwind gray-50) */
+  --analytics-border: #fef9c3;    /* light yellow */
+  --analytics-chart1: #fbbf24;    /* amber-400 */
+  --analytics-chart2: #f59e0b;    /* amber-500 */
+  --analytics-chart3: #d97706;    /* amber-600 */
+  --analytics-chart4: #b45309;    /* amber-700 */
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #111827;
-    --text-color: #f9fafb;
-    --card-bg: #1f2937;
-    --border-color: #374151;
-    --color-primary: #3b82f6;
-  }
-}
-
-/* Main page container */
+/* ================= COURSES PAGE ================= */
 .courses-page {
-  padding: 20px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  padding: 1rem;
+  background: var(--analytics-bg); /* #ffffff */
+  color: var(--analytics-text); /* #78350f */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.75rem;
 }
 
-/* Titles */
+/* ================= TITLES ================= */
 .courses-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
+  color: var(--analytics-primary); /* #f59e0b */
   margin-bottom: 4px;
 }
-
 .courses-subtitle {
-  font-size: 0.9rem;
-  color: var(--text-color);
-  margin-bottom: 20px;
+  font-size: 0.8rem;
+  color: var(--analytics-hover); /* #b45309 */
+  margin-bottom: 1rem;
 }
 
-/* Card */
+/* ================= CARD ================= */
 .courses-card {
-  background-color: var(--card-bg);
-  padding: 16px;
-  border-radius: 10px;
+  background: var(--analytics-bg-alt); /* #f9fafb */
+  padding: 1rem;
+  border-radius: 8px;
   max-width: 700px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 3px solid var(--analytics-border); /* #fef9c3 */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-/* File input */
+/* ================= FILE INPUT ================= */
 .file-input {
-  margin-bottom: 12px;
+  margin-bottom: 0.6rem;
   width: 100%;
 }
-
-/* File preview & name */
 .file-preview {
   text-align: center;
 }
-
 .file-name {
-  font-size: 0.85rem;
-  margin-bottom: 8px;
+  font-size: 0.7rem;
+  margin-bottom: 6px;
   font-weight: 500;
+  color: var(--analytics-text); /* #78350f */
 }
 
-/* Scrollable table */
+/* ================= TABLE ================= */
 .table-container {
-  max-height: 400px;
+  max-height: 350px;
   overflow-y: auto;
-  border: 1px solid var(--border-color);
+  border: 3px solid var(--analytics-border); /* #fef9c3 */
   border-radius: 6px;
   margin-bottom: 10px;
 }
-
-/* Data table */
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   min-width: 400px;
 }
-
 .data-table th,
 .data-table td {
-  border: 1px solid var(--border-color);
-  padding: 8px;
+  padding: 0.45rem;
+  border-bottom: 3px solid var(--analytics-border); /* #fef9c3 */
   text-align: left;
+  color: var(--analytics-text); /* #78350f */
 }
-
 .data-table th {
-  position: sticky;
-  top: 0;
-  background-color: var(--color-primary);
-  color: white;
-  z-index: 1;
-  text-transform: uppercase;
+  background: var(--analytics-border); /* #fef9c3 */
   font-weight: 600;
+  color: var(--analytics-primary); /* #f59e0b */
+  text-transform: uppercase;
+  font-size: 0.7rem;
 }
 
-/* Buttons */
-.btn {
-  font-size: 0.75rem;
-  padding: 6px 12px;
-  border-radius: 4px;
+/* Row striping (Agent dashboard style) */
+.data-table tbody tr:nth-child(even) td {
+  background: var(--analytics-bg-alt); /* #f9fafb */
+}
+.data-table tbody tr:nth-child(odd) td {
+  background: var(--analytics-bg); /* #ffffff */
+}
+.data-table tbody tr:hover td {
+  background: #fef08a; /* yellow-200 */
+}
+
+/* ================= BUTTONS ================= */
+.courses-page .btn {
+  font-size: 0.7rem;
+  padding: 5px 10px;
+  border-radius: 5px;
   cursor: pointer;
-  border: none;
+  border: 3px solid var(--analytics-border); /* #fef9c3 */
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  background: #fef08a; /* Swapped to hover color */
+  color: #1F2937; /* Dark text for visibility */
 }
 
-.btn-download {
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.btn-download:hover {
-  background-color: #2563eb;
-}
-
-/* Responsive for small screens */
-@media (max-width: 640px) {
-  .courses-card {
-    padding: 12px;
-  }
-
-  .data-table {
-    font-size: 0.7rem;
-  }
-
-  .btn {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-  }
+.courses-page .btn:hover {
+  background: var(--analytics-primary); /* #f59e0b */
+  color: white; /* Light text for visibility */
 }
 
 /* Select File button */
 .file-upload-btn {
-  background-color: #facc15; /* yellow */
-  color: #111827;
-  padding: 8px 16px;
+  background: #fef08a; /* Swapped to hover color */
+  color: #1F2937; /* Dark text for visibility */
+  padding: 6px 12px;
   border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: none;
-  transition: background 0.2s;
+  border: 3px solid var(--analytics-border); /* #fef9c3 */
 }
 
 .file-upload-btn:hover {
-  background-color: #eab308; /* darker yellow */
+  background: var(--analytics-primary); /* #f59e0b */
+  color: white;
 }
 
 /* Submit button */
 .btn-submit {
-  background-color: #374151; /* neutral gray by default */
-  color: white;
-  margin-left: 10px;
+  background: #fef08a; /* Swapped to hover color */
+  color: #1F2937; /* Dark text for visibility */
+  margin-left: 8px;
 }
 
 .btn-submit:hover {
-  background-color: #3b82f6; /* blue on hover */
+  background: var(--analytics-chart2); /* #f59e0b */
+  color: white;
 }
 
+/* Download button */
+.btn-download {
+  background: #fef08a; /* Swapped to hover color */
+  color: #1F2937; /* Dark text for visibility */
+  padding: 6px 12px;
+}
+
+.btn-download:hover {
+  background: var(--analytics-chart1); /* #fbbf24 */
+  color: white;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 640px) {
+  .courses-card {
+    padding: 0.8rem;
+  }
+  .data-table {
+    font-size: 0.65rem;
+  }
+  .courses-page .btn {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+  }
+}

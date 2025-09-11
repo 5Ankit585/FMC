@@ -1,4 +1,5 @@
 import React from 'react';
+import './NewsArticles.css';
 
 const NewsArticles = () => {
   const newsItems = [
@@ -77,46 +78,35 @@ const NewsArticles = () => {
   ];
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
-      <div className="max-w-5xl mx-auto">
-        <div className="bg-blue-800 text-white p-3 rounded-t-lg mb-3">
-          <h1 className="text-xl font-bold mb-1">Latest News</h1>
-          <p className="text-xs">Stay updated with latest stories</p>
+    <div className="news-container">
+      <div className="news-header">
+        <div>
+          <h1>Latest News</h1>
+          <p>Stay updated with latest stories</p>
         </div>
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
-
-          {newsItems.map((item) => (
-            <div 
-              key={item.id} 
-              className="bg-white rounded-lg shadow-md overflow-hidden transform transition hover:scale-105 hover:shadow-lg w-full"
-              style={{ maxWidth: '320px', height: '280px' }}
-            >
-              <img 
-                src={item.image} 
-                alt={item.title} 
-                className="w-full h-32 object-cover"
-              />
-              <div className="p-3 flex flex-col h-[calc(100%-128px)]">
-                <div className="flex justify-between items-start mb-2">
-                  <h2 className="text-base font-semibold text-gray-800 line-clamp-2">{item.title}</h2>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
+        {newsItems.map((item) => (
+          <div key={item.id} className="news-card" style={{ maxWidth: '320px', height: '280px' }}>
+            <img src={item.image} alt={item.title} />
+            <div style={{ padding: '0.75rem', display: 'flex', flexDirection: 'column', height: 'calc(100% - 128px)' }}>
+              <h2 className="news-title">{item.title}</h2>
+              <p className="news-date">{item.date}</p>
+              <p className="news-content">
+                {item.content}
+                <a href="#">Read more</a>
+              </p>
+              <div className="news-meta">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <i className="fa fa-share" title="Share"></i>
+                  <i className="fa fa-bookmark" title="Save"></i>
+                  <span>{item.readTime}</span>
                 </div>
-                <p className="text-gray-500 text-xs mb-2">{item.date}</p>
-                <p className="text-gray-600 mb-2 line-clamp-2 text-sm flex-grow">
-                  {item.content} 
-                  <a href="#" className="text-blue-500 hover:underline ml-1">Read more</a>
-                </p>
-                <div className="flex justify-between items-center text-gray-500 text-xs">
-                  <div className="flex items-center space-x-2">
-                    <i className="fa fa-share text-blue-500 cursor-pointer" title="Share"></i>
-                    <i className="fa fa-bookmark text-blue-500 cursor-pointer" title="Save"></i>
-                    <span>{item.readTime}</span>
-                  </div>
-                  <span>{item.views}</span>
-                </div>
+                <span>{item.views}</span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

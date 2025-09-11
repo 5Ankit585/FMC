@@ -17,7 +17,11 @@ const MENU = [
 export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {
   return (
     <aside className={`ad-sidebar ${sidebarOpen ? "open" : "closed"}`}>
-      <div className="ad-brand" onClick={() => setRoute("dashboard")} style={{ cursor: "pointer" }}>
+      <div
+        className="ad-brand"
+        onClick={() => setRoute("dashboard")}
+        style={{ cursor: "pointer" }}
+      >
         <div className="ad-brand-text">
           <strong>Agent Panel</strong>
           <small>Admin</small>

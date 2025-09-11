@@ -29,7 +29,7 @@ import Footer from "../components/Footer";
 
 import logo from "../../src/Images/logoo.png";
 import "./UniversityPage.css";
-
+import "../components/UniversitySections/CoursesAndFees.css";
 const API_BASE = import.meta?.env?.VITE_API_BASE || "http://localhost:5000";
 const FALLBACK_BANNER =
   "https://www.shutterstock.com/image-photo/ucla-los-angeles-usa-may-600nw-2397826809.jpg";
@@ -89,28 +89,28 @@ function UniversityPage() {
     university?.affiliation,
   ].filter(Boolean);
 
-// Banner sources (merge)
-const bannerSources = [
-  ...(university?.bannerImage || []),
-  ...(university?.photos || []),
-  ...(university?.galleryImages || []),
-].filter(Boolean);
+  // Banner sources (merge)
+  const bannerSources = [
+    ...(university?.bannerImage || []),
+    ...(university?.photos || []),
+    ...(university?.galleryImages || []),
+  ].filter(Boolean);
 
-// Banner auto-slide
-useEffect(() => {
-  if (!bannerSources.length) return;
+  // Banner auto-slide
+  useEffect(() => {
+    if (!bannerSources.length) return;
 
-  const interval = setInterval(() => {
-    setBannerIndex((prev) =>
-      prev + 1 < bannerSources.length ? prev + 1 : 0
-    );
-  }, 3000);
+    const interval = setInterval(() => {
+      setBannerIndex((prev) =>
+        prev + 1 < bannerSources.length ? prev + 1 : 0
+      );
+    }, 3000);
 
-  return () => clearInterval(interval);
-}, [bannerSources]);
+    return () => clearInterval(interval);
+  }, [bannerSources]);
 
-// Current banner
-const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
+  // Current banner
+  const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
 
 
 
@@ -122,71 +122,58 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
       : FALLBACK_LOGO;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        backgroundColor: "var(--background-color)",
-        color: "var(--text-color)",
-      }}
-    >
+    <div className="uni-page min-h-screen">
       {/* Navbar */}
-      <nav>
-        <div className="flex items-center">
+      <nav className="uni-navbar">
+        <div className="uni-navbar-left flex items-center">
           <img
             src={logo}
             alt="Company Logo"
-            className="h-8 w-8 mr-2 object-cover rounded-full bg-white"
+            className="uni-logo h-8 w-8 mr-2 object-cover rounded-full bg-white"
           />
-          <span className={`font-bold ${!darkMode ? "text-black" : ""}`}>
+          <span className={`uni-title font-bold ${!darkMode ? "text-black" : ""}`}>
             Uni Hub
           </span>
         </div>
 
-        <div className="flex-1 mx-10">
-          <input type="text" placeholder="Search..." className="w-full" />
+        <div className="uni-navbar-center flex-1 mx-10">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="uni-search w-full"
+          />
         </div>
 
-        <div className="flex items-center space-x-2 relative">
-          <button className="bg-[var(--button-accent)] hover:bg-[var(--button-hover)]">
-            Write a Review
-          </button>
-          <button className="flex items-center bg-[var(--button-primary)] text-white hover:bg-[var(--button-hover)]">
+        <div className="uni-navbar-right flex items-center space-x-2 relative">
+          <button className="uni-btn-accent">Write a Review</button>
+          <button className="uni-btn-primary flex items-center">
             <FontAwesomeIcon icon={faCompass} className="mr-1 text-white" />
             Explore
           </button>
-          <button className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]">
-            <FontAwesomeIcon icon={faBell} className="text-white" />
+          <button className="uni-btn-icon">
+            <FontAwesomeIcon icon={faBell} />
           </button>
-          <button
-            className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]"
-            onClick={toggleTheme}
-          >
-            <FontAwesomeIcon
-              icon={darkMode ? faSun : faMoon}
-              className="text-white"
-            />
+          <button className="uni-btn-icon" onClick={toggleTheme}>
+            <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
           </button>
 
           {/* User dropdown */}
-          <div className="dropdown" ref={dropdownRef}>
+          <div className="uni-dropdown" ref={dropdownRef}>
             <button
-              className="bg-[var(--button-primary)] rounded-full hover:bg-[var(--button-hover)]"
+              className="uni-btn-icon"
               onClick={() => setShowUserDropdown((v) => !v)}
             >
-              <FontAwesomeIcon icon={faUser} className="text-white" />
+              <FontAwesomeIcon icon={faUser} />
             </button>
 
             {showUserDropdown && (
-              <div className="dropdown-menu">
+              <div className="uni-dropdown-menu">
                 {user ? (
                   <>
-                    <p className="text-[var(--dropdown-text)]">
+                    <p>
                       Signed in as <br /> <strong>{user.name}</strong>
                     </p>
-                    <button
-                      className="flex items-center w-full text-left text-[var(--dropdown-text)] hover:text-[var(--button-hover)]"
-                      onClick={() => setUser(null)}
-                    >
+                    <button onClick={() => setUser(null)}>
                       <FontAwesomeIcon
                         icon={faArrowRightFromBracket}
                         className="mr-1"
@@ -196,14 +183,11 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
                   </>
                 ) : (
                   <>
-                    <button className="flex items-center w-full text-left text-[var(--dropdown-text)] mb-1 hover:text-[var(--button-hover)]">
-                      <FontAwesomeIcon
-                        icon={faRightToBracket}
-                        className="mr-1"
-                      />
+                    <button>
+                      <FontAwesomeIcon icon={faRightToBracket} className="mr-1" />
                       Login
                     </button>
-                    <button className="flex items-center w-full text-left text-[var(--dropdown-text)] hover:text-[var(--button-hover)]">
+                    <button>
                       <FontAwesomeIcon icon={faUserPlus} className="mr-1" />
                       Sign Up
                     </button>
@@ -214,7 +198,7 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
           </div>
 
           {/* Course dropdown */}
-          <select className="bg-[var(--button-primary)] text-[var(--text-color)] hover:bg-[var(--button-hover)]">
+          <select className="uni-select">
             <option>All Courses</option>
             {university?.courses?.map((c, i) => (
               <option key={i}>{c.courseName || c.name}</option>
@@ -225,33 +209,33 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
 
       {/* Loading / Error */}
       {status === "loading" && (
-        <div className="p-8 text-center opacity-80">Loading university…</div>
+        <div className="uni-loading">Loading university…</div>
       )}
       {status === "error" && (
-        <div className="p-8 text-center text-red-500">Error: {error}</div>
+        <div className="uni-error">Error: {error}</div>
       )}
 
       {status === "ready" && (
         <>
           {/* Banner */}
           <div
-            className="university-banner"
+            className="uni-banner"
             style={{ backgroundImage: `url(${bannerImage})` }}
           >
-            <div className="banner-content">
-              <div className="lower-blur">
+            <div className="uni-banner-content">
+              <div className="uni-banner-lower">
                 <img src={uniLogo} alt="University Logo" />
                 <div className="text-center">
                   <h1>{university?.instituteName || "—"}</h1>
                   <p>
                     © {university?.city || "City"},{" "}
-                    {university?.state || "State"} &nbsp;|&nbsp; Est.{" "}
+                    {university?.state || "State"} | Est.{" "}
                     {university?.year || "—"}
                   </p>
                 </div>
               </div>
 
-              <div className="banner-tags">
+              <div className="uni-banner-tags">
                 <div className="flex space-x-1 flex-wrap">
                   {chips.map((c, i) => (
                     <span key={i}>{c}</span>
@@ -273,13 +257,13 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
           </div>
 
           {/* Tabs */}
-          <div className="tab-navigation">
-            <div className="tab-container">
-              <button className="tab-scroll-button" onClick={scrollLeft}>
+          <div className="uni-tabs">
+            <div className="uni-tab-container">
+              <button className="uni-tab-scroll" onClick={scrollLeft}>
                 <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
               </button>
 
-              <div ref={scrollRef} className="tab-scroll">
+              <div ref={scrollRef} className="uni-tab-list">
                 {[
                   "About",
                   "Info",
@@ -296,9 +280,8 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
                 ].map((section) => (
                   <button
                     key={section}
-                    className={`tab-button ${
-                      activeSection === section ? "active" : ""
-                    }`}
+                    className={`uni-tab-btn ${activeSection === section ? "active" : ""
+                      }`}
                     onClick={() => setActiveSection(section)}
                   >
                     {section}
@@ -306,89 +289,82 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
                 ))}
               </div>
 
-              <button className="tab-scroll-button" onClick={scrollRight}>
+              <button className="uni-tab-scroll" onClick={scrollRight}>
                 <FontAwesomeIcon icon={faChevronRight} />
               </button>
             </div>
 
-            <div className="action-buttons">
+            <div className="uni-actions">
               <button>Apply For Admission</button>
               <button className="primary">Download Brochure</button>
               <button className="primary">More Nearby Colleges</button>
             </div>
 
             {/* Dynamic sections */}
-            <div className="content-section">
+            <div className="uni-section">
               {activeSection === "About" && <AboutUs university={university} />}
               {activeSection === "Info" && <Info university={university} />}
-              {activeSection === "Courses & Fees" && (
-                <div className="p-4">
-                  <h2 className="text-xl font-bold mb-3">Courses Offered</h2>
-                  <table className="w-full border border-gray-300">
-                    <thead>
-                      <tr className="bg-gray-200">
-                        <th className="border p-2">Course Name</th>
-                        <th className="border p-2">Total Fees</th>
-                        <th className="border p-2">Yearly Fees</th>
-                        <th className="border p-2">Duration</th>
-                        <th className="border p-2">Intake</th>
-                        <th className="border p-2">Apply</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {university?.courses?.map((course, i) => (
-                        <tr key={i} className="text-center">
-                          <td className="border p-2">
-                            {course.courseName || course.name}
-                          </td>
-                          <td className="border p-2">₹{course.totalFees}</td>
-                          <td className="border p-2">₹{course.yearlyFees}</td>
-                          <td className="border p-2">{course.duration}</td>
-                          <td className="border p-2">{course.intake}</td>
-                          <td className="border p-2">
-                            {course.applyLink ? (
-                              <a
-                                href={course.applyLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 underline"
-                              >
-                                Apply Now
-                              </a>
-                            ) : (
-                              <span className="text-gray-500">N/A</span>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+{activeSection === "Courses & Fees" && (
+  <div className="uni-courses-container">
+    <h2 className="uni-courses-title">Courses Offered</h2>
+    <div className="uni-courses-table-wrapper">
+      <table className="uni-courses-table">
+        <thead className="uni-courses-header">
+          <tr>
+            <th className="uni-courses-th">Course Name</th>
+            <th className="uni-courses-th">Total Fees</th>
+            <th className="uni-courses-th">Yearly Fees</th>
+            <th className="uni-courses-th">Duration</th>
+            <th className="uni-courses-th">Intake</th>
+            <th className="uni-courses-th">Apply</th>
+          </tr>
+        </thead>
+        <tbody>
+          {university?.courses?.length > 0 ? (
+            university.courses.map((course, i) => (
+              <tr key={i} className="uni-courses-row">
+                <td className="uni-courses-td">{course.courseName || course.name}</td>
+                <td className="uni-courses-td">₹{course.totalFees}</td>
+                <td className="uni-courses-td">₹{course.yearlyFees}</td>
+                <td className="uni-courses-td">{course.duration}</td>
+                <td className="uni-courses-td">{course.intake}</td>
+                <td className="uni-courses-td">
+                  {course.applyLink ? (
+                    <a
+                      href={course.applyLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="uni-courses-apply-button"
+                    >
+                      Apply Now
+                    </a>
+                  ) : (
+                    <span className="text-gray-500">N/A</span>
+                  )}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="uni-courses-no-data">
+                No courses available
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
 
-              {activeSection === "Cutoff" && (
-                <Cutoff universityId={university?._id} />
-              )}
-
-              {activeSection === "Placements" && (
-                <Placement university={university} />
-              )}
-              {activeSection === "Facilities" && (
-                <Facilities universityId={university?._id} />
-              )}
-              {activeSection === "Admission" && (
-                <Admission university={university} />
-              )}
+              {activeSection === "Cutoff" && <Cutoff universityId={university?._id} />}
+              {activeSection === "Placements" && <Placement university={university} />}
+              {activeSection === "Facilities" && <Facilities universityId={university?._id} />}
+              {activeSection === "Admission" && <Admission university={university} />}
               {activeSection === "Q&A" && <QA university={university} />}
-              {activeSection === "Gallery" && (
-                <Gallery universityId={university?._id} darkMode={darkMode} />
-              )}
-              {activeSection === "Reviews" && (
-                <Reviews university={university} />
-              )}
-              {activeSection === "News & Articles" && (
-                <NewsArticles university={university} />
-              )}
+              {activeSection === "Gallery" && <Gallery universityId={university?._id} darkMode={darkMode} />}
+              {activeSection === "Reviews" && <Reviews university={university} />}
+              {activeSection === "News & Articles" && <NewsArticles university={university} />}
             </div>
           </div>
         </>
@@ -400,3 +376,4 @@ const bannerImage = bannerSources[bannerIndex] || FALLBACK_BANNER;
 }
 
 export default UniversityPage;
+

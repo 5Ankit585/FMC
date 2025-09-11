@@ -365,7 +365,7 @@ const AddStudentPopup = ({
     if (step === currentStep) return 'active';
     return '';
   };
-  const getLineClass = (lineIndex) => (step > lineIndex + 1 ? 'step-line active' : 'step-line');
+  const getLineClass = (lineIndex) => (step > lineIndex + 1 ? 'add-stud-step-line active' : 'add-stud-step-line');
 
   /* ---------- Upload Tile Subcomponent ---------- */
   const UploadTile = ({ name, label, file, accept, required, onFile, onClear, error }) => {
@@ -383,9 +383,9 @@ const AddStudentPopup = ({
     };
 
     return (
-      <div className={`upload-tile ${dragOver ? 'drag-active' : ''} ${error ? 'has-error' : ''}`}>
+      <div className={`add-stud-upload-tile ${dragOver ? 'drag-active' : ''} ${error ? 'has-error' : ''}`}>
         <div
-          className="upload-hitarea"
+          className="add-stud-upload-hitarea"
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
@@ -394,15 +394,15 @@ const AddStudentPopup = ({
           onKeyDown={(e) => { if (e.key === 'Enter') document.getElementById(inputId)?.click(); }}
           aria-describedby={`${inputId}-desc`}
         >
-          <FiUpload className="upload-icon" aria-hidden="true" />
-          <div className="upload-text">
-            <span className="upload-title">{label}{required ? ' *' : ''}</span>
-            <span id={`${inputId}-desc`} className="upload-subtitle">Drag & drop or</span>
-            <label htmlFor={inputId} className="btn btn-outline btn-sm">Browse</label>
+          <FiUpload className="add-stud-upload-icon" aria-hidden="true" />
+          <div className="add-stud-upload-text">
+            <span className="add-stud-upload-title">{label}{required ? ' *' : ''}</span>
+            <span id={`${inputId}-desc`} className="add-stud-upload-subtitle">Drag & drop or</span>
+            <label htmlFor={inputId} className="add-stud-btn add-stud-btn-outline add-stud-btn-sm">Browse</label>
             <input
               id={inputId}
               type="file"
-              className="visually-hidden"
+              className="add-stud-visually-hidden"
               accept={accept}
               onChange={(e) => onFile(e)}
             />
@@ -410,12 +410,12 @@ const AddStudentPopup = ({
         </div>
 
         {file && (
-          <div className="file-chip" title={file.name}>
-            <FiFileText className="chip-icon" aria-hidden="true" />
-            <span className="chip-name">{file.name}</span>
-            <span className="chip-size">• {formatBytes(file.size)}</span>
+          <div className="add-stud-file-chip" title={file.name}>
+            <FiFileText className="add-stud-chip-icon" aria-hidden="true" />
+            <span className="add-stud-chip-name">{file.name}</span>
+            <span className="add-stud-chip-size">• {formatBytes(file.size)}</span>
             <a
-              className="chip-action"
+              className="add-stud-chip-action"
               href={URL.createObjectURL(file)}
               target="_blank"
               rel="noopener noreferrer"
@@ -425,7 +425,7 @@ const AddStudentPopup = ({
             </a>
             <button
               type="button"
-              className="chip-action"
+              className="add-stud-chip-action"
               onClick={() => onClear()}
               aria-label={`Remove ${label}`}
               title="Remove"
@@ -435,111 +435,111 @@ const AddStudentPopup = ({
           </div>
         )}
 
-        {!!error && <p className="field-error" role="alert">{error}</p>}
+        {!!error && <p className="add-stud-field-error" role="alert">{error}</p>}
       </div>
     );
   };
 
   /* ---------- Render ---------- */
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose} aria-label="Close">
+    <div className="add-stud-modal-overlay" onClick={onClose}>
+      <div className="add-stud-modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="add-stud-modal-close" onClick={onClose} aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </button>
 
-        <div className="popup">
-          <div className="popup-content">
+        <div className="add-stud-popup">
+          <div className="add-stud-popup-content">
             {/* Stepper */}
-            <div className="stepper horizontal">
-              <div className={`step ${getStepClass(1)}`}>{step > 1 ? <FaCheck /> : 1}</div>
+            <div className="add-stud-stepper add-stud-horizontal">
+              <div className={`add-stud-step ${getStepClass(1)}`}>{step > 1 ? <FaCheck /> : 1}</div>
               <div className={getLineClass(1)}></div>
-              <div className={`step ${getStepClass(2)}`}>{step > 2 ? <FaCheck /> : 2}</div>
+              <div className={`add-stud-step ${getStepClass(2)}`}>{step > 2 ? <FaCheck /> : 2}</div>
               <div className={getLineClass(2)}></div>
-              <div className={`step ${getStepClass(3)}`}>{step > 3 ? <FaCheck /> : 3}</div>
+              <div className={`add-stud-step ${getStepClass(3)}`}>{step > 3 ? <FaCheck /> : 3}</div>
               <div className={getLineClass(3)}></div>
-              <div className={`step ${getStepClass(4)}`}>{step > 4 ? <FaCheck /> : 4}</div>
+              <div className={`add-stud-step ${getStepClass(4)}`}>{step > 4 ? <FaCheck /> : 4}</div>
             </div>
 
-            <form onSubmit={handleSubmit} className="student-form" noValidate>
+            <form onSubmit={handleSubmit} className="add-stud-student-form" noValidate>
               {/* -------- Step 1 -------- */}
               {step === 1 && (
-                <div className="form-section basic-details">
-                  <h2 className="form-section-title">Basic Student Details</h2>
+                <div className="add-stud-form-section add-stud-basic-details">
+                  <h2 className="add-stud-form-section-title">Basic Student Details</h2>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="fullName">Full Name</label>
                       <input type="text" id="fullName" name="fullName" autoComplete="name"
-                        value={formData.fullName} onChange={handleInputChange} className="input" required />
+                        value={formData.fullName} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="dateOfBirth">Date of Birth</label>
                       <input type="date" id="dateOfBirth" name="dateOfBirth"
-                        value={formData.dateOfBirth} onChange={handleInputChange} className="input" required />
+                        value={formData.dateOfBirth} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="gender">Gender</label>
-                      <select id="gender" name="gender" value={formData.gender} onChange={handleInputChange} className="input" required>
+                      <select id="gender" name="gender" value={formData.gender} onChange={handleInputChange} className="add-stud-input" required>
                         <option value="">Select</option>
                         <option>Male</option>
                         <option>Female</option>
                         <option>Other</option>
                       </select>
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="contactNumber">Contact Number</label>
                       <input type="tel" id="contactNumber" name="contactNumber" inputMode="tel" placeholder="+91-XXXXXXXXXX"
-                        value={formData.contactNumber} onChange={handleInputChange} className="input" required />
+                        value={formData.contactNumber} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="email">Email ID</label>
                       <input type="email" id="email" name="email" autoComplete="email"
-                        value={formData.email} onChange={handleInputChange} className="input" required />
+                        value={formData.email} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="address">Address</label>
                       <textarea id="address" name="address" value={formData.address}
-                        onChange={handleInputChange} className="input" rows="2" required />
+                        onChange={handleInputChange} className="add-stud-input" rows="2" required />
                     </div>
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="parentName">Parent Name</label>
                       <input type="text" id="parentName" name="parentName"
-                        value={formData.parentName} onChange={handleInputChange} className="input" required />
+                        value={formData.parentName} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="parentContact">Parent Contact</label>
                       <input type="tel" id="parentContact" name="parentContact" inputMode="tel"
-                        value={formData.parentContact} onChange={handleInputChange} className="input" required />
+                        value={formData.parentContact} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
                   </div>
 
-                  <div className="form-actions">
-                    <button type="button" className="btn btn-primary" onClick={nextStep}>Next</button>
+                  <div className="add-stud-form-actions">
+                    <button type="button" className="add-stud-btn add-stud-btn-primary" onClick={nextStep}>Next</button>
                   </div>
                 </div>
               )}
 
               {/* -------- Step 2 -------- */}
               {step === 2 && (
-                <div className="form-section">
-                  <h2 className="form-section-title">Academic Details</h2>
+                <div className="add-stud-form-section">
+                  <h2 className="add-stud-form-section-title">Academic Details</h2>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="board">Board *</label>
-                      <select id="board" name="board" value={formData.board} onChange={handleInputChange} className="input" required>
+                      <select id="board" name="board" value={formData.board} onChange={handleInputChange} className="add-stud-input" required>
                         <option value="">Select</option>
                         <option>CBSE</option>
                         <option>ICSE</option>
@@ -547,11 +547,11 @@ const AddStudentPopup = ({
                         <option>Others</option>
                       </select>
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="stream">Stream *</label>
                       <select id="stream" name="stream" value={formData.stream} onChange={(e) => {
                         setFormData(prev => ({ ...prev, stream: e.target.value, subjects: [] }));
-                      }} className="input" required>
+                      }} className="add-stud-input" required>
                         <option value="">Select</option>
                         <option>Science</option>
                         <option>Commerce</option>
@@ -561,20 +561,20 @@ const AddStudentPopup = ({
                     </div>
                   </div>
 
-                  <div className="form-group">
+                  <div className="add-stud-form-group">
                     <label>Subjects *</label>
                     {!formData.stream ? (
-                      <p className="muted">Select a <strong>Stream</strong> to view suggested subjects.</p>
+                      <p className="add-stud-muted">Select a <strong>Stream</strong> to view suggested subjects.</p>
                     ) : (
                       <>
-                        <div className="pill-grid" role="group" aria-label="Suggested subjects">
+                        <div className="add-stud-pill-grid" role="group" aria-label="Suggested subjects">
                           {subjectOptions.map(subj => {
                             const selected = formData.subjects.includes(subj);
                             return (
                               <button
                                 type="button"
                                 key={subj}
-                                className={`pill ${selected ? 'selected' : ''}`}
+                                className={`add-stud-pill ${selected ? 'selected' : ''}`}
                                 onClick={() => toggleSubject(subj)}
                                 aria-pressed={selected}
                               >
@@ -583,28 +583,28 @@ const AddStudentPopup = ({
                             );
                           })}
                         </div>
-                        <div className="add-subject-row">
+                        <div className="add-stud-add-subject-row">
                           <input
                             type="text"
-                            className="input"
+                            className="add-stud-input"
                             placeholder="Add another subject (e.g., French)"
                             value={customSubject}
                             onChange={(e) => setCustomSubject(e.target.value)}
                             onKeyDown={handleCustomSubjectKey}
                             aria-label="Add custom subject"
                           />
-                          <button type="button" className="btn btn-outline add-btn" onClick={addCustomSubject}>
+                          <button type="button" className="add-stud-btn add-stud-btn-outline add-stud-add-btn" onClick={addCustomSubject}>
                             <FiPlus /> Add
                           </button>
                         </div>
                         {formData.subjects.length > 0 && (
-                          <div className="selected-chips">
+                          <div className="add-stud-selected-chips">
                             {formData.subjects.map(s => (
-                              <span className="tag" key={s}>
+                              <span className="add-stud-tag" key={s}>
                                 {s}
                                 <button
                                   type="button"
-                                  className="tag-close"
+                                  className="add-stud-tag-close"
                                   aria-label={`Remove ${s}`}
                                   onClick={() => toggleSubject(s)}
                                 >
@@ -618,8 +618,8 @@ const AddStudentPopup = ({
                     )}
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="totalPercentage">Total Percentage *</label>
                       <input
                         type="number"
@@ -631,89 +631,89 @@ const AddStudentPopup = ({
                         placeholder="e.g., 86.5"
                         value={formData.totalPercentage}
                         onChange={handleInputChange}
-                        className="input"
+                        className="add-stud-input"
                         required
                       />
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="rollNumber">Roll Number *</label>
                       <input type="text" id="rollNumber" name="rollNumber"
-                        value={formData.rollNumber} onChange={handleInputChange} className="input" required />
+                        value={formData.rollNumber} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="schoolName">School Name *</label>
                       <input type="text" id="schoolName" name="schoolName"
-                        value={formData.schoolName} onChange={handleInputChange} className="input" required />
+                        value={formData.schoolName} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="yearOfPassing">Year of Passing *</label>
                       <input type="number" id="yearOfPassing" name="yearOfPassing" min="1990" max="2100"
-                        value={formData.yearOfPassing} onChange={handleInputChange} className="input" required />
+                        value={formData.yearOfPassing} onChange={handleInputChange} className="add-stud-input" required />
                     </div>
                   </div>
 
-                  <div className="form-actions">
-                    <button type="button" className="btn" onClick={prevStep}>Back</button>
-                    <button type="button" className="btn btn-primary" onClick={nextStep}>Next</button>
+                  <div className="add-stud-form-actions">
+                    <button type="button" className="add-stud-btn" onClick={prevStep}>Back</button>
+                    <button type="button" className="add-stud-btn add-stud-btn-primary" onClick={nextStep}>Next</button>
                   </div>
                 </div>
               )}
 
               {/* -------- Step 3 -------- */}
               {step === 3 && (
-                <div className="form-section">
-                  <h2 className="form-section-title">Admission & Documents</h2>
+                <div className="add-stud-form-section">
+                  <h2 className="add-stud-form-section-title">Admission & Documents</h2>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="course">Course *</label>
-                      <select id="course" name="course" value={formData.course} onChange={handleInputChange} className="input" required>
+                      <select id="course" name="course" value={formData.course} onChange={handleInputChange} className="add-stud-input" required>
                         <option value="">Select</option>
                         {courses.map(course => <option key={course} value={course}>{course}</option>)}
                       </select>
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="specialization">Specialization</label>
                       <input type="text" id="specialization" name="specialization"
-                        value={formData.specialization} onChange={handleInputChange} className="input" />
+                        value={formData.specialization} onChange={handleInputChange} className="add-stud-input" />
                     </div>
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="mode">Mode *</label>
-                      <select id="mode" name="mode" value={formData.mode} onChange={handleInputChange} className="input" required>
+                      <select id="mode" name="mode" value={formData.mode} onChange={handleInputChange} className="add-stud-input" required>
                         <option value="">Select</option>
                         <option>Regular</option>
                         <option>Distance</option>
                         <option>Online</option>
                       </select>
                     </div>
-                    <div className="form-group-column">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="hostelRequired">Hostel Required? *</label>
-                      <select id="hostelRequired" name="hostelRequired" value={formData.hostelRequired} onChange={handleInputChange} className="input" required>
+                      <select id="hostelRequired" name="hostelRequired" value={formData.hostelRequired} onChange={handleInputChange} className="add-stud-input" required>
                         <option>Yes</option>
                         <option>No</option>
                       </select>
                     </div>
                   </div>
 
-                  <div className="form-group-row">
-                    <div className="form-group-column">
+                  <div className="add-stud-form-group-row">
+                    <div className="add-stud-form-group-column">
                       <label htmlFor="university">University *</label>
-                      <select id="university" name="university" value={formData.university} onChange={handleInputChange} className="input" required>
+                      <select id="university" name="university" value={formData.university} onChange={handleInputChange} className="add-stud-input" required>
                         <option value="">Select University</option>
                         {UNIVERSITIES.map(university => <option key={university} value={university}>{university}</option>)}
                       </select>
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-subtitle">Documents <span className="muted">(Required, Max {MAX_FILE_MB}MB each)</span></label>
-                    <div className="document-grid">
+                  <div className="add-stud-form-group">
+                    <label className="add-stud-form-subtitle">Documents <span className="add-stud-muted">(Required, Max {MAX_FILE_MB}MB each)</span></label>
+                    <div className="add-stud-document-grid">
                       {DOCUMENT_FIELDS.map(df => (
                         <UploadTile
                           key={df.name}
@@ -730,9 +730,9 @@ const AddStudentPopup = ({
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-subtitle">Payment Receipt <span className="muted">(Optional, Max {MAX_FILE_MB}MB)</span></label>
-                    <div className="document-grid">
+                  <div className="add-stud-form-group">
+                    <label className="add-stud-form-subtitle">Payment Receipt <span className="add-stud-muted">(Optional, Max {MAX_FILE_MB}MB)</span></label>
+                    <div className="add-stud-document-grid">
                       <UploadTile
                         name="paymentReceipt"
                         label="Payment Receipt"
@@ -746,23 +746,23 @@ const AddStudentPopup = ({
                     </div>
                   </div>
 
-                  <div className="form-actions">
-                    <button type="button" className="btn" onClick={prevStep}>Back</button>
-                    <button type="button" className="btn btn-primary" onClick={nextStep}>Next</button>
+                  <div className="add-stud-form-actions">
+                    <button type="button" className="add-stud-btn" onClick={prevStep}>Back</button>
+                    <button type="button" className="add-stud-btn add-stud-btn-primary" onClick={nextStep}>Next</button>
                   </div>
                 </div>
               )}
 
               {/* -------- Step 4 -------- */}
               {step === 4 && (
-                <div className="form-section">
-                  <div className='univeristy-title'>{formData.university && <span>- {formData.university}</span>}</div>
-                  <h2 className="form-section-title">Review & Declaration</h2>
+                <div className="add-stud-form-section">
+                  <div className='add-stud-university-title'>{formData.university && <span>- {formData.university}</span>}</div>
+                  <h2 className="add-stud-form-section-title">Review & Declaration</h2>
 
-                  <div className="review-section">
+                  <div className="add-stud-review-section">
                     <h3>
                       Student Details
-                      <button type="button" className="edit-btn" onClick={() => setStep(1)}>Edit</button>
+                      <button type="button" className="add-stud-edit-btn" onClick={() => setStep(1)}>Edit</button>
                     </h3>
                     <p><strong>Name:</strong> {formData.fullName}</p>
                     <p><strong>DOB:</strong> {formData.dateOfBirth}</p>
@@ -773,7 +773,7 @@ const AddStudentPopup = ({
 
                     <h3>
                       Academic Details
-                      <button type="button" className="edit-btn" onClick={() => setStep(2)}>Edit</button>
+                      <button type="button" className="add-stud-edit-btn" onClick={() => setStep(2)}>Edit</button>
                     </h3>
                     <p><strong>Board:</strong> {formData.board}</p>
                     <p><strong>Stream:</strong> {formData.stream}</p>
@@ -785,7 +785,7 @@ const AddStudentPopup = ({
 
                     <h3>
                       Admission
-                      <button type="button" className="edit-btn" onClick={() => setStep(3)}>Edit</button>
+                      <button type="button" className="add-stud-edit-btn" onClick={() => setStep(3)}>Edit</button>
                     </h3>
                     <p><strong>Course:</strong> {formData.course}</p>
                     <p><strong>Specialization:</strong> {formData.specialization}</p>
@@ -794,7 +794,7 @@ const AddStudentPopup = ({
                     <p><strong>University:</strong> {formData.university}</p>
 
                     <h3>Uploaded Documents</h3>
-                    <ul className="review-files">
+                    <ul className="add-stud-review-files">
                       {Object.entries(formData.documents).map(([key, file]) => (
                         file ? (
                           <li key={key}>
@@ -802,7 +802,7 @@ const AddStudentPopup = ({
                             <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
                               {file.name}
                             </a>{' '}
-                            <span className="muted">({formatBytes(file.size)})</span>
+                            <span className="add-stud-muted">({formatBytes(file.size)})</span>
                           </li>
                         ) : null
                       ))}
@@ -812,14 +812,14 @@ const AddStudentPopup = ({
                           <a href={URL.createObjectURL(formData.paymentReceipt)} target="_blank" rel="noopener noreferrer">
                             {formData.paymentReceipt.name}
                           </a>{' '}
-                          <span className="muted">({formatBytes(formData.paymentReceipt.size)})</span>
+                          <span className="add-stud-muted">({formatBytes(formData.paymentReceipt.size)})</span>
                         </li>
                       )}
                     </ul>
                   </div>
 
-                  <div className="form-group">
-                    <div className="checkbox-row">
+                  <div className="add-stud-form-group">
+                    <div className="add-stud-checkbox-row">
                       <input
                         type="checkbox"
                         id="declaration"
@@ -832,9 +832,9 @@ const AddStudentPopup = ({
                     </div>
                   </div>
 
-                  <div className="form-actions">
-                    <button type="button" className="btn" onClick={prevStep}>Back</button>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                  <div className="add-stud-form-actions">
+                    <button type="button" className="add-stud-btn" onClick={prevStep}>Back</button>
+                    <button type="submit" className="add-stud-btn add-stud-btn-primary">Submit</button>
                   </div>
                 </div>
               )}

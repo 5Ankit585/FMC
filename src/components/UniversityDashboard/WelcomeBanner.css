@@ -1,6 +1,6 @@
 /* Theme variables */
 :root {
-  --card-bg-light: #ffffff;
+  --card-bg-light: #FAF9F6; /* Updated to off-white */
   --card-bg-dark: #1f2937;
   --border-color-light: #e5e7eb;
   --border-color-dark: #374151;
@@ -14,7 +14,7 @@
 }
 
 [data-theme="light"] {
-  --card-bg: var(--card-bg-light);
+  --card-bg: var(--card-bg-light); /* Uses off-white #FAF9F6 */
   --border-color: var(--border-color-light);
   --text-color: var(--text-color-light);
 }
