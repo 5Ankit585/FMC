@@ -3,94 +3,70 @@
   --analytics-primary: #f59e0b;   /* amber-500 */
   --analytics-hover: #b45309;     /* amber-700 */
   --analytics-text: #78350f;      /* amber-900 */
-  --analytics-bg: #faf9f6;        /* white */
-  --analytics-bg-alt: #f9fafb;    /* off-white (tailwind gray-50) */
+  --analytics-bg: #ffffff;        /* white */
+  --analytics-bg-alt: #f9fafb;    /* off-white */
   --analytics-border: #fef9c3;    /* light yellow */
-  --analytics-chart1: #fbbf24;    /* amber-400 */
-  --analytics-chart2: #f59e0b;    /* amber-500 */
-  --analytics-chart3: #d97706;    /* amber-600 */
-  --analytics-chart4: #b45309;    /* amber-700 */
+  --analytics-edit: #facc15;      /* amber-400 */
+  --analytics-delete: #ef4444;    /* red-500 */
 }
 
 /* -------- Container -------- */
 .ud-news {
-  padding: 0.75rem;
-  margin: 0.5rem auto;
+  padding: 1rem;
+  margin: 1rem auto;
   max-width: 1200px;
-  box-sizing: border-box;
-  color: var(--analytics-text); /* #78350f */
-  background: var(--analytics-bg); /* #ffffff */
-  border-radius: 8px;
+  color: var(--analytics-text);
+  background: var(--analytics-bg);
+  border-radius: 10px;
+  border: 2px solid var(--analytics-border);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 /* Heading */
+.ud-news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .75rem;
+}
+
 .ud-news h3 {
-  margin: 0 0 0.6rem 0;
-  font-size: 1rem;
+  margin: 0;
+  font-size: 1.1rem;
   font-weight: 700;
-  line-height: 1.2;
-  color: #1a202c; /* #f59e0b */
-}
-
-/* Category header */
-.ud-news-section {
-  margin-bottom: 1rem;
-}
-
-.ud-news-category-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #1a202c; /* #f59e0b */
-  margin-bottom: 0.4rem;
-  border-bottom: 3px solid #bfa233; /* #fef9c3 */
-  padding-bottom: 0.25rem;
+  color: var(--analytics-primary);
 }
 
 /* -------- Grid -------- */
 .ud-news-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.8rem;
-  align-items: start;
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
-  .ud-news-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .ud-news-grid {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
 }
 
 /* -------- Card -------- */
 .ud-news-card {
   display: flex;
   flex-direction: column;
-  background: var(--analytics-bg-alt); /* #f9fafb */
-  border-radius: 6px;
+  background: var(--analytics-bg-alt);
+  border-radius: 8px;
   overflow: hidden;
-  border: 2px solid #1e293b; /* #fef9c3 */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  height: 100%;
+  border: 1px solid var(--analytics-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ud-news-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 /* -------- Image -------- */
 .ud-news-image-wrap {
   width: 100%;
-  height: 100px;
+  height: 150px;
   overflow: hidden;
-  background: var(--analytics-border); /* #fef9c3 */
+  background: var(--analytics-border);
 }
 
 .ud-news-image {
@@ -101,111 +77,93 @@
 }
 
 .ud-news-card:hover .ud-news-image {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
 /* -------- Content -------- */
 .ud-news-content {
-  padding: 0.5rem 0.6rem;
+  padding: 0.75rem;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  flex: 1;
+  gap: 0.4rem;
 }
 
 .ud-news-title {
-  margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: var(--analytics-text); /* #78350f */
-  line-height: 1.2;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: var(--analytics-text);
+  margin: 0;
+  line-height: 1.3;
 }
 
 .ud-news-description {
+  font-size: 0.8rem;
+  color: var(--analytics-hover);
   margin: 0;
-  font-size: 0.72rem;
-  color: var(--analytics-hover); /* #b45309 */
-  line-height: 1.25;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  line-height: 1.3;
 }
 
 /* -------- Footer -------- */
 .ud-news-footer {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
-  margin-top: 0.2rem;
-  padding: 0.3rem 0.6rem 0.4rem;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--analytics-border);
 }
 
 .ud-news-date {
-  font-size: 0.65rem;
-  color: var(--analytics-hover); /* #b45309 */
+  font-size: 0.7rem;
+  color: var(--analytics-hover);
 }
 
 .ud-news-actions {
   display: flex;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
 /* -------- Buttons -------- */
 .ud-btn {
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 0.18rem 0.35rem;
-  font-size: 0.7rem;
-  border-radius: 4px;
+  border: 1px solid transparent;
   transition: all 0.2s ease;
-  background: #fef08a; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
 }
 
-.ud-btn:hover {
-  background: var(--analytics-primary); /* #f59e0b */
-  color: white; /* Light text for visibility */
+/* Add button */
+.ud-btn-add {
+  background: var(--analytics-primary);
+  color: white;
+  border: 1px solid var(--analytics-hover);
 }
 
+.ud-btn-add:hover {
+  background: var(--analytics-hover);
+}
+
+/* Edit button */
 .ud-btn-edit {
-  background: #d4af37; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
+  background: var(--analytics-edit);
+  color: #1f2937;
+  border: 1px solid var(--analytics-border);
 }
 
 .ud-btn-edit:hover {
-  background: #bfa233; /* #fbbf24 */
+  background: #eab308; /* stronger amber */
   color: white;
 }
 
+/* Delete button */
 .ud-btn-delete {
-  background: #d4af37; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
+  background: var(--analytics-delete);
+  color: white;
+  border: 1px solid #dc2626;
 }
 
 .ud-btn-delete:hover {
-  background: #bfa233; /* #d97706 */
-  color: white;
-}
-
-/* -------- Empty state -------- */
-.ud-news-empty {
-  padding: 0.7rem;
-  text-align: center;
-  color: var(--analytics-hover); /* #b45309 */
-  font-size: 0.8rem;
-}
-
-/* -------- Read more link -------- */
-.ud-news-readmore {
-  font-size: 0.72rem;
-  color: var(--analytics-primary); /* #f59e0b */
-  text-decoration: underline;
+  background: #b91c1c; /* darker red */
 }

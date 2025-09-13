@@ -62,6 +62,12 @@ function App() {
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
           <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
+          {/* University Profile */}
+<Route 
+  path="/university-profile/:id" 
+  element={<UniversityPage />} 
+/>
+
 
           {/* footer page routes */}
           <Route path="/college-review" element={<CollegeReview />} />

@@ -91,154 +91,157 @@ export default function MultiStepForm() {
 
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // -----------------------------
-      // 1. Prepare main payload
-      // -----------------------------
-      const payload = new FormData();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    // -----------------------------
+    // 1. Prepare main payload
+    // -----------------------------
+    const payload = new FormData();
 
-      // Append text fields except facilities
-      Object.entries(formData).forEach(([key, val]) => {
-        if (key !== "facilities") {
-          payload.append(key, val);
-        }
-      });
-
-      // Facilities (stringify array)
-      if (formData.facilities?.length) {
-        payload.append("facilities", JSON.stringify(formData.facilities));
+    // Append text fields except facilities
+    Object.entries(formData).forEach(([key, val]) => {
+      if (key !== "facilities") {
+        payload.append(key, val);
       }
+    });
 
-      // Branches
-      if (branches?.length) {
-        payload.append("branches", JSON.stringify(branches));
-      }
-
-      // File fields
-      Object.entries(files).forEach(([key, fileList]) => {
-        if (!fileList) return;
-        if (Array.isArray(fileList)) {
-          fileList.forEach((f) => payload.append(key, f));
-        } else {
-          payload.append(key, fileList);
-        }
-      });
-
-      // -----------------------------
-      // 2. Register university
-      // -----------------------------
-      const baseUrl = "http://localhost:5000";
-
-      const res = await fetch(`${baseUrl}/api/university-registration`, {
-        method: "POST",
-        body: payload,
-      });
-
-      if (!res.ok) {
-        console.error("❌ Registration failed:", await res.text());
-        alert("❌ University registration failed!");
-        return;
-      }
-
-      const data = await res.json();
-      console.log("✅ University registered:", data);
-
-      if (!data?.data?._id) {
-        alert("❌ University not created!");
-        return;
-      }
-
-      const universityId = data.data._id;
-
-      // -----------------------------
-      // 3. Helper for uploads
-      // -----------------------------
-      const uploadFile = async (url, formData, label) => {
-        const r = await fetch(url, { method: "POST", body: formData });
-        if (!r.ok) {
-          console.error(`❌ ${label} upload failed:`, await r.text());
-          alert(`❌ ${label} upload failed!`);
-          throw new Error(`${label} upload failed`);
-        }
-        console.log(`✅ ${label} uploaded`);
-      };
-
-      // -----------------------------
-      // 4. Upload extras (if provided)
-      // -----------------------------
-      if (files.file) {
-        const fd = new FormData();
-        fd.append("file", files.file);
-        await uploadFile(
-          `${baseUrl}/api/universities/${universityId}/courses/upload`,
-          fd,
-          "Courses"
-        );
-      }
-
-      if (files.cutoffExcel) {
-        const fd = new FormData();
-        fd.append("file", files.cutoffExcel);
-        await uploadFile(
-          `${baseUrl}/api/cutoff/${universityId}/cutoff/upload`,
-          fd,
-          "Cutoff"
-        );
-      }
-
-      if (files.admissionsExcel) {
-        const fd = new FormData();
-        fd.append("file", files.admissionsExcel);
-        await uploadFile(
-          `${baseUrl}/api/admissions/${universityId}/admissions/upload`,
-          fd,
-          "Admissions"
-        );
-      }
-
-      if (files.placementsExcel) {
-        const fd = new FormData();
-        fd.append("file", files.placementsExcel);
-        await uploadFile(
-          `${baseUrl}/api/universities/${universityId}/placements/upload`,
-          fd,
-          "Placements"
-        );
-      }
-
-      if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
-        const fd = new FormData();
-        files.infraPhotos?.forEach((f) => fd.append("infraPhotos", f));
-        files.eventPhotos?.forEach((f) => fd.append("eventPhotos", f));
-        files.galleryImages?.forEach((f) => fd.append("galleryImages", f));
-        await uploadFile(
-          `${baseUrl}/api/universities/${universityId}/gallery/upload`,
-          fd,
-          "Gallery"
-        );
-      }
-
-      if (files.recruitersLogos?.length) {
-        const fd = new FormData();
-        files.recruitersLogos.forEach((f) => fd.append("recruitersLogos", f));
-        await uploadFile(
-          `${baseUrl}/api/recruiters/${universityId}/recruiters/upload`,
-          fd,
-          "Recruiters logos"
-        );
-      }
-
-      // -----------------------------
-      // 5. Success
-      // -----------------------------
-      alert("🎉 University Registered Successfully!");
-    } catch (err) {
-      console.error("❌ Error submitting form:", err);
-      alert("❌ Form submission failed!");
+    // Facilities (stringify array)
+    if (formData.facilities?.length) {
+      payload.append("facilities", JSON.stringify(formData.facilities));
     }
-  };
+
+    // Branches
+    if (branches?.length) {
+      payload.append("branches", JSON.stringify(branches));
+    }
+
+    // File fields
+    Object.entries(files).forEach(([key, fileList]) => {
+      if (!fileList) return;
+      if (Array.isArray(fileList)) {
+        fileList.forEach((f) => payload.append(key, f));
+      } else {
+        payload.append(key, fileList);
+      }
+    });
+
+    // -----------------------------
+    // 2. Register university
+    // -----------------------------
+    const baseUrl = "http://localhost:5000";
+
+    const res = await fetch(`${baseUrl}/api/university-registration`, {
+      method: "POST",
+      body: payload,
+    });
+
+    if (!res.ok) {
+      console.error("❌ Registration failed:", await res.text());
+      alert("❌ University registration failed!");
+      return;
+    }
+
+    const data = await res.json();
+    console.log("✅ University registered:", data);
+
+    if (!data?.data?._id) {
+      alert("❌ University not created!");
+      return;
+    }
+
+    // ✅ store universityId in localStorage and variable
+    const universityId = data.data._id;
+    localStorage.setItem("universityId", universityId);
+
+    // -----------------------------
+    // 3. Helper for uploads
+    // -----------------------------
+    const uploadFile = async (url, formData, label) => {
+      const r = await fetch(url, { method: "POST", body: formData });
+      if (!r.ok) {
+        console.error(`❌ ${label} upload failed:`, await r.text());
+        alert(`❌ ${label} upload failed!`);
+        throw new Error(`${label} upload failed`);
+      }
+      console.log(`✅ ${label} uploaded`);
+    };
+
+    // -----------------------------
+    // 4. Upload extras (if provided)
+    // -----------------------------
+    if (files.file) {
+      const fd = new FormData();
+      fd.append("file", files.file);
+      await uploadFile(
+        `${baseUrl}/api/universities/${universityId}/courses/upload`,
+        fd,
+        "Courses"
+      );
+    }
+
+    if (files.cutoffExcel) {
+      const fd = new FormData();
+      fd.append("file", files.cutoffExcel);
+      await uploadFile(
+        `${baseUrl}/api/cutoff/${universityId}/cutoff/upload`,
+        fd,
+        "Cutoff"
+      );
+    }
+
+    if (files.admissionsExcel) {
+      const fd = new FormData();
+      fd.append("file", files.admissionsExcel);
+      await uploadFile(
+        `${baseUrl}/api/admissions/${universityId}/admissions/upload`,
+        fd,
+        "Admissions"
+      );
+    }
+
+    if (files.placementsExcel) {
+      const fd = new FormData();
+      fd.append("file", files.placementsExcel);
+      await uploadFile(
+        `${baseUrl}/api/universities/${universityId}/placements/upload`,
+        fd,
+        "Placements"
+      );
+    }
+
+    if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
+      const fd = new FormData();
+      files.infraPhotos?.forEach((f) => fd.append("infraPhotos", f));
+      files.eventPhotos?.forEach((f) => fd.append("eventPhotos", f));
+      files.galleryImages?.forEach((f) => fd.append("galleryImages", f));
+      await uploadFile(
+        `${baseUrl}/api/universities/${universityId}/gallery/upload`,
+        fd,
+        "Gallery"
+      );
+    }
+
+    if (files.recruitersLogos?.length) {
+      const fd = new FormData();
+      files.recruitersLogos.forEach((f) => fd.append("recruitersLogos", f));
+      await uploadFile(
+        `${baseUrl}/api/recruiters/${universityId}/recruiters/upload`,
+        fd,
+        "Recruiters logos"
+      );
+    }
+
+    // -----------------------------
+    // 5. Success
+    // -----------------------------
+    alert("🎉 University Registered Successfully!");
+  } catch (err) {
+    console.error("❌ Error submitting form:", err);
+    alert("❌ Form submission failed!");
+  }
+};
+
 
   const facilityOptions = [
     "hostel",
