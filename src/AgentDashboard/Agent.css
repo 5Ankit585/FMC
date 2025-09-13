@@ -28,12 +28,12 @@ a, button {
 
 
 .ad-footer {
-  margin-top: auto;
+  margin-top: 3rem;
   padding: 0.8rem 0;
   font-size: 0.65rem;
   text-align: center;
   color: #000;
-  border-top: 1px solid #fde047;
+  border-top: 1px solid #d4af37;
   background: #fefce8;
 }
 

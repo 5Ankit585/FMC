@@ -1,13 +1,13 @@
 /* ===== Root Page ===== */
 .uni-page {
-  background-color: #fffef7; /* soft pale background */
+  background-color: #e8e8e8; /* soft pale background */
   color: #000;
   font-family: "Inter", sans-serif;
 }
 
 /* ===== Navbar ===== */
 .uni-navbar {
-  background-color: #fffefc; /* near white */
+  background-color: #1a202c; /* near white */
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -20,7 +20,7 @@
 .uni-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #000;
+  color: darkgray;
 }
 
 .uni-search {
@@ -54,7 +54,7 @@
 
 /* Primary */
 .uni-btn-primary {
-  background-color: #facc15; /* yellow-400 */
+  background-color: #ecc94b; /* yellow-400 */
   border: 1px solid #fde047;
   color: #000;
 }
@@ -66,12 +66,12 @@
 
 /* Accent */
 .uni-btn-accent {
-  background-color: #fef9c3; /* pale yellow */
+  background-color: #ecc94b; /* pale yellow */
   border: 1px solid #fde047;
   color: #000;
 }
 .uni-btn-accent:hover {
-  background-color: #fde047;
+  background-color: #eab308;
   color: #000;
 }
 
@@ -128,7 +128,7 @@
 
 /* ===== Select ===== */
 .uni-select {
-  background-color: #fef9c3;
+  background-color: #ecc94b;
   border: 1px solid #fde047;
   padding: 0.25rem 0.5rem;
   border-radius: 0.35rem;
@@ -138,7 +138,7 @@
 }
 
 .uni-select:hover {
-  background-color: #fde047;
+  background-color: #ecc94b;
   color: #000;
 }
 
@@ -189,8 +189,8 @@
 }
 
 .uni-banner-tags span {
-  background-color: #fef9c3;
-  border: 1px solid #fde047;
+  background-color: #ecc94b;
+  border: 1px solid #1e293b;
   padding: 0.25rem 0.5rem;
   margin: 0.5rem 0.25rem 0 0;
   border-radius: 0.25rem;
@@ -206,7 +206,7 @@
 }
 
 .uni-banner-tags .review {
-  background-color: #fde68a;
+  background-color: #ecc94b;
   border: 1px solid #fde047;
   color: #000;
 }
@@ -265,7 +265,7 @@
   align-items: center;
   justify-content: center;
   background-color: #fffefc;       /* clean near-white base */
-  border: 1px solid #fde047;      /* soft yellow border */
+  border: 1px solid #1a202c;      /* soft yellow border */
   color: #000;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
@@ -274,7 +274,7 @@
 /* Active State */
 .uni-tab-btn.active {
   background-color: #facc15;      /* bright yellow */
-  border: 1px solid #eab308;      /* darker yellow border */
+  border: 1px solid #1e293b;      /* darker yellow border */
   color: #000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
@@ -299,7 +299,7 @@
 }
 
 .uni-actions button {
-  background-color: #fef9c3;
+  background-color: #fde68a;
   border: 1px solid #fde047;
   color: #000;
   padding: 0.3rem 0.6rem;
@@ -319,7 +319,7 @@
 .uni-actions button:hover,
 .uni-actions button.primary:hover {
   background-color: #eab308;
-  border-color: #d97706;
+  border-color: #1e293b;
   color: #fff;
 }
 

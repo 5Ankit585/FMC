@@ -34,7 +34,7 @@
   }
   .ud-main {
     padding: 1rem;
-    background: var(--bg-color); /* Ensure off-white background */
+    background: #e8e8e8; /* Ensure off-white background */
   }
 }
 

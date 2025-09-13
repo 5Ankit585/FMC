@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ProfileForm from "./ProfileForm";
 import Courses from "./Courses";
 import LatestNews from "./LatestNews";
@@ -7,10 +7,13 @@ import Documents from "./Documents";
 import AnalyticsDashboard from "./AnalyticsDashboard"; 
 import Subscription from "./Subscription";
 import Settings from "./Settings";
+import AddStudent from "./AddStudent";
+
 import "./MainView.css";
 
 export default function MainView({ route }) {
-  // 🔹 Sample data
+  const [showAddStudent, setShowAddStudent] = useState(false); // 🔹 popup state
+
   const recentApplications = [
     { id: 1, student: "John Doe", institute: "MIT", course: "Computer Science", stage: "Submitted" },
     { id: 2, student: "Jane Smith", institute: "Stanford", course: "Mathematics", stage: "Under Review" },
@@ -22,6 +25,9 @@ export default function MainView({ route }) {
     { id: "R-1002", student: "Jane Smith", institute: "Stanford", amount: "$900" },
     { id: "R-1003", student: "Alice Johnson", institute: "Harvard", amount: "$1500" },
   ];
+
+  const openAddStudentPopup = () => setShowAddStudent(true);
+  const closeAddStudentPopup = () => setShowAddStudent(false);
 
   switch (route) {
     case "My Profile":
@@ -95,8 +101,9 @@ export default function MainView({ route }) {
           {/* Action buttons */}
           <div className="actions-row">
             <div className="button-group">
-              <button className="primary-btn">+ Add New Student</button>
-              <button className="primary-btn">+ New Application</button>
+              <button className="primary-btn" onClick={openAddStudentPopup}>
+                + Add New Student
+              </button>
             </div>
             <div className="link-group">
               <button className="link-btn">Withdraw Commission</button>
@@ -104,9 +111,20 @@ export default function MainView({ route }) {
             </div>
           </div>
 
+          {/* Add Student Modal */}
+          {showAddStudent && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <button className="close-btn" onClick={closeAddStudentPopup}>
+                  ✖
+                </button>
+                <AddStudent />
+              </div>
+            </div>
+          )}
+
           {/* Tables */}
           <div className="tables-grid">
-            {/* Recent Applications */}
             <div className="table-card">
               <h3>Recent Applications</h3>
               <table>
@@ -131,7 +149,6 @@ export default function MainView({ route }) {
               </table>
             </div>
 
-            {/* Recent Receipts */}
             <div className="table-card">
               <h3>Recent Receipts</h3>
               <table>
@@ -152,7 +169,10 @@ export default function MainView({ route }) {
                       <td>{rec.institute}</td>
                       <td>{rec.amount}</td>
                       <td>
-                        <button className="primary-btn" style={{ padding: "0.25rem 0.5rem", fontSize: "0.7rem" }}>
+                        <button
+                          className="primary-btn"
+                          style={{ padding: "0.25rem 0.5rem", fontSize: "0.7rem" }}
+                        >
                           ⬇
                         </button>
                       </td>

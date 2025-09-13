@@ -3,6 +3,8 @@
   background-color: #fffef7; /* dark gray */
   color: #ffffff;
   padding: 3rem 1.5rem;
+  border: 1px solid #1e293b;
+  border-radius: 9px;
 }
 
 .admission-container {
@@ -15,7 +17,7 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: 2.5rem;
-  color: black;
+  color: #1e293b;
 }
 
 .admission-grid {
@@ -33,7 +35,7 @@
 /* Individual Course Card */
 .admission-card {
   background-color: #ffffff; /* pale cream */
-  border: 2px solid #fcd34d; /* light amber */
+  border: 2px solid #1e293b; /* light amber */
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -65,7 +67,7 @@
 
 /* Buttons */
 .admission-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;
   border-radius: 0.5rem;
@@ -76,7 +78,7 @@
 .admission-btn-apply {
   background-color: #facc15; /* yellow-400 */
   color: #000000;
-  border: none;
+  border: 1px solid #1e293b;
 }
 
 .admission-btn-apply:hover {

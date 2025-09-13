@@ -3,7 +3,7 @@
   --analytics-primary: #f59e0b;   /* amber-500 */
   --analytics-hover: #b45309;     /* amber-700 */
   --analytics-text: #78350f;      /* amber-900 */
-  --analytics-bg: #ffffff;        /* white */
+  --analytics-bg: #faf9f6;        /* white */
   --analytics-bg-alt: #f9fafb;    /* off-white (tailwind gray-50) */
   --analytics-border: #fef9c3;    /* light yellow */
   --analytics-chart1: #fbbf24;    /* amber-400 */
@@ -20,6 +20,7 @@
   box-sizing: border-box;
   color: var(--analytics-text); /* #78350f */
   background: var(--analytics-bg); /* #ffffff */
+  border-radius: 8px;
 }
 
 /* Heading */
@@ -28,7 +29,7 @@
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
-  color: var(--analytics-primary); /* #f59e0b */
+  color: #1a202c; /* #f59e0b */
 }
 
 /* Category header */
@@ -39,9 +40,9 @@
 .ud-news-category-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--analytics-primary); /* #f59e0b */
+  color: #1a202c; /* #f59e0b */
   margin-bottom: 0.4rem;
-  border-bottom: 3px solid var(--analytics-border); /* #fef9c3 */
+  border-bottom: 3px solid #bfa233; /* #fef9c3 */
   padding-bottom: 0.25rem;
 }
 
@@ -73,7 +74,7 @@
   background: var(--analytics-bg-alt); /* #f9fafb */
   border-radius: 6px;
   overflow: hidden;
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
+  border: 2px solid #1e293b; /* #fef9c3 */
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   height: 100%;
@@ -175,22 +176,22 @@
 }
 
 .ud-btn-edit {
-  background: #fef08a; /* Swapped to hover color */
+  background: #d4af37; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
 }
 
 .ud-btn-edit:hover {
-  background: var(--analytics-chart1); /* #fbbf24 */
+  background: #bfa233; /* #fbbf24 */
   color: white;
 }
 
 .ud-btn-delete {
-  background: #fef08a; /* Swapped to hover color */
+  background: #d4af37; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
 }
 
 .ud-btn-delete:hover {
-  background: var(--analytics-chart3); /* #d97706 */
+  background: #bfa233; /* #d97706 */
   color: white;
 }
 

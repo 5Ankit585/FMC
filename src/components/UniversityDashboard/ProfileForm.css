@@ -3,7 +3,7 @@
   --analytics-primary: #f59e0b;   /* amber-500 */
   --analytics-hover: #b45309;     /* amber-700 */
   --analytics-text: #78350f;      /* amber-900 */
-  --analytics-bg: #ffffff;        /* white */
+  --analytics-bg: #faf9f6;        /* white */
   --analytics-bg-alt: #f9fafb;    /* off-white (tailwind gray-50) */
   --analytics-border: #fef9c3;    /* light yellow */
   --analytics-chart1: #fbbf24;    /* amber-400 */
@@ -18,6 +18,7 @@
   margin: 0 auto;
   padding: 1rem; 
   background: var(--analytics-bg); /* #ffffff */
+  border-radius: 6px;
 }
 
 /* ===== Stepper ===== */
@@ -34,14 +35,14 @@
   width: 26px; 
   height: 26px;
   border-radius: 50%;
-  background: var(--analytics-border); /* #fef9c3 */
+  background: #ecc94b; /* #fef9c3 */
   color: var(--analytics-primary); /* #f59e0b */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 600;
-  border: 3px solid var(--analytics-primary); /* #f59e0b */
+  border: 2px solid #1a202c; /* #f59e0b */
   transition: background 0.3s, color 0.3s, transform 0.2s;
 }
 
@@ -59,11 +60,11 @@
 .uni-profile-step-line {
   flex: 1;
   height: 2px;
-  background: var(--analytics-border); /* #fef9c3 */
+  background: #1a202c; /* #fef9c3 */
 }
 
 .uni-profile-step-line.active {
-  background: var(--analytics-primary); /* #f59e0b */
+  background: #1a202c; /* #f59e0b */
 }
 
 /* ===== Form Base ===== */
@@ -78,7 +79,7 @@
   border-radius: 6px;
   padding: 0.6rem; 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
+  border: 3px solid #1e293b; /* #fef9c3 */
 }
 
 .uni-profile-form-section-title {
@@ -107,7 +108,7 @@
   padding: 0.5rem 0.7rem;
   font-size: 0.8rem;
   border-radius: 4px;
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
+  border: 3px solid #d4af37; /* #fef9c3 */
   background: var(--analytics-bg); /* #ffffff */
   color: var(--analytics-text); /* #78350f */
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -120,7 +121,7 @@
 }
 
 .uni-profile-input:hover {
-  border-color: var(--analytics-chart3); /* #d97706 */
+  border-color: #1a202c; /* #d97706 */
 }
 
 textarea.uni-profile-input {
@@ -160,13 +161,13 @@ select.uni-profile-input {
 }
 
 .uni-profile-btn-primary {
-  background: #fef08a; /* Swapped to hover color */
+  background: #d4af37; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
   border: 3px solid var(--analytics-border); /* #fef9c3 */
 }
 
 .uni-profile-btn-primary:hover {
-  background: var(--analytics-chart3); /* #d97706 */
+  background: #bfa233; /* #d97706 */
   color: white;
 }
 

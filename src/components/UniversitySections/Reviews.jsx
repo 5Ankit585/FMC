@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import "./Reviews.css";
+
 
 const Reviews = () => {
   const [rating, setRating] = useState(0);

@@ -5,21 +5,22 @@
   flex-direction: column;
   align-items: center;
   background-color: #fffefc; /* cream background */
-  min-height: 100vh;
+  border: 1px solid #1e293b;
+  border-radius: 9px;
 }
 
 .facilities-title {
-  font-size: 2rem;       /* increased font size */
+  font-size: clamp(1.5rem, 5vw, 2rem); /* Responsive font size */
   font-weight: 700;
-  color: #000000;        /* amber-700 for headings */
-  margin-bottom: 2rem;   /* spacing below heading */
-  text-align: center;    /* center align */
+  color: #000000; /* amber-700 for headings */
+  margin-bottom: 2rem; /* spacing below heading */
+  text-align: center; /* center align */
 }
 
 .facilities-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 1rem;
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
@@ -27,10 +28,10 @@
 }
 
 .facility-card {
-  border: 2px solid #fde047; /* amber-400 border */
+  border: 2px solid #1e293b; /* amber-400 border */
   border-radius: 8px;
   background-color: #fffefc; /* cream card */
-  padding: 0.75rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -41,20 +42,20 @@
 
 .facility-card:hover {
   transform: translateY(-3px);
-  border-color: #f59e0b; /* amber-500 on hover */
+  border-color: #ecc94b; /* amber-500 on hover */
   box-shadow: 0 6px 15px rgba(0,0,0,0.12);
 }
 
 .facility-header {
   display: flex;
   align-items: center;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
-.facility-icon {
+.uni-facility-icon span {
   margin-right: 0.5rem;
-  font-size: 1.5rem;
-  color: #f59e0b; /* amber-500 */
+  font-size: clamp(1.2rem, 3vw, 1.5rem); /* Responsive icon size */
+  color: #ecc94b !important; /* amber-500 */
   transition: color 0.3s;
 }
 
@@ -63,17 +64,17 @@
 }
 
 .facility-title {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2.5vw, 0.875rem); /* Responsive font size */
   font-weight: 600;
   margin-left: 0.5rem;
-  color: #000000;
+  color: #1a202c;
 }
 
 .facility-description {
-  font-size: 0.75rem;
-  margin-bottom: 0.25rem;
-  line-height: 1.2;
+  font-size: clamp(0.7rem, 2vw, 0.8rem); /* Responsive font size */
+  line-height: 1.3;
   color: #374151; /* gray-700 */
+  padding: 1rem; /* Adjusted padding for smaller screens */
 }
 
 .reviews {
@@ -87,12 +88,12 @@
 
 .reviews li {
   margin-bottom: 0.25rem;
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 2vw, 0.75rem); /* Responsive font size */
   color: #374151;
 }
 
 .no-reviews {
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 2vw, 0.75rem); /* Responsive font size */
   color: #9ca3af; /* gray-400 */
   text-align: center;
 }
@@ -103,10 +104,10 @@
   justify-content: center;
   background-color: #facc15; /* yellow-400 */
   color: #000000;
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 1rem; /* Increased padding for better touch targets */
   border: none;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 2vw, 0.75rem); /* Responsive font size */
   cursor: pointer;
   transition: background-color 0.3s;
   width: 100%;
@@ -120,13 +121,13 @@
 
 .reviews-section {
   margin-top: 2rem;
-  width: 50%;
-  text-align: center;
+  width: 90%; /* Responsive width */
   max-width: 600px;
+  text-align: center;
 }
 
 .reviews-title {
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 3vw, 1rem); /* Responsive font size */
   font-weight: 700;
   color: #b45309; /* amber-700 for headings */
   margin-bottom: 1rem;
@@ -137,13 +138,13 @@
 }
 
 .review-text {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2.5vw, 0.875rem); /* Responsive font size */
   color: #000000;
   margin-bottom: 0.25rem;
 }
 
 .review-meta {
-  font-size: 0.7rem;
+  font-size: clamp(0.6rem, 2vw, 0.7rem); /* Responsive font size */
   color: #9ca3af; /* gray-400 */
 }
 
@@ -163,7 +164,7 @@
 
 .modal-content {
   background-color: #fffefc; /* cream modal */
-  padding: 1rem;
+  padding: 1.5rem; /* Increased padding for better spacing */
   border-radius: 8px;
   width: 90%;
   max-width: 400px;
@@ -173,14 +174,14 @@
 }
 
 .modal-title {
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 3vw, 1rem); /* Responsive font size */
   font-weight: 700;
   margin-bottom: 0.75rem;
   color: #b45309;
 }
 
 .modal-label {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2.5vw, 0.875rem); /* Responsive font size */
   margin-bottom: 0.25rem;
   color: #374151;
 }
@@ -191,7 +192,7 @@
 }
 
 .star {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem); /* Responsive icon size */
   margin-right: 0.25rem;
   cursor: pointer;
   color: #fde047; /* amber-400 */
@@ -221,7 +222,7 @@
 .cancel-button {
   background-color: #fde047; /* amber-400 */
   color: #000000;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem; /* Increased padding for better touch targets */
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -235,7 +236,7 @@
 .submit-button {
   background-color: #facc15; /* yellow-400 */
   color: #000000;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem; /* Increased padding for better touch targets */
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -251,25 +252,78 @@
   cursor: not-allowed;
 }
 
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .facilities-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust for tablets */
+    gap: 0.75rem;
+  }
+
+  .facilities-container {
+    padding: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .facilities-grid {
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust for smaller screens */
+    width: 95%;
   }
 
   .reviews-section {
-    width: 100%;
+    width: 95%;
   }
 
-  .facility-title {
-    font-size: 0.75rem;
+  .facility-card {
+    padding: 0.75rem;
   }
 
   .facility-description {
-    font-size: 0.7rem;
+    padding: 0.5rem;
   }
 
   .modal-content {
     width: 95%;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .facilities-grid {
+    grid-template-columns: 1fr; /* Single column for mobile */
+    gap: 0.5rem;
+  }
+
+  .facilities-container {
+    padding: 1rem;
+  }
+
+  .facilities-title {
+    margin-bottom: 1rem;
+  }
+
+  .facility-card {
+    padding: 0.5rem;
+  }
+
+  .facility-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .facility-title {
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+
+  .review-button,
+  .cancel-button,
+  .submit-button {
+    padding: 0.4rem 0.8rem; /* Smaller padding for mobile */
+  }
+
+  .modal-content {
+    width: 98%;
+    padding: 0.75rem;
   }
 }

@@ -17,7 +17,7 @@
   margin-bottom: 0.7rem;
   font-size: 1.1rem; /* reduced */
   font-weight: 700;
-  color: #f59e0b; /* amber-500 */
+  color: #d4af37; /* amber-500 */
   text-align: center;
 }
 
@@ -26,7 +26,7 @@
   width: 100%;
   padding: 0.45rem 0.65rem; /* reduced */
   margin-bottom: 0.7rem;
-  border: 1px solid #e5e7eb; /* gray-300 */
+  border: 1px solid #1e293b; /* gray-300 */
   border-radius: 6px;
   font-size: 0.8rem; /* smaller text */
   background-color: #ffffff;
@@ -52,7 +52,7 @@
   border-radius: 9999px;
   background-color: #f9fafb; /* off-white */
   color: #78350f; /* deep amber */
-  border: 1px solid #e5e7eb;
+  border: 1px solid #1e293b;
   cursor: pointer;
   font-weight: 500;
   font-size: 0.75rem; /* reduced */
@@ -65,7 +65,7 @@
 }
 
 .ab-filter-chip-active {
-  background-color: #f59e0b; /* amber-500 */
+  background-color: #d1b036; /* amber-500 */
   color: #fff;
 }
 
@@ -82,7 +82,7 @@
   align-items: center;
   padding: 0.6rem 0.8rem; /* reduced */
   border-radius: 6px;
-  border: 1px solid #e5e7eb; /* gray-300 */
+  border: 1px solid #1e293b; /* gray-300 */
   background-color: #ffffff;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -94,7 +94,7 @@
 
 /* Info */
 .ud-app-info strong {
-  color: #78350f; /* amber-900 */
+  color: #1e293b; /* amber-900 */
   font-size: 0.82rem; /* smaller */
 }
 

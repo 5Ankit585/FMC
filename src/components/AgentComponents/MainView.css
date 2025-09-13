@@ -1,6 +1,6 @@
 .main-view {
   min-height: 100vh;
-  background: #fefce8;
+  background: #8080802f;;
   display: flex;
   flex-direction: column;
   align-items: stretch;   /* ✅ let children stretch full width */

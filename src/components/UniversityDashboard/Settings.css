@@ -3,9 +3,9 @@
   background: #faf9f6; /* new light background */
   color: #000;
   padding: 1rem 0.8rem;
-  min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.75rem; /* compact font */
+  border-radius: 9px;
 }
 
 /* Header */
@@ -40,7 +40,7 @@
 /* Card */
 .ud-settings-card {
   background: #fffefc;
-  border: 3px solid #fefce8; /* updated border */
+  border: 3px solid #1e293b; /* updated border */
   border-radius: 0.5rem;
   padding: 0.8rem;
   display: flex;
@@ -56,7 +56,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #fef9c3; /* pale yellow */
+  background: #cfb040; /* pale yellow */
   border: 1px solid #facc15;
   display: flex;
   align-items: center;
@@ -86,8 +86,8 @@
   margin-top: 0.6rem;
   align-self: flex-end;
   padding: 0.25rem 0.6rem;
-  background: #fef08a; /* updated bg */
-  color: #000; /* black text */
+  background: #1e293b; /* updated bg */
+  color: #cfb040; /* black text */
   border: none;
   border-radius: 0.35rem;
   font-size: 0.65rem;
@@ -98,7 +98,7 @@
 
 .ud-settings-btn:hover,
 .dashboard-content .action-button:hover {
-  background: #f59e0b; /* hover color */
-  color: #fff;
+  /* background: #f59e0b;  */
+   color: #fff; 
   transform: translateY(-1px);
 }

@@ -4,20 +4,19 @@
   width: 95%;
   margin: 1rem auto;
   padding: 0.8rem;
-  background: #fff;
+  background: #faf9f6;
   border-radius: 8px;
-  border: 3px solid #fefce8; /* fixed border */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.75rem;
-  color: #000;
+  color: #1f2937;
 }
 
 /* ===== Title ===== */
 .title {
   font-size: 1rem;
   font-weight: 700;
-  color: #000;
+  color: #1e293b; /* navy */
   margin-bottom: 0.8rem;
   text-align: center;
 }
@@ -26,18 +25,18 @@
 .add-btn {
   display: block;
   margin: 0 auto 1rem auto;
-  background-color: #facc15;
-  color: #000;
+  background-color: #d4af37; /* gold */
+  color: #1e293b; /* navy text */
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.35rem 0.75rem;
-  border: 3px solid #fefce8; /* fixed border */
+  border: 1px solid #d4af37;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .add-btn:hover {
-  background-color: #eab308;
+  background-color: #bfa233; /* darker gold */
   color: #fff;
   transform: translateY(-1px);
 }
@@ -57,27 +56,25 @@
   background: #fff;
   padding: 0.6rem 0.75rem;
   border-radius: 6px;
-  border: 3px solid #fefce8; /* fixed border */
+  border: 1px solid #e5e7eb; /* light gray */
   font-size: 0.7rem;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.2s ease;
 }
 
 .announcement-row:hover {
+  background: #fef9c3; /* pale gold */
   transform: translateY(-2px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid  #eab308; /* darker yellow on hover */
 }
 
 /* Striped rows */
 .announcements-list .announcement-row:nth-child(odd) {
-  background: #fffef7;
+  background: #faf9f6; /* light gray */
+  border-color: #1a202c;
 }
 .announcements-list .announcement-row:nth-child(even) {
-  background: #fff;
-}
-.announcement-row:hover {
-  background: #fef08a;
-  transform: translateY(-1px);
+  background: #faf9f6;
+  border-color: #1a202c;
 }
 
 /* Left side (text info) */
@@ -91,7 +88,7 @@
 
 .announcement-title {
   font-weight: 600;
-  color: #000;
+  color: #1e293b; /* navy */
   font-size: 0.75rem;
   position: relative;
   display: inline-block;
@@ -103,14 +100,14 @@
   display: block;
   height: 2px;
   width: 24px;
-  background-color: #facc15;
+  background-color: #d4af37; /* gold underline */
   margin-top: 2px;
   border-radius: 2px;
 }
 
 .announcement-date {
   font-size: 0.65rem;
-  color: #444;
+  color: #6b7280; /* muted gray */
 }
 
 /* ===== Right side (actions) ===== */
@@ -132,22 +129,22 @@
 
 /* Edit Button */
 .edit-btn {
-  background-color: #fef9c3;
+  background-color: #fef9c3; /* pale gold */
   color: #92400e;
-  border: 3px solid #fefce8; /* fixed border */
+  border: 1px solid #d4af37;
 }
 .edit-btn:hover {
-  background-color: #facc15;
-  color: #000;
+  background-color: #d4af37; /* gold */
+  color: #fff;
 }
 
 /* Delete Button */
 .delete-btn {
   background-color: #fee2e2;
   color: #991b1b;
-  border: 3px solid #fecaca;
+  border: 1px solid #fecaca;
 }
 .delete-btn:hover {
-  background-color: #fecaca;
+  background-color: #fca5a5;
   color: #fff;
 }

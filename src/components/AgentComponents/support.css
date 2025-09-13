@@ -4,12 +4,10 @@
   max-width: 1400px;
   width: 90%; 
   margin: 0 auto;
-  background: #fff;
-  min-height: 100vh;
+  background: #faf9f6;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.75rem;
   color: #000;
-  border: 3px solid #fefce8; /* fixed border */
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
@@ -18,7 +16,7 @@
 .support-header {
   text-align: center;
   margin-bottom: 1rem;
-  border-bottom: 3px dashed #fefce8; /* match borders */
+  border-bottom: 2px dashed #d4af37; /* match borders */
   padding-bottom: 0.5rem;
 }
 
@@ -50,8 +48,8 @@
 
 /* ===== Ticket Card ===== */
 .ticket-card {
-  background: #fffef7;
-  border: 3px solid #fefce8; /* fixed border */
+  background: #faf9f6;
+  border: 3px solid #1e293b; /* fixed border */
   border-radius: 6px;
   padding: 0.6rem;
   display: flex;
@@ -67,7 +65,7 @@
 .ticket-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid  #eab308; /* darker yellow on hover */
+  border: 1px solid  #1e293b; /* darker yellow on hover */
 }
 
 /* ===== Ticket Header ===== */
@@ -92,8 +90,8 @@
 
 /* ===== Buttons ===== */
 .ticket-btn {
-  background: #facc15;
-  color: #000;
+  background: #1e293b;
+  color: #cfb040;
   border: 3px solid #fefce8; /* fixed border */
   padding: 0.3rem 0.6rem;
   border-radius: 4px;

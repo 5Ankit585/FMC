@@ -3,8 +3,7 @@
   background-color: #fffefc; /* soft yellowish background */
   color: #000; /* black text */
   padding: 2rem;
-  min-height: 100vh;
-  border: 1px solid #fcd34d; /* amber border */
+  border: 1px solid #1a202c; /* amber border */
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
@@ -38,8 +37,8 @@
 
 /* Table Header */
 .uni-courses-header tr {
-  background-color: #fcd34d;
-  color: #000;
+  background-color: #1e293b;
+  color: #ecc94b;
 }
 
 .uni-courses-th {
@@ -76,7 +75,7 @@
   background: #fffef7;
 }
 .uni-courses-table tbody tr:hover td {
-  background: #fef08a;
+  background: #ecc94b;
 }
 
 /* No Data Row */

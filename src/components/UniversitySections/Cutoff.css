@@ -5,7 +5,7 @@
   padding: 16px;
   background-color: #fffefc; /* soft yellowish background */
   border-radius: 8px;
-  border: 1px solid #fcd34d; /* amber border */
+  border: 1px solid #1a202c; /* amber border */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   color: #000; /* black text */
 }
@@ -43,8 +43,8 @@
 
 /* Table Head */
 .uni-cutoff-container .uni-cutoff-table thead {
-  background-color: #fcd34d !important; /* amber header */
-  color: #000 !important; /* black text */
+  background-color: #1e293b !important; /* amber header */
+  color: #ecc94b !important; /* black text */
 }
 
 .uni-cutoff-container .uni-cutoff-table th {
@@ -65,7 +65,7 @@
 }
 
 .uni-cutoff-container .uni-cutoff-table tbody tr:hover {
-  background-color: #fef9c3; /* light yellow hover */
+  background-color: #ecc94b; /* light yellow hover */
 }
 
 .uni-cutoff-container .uni-cutoff-table td {

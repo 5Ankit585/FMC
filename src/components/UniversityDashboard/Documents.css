@@ -3,7 +3,7 @@
   --analytics-primary: #f59e0b;   /* amber-500 */
   --analytics-hover: #b45309;     /* amber-700 */
   --analytics-text: #78350f;      /* amber-900 */
-  --analytics-bg: #ffffff;        /* white */
+  --analytics-bg: #faf9f6;        /* white */
   --analytics-bg-alt: #f9fafb;    /* off-white (tailwind gray-50) */
   --analytics-border: #fef9c3;    /* light yellow */
   --analytics-chart1: #fbbf24;    /* amber-400 */
@@ -16,9 +16,9 @@
 .documents-page {
   padding: 20px;
   background: var(--analytics-bg); /* #ffffff */
-  min-height: 100vh;
   font-family: "Inter", sans-serif;
   color: var(--analytics-text); /* #78350f */
+  border-radius: 9px;
 }
 
 /* Upload button */
@@ -28,7 +28,7 @@
 }
 
 .upload-btn {
-  background-color: #fef08a; /* Swapped to hover color */
+  background-color: #d1af39; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
   padding: 10px 16px;
   border-radius: 8px;
@@ -42,7 +42,7 @@
 }
 
 .upload-btn:hover {
-  background-color: var(--analytics-primary); /* #f59e0b */
+  background-color: #ca8a04; /* #f59e0b */
   color: white; /* Light text for visibility */
 }
 
@@ -67,7 +67,7 @@
   padding: 14px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
+  border: 3px solid #1e293b; /* #fef9c3 */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -123,12 +123,12 @@
 }
 
 .btn.view {
-  background: #fef08a; /* Swapped to hover color */
+  background: #d1af39; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
 }
 
 .btn.view:hover {
-  background: var(--analytics-chart1); /* #fbbf24 */
+  background: #d1af39; /* #fbbf24 */
   color: white;
 }
 
@@ -138,12 +138,12 @@
 }
 
 .btn.edit:hover {
-  background: var(--analytics-chart2); /* #f59e0b */
+  background: #d1af39; /* #f59e0b */
   color: white;
 }
 
 .btn.delete {
-  background: #fef08a; /* Swapped to hover color */
+  background: #d1af39; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
 }
 

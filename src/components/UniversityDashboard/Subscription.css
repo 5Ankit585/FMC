@@ -56,13 +56,13 @@
   font-weight: 600;
   font-size: 0.75rem;
   cursor: pointer;
-  background: #fef08a; /* Swapped to hover color */
+  background: #d4af37; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
   transition: all 0.2s ease;
 }
 
 .subscription-container .btn:hover {
-  background: var(--sub-primary); /* Swapped to original color */
+  background-color: #bfa233; /* darker gold */
   color: white; /* Light text for visibility */
 }
 
@@ -70,7 +70,7 @@
   width: 100%;
   padding: 0.4rem;
   border-radius: 5px;
-  background: #fef08a; /* Swapped to hover color */
+  background: #d4af37; /* Swapped to hover color */
   color: #1F2937; /* Dark text for visibility */
   font-weight: 600;
   font-size: 0.8rem;
@@ -79,7 +79,7 @@
 }
 
 .buy-button:hover {
-  background: var(--sub-primary); /* Swapped to original color */
+  background-color: #bfa233; /* darker gold */
   color: white; /* Light text for visibility */
 }
 
@@ -97,7 +97,7 @@
   padding: 0.9rem;
   border-radius: 8px;
   box-shadow: var(--shadow);
-  border: 2px solid var(--sub-border);
+  border: 2px solid #1e293b;
   transition: background-color 0.2s ease;
   font-size: 0.8rem;
 }
@@ -120,7 +120,7 @@
 }
 
 .plan-badge {
-  background: var(--sub-border);
+  background: #d4af37;
   color: var(--sub-primary);
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
