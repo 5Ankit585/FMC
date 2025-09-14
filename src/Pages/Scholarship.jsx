@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { GraduationCap, Banknote, BellRing, Landmark } from "lucide-react";
-import Navbar from "../components/Navbar";
 
 export default function ScholarshipsLoans() {
   const [loanAmount, setLoanAmount] = useState(0);
@@ -22,14 +21,13 @@ export default function ScholarshipsLoans() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <Navbar/>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
       {/* Page Heading */}
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-3xl md:text-4xl font-bold text-center text-indigo-700 mb-8 mt-10"
+        className="text-3xl md:text-4xl font-bold text-center text-indigo-700 mb-8"
       >
         🎓 Scholarships & Loans
       </motion.h1>

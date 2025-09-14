@@ -15,6 +15,7 @@ import AdminHome from "./Pages/Admin/AdminHome";
 import LoginModal from "./Modals/LoginModal";
 import SignupModal from "./Modals/SignupModal";
 import UniversityDetails from "./Pages/UniversityDetails";
+import CourseRegister from "./Pages/CourseRegister";
 
 // footer page imports 
 import CollegeReview from './FooterPages/topExam/CollegeReview'
@@ -25,6 +26,7 @@ import Service from './FooterPages/topExam/Service'
 import Srm from './FooterPages/topExam/Srm'
 import Upes from './FooterPages/topExam/Upes'
 
+import CoursePage from './Pages/CoursePage'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -77,6 +79,8 @@ function App() {
           <Route path="/greatlake" element={<GreatLakes />} />
           <Route path="/mahe" element={<Mahe />} />
           <Route path="/srm" element={<Srm />} />
+          <Route path="/coursepage/:id" element={<CoursePage />} />
+          <Route path="/CourseRegister" element={<CourseRegister/>} />
         </Routes>
       </BrowserRouter>
     </>
