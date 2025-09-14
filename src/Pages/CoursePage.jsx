@@ -5,42 +5,42 @@ import "./CoursePage.css";
 
 /* Stat Component */
 const Stat = ({ label, value, highlight = false }) => (
-  <div className="stat-container">
-    <span className="stat-label">{label}</span>
-    <span className={`stat-value ${highlight ? "stat-highlight" : ""}`}>{value}</span>
+  <div className="course-stat-container">
+    <span className="course-stat-label">{label}</span>
+    <span className={`course-stat-value ${highlight ? "course-stat-highlight" : ""}`}>{value}</span>
   </div>
 );
 
 /* Generic Card with optional image */
 const Card = ({ title, desc, icon, imgSrc }) => (
-  <div className="card-container">
+  <div className="course-card-container">
     {imgSrc ? (
-      <div className="card-image">
-        <img src={imgSrc} alt={title} className="card-img" loading="lazy" />
-        <div className="card-img-overlay" />
+      <div className="course-card-image">
+        <img src={imgSrc} alt={title} className="course-card-img" loading="lazy" />
+        <div className="course-card-img-overlay" />
       </div>
     ) : null}
-    <div className="card-content">
-      <div className="card-icon">
-        {icon ?? <span className="card-icon-fallback">★</span>}
+    <div className="course-card-content">
+      <div className="course-card-icon">
+        {icon ?? <span className="course-card-icon-fallback">★</span>}
       </div>
-      <h4 className="card-title">{title}</h4>
-      {desc && <p className="card-desc">{desc}</p>}
+      <h4 className="course-card-title">{title}</h4>
+      {desc && <p className="course-card-desc">{desc}</p>}
     </div>
   </div>
 );
 
 /* Institute Card */
 const InstituteCard = ({ title, desc, img }) => (
-  <div className="institute-card-container">
-    <div className="institute-card">
-      <div className="institute-image">
-        <img src={img} alt={title} className="institute-img" loading="lazy" />
-        <div className="institute-img-overlay" />
+  <div className="course-institute-card-container">
+    <div className="course-institute-card">
+      <div className="course-institute-image">
+        <img src={img} alt={title} className="course-institute-img" loading="lazy" />
+        <div className="course-institute-img-overlay" />
       </div>
-      <div className="institute-content">
-        <h4 className="institute-title">{title}</h4>
-        {desc && <p className="institute-desc">{desc}</p>}
+      <div className="course-institute-content">
+        <h4 className="course-institute-title">{title}</h4>
+        {desc && <p className="course-institute-desc">{desc}</p>}
       </div>
     </div>
   </div>
@@ -48,14 +48,14 @@ const InstituteCard = ({ title, desc, img }) => (
 
 /* Section Component */
 const Section = ({ title, subtitle, children, id }) => (
-  <section id={id} className="section-container">
-    <div className="section-header">
+  <section id={id} className="course-section-container">
+    <div className="course-section-header">
       <div>
-        <h2 className="section-title">{title}</h2>
-        {subtitle && <p className="section-subtitle">{subtitle}</p>}
+        <h2 className="course-section-title">{title}</h2>
+        {subtitle && <p className="course-section-subtitle">{subtitle}</p>}
       </div>
-      <div className="section-buttons">
-        <a href="#counselor" className="section-counselor-button">
+      <div className="course-section-buttons">
+        <a href="#counselor" className="course-section-counselor-button">
           Talk to Counselor
         </a>
       </div>
@@ -89,7 +89,7 @@ export default function CoursePage() {
     const fetchCourse = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/courses/${id}`);
-        const courseData = await res.json();  // direct milega
+        const courseData = await res.json();
         console.log("Course fetched:", courseData);
 
         const parsed = {
@@ -147,59 +147,59 @@ export default function CoursePage() {
     };
   }, [course]);
 
-  if (!course) return <div className="loading">Loading course...</div>;
+  if (!course) return <div className="course-loading">Loading course...</div>;
 
   return (
-    <div className="page-container">
+    <div className="course-page-container">
       {/* Navbar */}
-      <header className="navbar">
-        <div className="navbar-content">
-          <div className="navbar-logo">
-            <div className="navbar-logo-icon">{course.shortName || "🎓"}</div>
-            <span className="navbar-logo-text">{course.courseTitle}</span>
+      <header className="course-navbar">
+        <div className="course-navbar-content">
+          <div className="course-navbar-logo">
+            <div className="course-navbar-logo-icon">{course.shortName || "🎓"}</div>
+            <span className="course-navbar-logo-text">{course.courseTitle}</span>
           </div>
-          <nav className="navbar-links">
-            <a href="#overview" className="navbar-link">Overview</a>
-            <a href="#specializations" className="navbar-link">Specializations</a>
-            <a href="#curriculum" className="navbar-link">Curriculum</a>
-            <a href="#institutes" className="navbar-link">Top Institutes</a>
-            <a href="#career" className="navbar-link">Careers</a>
+          <nav className="course-navbar-links">
+            <a href="#overview" className="course-navbar-link">Overview</a>
+            <a href="#specializations" className="course-navbar-link">Specializations</a>
+            <a href="#curriculum" className="course-navbar-link">Curriculum</a>
+            <a href="#institutes" className="course-navbar-link">Top Institutes</a>
+            <a href="#career" className="course-navbar-link">Careers</a>
           </nav>
-          <a href="#brochure" className="navbar-brochure-button">Download Brochure</a>
+          <a href="#brochure" className="course-navbar-brochure-button">Download Brochure</a>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section id="overview" className="hero-section">
-        <div className="hero-overlay">
-          <div className="hero-blur-left" />
-          <div className="hero-blur-right" />
+      <section id="overview" className="course-hero-section">
+        <div className="course-hero-overlay">
+          <div className="course-hero-blur-left" />
+          <div className="course-hero-blur-right" />
         </div>
-        <div className="hero-grid">
+        <div className="course-hero-grid">
           <div>
-            <div className="hero-badge">{course.shortName || "Course"}</div>
-            <h1 className="hero-title">{course.courseTitle}</h1>
-            <p className="hero-description">{course.description}</p>
-            <div className="hero-stats">
+            <div className="course-hero-badge">{course.shortName || "Course"}</div>
+            <h1 className="course-hero-title">{course.courseTitle}</h1>
+            <p className="course-hero-description">{course.description}</p>
+            <div className="course-hero-stats">
               <Stat label="Duration" value={course.duration} highlight />
               <Stat label="Fees" value={course.fees} />
               <Stat label="Mode" value={course.mode} />
               <Stat label="Level" value={course.level} />
             </div>
-            <div className="hero-buttons">
-              <a href="#counselor" className="hero-counselor-button">Talk to Counselor</a>
-              <a href="#brochure" className="hero-brochure-button">Download Brochure</a>
+            <div className="course-hero-buttons">
+              <a href="#counselor" className="course-hero-counselor-button">Talk to Counselor</a>
+              <a href="#brochure" className="course-hero-brochure-button">Download Brochure</a>
             </div>
           </div>
-          <div className="highlights-container">
-            <div className="highlights-background" />
-            <h3 className="highlights-title">Key Highlights</h3>
-            <ul className="highlights-list">
+          <div className="course-highlights-container">
+            <div className="course-highlights-background" />
+            <h3 className="course-highlights-title">Key Highlights</h3>
+            <ul className="course-highlights-list">
               {course.highlights.map((item, idx) => (
                 <li key={idx}>{item.trim()}</li>
               ))}
             </ul>
-            <div className="highlights-stats">
+            <div className="course-highlights-stats">
               <Stat label="Internship" value={course.internship || "N/A"} />
               <Stat label="Placement" value={course.placement || "N/A"} />
             </div>
@@ -213,7 +213,7 @@ export default function CoursePage() {
         title="Specializations"
         subtitle="Choose a focus area to align with career goals."
       >
-        <div className="specializations-grid">
+        <div className="course-specializations-grid">
           {course.specializationImages?.map((item, idx) => (
             <Card
               key={idx}
@@ -230,11 +230,11 @@ export default function CoursePage() {
         title="Curriculum Snapshot"
         subtitle="Core subjects and electives."
       >
-        <div className="curriculum-grid">
+        <div className="course-curriculum-grid">
           {course.curriculum.map((item, idx) => (
-            <div key={idx} className="curriculum-card">
-              <h4 className="curriculum-title">Subject {idx + 1}</h4>
-              <ul className="curriculum-list">
+            <div key={idx} className="course-curriculum-card">
+              <h4 className="course-curriculum-title">Subject {idx + 1}</h4>
+              <ul className="course-curriculum-list">
                 <li>{item.trim()}</li>
               </ul>
             </div>
@@ -248,10 +248,10 @@ export default function CoursePage() {
         title="Top Institutes"
         subtitle="Popular institutions offering this course."
       >
-        <div className="institutes-container">
-          <div className="institutes-background" />
-          <div ref={scrollerRef} className="institutes-scroller">
-            <div className="institutes-content">
+        <div className="course-institutes-container">
+          <div className="course-institutes-background" />
+          <div ref={scrollerRef} className="course-institutes-scroller">
+            <div className="course-institutes-content">
               {course.topInstituteImages?.map((item, idx) => (
                 <InstituteCard
                   key={idx}
@@ -270,10 +270,10 @@ export default function CoursePage() {
         title="Career Opportunities"
         subtitle="Roles with strong growth potential."
       >
-        <div className="careers-grid">
-          <div className="careers-card">
-            <h4 className="careers-title">Popular Roles</h4>
-            <ul className="careers-list">
+        <div className="course-careers-grid">
+          <div className="course-careers-card">
+            <h4 className="course-careers-title">Popular Roles</h4>
+            <ul className="course-careers-list">
               {course.careerRoles.map((role, idx) => (
                 <li key={idx}>{role.trim()}</li>
               ))}
@@ -283,19 +283,19 @@ export default function CoursePage() {
       </Section>
 
       {/* CTA Section */}
-      <section id="apply" className="cta-section">
-        <div className="cta-container">
-          <div className="cta-background" />
-          <div className="cta-grid">
+      <section id="apply" className="course-cta-section">
+        <div className="course-cta-container">
+          <div className="course-cta-background" />
+          <div className="course-cta-grid">
             <div>
-              <h3 className="cta-title">Ready to begin your journey?</h3>
-              <p className="cta-description">
+              <h3 className="course-cta-title">Ready to begin your journey?</h3>
+              <p className="course-cta-description">
                 Apply now or speak with a counselor to clarify admissions and course details.
               </p>
             </div>
-            <div className="cta-buttons">
-              <a href="#counselor" className="cta-counselor-button">Talk to Counselor</a>
-              <a href="#apply-form" className="cta-apply-button">Start Application</a>
+            <div className="course-cta-buttons">
+              <a href="#counselor" className="course-cta-counselor-button">Talk to Counselor</a>
+              <a href="#apply-form" className="course-cta-apply-button">Start Application</a>
             </div>
           </div>
         </div>
@@ -303,12 +303,12 @@ export default function CoursePage() {
 
       {/* Footer */}
       <Footer />
-      <footer className="footer">
-        <div className="footer-content">
+      <footer className="course-footer">
+        <div className="course-footer-content">
           <p>© {new Date().getFullYear()} Course Guide</p>
-          <div className="footer-links">
-            <a href="#brochure" className="footer-link">Brochure</a>
-            <a href="#counselor" className="footer-link">Counselor</a>
+          <div className="course-footer-links">
+            <a href="#brochure" className="course-footer-link">Brochure</a>
+            <a href="#counselor" className="course-footer-link">Counselor</a>
           </div>
         </div>
       </footer>
