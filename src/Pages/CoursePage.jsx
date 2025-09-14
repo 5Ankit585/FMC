@@ -89,11 +89,9 @@ export default function CoursePage() {
     const fetchCourse = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/courses/${id}`);
-        const result = await res.json();
+        const courseData = await res.json();  // direct milega
+        console.log("Course fetched:", courseData);
 
-        if (!result.success) return console.error("Course fetch failed");
-
-        const courseData = result.data;
         const parsed = {
           ...courseData,
           highlights: courseData.highlights ? courseData.highlights.split(",") : [],
@@ -216,11 +214,11 @@ export default function CoursePage() {
         subtitle="Choose a focus area to align with career goals."
       >
         <div className="specializations-grid">
-          {course.specializations.map((spec, idx) => (
+          {course.specializationImages?.map((item, idx) => (
             <Card
               key={idx}
-              title={spec.trim()}
-              imgSrc={SPECIALIZATION_IMAGES[spec.trim()] || "/default-spec.jpeg"}
+              title={item.description || course.specializations[idx] || `Specialization ${idx+1}`}
+              imgSrc={item.url ? `http://localhost:5000/${item.url}` : "/default-spec.jpeg"}
             />
           ))}
         </div>
@@ -254,11 +252,11 @@ export default function CoursePage() {
           <div className="institutes-background" />
           <div ref={scrollerRef} className="institutes-scroller">
             <div className="institutes-content">
-              {course.topInstitutes.map((inst, idx) => (
+              {course.topInstituteImages?.map((item, idx) => (
                 <InstituteCard
                   key={idx}
-                  title={inst.trim()}
-                  img={INSTITUTE_IMAGES[inst.trim()] || "/default-institute.jpeg"}
+                  title={item.description || course.topInstitutes[idx] || `Institute ${idx+1}`}
+                  img={item.url ? `http://localhost:5000/${item.url}` : "/default-institute.jpeg"}
                 />
               ))}
             </div>
