@@ -12,9 +12,7 @@ export default function RemoveScholarship() {
     const fetchScholarships = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/scholarships");
-        if (!res.ok) {
-          throw new Error("Failed to fetch scholarships");
-        }
+        if (!res.ok) throw new Error("Failed to fetch scholarships");
         const data = await res.json();
         setScholarships(data);
       } catch (err) {
@@ -22,35 +20,27 @@ export default function RemoveScholarship() {
         toast.error("Failed to load scholarships. Please try again.");
       }
     };
-
     fetchScholarships();
   }, []);
 
   // Delete scholarship
-  const handleDelete = async (id, name) => {
-    // Confirm deletion
+  const handleDelete = async (_id, name) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete the scholarship "${name}"? This action cannot be undone.`
     );
-    if (!confirmDelete) {
-      return;
-    }
+    if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/scholarships/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/scholarships/${_id}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Failed to delete scholarship");
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete scholarship");
 
-      // Update local state to remove the deleted scholarship
-      setScholarships(scholarships.filter((s) => s.id !== id));
+      // Remove deleted scholarship from local state
+      setScholarships(scholarships.filter((s) => s._id !== _id));
       toast.success("Scholarship deleted successfully!");
     } catch (err) {
       console.error("Error deleting scholarship:", err);
@@ -81,8 +71,18 @@ export default function RemoveScholarship() {
               {scholarships.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <svg
+                      className="w-8 h-8 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
                     </svg>
                   </div>
                   <p className="text-gray-500 text-lg">No scholarships available to remove.</p>
@@ -91,7 +91,7 @@ export default function RemoveScholarship() {
                 <div className="space-y-4">
                   {scholarships.map((s) => (
                     <div
-                      key={s.id}
+                      key={s._id}
                       className="p-6 border border-gray-200 rounded-xl hover:shadow-md transition-all duration-200 flex justify-between items-start bg-gray-50"
                     >
                       <div className="flex-1">
@@ -104,7 +104,7 @@ export default function RemoveScholarship() {
                           </div>
                           <div>
                             <span className="font-medium text-gray-700">Tags:</span>
-                            <p className="text-gray-600">{s.tags.join(", ") || "—"}</p>
+                            <p className="text-gray-600">{s.tags?.join(", ") || "—"}</p>
                           </div>
                           <div>
                             <span className="font-medium text-gray-700">Benefits:</span>
@@ -117,7 +117,7 @@ export default function RemoveScholarship() {
                         </div>
                       </div>
                       <button
-                        onClick={() => handleDelete(s.id, s.name)}
+                        onClick={() => handleDelete(s._id, s.name)}
                         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 ml-4 flex-shrink-0 shadow-md hover:shadow-lg"
                       >
                         Delete

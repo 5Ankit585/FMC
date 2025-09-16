@@ -21,6 +21,28 @@ export default function ViewScholarships() {
     fetchScholarships();
   }, []);
 
+  // Handle delete scholarship
+  const handleDelete = async (id) => {
+  if (window.confirm("Are you sure you want to delete this scholarship?")) {
+    try {
+      const res = await fetch(`http://localhost:5000/api/scholarships/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setScholarships(scholarships.filter((s) => s._id !== id));
+      } else {
+        console.error("Delete failed:", data);
+        alert(data.error || "Failed to delete scholarship.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete scholarship.");
+    }
+  }
+};
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex">
       {/* Sidebar */}
@@ -54,7 +76,7 @@ export default function ViewScholarships() {
                 <div className="space-y-4">
                   {scholarships.map((s) => (
                     <div
-                      key={s.id}
+                      key={s._id} // Changed from s.id to s._id to match MongoDB convention
                       className="p-6 border border-gray-200 rounded-xl hover:shadow-md transition-all duration-200 flex justify-between items-start bg-gray-50"
                     >
                       <div className="flex-1">
@@ -67,7 +89,7 @@ export default function ViewScholarships() {
                           </div>
                           <div>
                             <span className="font-medium text-gray-700">Tags:</span>
-                            <p className="text-gray-600">{s.tags.join(", ") || "—"}</p>
+                            <p className="text-gray-600">{s.tags?.join(", ") || "—"}</p>
                           </div>
                           <div>
                             <span className="font-medium text-gray-700">Benefits:</span>
@@ -100,6 +122,15 @@ export default function ViewScholarships() {
                             {s.deadline || "—"}
                           </span>
                         </div>
+                      </div>
+                      {/* Delete Button */}
+                      <div className="ml-4">
+                        <button
+                          onClick={() => handleDelete(s._id)}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200"
+                        >
+                          Delete
+                        </button>
                       </div>
                     </div>
                   ))}
