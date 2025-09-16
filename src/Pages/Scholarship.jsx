@@ -1,65 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-
-const ALL_SCHOLARSHIPS = [
-  {
-    id: 1,
-    name: "National Merit Scholarship",
-    provider: "Central Govt",
-    tags: ["SC", "≤3L income", "UG"],
-    benefits: "₹50,000 / year",
-    deadline: "15 Sept (soon)",
-    status: "Open",
-  },
-  {
-    id: 2,
-    name: "State Post-Matric Scholarship",
-    provider: "State Govt",
-    tags: ["OBC", "≤5L income", "PG"],
-    benefits: "₹35,000 / year",
-    deadline: "25 Oct",
-    status: "Upcoming",
-  },
-  {
-    id: 3,
-    name: "Institute Talent Reward Scholarship",
-    provider: "ABC Institute",
-    tags: ["General", "≤5L income", "UG"],
-    benefits: "₹20,000 / year",
-    deadline: "10 Oct",
-    status: "Open",
-  },
-  {
-    id: 4,
-    name: "Private Excellence Scholarship",
-    provider: "XYZ Foundation",
-    tags: ["Minority", "≤3L income", "UG/PG"],
-    benefits: "₹60,000 / year",
-    deadline: "30 Nov",
-    status: "Upcoming",
-  },
-    {
-    id: 4,
-    name: "Private Excellence Scholarship",
-    provider: "XYZ Foundation",
-    tags: ["Minority", "≤3L income", "UG/PG"],
-    benefits: "₹60,000 / year",
-    deadline: "30 Nov",
-    status: "Upcoming",
-  },
-    {
-    id: 4,
-    name: "Private Excellence Scholarship",
-    provider: "XYZ Foundation",
-    tags: ["Minority", "≤3L income", "UG/PG"],
-    benefits: "₹60,000 / year",
-    deadline: "30 Nov",
-    status: "Upcoming",
-  },
-
-];
 
 // -----------------------
 // HeroSection
@@ -169,20 +110,19 @@ function SidebarFilterLeft({ values, onChange }) {
         </select>
       </div>
 
-     <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
-  <h4 className="font-semibold text-gray-800 mb-2">Family Income</h4>
-  <select
-    className="w-full border border-gray-200 rounded-xl px-3 py-2"
-    value={values.income}
-    onChange={(e) => onChange({ income: e.target.value })}
-  >
-    <option value="">Any</option>
-    <option value="1L-3L">1L to 3L</option>
-    <option value="4L-5L">4L to 5L</option>
-    <option value="6L-7L">6L to 7L</option>
-  </select>
-</div>
-
+      <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">Family Income</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.income}
+          onChange={(e) => onChange({ income: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option value="1L-3L">1L to 3L</option>
+          <option value="4L-5L">4L to 5L</option>
+          <option value="6L-7L">6L to 7L</option>
+        </select>
+      </div>
 
       <div className="bg-gray=100 rounded-2xl p-4 border border-gray-100 shadow-sm">
         <h4 className="font-semibold text-gray-800 mb-2">Education Level</h4>
@@ -259,20 +199,11 @@ function SidebarFilterLeft({ values, onChange }) {
 }
 
 // -----------------------
-// SidebarFilterRight
+// SidebarFilterRight (empty placeholder)
 // -----------------------
-function SidebarFilterRight({ values, onChange }) {
+function SidebarFilterRight() {
   return (
-    <motion.aside
-      layout
-      initial={{ opacity: 0, x: 16 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="w-full lg:w-64 flex-shrink-0 space-y-4"
-    >
-   
-
-    
-    </motion.aside>
+    <motion.aside layout initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} className="w-full lg:w-64 flex-shrink-0" />
   );
 }
 
@@ -280,7 +211,7 @@ function SidebarFilterRight({ values, onChange }) {
 // ScholarshipCard
 // -----------------------
 function ScholarshipCard({ data }) {
-  const { name, provider, tags, benefits, deadline, status } = data;
+  const { _id, name, provider, tags = [], benefits, deadline, status } = data;
   return (
     <motion.div
       layout
@@ -311,11 +242,8 @@ function ScholarshipCard({ data }) {
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mt-4">
-        {tags.map((t) => (
-          <span
-            key={t}
-            className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium"
-          >
+        {(tags || []).map((t) => (
+          <span key={t} className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
             {t}
           </span>
         ))}
@@ -335,9 +263,11 @@ function ScholarshipCard({ data }) {
 
       {/* Buttons */}
       <div className="mt-6 flex items-center gap-3">
-        <button className="flex-1 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-100 transition">
-          View Details
-        </button>
+        <Link to={`/scholarships/${_id}`} className="flex-1">
+          <button className="w-full rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-100 transition">
+            View Details
+          </button>
+        </Link>
         <Link to="/Applynow" className="flex-1">
           <button className="w-full rounded-xl bg-yellow-400 text-white px-4 py-2 text-sm font-semibold hover:bg-yellow-500 transition">
             Apply Now
@@ -351,11 +281,11 @@ function ScholarshipCard({ data }) {
   );
 }
 
-
 // -----------------------
 // Scholar (main export)
 // -----------------------
 export default function Scholar() {
+  const [scholarships, setScholarships] = useState([]);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState({
     category: "",
@@ -366,25 +296,79 @@ export default function Scholar() {
     generalQuota: "",
     deadlineState: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchScholarships = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("http://localhost:5000/api/scholarships");
+        if (!res.ok) throw new Error("Failed to fetch scholarships");
+        const data = await res.json();
+        // ensure every item has tags array
+        const normalized = data.map((d) => ({ tags: [], ...d }));
+        setScholarships(normalized);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchScholarships();
+  }, []);
 
   const filtered = useMemo(() => {
-    return ALL_SCHOLARSHIPS.filter((s) => {
-      const q = query.trim().toLowerCase();
+    const q = (query || "").trim().toLowerCase();
+
+    return scholarships.filter((s) => {
+      // normalize fields
+      const name = (s.name || "").toLowerCase();
+      const provider = (s.provider || "").toLowerCase();
+      const tags = (s.tags || []).map((t) => String(t).toLowerCase());
+      const status = (s.status || "").toLowerCase();
+
       const matchesQuery =
         q.length === 0 ||
-        s.name.toLowerCase().includes(q) ||
-        s.provider.toLowerCase().includes(q) ||
-        s.tags.some((t) => t.toLowerCase().includes(q));
+        name.includes(q) ||
+        provider.includes(q) ||
+        tags.some((t) => t.includes(q));
 
+      // category: check either s.category or tags
       const byCategory =
-        !filters.category || s.tags.map((t) => t.toLowerCase()).includes(filters.category.toLowerCase()); 
+        !filters.category ||
+        (s.category && s.category.toLowerCase() === filters.category.toLowerCase()) ||
+        tags.includes((filters.category || "").toLowerCase());
 
-      const byDeadline =
-        !filters.deadlineState || s.status.toLowerCase() === filters.deadlineState.toLowerCase();
+      const byIncome = !filters.income || (s.income && s.income === filters.income);
 
-      return matchesQuery && byCategory && byDeadline;
+      const byEducation =
+        !filters.educationLevel ||
+        (s.educationLevel && s.educationLevel.toLowerCase() === filters.educationLevel.toLowerCase()) ||
+        tags.includes((filters.educationLevel || "").toLowerCase());
+
+      const byType = !filters.type || (s.type && s.type.toLowerCase() === filters.type.toLowerCase());
+
+      const byRegion = !filters.region || (s.region && s.region.toLowerCase() === filters.region.toLowerCase());
+
+      const byGeneralQuota =
+        !filters.generalQuota || String(s.generalQuota || "").toLowerCase() === filters.generalQuota.toLowerCase();
+
+      const byDeadline = !filters.deadlineState || status === (filters.deadlineState || "").toLowerCase();
+
+      return (
+        matchesQuery &&
+        byCategory &&
+        byIncome &&
+        byEducation &&
+        byType &&
+        byRegion &&
+        byGeneralQuota &&
+        byDeadline
+      );
     });
-  }, [query, filters]);
+  }, [scholarships, query, filters]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -398,20 +382,28 @@ export default function Scholar() {
       <div className="flex flex-col lg:flex-row p-6 gap-6">
         <SidebarFilterLeft values={filters} onChange={(next) => setFilters((p) => ({ ...p, ...next }))} />
 
-    <motion.div layout className="flex-[4] bg-gray-100 p-10 rounded-2xl shadow-lg border border-gray-200">
-  <div className="flex items-center justify-between mb-6">
-    <h2 className="text-2xl font-bold">Available Scholarships</h2>
-    <span className="text-sm text-gray-500">{filtered.length} results</span>
-  </div>
+        <motion.div layout className="flex-[4] bg-gray-100 p-10 rounded-2xl shadow-lg border border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold">Available Scholarships</h2>
+            <span className="text-sm text-gray-500">{filtered.length} results</span>
+          </div>
 
-  <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-    {filtered.map((s) => (
-      <ScholarshipCard key={s.id} data={s} />
-    ))}
-  </div>
-</motion.div>
+          {loading ? (
+            <div className="py-20 text-center text-gray-500">Loading scholarships...</div>
+          ) : error ? (
+            <div className="py-20 text-center text-red-500">Error: {error}</div>
+          ) : filtered.length === 0 ? (
+            <div className="py-20 text-center text-gray-500">No scholarships found for your filters.</div>
+          ) : (
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              {filtered.map((s) => (
+                <ScholarshipCard key={s._id} data={s} />
+              ))}
+            </div>
+          )}
+        </motion.div>
 
-
+        <SidebarFilterRight />
       </div>
     </div>
   );
