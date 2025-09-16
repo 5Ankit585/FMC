@@ -1,7 +1,7 @@
 /* Course Page Container */
 .course-page-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #dfe5fa, #F1F5F9, #FFFFFF);
+  background: linear-gradient(to bottom, #bfc4d8, #F1F5F9, #FFFFFF);
   color: #0F172A;
 }
 
@@ -104,7 +104,7 @@
   display: flex;
   flex-direction: column;
   border-radius: 0.75rem;
-  border: 1px solid #C7D2FE;
+  border: 1px solid #1a202c;
   background: #dfe5fa;
   padding: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -113,14 +113,14 @@
 
 .course-stat-label {
   font-size: 0.875rem;
-  color: #fde047;
+  color: #1a202c;
 }
 
 .course-stat-value {
   margin-top: 0.25rem;
   font-size: 1.25rem;
   font-weight: 500;
-  color: #0F172A;
+  color: #1a202c;
 }
 
 .course-stat-highlight {
@@ -131,7 +131,7 @@
 /* Card Component */
 .course-card-container {
   border-radius: 1rem;
-  border: 1px solid #C7D2FE;
+  border: 2px solid #ecc94b;
   background: #C7D2FE;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s, box-shadow 0.2s;
@@ -171,6 +171,7 @@
 
 .course-card-content {
   padding: 1.25rem;
+  background-color: #1a202c;
 }
 
 .course-card-icon {
@@ -181,8 +182,8 @@
   height: 2.5rem;
   margin-bottom: 0.75rem;
   border-radius: 9999px;
-  background: linear-gradient(to bottom right, #EEF2FF, #EDE9FE, #F5D0FE);
-  color: #4F46E5;
+  background: linear-gradient(to bottom right, #ecc94b, #ecc94b, #ecc94b);
+  color: #1a202c;
   border: 1px solid #C7D2FE;
 }
 
@@ -193,7 +194,7 @@
 .course-card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #0F172A;
+  color: #ecc94b;
 }
 
 .course-card-desc {
@@ -210,12 +211,12 @@
 
 .course-institute-card {
   border-radius: 1rem;
-  border: 1px solid #C7D2FE;
-  background: rgba(255, 255, 255, 0.9);
+  background: #1a202c;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.2s;
   backdrop-filter: blur(4px);
   overflow: hidden;
+  margin-left: 0.5rem;
 }
 
 .course-institute-card:hover {
@@ -254,7 +255,7 @@
 .course-institute-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #0F172A;
+  color: #ecc94b;
 }
 
 .course-institute-desc {
@@ -294,12 +295,12 @@
 .course-section-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0F172A;
+  color: #1a202c;
 }
 
 .course-section-subtitle {
   margin-top: 0.25rem;
-  color: #4B5563;
+  color: #1a202c
 }
 
 .course-section-buttons {
@@ -315,17 +316,18 @@
 
 .course-section-counselor-button {
   border-radius: 0.5rem;
-  background: linear-gradient(to right, #4F46E5, #7C3AED);
+  background: linear-gradient(to right, #e9bc19, #e9bc19);
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #FFFFFF;
+  color: #1a202c;
   text-decoration: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .course-section-counselor-button:hover {
-  background: linear-gradient(to right, #4338CA, #6D28D9);
+  background: linear-gradient(to right, #283142, #1a202c);
+  color: #e9bc19;
 }
 
 /* Hero Section */
@@ -397,19 +399,19 @@
   align-items: center;
   gap: 0.5rem;
   border-radius: 9999px;
-  background: #EEF2FF;
+  background: #ecc94b;
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #4F46E5;
-  border: 1px solid #C7D2FE;
+  color: #1a202c;
+  border: 1px solid #1a202c;
 }
 
 .course-hero-title {
   margin-top: 0.75rem;
   font-size: 1.875rem;
   font-weight: 700;
-  color: #0F172A;
+  color: #1a202c;
 }
 
 @media (min-width: 640px) {
@@ -420,7 +422,7 @@
 
 .course-hero-description {
   margin-top: 0.75rem;
-  color: #1E293B;
+  color: #1a202c;
 }
 
 .course-hero-stats {
@@ -446,8 +448,8 @@
 
 .course-hero-counselor-button {
   border-radius: 0.5rem;
-  border: 1px solid #D1D5DB;
-  background: #FFFFFF;
+  border: 1px solid #1a202c;
+  background: #dfe5fa;
   padding: 0.625rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -462,17 +464,18 @@
 
 .course-hero-brochure-button {
   border-radius: 0.5rem;
-  background: linear-gradient(to right, #111827, #1E293B);
+  background: linear-gradient(to right, #ecc94b, #ecc94b);
   padding: 0.625rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #0F172A;
   text-decoration: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .course-hero-brochure-button:hover {
-  background: linear-gradient(to right, #000000, #0F172A);
+  background: linear-gradient(to right, #0F172A, #0F172A);
+  color: #ecc94b;
 }
 
 .course-highlights-container {
@@ -554,8 +557,8 @@
 
 .course-curriculum-card {
   border-radius: 1rem;
-  border: 1px solid #C7D2FE;
-  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid #ecc94b;
+  background: #1a202c;
   padding: 1.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(4px);
@@ -564,7 +567,7 @@
 .course-curriculum-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #0F172A;
+  color: #ecc94b;
 }
 
 .course-curriculum-list {
@@ -577,6 +580,7 @@
 
 .course-curriculum-list li {
   margin-bottom: 0.5rem;
+  color: #ecc94b;
 }
 
 /* Institutes Section */
@@ -595,7 +599,7 @@
 
 .course-institutes-scroller {
   border-radius: 0.75rem;
-  border: 1px solid #C7D2FE;
+  border: 1px solid #1a202c;
   background: rgba(255, 255, 255, 0.5);
   padding: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -638,7 +642,7 @@
 .course-careers-card {
   border-radius: 1rem;
   border: 1px solid #C7D2FE;
-  background: #C7D2FE;
+  background: linear-gradient(to right, #ecc94b, #b2921e);
   padding: 1.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(4px);
@@ -647,7 +651,7 @@
 .course-careers-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #0F172A;
+  color: #1a202c;
 }
 
 .course-careers-list {
@@ -660,6 +664,7 @@
 
 .course-careers-list li {
   margin-bottom: 0.5rem;
+  color: #1a202c;
 }
 
 /* CTA Section */
@@ -686,9 +691,9 @@
   overflow: hidden;
   border-radius: 1.5rem;
   border: 1px solid #C7D2FE;
-  background: linear-gradient(to right, #4F46E5, #7C3AED);
+  background: linear-gradient(to right, #ecc94b, #b2921e);
   padding: 2rem;
-  color: #FFFFFF;
+  color: #1a202c;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -721,7 +726,7 @@
 
 .course-cta-description {
   margin-top: 0.25rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: #1a202c;
 }
 
 .course-cta-buttons {
@@ -742,9 +747,9 @@
   padding: 0.75rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #1a202c;
   text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
 
@@ -754,16 +759,17 @@
 
 .course-cta-apply-button {
   border-radius: 0.5rem;
-  background: #FFFFFF;
+  background: #1a202c;
   padding: 0.75rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #4F46E5;
+  color: #ecc94b;
   text-decoration: none;
 }
 
 .course-cta-apply-button:hover {
-  background: #F9FAFB;
+  background: #dfe5fa;
+  color: #1a202c;
 }
 
 /* Footer */

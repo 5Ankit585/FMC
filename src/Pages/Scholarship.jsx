@@ -1,180 +1,418 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Banknote, BellRing, Landmark } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export default function ScholarshipsLoans() {
-  const [loanAmount, setLoanAmount] = useState(0);
-  const [interestRate, setInterestRate] = useState(0);
-  const [tenure, setTenure] = useState(12);
-  const [emi, setEmi] = useState(null);
 
-  const calculateEMI = () => {
-    const principal = parseFloat(loanAmount);
-    const rate = parseFloat(interestRate) / 100 / 12;
-    const n = parseInt(tenure);
-    if (principal && rate && n) {
-      const emiValue =
-        (principal * rate * Math.pow(1 + rate, n)) /
-        (Math.pow(1 + rate, n) - 1);
-      setEmi(emiValue.toFixed(2));
-    }
-  };
+const ALL_SCHOLARSHIPS = [
+  {
+    id: 1,
+    name: "National Merit Scholarship",
+    provider: "Central Govt",
+    tags: ["SC", "≤3L income", "UG"],
+    benefits: "₹50,000 / year",
+    deadline: "15 Sept (soon)",
+    status: "Open",
+  },
+  {
+    id: 2,
+    name: "State Post-Matric Scholarship",
+    provider: "State Govt",
+    tags: ["OBC", "≤5L income", "PG"],
+    benefits: "₹35,000 / year",
+    deadline: "25 Oct",
+    status: "Upcoming",
+  },
+  {
+    id: 3,
+    name: "Institute Talent Reward Scholarship",
+    provider: "ABC Institute",
+    tags: ["General", "≤5L income", "UG"],
+    benefits: "₹20,000 / year",
+    deadline: "10 Oct",
+    status: "Open",
+  },
+  {
+    id: 4,
+    name: "Private Excellence Scholarship",
+    provider: "XYZ Foundation",
+    tags: ["Minority", "≤3L income", "UG/PG"],
+    benefits: "₹60,000 / year",
+    deadline: "30 Nov",
+    status: "Upcoming",
+  },
+    {
+    id: 4,
+    name: "Private Excellence Scholarship",
+    provider: "XYZ Foundation",
+    tags: ["Minority", "≤3L income", "UG/PG"],
+    benefits: "₹60,000 / year",
+    deadline: "30 Nov",
+    status: "Upcoming",
+  },
+    {
+    id: 4,
+    name: "Private Excellence Scholarship",
+    provider: "XYZ Foundation",
+    tags: ["Minority", "≤3L income", "UG/PG"],
+    benefits: "₹60,000 / year",
+    deadline: "30 Nov",
+    status: "Upcoming",
+  },
+
+];
+
+// -----------------------
+// HeroSection
+// -----------------------
+function HeroSection() {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-gray-900 via-gray-900 to-gray-900" />
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 max-w-7xl mx-auto px-6 py-16 text-white text-center"
+      >
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+          Find the Perfect Scholarship
+        </h1>
+        <p className="mt-3 text-blue/90 text-lg">
+          Search, filter, and apply for scholarships that match your profile.
+        </p>
+      </motion.div>
+      <div className="pointer-events-none absolute -bottom-24 -left-24 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+      <div className="pointer-events-none absolute -top-28 -right-28 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
+    </section>
+  );
+}
+
+// -----------------------
+// SearchBar
+// -----------------------
+function SearchBar({ onSearch }) {
+  const [q, setQ] = useState("");
+  return (
+    <div className="bg-gray-100 border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center gap-3">
+        <div className="text-2xl font-extrabold text-gray-900">🎓 ScholarFind</div>
+
+        <div className="flex-1 w-full">
+          <div className="flex items-stretch gap-2">
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && onSearch(q)}
+              placeholder="Search scholarship, provider or tags..."
+              className="w-full border border-gray-900 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-yellow-500"
+            />
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onSearch(q)}
+              className="px-4 py-2.5 rounded-xl bg-yellow-500 text-white font-semibold hover:bg-yellow-500 transition"
+            >
+              Search
+            </motion.button>
+          </div>
+        </div>
+
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="px-4 py-2.5 rounded-xl bg-yellow-500 text-white font-medium hover:bg-blue/90 transition"
+          onClick={() => alert("Open advanced filters drawer (optional)")}
+        >
+          Filters
+        </motion.button>
+
+        <div className="flex items-center gap-2">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            className="px-3 py-2 rounded-lg border border-gray-900 font-medium hover:bg-yellow-500"
+          >
+            Login
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            className="px-3 py-2 rounded-lg bg-yellow-500 text-white font-semibold hover:bg-yellow-500"
+          >
+            Register
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// -----------------------
+// SidebarFilterLeft
+// -----------------------
+function SidebarFilterLeft({ values, onChange }) {
+  return (
+    <motion.aside
+      layout
+      initial={{ opacity: 0, x: -16 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="w-full lg:w-64 flex-shrink-0 space-y-4"
+    >
+      <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-900 mb-2">Category</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.category}
+          onChange={(e) => onChange({ category: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option>SC</option>
+          <option>ST</option>
+          <option>OBC</option>
+          <option>General</option>
+        </select>
+      </div>
+
+     <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+  <h4 className="font-semibold text-gray-800 mb-2">Family Income</h4>
+  <select
+    className="w-full border border-gray-200 rounded-xl px-3 py-2"
+    value={values.income}
+    onChange={(e) => onChange({ income: e.target.value })}
+  >
+    <option value="">Any</option>
+    <option value="1L-3L">1L to 3L</option>
+    <option value="4L-5L">4L to 5L</option>
+    <option value="6L-7L">6L to 7L</option>
+  </select>
+</div>
+
+
+      <div className="bg-gray=100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">Education Level</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.educationLevel}
+          onChange={(e) => onChange({ educationLevel: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option>UG</option>
+          <option>PG</option>
+          <option>PhD</option>
+        </select>
+      </div>
+
+      <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">Scholarship Type</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.type}
+          onChange={(e) => onChange({ type: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option>Merit</option>
+          <option>Need</option>
+          <option>Government</option>
+          <option>Private</option>
+        </select>
+      </div>
+
+      <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">State / Region</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.region}
+          onChange={(e) => onChange({ region: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option>Maharashtra</option>
+          <option>Karnataka</option>
+          <option>Delhi</option>
+          <option>Tamil Nadu</option>
+        </select>
+      </div>
+
+      <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">General Quota</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.generalQuota}
+          onChange={(e) => onChange({ generalQuota: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div className="bg-gray-100 rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">Deadline</h4>
+        <select
+          className="w-full border border-gray-200 rounded-xl px-3 py-2"
+          value={values.deadlineState}
+          onChange={(e) => onChange({ deadlineState: e.target.value })}
+        >
+          <option value="">Any</option>
+          <option>Open</option>
+          <option>Upcoming</option>
+          <option>Closed</option>
+        </select>
+      </div>
+    </motion.aside>
+  );
+}
+
+// -----------------------
+// SidebarFilterRight
+// -----------------------
+function SidebarFilterRight({ values, onChange }) {
+  return (
+    <motion.aside
+      layout
+      initial={{ opacity: 0, x: 16 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="w-full lg:w-64 flex-shrink-0 space-y-4"
+    >
+   
+
+    
+    </motion.aside>
+  );
+}
+
+// -----------------------
+// ScholarshipCard
+// -----------------------
+function ScholarshipCard({ data }) {
+  const { name, provider, tags, benefits, deadline, status } = data;
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.25 }}
+      className="group rounded-2xl border border-gray-900 bg-gray-100 shadow-md hover:shadow-xl transition-all p-5"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
+          <p className="text-sm text-gray-900 mt-1">Provider: {provider}</p>
+        </div>
+        <span
+          className={`text-xs font-medium px-3 py-1 rounded-full ${
+            status === "Open"
+              ? "bg-green-100 text-green-700"
+              : status === "Upcoming"
+              ? "bg-amber-100 text-amber-700"
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {status}
+        </span>
+      </div>
+
+      {/* Tags */}
+      <div className="flex flex-wrap gap-2 mt-4">
+        {tags.map((t) => (
+          <span
+            key={t}
+            className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-medium"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      {/* Benefits & Deadline */}
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="rounded-xl border border-gray-200 p-3 bg-gray-50">
+          <p className="text-xs text-gray-500 mb-1">Benefits</p>
+          <p className="text-sm font-semibold text-gray-800">{benefits}</p>
+        </div>
+        <div className="rounded-xl border border-gray-200 p-3 bg-gray-50">
+          <p className="text-xs text-gray-500 mb-1">Deadline</p>
+          <p className="text-sm font-semibold text-gray-800">{deadline}</p>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="mt-6 flex items-center gap-3">
+        <button className="flex-1 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-100 transition">
+          View Details
+        </button>
+        <Link to="/Applynow" className="flex-1">
+          <button className="w-full rounded-xl bg-yellow-400 text-white px-4 py-2 text-sm font-semibold hover:bg-yellow-500 transition">
+            Apply Now
+          </button>
+        </Link>
+        <button className="rounded-xl border border-gray-200 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition">
+          Download
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+
+// -----------------------
+// Scholar (main export)
+// -----------------------
+export default function Scholar() {
+  const [query, setQuery] = useState("");
+  const [filters, setFilters] = useState({
+    category: "",
+    income: "",
+    educationLevel: "",
+    type: "",
+    region: "",
+    generalQuota: "",
+    deadlineState: "",
+  });
+
+  const filtered = useMemo(() => {
+    return ALL_SCHOLARSHIPS.filter((s) => {
+      const q = query.trim().toLowerCase();
+      const matchesQuery =
+        q.length === 0 ||
+        s.name.toLowerCase().includes(q) ||
+        s.provider.toLowerCase().includes(q) ||
+        s.tags.some((t) => t.toLowerCase().includes(q));
+
+      const byCategory =
+        !filters.category || s.tags.map((t) => t.toLowerCase()).includes(filters.category.toLowerCase()); 
+
+      const byDeadline =
+        !filters.deadlineState || s.status.toLowerCase() === filters.deadlineState.toLowerCase();
+
+      return matchesQuery && byCategory && byDeadline;
+    });
+  }, [query, filters]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      {/* Page Heading */}
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl md:text-4xl font-bold text-center text-indigo-700 mb-8"
-      >
-        🎓 Scholarships & Loans
-      </motion.h1>
+    <div className="min-h-screen bg-gray-50">
+      {/* Row 1 */}
+      <HeroSection />
 
-      {/* Unified Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition"
-      >
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b-4 border-gradient-to-r from-indigo-500 to-blue-600 inline-block pb-1">
-          Scholarships
-        </h2>
+      {/* Row 2 */}
+      <SearchBar onSearch={setQuery} />
 
-        {/* Applied Scholarships Form */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <GraduationCap className="text-indigo-600 w-7 h-7" />
-            <h3 className="text-xl font-semibold text-gray-800">
-              Applied Scholarships
-            </h3>
-          </div>
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-700">Name</label>
-              <input type="text" className="w-full border rounded-lg p-2" placeholder="Enter scholarship name" />
-            </div>
-            <div>
-              <label className="block text-gray-700">Provider</label>
-              <input type="text" className="w-full border rounded-lg p-2" placeholder="Enter provider name" />
-            </div>
-            <div>
-              <label className="block text-gray-700">Status</label>
-              <select className="w-full border rounded-lg p-2">
-                <option>Pending</option>
-                <option>Approved</option>
-                <option>Rejected</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-gray-700">Amount</label>
-              <input type="number" className="w-full border rounded-lg p-2" placeholder="Enter amount" />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-gray-700">Deadline</label>
-              <input type="date" className="w-full border rounded-lg p-2" />
-            </div>
-          </form>
-        </div>
+      {/* Row 3 */}
+      <div className="flex flex-col lg:flex-row p-6 gap-6">
+        <SidebarFilterLeft values={filters} onChange={(next) => setFilters((p) => ({ ...p, ...next }))} />
 
-        {/* Eligible Scholarships */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <BellRing className="text-green-600 w-7 h-7" />
-            <h3 className="text-xl font-semibold text-gray-800">
-              Eligible Scholarships (AI Suggested)
-            </h3>
-          </div>
-          <p className="text-gray-600 mb-3">Based on your profile, you may qualify for:</p>
-          <ul className="list-disc list-inside text-gray-600 space-y-2">
-            <li>Women in Tech Fellowship – Deadline: Oct 15</li>
-            <li>State Minority Scholarship – Deadline: Sep 30</li>
-          </ul>
-        </div>
+    <motion.div layout className="flex-[4] bg-gray-100 p-10 rounded-2xl shadow-lg border border-gray-200">
+  <div className="flex items-center justify-between mb-6">
+    <h2 className="text-2xl font-bold">Available Scholarships</h2>
+    <span className="text-sm text-gray-500">{filtered.length} results</span>
+  </div>
 
-        {/* Government Schemes */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Landmark className="text-blue-600 w-7 h-7" />
-            <h3 className="text-xl font-semibold text-gray-800">Government Schemes</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-700">Select State</label>
-              <select className="w-full border rounded-lg p-2">
-                <option>Maharashtra</option>
-                <option>Karnataka</option>
-                <option>Uttar Pradesh</option>
-                <option>Tamil Nadu</option>
-                <option>Delhi</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-gray-700">Select Category</label>
-              <select className="w-full border rounded-lg p-2">
-                <option>General</option>
-                <option>OBC</option>
-                <option>SC</option>
-                <option>ST</option>
-                <option>Minority</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-gray-700">Search</label>
-              <input type="text" className="w-full border rounded-lg p-2" placeholder="Search scheme" />
-            </div>
-          </div>
-          <ul className="list-disc list-inside text-gray-600 space-y-2">
-            <li>State Education Loan Subsidy Scheme</li>
-            <li>Central OBC Scholarship – Income Bracket Eligible</li>
-          </ul>
-        </div>
+  <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+    {filtered.map((s) => (
+      <ScholarshipCard key={s.id} data={s} />
+    ))}
+  </div>
+</motion.div>
 
-        {/* Loan Applications */}
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <Banknote className="text-pink-600 w-7 h-7" />
-            <h3 className="text-xl font-semibold text-gray-800">Loan Applications</h3>
-          </div>
-          <form className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-700">Loan Amount (₹)</label>
-              <input type="number" className="w-full border rounded-lg p-2" value={loanAmount} onChange={(e) => setLoanAmount(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-gray-700">Interest Rate (%)</label>
-              <input type="number" className="w-full border rounded-lg p-2" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-gray-700">Tenure (months)</label>
-              <select className="w-full border rounded-lg p-2" value={tenure} onChange={(e) => setTenure(e.target.value)}>
-                <option value="12">12</option>
-                <option value="24">24</option>
-                <option value="36">36</option>
-                <option value="48">48</option>
-                <option value="60">60</option>
-              </select>
-            </div>
-          </form>
-          <button onClick={calculateEMI} className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
-            Calculate EMI
-          </button>
-          {emi && <p className="mt-3 text-gray-700">Estimated EMI: ₹{emi}/month</p>}
-        </div>
-      </motion.div>
 
-      {/* New Opportunities Alert */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="max-w-3xl mx-auto mt-10 bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg text-center"
-      >
-        <h2 className="text-2xl font-bold mb-2">🔔 New Opportunities Alert</h2>
-        <p>We’ll notify you when new funding opportunities match your profile.</p>
-      </motion.div>
+      </div>
     </div>
   );
 }

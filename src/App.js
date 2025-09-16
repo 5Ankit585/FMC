@@ -10,7 +10,6 @@ import MyCourse from "./Pages/MyCourse";
 import ExamAt from "./Pages/ExamAt";
 import Companion from "./FooterPages/Companion";
 import AdminLogin from "./Pages/Admin/AdminLogin";
-import UserList from "./Pages/Admin/UserList";
 import AdminHome from "./Pages/Admin/AdminHome";
 import LoginModal from "./Modals/LoginModal";
 import SignupModal from "./Modals/SignupModal";
@@ -36,6 +35,12 @@ import UniversityDashboard from "./dashboard/UniversityDashboard";
 import UniversityPage from "./Pages/UniversityPage";
 import UniversityRegister from "./Pages/UniversityRegister";
 
+// Scholarship Management Pages
+import Dashboard from "./Pages/Scholarshipmanage/Dashboard";
+import ViewScholarships from "./Pages/Scholarshipmanage/ViewScholarships";
+import AddScholarship from "./Pages/Scholarshipmanage/AddScholarship";
+import RemoveScholarship from "./Pages/Scholarshipmanage/RemoveScholarship";
+import Settings from "./Pages/Scholarshipmanage/Settings";
 
 function App() {
   return (
@@ -54,7 +59,6 @@ function App() {
           <Route path="/examat" element={<ExamAt />} />
           <Route path="/companion" element={<Companion />} />
           <Route path="/adminlogin" element={<AdminLogin />} />
-          <Route path="/users" element={<UserList />} />
           <Route path="/college-profile" element={<AdminHome />} />
           <Route path="/login" element={<LoginModal />} />
           <Route path="/signup" element={<SignupModal />} />
@@ -64,14 +68,18 @@ function App() {
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
           <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
+
+          {/* Scholarship Management Routes */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/scholarships" element={<ViewScholarships />} />
+          <Route path="/add-scholarship" element={<AddScholarship />} />
+          <Route path="/remove-scholarship" element={<RemoveScholarship />} />
+          <Route path="/settings" element={<Settings />} />
+
           {/* University Profile */}
-<Route 
-  path="/university-profile/:id" 
-  element={<UniversityPage />} 
-/>
+          <Route path="/university-profile/:id" element={<UniversityPage />} />
 
-
-          {/* footer page routes */}
+          {/* Footer Page Routes */}
           <Route path="/college-review" element={<CollegeReview />} />
           <Route path="/service" element={<Service />} />
           <Route path="/lpu" element={<LPU />} />
@@ -80,7 +88,7 @@ function App() {
           <Route path="/mahe" element={<Mahe />} />
           <Route path="/srm" element={<Srm />} />
           <Route path="/coursepage/:id" element={<CoursePage />} />
-          <Route path="/CourseRegister" element={<CourseRegister/>} />
+          <Route path="/CourseRegister" element={<CourseRegister />} />
         </Routes>
       </BrowserRouter>
     </>
