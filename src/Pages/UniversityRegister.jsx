@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./UniversityRegister.css";
-import Navbar from "../components/Navbar";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
@@ -260,7 +259,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="univ-app-container">
-      <Navbar />
+     
       <header className="univ-header">
         <h1 className="univ-header-title">University Registration</h1>
         <p className="univ-header-subtitle">Complete all 9 steps below</p>

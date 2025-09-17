@@ -97,7 +97,7 @@ body {
 .univ-header {
   text-align: center;
   padding: 32px 0;
-  background: linear-gradient(to right, #2563eb, #4f46e5);
+  background: linear-gradient(to right, #1a202c);
   color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -106,12 +106,14 @@ body {
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 8px;
+  color: #ecc94b;
 }
 
 .univ-header-subtitle {
   font-size: 18px;
   font-weight: 500;
   opacity: 0.9;
+  color: #ecc94b;
 }
 
 /* Stepper */
@@ -121,7 +123,7 @@ body {
   align-items: center;
   gap: 16px;
   padding: 24px 0;
-  background-color: #ffffff;
+  background-color: #faf9f6;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
@@ -139,9 +141,9 @@ body {
 }
 
 .univ-stepper-circle.active {
-  background-color: #2563eb;
+  background-color: #1a202c;
   color: #ffffff;
-  border-color: #2563eb;
+  border-color: #1a202c;
 }
 
 .univ-stepper-circle.completed {
@@ -157,10 +159,11 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 24px;
+  background-color: #faf9f6;
 }
 
 .univ-multi-step-form {
-  background-color: #ffffff;
+  background-color:#e8e8e8;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 32px;
@@ -190,7 +193,7 @@ body {
 .univ-step-title {
   font-size: 24px;
   font-weight: 600;
-  color: #1f2937;
+  color: #1a202c;
   margin-bottom: 16px;
   grid-column: 1 / -1;
 }
@@ -199,7 +202,7 @@ body {
 input, select, textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #1a202c;
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.2s ease;
@@ -251,29 +254,32 @@ select {
 }
 
 .univ-nav-btn {
-  background-color: #e5e7eb;
-  color: #1f2937;
+  background-color: #1a202c;
+  color: #ecc94b;
   border: none;
+  margin-top: 2rem;
+  margin-left: 1rem;
 }
 
 .univ-nav-btn:hover {
-  background-color: #d1d5db;
+  background-color: #ecc94b;
+  color: #1a202c;
 }
 
 .univ-submit-btn {
-  background-color: #2563eb;
+  background-color: #22c55e;
   color: #ffffff;
   border: none;
   width: 100%;
 }
 
 .univ-submit-btn:hover {
-  background-color: #1d4ed8;
+  background-color: #16a34a;
 }
 
 .univ-add-btn {
   background-color: #22c55e;
-  color: #ffffff;
+  color: #1a202c;
   border: none;
 }
 
