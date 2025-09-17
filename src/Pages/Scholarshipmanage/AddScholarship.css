@@ -1,0 +1,108 @@
+/* Container */
+.addsch-container {
+  min-height: 100vh;
+  display: flex;
+  background: linear-gradient(to bottom right, #e8e8e8);
+}
+
+/* Main Content */
+.addsch-main {
+  flex: 1;
+  margin-left: 16rem; /* Sidebar width */
+  padding: 2rem 1rem;
+}
+
+.addsch-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.addsch-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.addsch-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #1a202c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+.addsch-subtitle {
+  color: #4b5563;
+}
+
+/* Card */
+.addsch-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 2px solid #1a202c;
+  padding: 2rem;
+}
+
+/* Card Title */
+.addsch-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Grid */
+.addsch-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .addsch-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.addsch-form-group {
+  display: flex;
+  flex-direction: column;
+}
+.md-span-2 {
+  grid-column: span 2;
+}
+
+/* Inputs and Textareas */
+.addsch-form-group input,
+.addsch-form-group select,
+.addsch-form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 1rem;
+  transition: all 0.2s;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+.addsch-form-group input:focus,
+.addsch-form-group select:focus,
+.addsch-form-group textarea:focus {
+  outline: none;
+  border-color: #e5c449;
+  box-shadow: 0 0 0 3px rgb(229,196,73);
+}
+
+/* Submit Button */
+.addsch-submit-btn {
+  width: 100%;
+  background: linear-gradient(to right, #ecc94b);
+  color: #1a202c;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  margin-top: 2rem;
+}
+.addsch-submit-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}

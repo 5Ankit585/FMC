@@ -1,0 +1,54 @@
+.sb-container {
+  width: 16rem; /* 64 */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  border-right: 1px solid #e5e7eb;
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sb-inner {
+  padding: 1.5rem; /* 6 */
+}
+
+.sb-title {
+  font-size: 1.5rem; /* 2xl */
+  font-weight: 700;
+  background: linear-gradient(to right, #1a202c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem; /* 8 */
+}
+
+.sb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* 2 */
+}
+
+.sb-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  color: #374151; /* gray-700 */
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sb-link:hover {
+  background-color: #ecc94b; /* blue-50 */
+}
+
+.sb-active {
+  background-color: #ecc94b; /* blue-100 */
+  color: #1a202c; /* blue-600 */
+  font-weight: 600;
+}
+
+.sb-icon {
+  width: 1.25rem; /* 5 */
+  height: 1.25rem;
+  margin-right: 0.75rem; /* 3 */
+}

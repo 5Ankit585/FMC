@@ -1,0 +1,113 @@
+.remsch-container {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #e8e8e8);
+}
+
+.remsch-main {
+  flex: 1;
+  margin-left: 16rem; /* Sidebar width */
+  padding: 2rem 1rem;
+}
+
+.remsch-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.remsch-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.remsch-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #1a202c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+.remsch-subtitle {
+  color: #4b5563;
+}
+
+.remsch-card {
+  background: #fff;
+  border-radius: 1rem;
+  border: 2px solid #1a202c;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.remsch-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* List */
+.remsch-list .remsch-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  background: #f9fafb;
+  transition: all 0.2s;
+  align-items: flex-start;
+}
+.remsch-list .remsch-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.remsch-item-left {
+  flex: 1;
+}
+.remsch-item-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+.remsch-item-desc {
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+.remsch-item-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 2rem;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-top: 0.5rem;
+}
+.remsch-item-details span {
+  font-weight: 600;
+}
+.remsch-benefits {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.remsch-delete-btn {
+  background: #ef4444;
+  color: #fff;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+.remsch-delete-btn:hover {
+  background: #dc2626;
+  transform: scale(1.02);
+}
+
+.remsch-empty {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+}
