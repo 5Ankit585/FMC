@@ -26,15 +26,24 @@ a, button {
   transition: color 0.2s ease;
 }
 
-
 .ad-footer {
-  margin-top: 3rem;
+ 
   padding: 0.8rem 0;
   font-size: 0.65rem;
   text-align: center;
   color: #000;
   border-top: 1px solid #d4af37;
   background: #fefce8;
+  position: fixed; /* Fix the footer to the bottom of the viewport */
+  bottom: 0;
+  left: 0;
+  width: 100%; 
+  z-index: 100;
+}
+
+
+.ad-main {
+  padding-bottom: 2rem;
 }
 
 @media (max-width: 900px) {
@@ -58,5 +67,6 @@ a, button {
 
   .ad-main {
     padding: 1rem 0.75rem;
+    padding-bottom: 2rem; /* Maintain padding-bottom for mobile to account for fixed footer */
   }
 }

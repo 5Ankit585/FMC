@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import "./AddScholarship.css"; // Import the separate CSS
+import "./AddScholarship.css"; // Updated CSS
 
 export default function AddScholarship() {
   const [formData, setFormData] = useState({
@@ -34,26 +33,12 @@ export default function AddScholarship() {
     if (formData.income) tags.push(`≤${formData.income} income`);
     if (formData.educationLevel) tags.push(formData.educationLevel);
 
-    const newScholarship = {
-      name: formData.name,
-      provider: formData.provider,
-      tags,
-      benefits: formData.benefits,
-      deadline: formData.deadline,
-      status: formData.status,
-      description: formData.description,
-      eligibility: formData.eligibility,
-      type: formData.type,
-      region: formData.region,
-      generalQuota: formData.generalQuota,
-    };
+    const newScholarship = { ...formData, tags };
 
     try {
       const res = await fetch("http://localhost:5000/api/scholarships", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newScholarship),
       });
 
@@ -82,23 +67,21 @@ export default function AddScholarship() {
   };
 
   return (
-    <div className="addsch-container">
-      <Sidebar location={location} />
-
-      <div className="addsch-main">
-        <div className="addsch-inner container">
+    <div className="ad-addsch-container">
+      <div className="ad-addsch-main">
+        <div className="ad-addsch-inner">
           {/* Header */}
-          <div className="addsch-header">
-            <h1 className="addsch-title">Add Scholarship</h1>
-            <p className="addsch-subtitle">Create a new scholarship entry.</p>
+          <div className="ad-addsch-header">
+            <h1 className="ad-addsch-title">Add Scholarship</h1>
+            <p className="ad-addsch-subtitle">Create a new scholarship entry.</p>
           </div>
 
-          {/* Form Section */}
-          <div className="addsch-card">
-            <h2 className="addsch-card-title">Add New Scholarship</h2>
-            <form onSubmit={handleSubmit} className="addsch-form-grid">
-              {/* Form fields */}
-              <div className="addsch-form-group">
+          {/* Form Card */}
+          <div className="ad-addsch-card">
+            <h2 className="ad-addsch-card-title">Add New Scholarship</h2>
+            <form onSubmit={handleSubmit} className="ad-addsch-form-grid">
+              {/* Fields */}
+              <div className="ad-addsch-form-group">
                 <label>Scholarship Name</label>
                 <input
                   name="name"
@@ -108,7 +91,7 @@ export default function AddScholarship() {
                   required
                 />
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Provider</label>
                 <input
                   name="provider"
@@ -118,13 +101,9 @@ export default function AddScholarship() {
                   required
                 />
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Category</label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                >
+                <select name="category" value={formData.category} onChange={handleChange}>
                   <option value="">Select Category</option>
                   <option value="SC">SC</option>
                   <option value="ST">ST</option>
@@ -133,20 +112,16 @@ export default function AddScholarship() {
                   <option value="Minority">Minority</option>
                 </select>
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Family Income Limit</label>
-                <select
-                  name="income"
-                  value={formData.income}
-                  onChange={handleChange}
-                >
+                <select name="income" value={formData.income} onChange={handleChange}>
                   <option value="">Select Income Limit</option>
                   <option value="3L">3L</option>
                   <option value="5L">5L</option>
                   <option value="7L">7L</option>
                 </select>
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Education Level</label>
                 <select
                   name="educationLevel"
@@ -160,7 +135,7 @@ export default function AddScholarship() {
                   <option value="PhD">PhD</option>
                 </select>
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Benefits</label>
                 <input
                   name="benefits"
@@ -169,7 +144,7 @@ export default function AddScholarship() {
                   placeholder="e.g., ₹50,000 / year"
                 />
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Deadline</label>
                 <input
                   type="text"
@@ -179,7 +154,7 @@ export default function AddScholarship() {
                   placeholder="e.g., 15 Sept (soon)"
                 />
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Status</label>
                 <select name="status" value={formData.status} onChange={handleChange}>
                   <option value="">Select Status</option>
@@ -188,7 +163,7 @@ export default function AddScholarship() {
                   <option value="Closed">Closed</option>
                 </select>
               </div>
-              <div className="addsch-form-group md-span-2">
+              <div className="ad-addsch-form-group ad-span-3">
                 <label>Description</label>
                 <textarea
                   name="description"
@@ -198,7 +173,7 @@ export default function AddScholarship() {
                   placeholder="Provide a detailed description..."
                 />
               </div>
-              <div className="addsch-form-group md-span-2">
+              <div className="ad-addsch-form-group ad-span-3">
                 <label>Eligibility</label>
                 <textarea
                   name="eligibility"
@@ -208,7 +183,7 @@ export default function AddScholarship() {
                   placeholder="e.g., Undergraduate students with GPA > 3.0"
                 />
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>Scholarship Type</label>
                 <select name="type" value={formData.type} onChange={handleChange}>
                   <option value="">Select Type</option>
@@ -218,7 +193,7 @@ export default function AddScholarship() {
                   <option value="Private">Private</option>
                 </select>
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>State / Region</label>
                 <select name="region" value={formData.region} onChange={handleChange}>
                   <option value="">Select Region</option>
@@ -228,21 +203,17 @@ export default function AddScholarship() {
                   <option value="Tamil Nadu">Tamil Nadu</option>
                 </select>
               </div>
-              <div className="addsch-form-group">
+              <div className="ad-addsch-form-group">
                 <label>General Quota</label>
-                <select
-                  name="generalQuota"
-                  value={formData.generalQuota}
-                  onChange={handleChange}
-                >
+                <select name="generalQuota" value={formData.generalQuota} onChange={handleChange}>
                   <option value="">Select Quota</option>
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
               </div>
 
-              <div className="addsch-form-group md-span-2">
-                <button type="submit" className="addsch-submit-btn">
+              <div className="ad-addsch-form-group ad-span-3">
+                <button type="submit" className="ad-addsch-submit-btn">
                   Add Scholarship
                 </button>
               </div>

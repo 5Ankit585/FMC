@@ -12,6 +12,12 @@ const MENU = [
   { id: "Announcements", label: "Announcements" },
   { id: "Support", label: "Support" },
   { id: "Settings", label: "Settings" },
+
+  // ✅ Match MainView cases
+  { id: "ViewScholarships", label: "View Scholarships" },
+  { id: "AddScholarship", label: "Add Scholarship" },
+  { id: "RemoveScholarship", label: "Remove Scholarship" },
+  { id: "ScholarshipAnalytics", label: "Scholarship Analytics" },
 ];
 
 export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {

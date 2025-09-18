@@ -11,6 +11,10 @@ const MENU = [
   { id: "analytics", label: "Analytics" },
   { id: "Subscription", label: "Subscription" },
   { id: "settings", label: "Settings" },
+  { id: "scholarship", label: "View Scholarships" },
+  { id: "addscholarship", label: "Add Scholarship" },
+  { id: "removescholarship", label: "Remove Scholarship" },
+  { id: "scholarshipanalytics", label: "Scholarship Analytics" },
 ];
 
 export default function Sidebar({ sidebarOpen, setRoute, currentRoute }) {

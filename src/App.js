@@ -35,12 +35,6 @@ import UniversityDashboard from "./dashboard/UniversityDashboard";
 import UniversityPage from "./Pages/UniversityPage";
 import UniversityRegister from "./Pages/UniversityRegister";
 
-// Scholarship Management Pages
-import Dashboard from "./Pages/Scholarshipmanage/Dashboard";
-import ViewScholarships from "./Pages/Scholarshipmanage/ViewScholarships";
-import AddScholarship from "./Pages/Scholarshipmanage/AddScholarship";
-import RemoveScholarship from "./Pages/Scholarshipmanage/RemoveScholarship";
-import Settings from "./Pages/Scholarshipmanage/Settings";
 
 function App() {
   return (
@@ -68,13 +62,6 @@ function App() {
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
           <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
-
-          {/* Scholarship Management Routes */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/scholarships" element={<ViewScholarships />} />
-          <Route path="/add-scholarship" element={<AddScholarship />} />
-          <Route path="/remove-scholarship" element={<RemoveScholarship />} />
-          <Route path="/settings" element={<Settings />} />
 
           {/* University Profile */}
           <Route path="/university-profile/:id" element={<UniversityPage />} />

@@ -4,12 +4,17 @@ import Courses from "./Courses";
 import LatestNews from "./LatestNews";
 import ApplicationBoard from "./ApplicationBoard";
 import Documents from "./Documents";
-import AnalyticsDashboard from "./AnalyticsDashboard"; 
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import Subscription from "./Subscription";
 import Settings from "./Settings";
 import AddStudent from "./AddStudent";
+import ViewScholarships from "./ViewScholarships";
+import AddScholarship from "./AddScholarship";
+import RemoveScholarship from "./RemoveScholarship";
+import ScholarshipAnalytics from "./ScholarshipAnalytics";
 
 import "./MainView.css";
+import Scholar from "../../Pages/Scholarship";
 
 export default function MainView({ route }) {
   const [showAddStudent, setShowAddStudent] = useState(false); // 🔹 popup state
@@ -83,6 +88,34 @@ export default function MainView({ route }) {
       return (
         <div className="ud-page">
           <Settings />
+        </div>
+      );
+
+    case "scholarship":
+      return (
+        <div className="ud-page">
+          <ViewScholarships />
+        </div>
+      );
+
+    case "addscholarship":
+      return (
+        <div className="ud-page">
+          <AddScholarship />
+        </div>
+      );
+
+    case "removescholarship":
+      return (
+        <div className="ud-page">
+          <RemoveScholarship />
+        </div>
+      );
+
+    case "scholarshipanalytics":
+      return (
+        <div className="ud-page">
+          <ScholarshipAnalytics />
         </div>
       );
 

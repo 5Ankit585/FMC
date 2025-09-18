@@ -1,6 +1,5 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Sidebar from "./Sidebar";
 import { FaUserGraduate, FaTasks, FaCheckCircle, FaBell } from "react-icons/fa";
 import {
   PieChart,
@@ -13,9 +12,9 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import "./Dashboard.css";
+import "./ScholarshipAnalytics.css"; // ✅ Updated CSS filename
 
-export default function Dashboard() {
+export default function ScholarshipAnalytics() {
   const location = useLocation();
 
   // Dummy data for metrics
@@ -43,43 +42,39 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="dashboard-container">
-      {/* Sidebar */}
-      <Sidebar location={location} />
-
-      {/* Main Content */}
-      <div className="dashboard-main">
-        <div className="dashboard-inner container">
+    <div className="ud-scholarship-analytics-container">
+      <div className="ud-scholarship-analytics-main">
+        <div className="ud-scholarship-analytics-inner">
           {/* Header */}
-          <div className="dashboard-header">
-            <h1 className="dashboard-title">Scholarship Dashboard</h1>
-            <p className="dashboard-subtitle">
-              Welcome to the Scholarship Admin Dashboard.
+          <div className="ud-scholarship-analytics-header">
+            <h1 className="ud-scholarship-analytics-title">Scholarship Analytics</h1>
+            <p className="ud-scholarship-analytics-subtitle">
+              Welcome to the Scholarship Analytics Dashboard.
             </p>
           </div>
 
           {/* Key Metrics */}
-          <div className="dashboard-metrics-grid">
+          <div className="ud-scholarship-analytics-metrics-grid">
             {metrics.map((metric, idx) => (
-              <div key={idx} className="dashboard-metric-card">
-                <div className="dashboard-metric-icon">{metric.icon}</div>
+              <div key={idx} className="ud-scholarship-analytics-metric-card">
+                <div className="ud-scholarship-analytics-metric-icon">{metric.icon}</div>
                 <div>
-                  <p className="dashboard-metric-title">{metric.title}</p>
-                  <p className="dashboard-metric-value">{metric.value}</p>
+                  <p className="ud-scholarship-analytics-metric-title">{metric.title}</p>
+                  <p className="ud-scholarship-analytics-metric-value">{metric.value}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Scholarship Status Card */}
-          <div className="dashboard-card dashboard-status-card">
-            <h2 className="dashboard-card-title">Scholarship Status</h2>
+          <div className="ud-scholarship-analytics-card">
+            <h2 className="ud-scholarship-analytics-card-title">Scholarship Status</h2>
 
-            <div className="dashboard-status-charts">
+            <div className="ud-scholarship-analytics-status-charts">
               {/* Pie Chart */}
-              <div className="dashboard-status-chart">
-                <h3 className="dashboard-status-chart-title">Overall Status</h3>
-                <ResponsiveContainer width="100%" height={180}>
+              <div className="ud-scholarship-analytics-status-chart">
+                <h3 className="ud-scholarship-analytics-status-chart-title">Overall Status</h3>
+                <ResponsiveContainer width="100%" height={200}>
                   <PieChart>
                     <Pie
                       data={pieData}
@@ -87,7 +82,7 @@ export default function Dashboard() {
                       nameKey="name"
                       cx="50%"
                       cy="50%"
-                      outerRadius={60}
+                      outerRadius={70}
                       label={(entry) => entry.name}
                     >
                       {pieData.map((entry, index) => (
@@ -96,9 +91,9 @@ export default function Dashboard() {
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
-                <div className="dashboard-legend">
+                <div className="ud-scholarship-analytics-legend">
                   {pieData.map((entry, index) => (
-                    <span key={index} style={{ color: entry.color, marginRight: "1rem" }}>
+                    <span key={index} style={{ color: entry.color }}>
                       {entry.name}: {entry.value}
                     </span>
                   ))}
@@ -106,17 +101,19 @@ export default function Dashboard() {
               </div>
 
               {/* Bar Chart */}
-              <div className="dashboard-status-chart">
-                <h3 className="dashboard-status-chart-title">Applications per Month</h3>
-                <ResponsiveContainer width="100%" height={180}>
+              <div className="ud-scholarship-analytics-status-chart">
+                <h3 className="ud-scholarship-analytics-status-chart-title">
+                  Applications per Month
+                </h3>
+                <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={barData}>
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="applications" fill="#4F46E5" />
+                    <Bar dataKey="applications" fill="#4F46E5" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
-                <p className="dashboard-chart-note">
+                <p className="ud-scholarship-analytics-chart-note">
                   Number of applications submitted each month
                 </p>
               </div>
@@ -124,10 +121,10 @@ export default function Dashboard() {
           </div>
 
           {/* Recent Applications */}
-          <div className="dashboard-card dashboard-recent-applications">
-            <h2 className="dashboard-card-title">Recent Applications</h2>
-            <div className="dashboard-table-wrapper">
-              <table className="dashboard-table">
+          <div className="ud-scholarship-analytics-card">
+            <h2 className="ud-scholarship-analytics-card-title">Recent Applications</h2>
+            <div className="ud-scholarship-analytics-table-wrapper">
+              <table className="ud-scholarship-analytics-table">
                 <thead>
                   <tr>
                     <th>Student Name</th>
@@ -140,19 +137,19 @@ export default function Dashboard() {
                   <tr>
                     <td>John Doe</td>
                     <td>Merit Scholarship</td>
-                    <td className="dashboard-approved">Approved</td>
+                    <td className="ud-approved">Approved</td>
                     <td>2025-09-15</td>
                   </tr>
                   <tr>
                     <td>Jane Smith</td>
                     <td>Need-Based Scholarship</td>
-                    <td className="dashboard-pending">Pending</td>
+                    <td className="ud-pending">Pending</td>
                     <td>2025-09-14</td>
                   </tr>
                   <tr>
                     <td>Alice Johnson</td>
                     <td>Merit Scholarship</td>
-                    <td className="dashboard-rejected">Rejected</td>
+                    <td className="ud-rejected">Rejected</td>
                     <td>2025-09-13</td>
                   </tr>
                 </tbody>
