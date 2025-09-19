@@ -32,13 +32,6 @@ const Placement = ({ darkMode, university }) => {
         </p>
         <div className="hero-stats">
           <div>🎯 {university?.placementRate || "NA"} Placement Rate</div>
-          <div>
-            💼{" "}
-            {university?.placements?.length > 0
-              ? university.placements[0].companies
-              : "NA"}{" "}
-            Companies
-          </div>
           <div>🏆 {university?.highestPackage || "NA"} Highest</div>
           <div>📊 {university?.avgPackage || "NA"} Average</div>
         </div>
@@ -120,10 +113,10 @@ const Placement = ({ darkMode, university }) => {
                 {openBranch === index && (
                   <div className="accordion-content">
                     <p>
-                      Highest Package: <strong>{item.highestLPA}</strong>
+                      Highest Package: <strong>{item.highestPackage}</strong>
                     </p>
                     <p>
-                      Average Package: <strong>{item.avgLPA}</strong>
+                      Average Package: <strong>{item.avgPackage}</strong>
                     </p>
                   </div>
                 )}

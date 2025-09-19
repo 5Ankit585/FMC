@@ -90,157 +90,184 @@ export default function MultiStepForm() {
 
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    // -----------------------------
-    // 1. Prepare main payload
-    // -----------------------------
-    const payload = new FormData();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // -----------------------------
+      // 1. Prepare main payload
+      // -----------------------------
+      const payload = new FormData();
 
-    // Append text fields except facilities
-    Object.entries(formData).forEach(([key, val]) => {
-      if (key !== "facilities") {
-        payload.append(key, val);
+      // Append text fields except facilities
+      Object.entries(formData).forEach(([key, val]) => {
+        if (key !== "facilities") {
+          payload.append(key, val);
+        }
+      });
+
+      // Facilities (stringify array)
+      if (formData.facilities?.length) {
+        payload.append("facilities", JSON.stringify(formData.facilities));
       }
-    });
 
-    // Facilities (stringify array)
-    if (formData.facilities?.length) {
-      payload.append("facilities", JSON.stringify(formData.facilities));
-    }
-
-    // Branches
-    if (branches?.length) {
-      payload.append("branches", JSON.stringify(branches));
-    }
-
-    // File fields
-    Object.entries(files).forEach(([key, fileList]) => {
-      if (!fileList) return;
-      if (Array.isArray(fileList)) {
-        fileList.forEach((f) => payload.append(key, f));
-      } else {
-        payload.append(key, fileList);
+      // Branches
+      if (branches?.length) {
+        payload.append("branches", JSON.stringify(branches));
       }
-    });
 
-    // -----------------------------
-    // 2. Register university
-    // -----------------------------
-    const baseUrl = "http://localhost:5000";
-
-    const res = await fetch(`${baseUrl}/api/university-registration`, {
-      method: "POST",
-      body: payload,
-    });
-
-    if (!res.ok) {
-      console.error("❌ Registration failed:", await res.text());
-      alert("❌ University registration failed!");
-      return;
-    }
-
-    const data = await res.json();
-    console.log("✅ University registered:", data);
-
-    if (!data?.data?._id) {
-      alert("❌ University not created!");
-      return;
-    }
-
-    // ✅ store universityId in localStorage and variable
-    const universityId = data.data._id;
-    localStorage.setItem("universityId", universityId);
-
-    // -----------------------------
-    // 3. Helper for uploads
-    // -----------------------------
-    const uploadFile = async (url, formData, label) => {
-      const r = await fetch(url, { method: "POST", body: formData });
-      if (!r.ok) {
-        console.error(`❌ ${label} upload failed:`, await r.text());
-        alert(`❌ ${label} upload failed!`);
-        throw new Error(`${label} upload failed`);
+      // Handle docs separately so they save inside docs:{} in Mongo
+      if (files.accreditationDoc) {
+        payload.append("accreditationDoc", files.accreditationDoc);
       }
-      console.log(`✅ ${label} uploaded`);
-    };
+      if (files.affiliationDoc) {
+        payload.append("affiliationDoc", files.affiliationDoc);
+      }
+      if (files.registrationDoc) {
+        payload.append("registrationDoc", files.registrationDoc);
+      }
+      if (files.videos) {
+        files.videos.forEach((f) => payload.append("videos", f));
+      }
+      if (files.courseFiles) {
+        files.courseFiles.forEach((f) => payload.append("courseFiles", f));
+      }
 
-    // -----------------------------
-    // 4. Upload extras (if provided)
-    // -----------------------------
-    if (files.file) {
-      const fd = new FormData();
-      fd.append("file", files.file);
-      await uploadFile(
-        `${baseUrl}/api/universities/${universityId}/courses/upload`,
-        fd,
-        "Courses"
-      );
+      // Handle all other files normally (logo, bannerImage, photos, etc.)
+      Object.entries(files).forEach(([key, fileList]) => {
+        if (
+          [
+            "accreditationDoc",
+            "affiliationDoc",
+            "registrationDoc",
+            "videos",
+            "courseFiles",
+          ].includes(key)
+        )
+          return;
+
+        if (!fileList) return;
+        if (Array.isArray(fileList)) {
+          fileList.forEach((f) => payload.append(key, f));
+        } else {
+          payload.append(key, fileList);
+        }
+      });
+
+      // -----------------------------
+      // 2. Register university
+      // -----------------------------
+      const baseUrl = "http://localhost:5000";
+
+      const res = await fetch(`${baseUrl}/api/university-registration`, {
+        method: "POST",
+        body: payload,
+      });
+
+      if (!res.ok) {
+        console.error("❌ Registration failed:", await res.text());
+        alert("❌ University registration failed!");
+        return;
+      }
+
+      const data = await res.json();
+      console.log("✅ University registered:", data);
+
+      if (!data?.data?._id) {
+        alert("❌ University not created!");
+        return;
+      }
+
+      // ✅ store universityId in localStorage and variable
+      const universityId = data.data._id;
+      localStorage.setItem("universityId", universityId);
+
+      // -----------------------------
+      // 3. Helper for uploads
+      // -----------------------------
+      const uploadFile = async (url, formData, label) => {
+        const r = await fetch(url, { method: "POST", body: formData });
+        if (!r.ok) {
+          console.error(`❌ ${label} upload failed:`, await r.text());
+          alert(`❌ ${label} upload failed!`);
+          throw new Error(`${label} upload failed`);
+        }
+        console.log(`✅ ${label} uploaded`);
+      };
+
+      // -----------------------------
+      // 4. Upload extras (if provided)
+      // -----------------------------
+      if (files.file) {
+        const fd = new FormData();
+        fd.append("file", files.file);
+        await uploadFile(
+          `${baseUrl}/api/universities/${universityId}/courses/upload`,
+          fd,
+          "Courses"
+        );
+      }
+
+      if (files.cutoffExcel) {
+        const fd = new FormData();
+        fd.append("file", files.cutoffExcel);
+        await uploadFile(
+          `${baseUrl}/api/cutoff/${universityId}/cutoff/upload`,
+          fd,
+          "Cutoff"
+        );
+      }
+
+      if (files.admissionsExcel) {
+        const fd = new FormData();
+        fd.append("file", files.admissionsExcel);
+        await uploadFile(
+          `${baseUrl}/api/admissions/${universityId}/admissions/upload`,
+          fd,
+          "Admissions"
+        );
+      }
+
+      if (files.placementsExcel) {
+        const fd = new FormData();
+        fd.append("file", files.placementsExcel);
+        await uploadFile(
+          `${baseUrl}/api/universities/${universityId}/placements/upload`,
+          fd,
+          "Placements"
+        );
+      }
+
+      if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
+        const fd = new FormData();
+        files.infraPhotos?.forEach((f) => fd.append("infraPhotos", f));
+        files.eventPhotos?.forEach((f) => fd.append("eventPhotos", f));
+        files.galleryImages?.forEach((f) => fd.append("galleryImages", f));
+        await uploadFile(
+          `${baseUrl}/api/universities/${universityId}/gallery/upload`,
+          fd,
+          "Gallery"
+        );
+      }
+
+      if (files.recruitersLogos?.length) {
+        const fd = new FormData();
+        files.recruitersLogos.forEach((f) => fd.append("recruitersLogos", f));
+        await uploadFile(
+          `${baseUrl}/api/recruiters/${universityId}/recruiters/upload`,
+          fd,
+          "Recruiters logos"
+        );
+      }
+
+      // -----------------------------
+      // 5. Success
+      // -----------------------------
+      alert("🎉 University Registered Successfully!");
+    } catch (err) {
+      console.error("❌ Error submitting form:", err);
+      alert("❌ Form submission failed!");
     }
-
-    if (files.cutoffExcel) {
-      const fd = new FormData();
-      fd.append("file", files.cutoffExcel);
-      await uploadFile(
-        `${baseUrl}/api/cutoff/${universityId}/cutoff/upload`,
-        fd,
-        "Cutoff"
-      );
-    }
-
-    if (files.admissionsExcel) {
-      const fd = new FormData();
-      fd.append("file", files.admissionsExcel);
-      await uploadFile(
-        `${baseUrl}/api/admissions/${universityId}/admissions/upload`,
-        fd,
-        "Admissions"
-      );
-    }
-
-    if (files.placementsExcel) {
-      const fd = new FormData();
-      fd.append("file", files.placementsExcel);
-      await uploadFile(
-        `${baseUrl}/api/universities/${universityId}/placements/upload`,
-        fd,
-        "Placements"
-      );
-    }
-
-    if (files.infraPhotos || files.eventPhotos || files.galleryImages) {
-      const fd = new FormData();
-      files.infraPhotos?.forEach((f) => fd.append("infraPhotos", f));
-      files.eventPhotos?.forEach((f) => fd.append("eventPhotos", f));
-      files.galleryImages?.forEach((f) => fd.append("galleryImages", f));
-      await uploadFile(
-        `${baseUrl}/api/universities/${universityId}/gallery/upload`,
-        fd,
-        "Gallery"
-      );
-    }
-
-    if (files.recruitersLogos?.length) {
-      const fd = new FormData();
-      files.recruitersLogos.forEach((f) => fd.append("recruitersLogos", f));
-      await uploadFile(
-        `${baseUrl}/api/recruiters/${universityId}/recruiters/upload`,
-        fd,
-        "Recruiters logos"
-      );
-    }
-
-    // -----------------------------
-    // 5. Success
-    // -----------------------------
-    alert("🎉 University Registered Successfully!");
-  } catch (err) {
-    console.error("❌ Error submitting form:", err);
-    alert("❌ Form submission failed!");
-  }
-};
-
+  };
 
   const facilityOptions = [
     "hostel",
@@ -259,7 +286,6 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="univ-app-container">
-     
       <header className="univ-header">
         <h1 className="univ-header-title">University Registration</h1>
         <p className="univ-header-subtitle">Complete all 9 steps below</p>
@@ -352,7 +378,6 @@ const handleSubmit = async (e) => {
                 accept="image/*"
                 onChange={handleFileChange}
               />
-
               <label>Upload Banner Images (at least 3)</label>
               <input
                 type="file"
@@ -516,8 +541,6 @@ const handleSubmit = async (e) => {
           {step === 5 && (
             <div className="univ-form-step grid-3">
               <h3 className="univ-step-title">Step 5: Placements</h3>
-
-              {/* Placement Rate */}
               <input
                 name="placementRate"
                 placeholder="Placement Rate (%)"
@@ -525,8 +548,6 @@ const handleSubmit = async (e) => {
                 onChange={handleChange}
                 title="Overall placement rate."
               />
-
-              {/* Highest Package */}
               <input
                 name="highestPackage"
                 placeholder="Highest Package (₹ LPA)"
@@ -534,8 +555,6 @@ const handleSubmit = async (e) => {
                 onChange={handleChange}
                 title="Highest package overall."
               />
-
-              {/* Average Package */}
               <input
                 name="avgPackage"
                 placeholder="Average Package (₹ LPA)"
@@ -543,8 +562,6 @@ const handleSubmit = async (e) => {
                 onChange={handleChange}
                 title="Average package overall."
               />
-
-              {/* Upload Year-wise Placements */}
               <label>Upload Year-wise Placements Excel (placements.xlsx)</label>
               <input
                 type="file"
@@ -553,8 +570,6 @@ const handleSubmit = async (e) => {
                 accept=".xlsx"
                 title="Upload Excel with columns: Year, Companies, Placed, Highest CTC, Avg CTC."
               />
-
-              {/* Upload Recruiters Logos */}
               <label>Upload Top Recruiters Logos</label>
               <input
                 type="file"
@@ -562,8 +577,6 @@ const handleSubmit = async (e) => {
                 multiple
                 onChange={handleFileChange}
               />
-
-              {/* Branch-wise Placements */}
               <h4>Branch-wise Placements</h4>
               <button
                 type="button"
@@ -572,7 +585,6 @@ const handleSubmit = async (e) => {
               >
                 + Add Branch
               </button>
-
               {branches.map((branch, index) => (
                 <div key={index} className="branch-group">
                   <input
@@ -771,14 +783,6 @@ const handleSubmit = async (e) => {
                 multiple
                 onChange={handleFileChange}
                 title="Upload promotional or campus videos."
-              />
-              <label>Upload Course Files</label>
-              <input
-                type="file"
-                name="courseFiles"
-                multiple
-                onChange={handleFileChange}
-                title="Upload additional course-related files."
               />
               <input
                 name="emailUsername"
