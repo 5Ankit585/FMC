@@ -28,100 +28,85 @@ export default function AddStudent() {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("✅ Student Added:\n" + JSON.stringify(formData, null, 2));
-    // Later: send formData to backend
   };
 
   return (
-    <div className="ud-page">
-      <h2>Add New Student</h2>
-      <form className="form-card" onSubmit={handleSubmit}>
+    <div className="ud-studentform-page">
+      <h2 className="ud-studentform-title">Add New Student</h2>
+
+      <form className="ud-studentform-form" onSubmit={handleSubmit}>
 
         {/* 🔹 Personal Info */}
-        <h3>Personal Information</h3>
-        <label>
+        <h3 className="ud-studentform-section">Personal Information</h3>
+        <label className="ud-studentform-label">
           Name
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+          <input className="ud-studentform-input" type="text" name="name" value={formData.name} onChange={handleChange} required />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Email
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          <input className="ud-studentform-input" type="email" name="email" value={formData.email} onChange={handleChange} required />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Phone
-          <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+          <input className="ud-studentform-input" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Date of Birth
-          <input type="date" name="dob" value={formData.dob} onChange={handleChange} required />
+          <input className="ud-studentform-input" type="date" name="dob" value={formData.dob} onChange={handleChange} required />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Gender
-          <select name="gender" value={formData.gender} onChange={handleChange} required>
+          <select className="ud-studentform-select" name="gender" value={formData.gender} onChange={handleChange} required>
             <option value="">Select Gender</option>
             <option>Male</option>
             <option>Female</option>
             <option>Other</option>
           </select>
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Address
-          <input type="text" name="address" value={formData.address} onChange={handleChange} />
+          <input className="ud-studentform-input" type="text" name="address" value={formData.address} onChange={handleChange} />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Nationality
-          <input type="text" name="nationality" value={formData.nationality} onChange={handleChange} />
+          <input className="ud-studentform-input" type="text" name="nationality" value={formData.nationality} onChange={handleChange} />
         </label>
 
         {/* 🔹 Academic Info */}
-        <h3>Academic Information</h3>
-        <label>
+        <h3 className="ud-studentform-section">Academic Information</h3>
+        <label className="ud-studentform-label">
           Course
-          <input type="text" name="course" value={formData.course} onChange={handleChange} />
+          <input className="ud-studentform-input" type="text" name="course" value={formData.course} onChange={handleChange} />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Enrollment Date
-          <input type="date" name="enrollmentDate" value={formData.enrollmentDate} onChange={handleChange} />
+          <input className="ud-studentform-input" type="date" name="enrollmentDate" value={formData.enrollmentDate} onChange={handleChange} />
         </label>
 
         {/* 🔹 Guardian Info */}
-        <h3>Guardian Information</h3>
-        <label>
+        <h3 className="ud-studentform-section">Guardian Information</h3>
+        <label className="ud-studentform-label">
           Father's Name
-          <input type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} />
+          <input className="ud-studentform-input" type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Mother's Name
-          <input type="text" name="motherName" value={formData.motherName} onChange={handleChange} />
+          <input className="ud-studentform-input" type="text" name="motherName" value={formData.motherName} onChange={handleChange} />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Guardian Phone
-          <input type="tel" name="guardianPhone" value={formData.guardianPhone} onChange={handleChange} />
+          <input className="ud-studentform-input" type="tel" name="guardianPhone" value={formData.guardianPhone} onChange={handleChange} />
         </label>
-        <label>
+        <label className="ud-studentform-label">
           Emergency Contact
-          <input type="tel" name="emergencyContact" value={formData.emergencyContact} onChange={handleChange} />
+          <input className="ud-studentform-input" type="tel" name="emergencyContact" value={formData.emergencyContact} onChange={handleChange} />
         </label>
 
-        {/* 🔹 Additional Info */}
-        <h3>Additional Info</h3>
-        <label>
-          Blood Group
-          <input type="text" name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} />
-        </label>
-        <label>
-          Allergies
-          <input type="text" name="allergies" value={formData.allergies} onChange={handleChange} />
-        </label>
-        <label>
-          Hobbies / Interests
-          <input type="text" name="hobbies" value={formData.hobbies} onChange={handleChange} />
-        </label>
-
-        <button type="submit" className="primary-btn">Save Student</button>
+        <button type="submit" className="ud-studentform-btn-primary">Save Student</button>
       </form>
 
       <button
-        className="link-btn"
+        className="ud-studentform-btn-link"
         onClick={() => window.dispatchEvent(new CustomEvent("navigate", { detail: "dashboard" }))}
       >
         ⬅ Back to Dashboard

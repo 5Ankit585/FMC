@@ -3,28 +3,22 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./ProfileForm.css";
 
 export default function ProfileForm() {
-  const { id } = useParams(); // URL se id aayegi
+  const { id } = useParams();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const baseUrl = "http://localhost:5000";
 
-  // ---------------------------
-  // Fetch profile on mount
-  // ---------------------------
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        if (!id) {
-          console.log("⚠️ No universityId found in params");
-          return;
-        }
+        if (!id) return;
         const res = await fetch(`${baseUrl}/api/universities/${id}`);
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
         setProfile(data);
-        setFormData(data); // prefill form
+        setFormData(data);
       } catch (err) {
         console.error("❌ Error fetching profile:", err);
       }
@@ -32,9 +26,6 @@ export default function ProfileForm() {
     fetchProfile();
   }, [id]);
 
-  // ---------------------------
-  // Handlers
-  // ---------------------------
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -70,7 +61,7 @@ export default function ProfileForm() {
       });
       if (!res.ok) throw new Error("Failed to delete profile");
       alert("🗑 University deleted!");
-      navigate("/"); // redirect to home
+      navigate("/");
     } catch (err) {
       console.error("❌ Delete error:", err);
       alert("❌ Delete failed!");
@@ -85,7 +76,6 @@ export default function ProfileForm() {
     <div className="profile-container">
       <h2 className="profile-title">University Profile</h2>
 
-      {/* Edit/Save/Delete Buttons */}
       <div className="profile-actions">
         {editing ? (
           <button className="btn save-btn" onClick={handleSubmit}>Save</button>
@@ -95,39 +85,79 @@ export default function ProfileForm() {
         <button className="btn delete-btn" onClick={handleDelete}>Delete</button>
       </div>
 
-      {/* Profile Form */}
       <form className="profile-form" onSubmit={handleSubmit}>
-        {/* Example Section */}
+        {/* Basic Info */}
         <section>
           <h3>Basic Info</h3>
           <input name="instituteName" placeholder="Institute Name" value={formData.instituteName || ""} onChange={handleChange} disabled={!editing} />
           <input name="type" placeholder="Type" value={formData.type || ""} onChange={handleChange} disabled={!editing} />
           <input name="year" placeholder="Year" value={formData.year || ""} onChange={handleChange} disabled={!editing} />
           <input name="ownership" placeholder="Ownership" value={formData.ownership || ""} onChange={handleChange} disabled={!editing} />
+          <input name="accreditation" placeholder="Accreditation" value={formData.accreditation || ""} onChange={handleChange} disabled={!editing} />
+          <input name="affiliation" placeholder="Affiliation" value={formData.affiliation || ""} onChange={handleChange} disabled={!editing} />
+          <input name="students" placeholder="No. of Students" value={formData.students || ""} onChange={handleChange} disabled={!editing} />
+          <input name="faculty" placeholder="No. of Faculty" value={formData.faculty || ""} onChange={handleChange} disabled={!editing} />
         </section>
 
-        {/* Media Section */}
+        {/* Contact Info */}
         <section>
-          <h3>Media</h3>
-          <div className="media-preview">
-            <h4>Logo</h4>
-            {profile.logo && profile.logo.length > 0 ? (
-              <img src={profile.logo[0]} alt="University Logo" className="media-logo" />
-            ) : (
-              <p>No logo uploaded</p>
-            )}
+          <h3>Contact & Info</h3>
+          <input name="address" placeholder="Address" value={formData.address || ""} onChange={handleChange} disabled={!editing} />
+          <input name="city" placeholder="City" value={formData.city || ""} onChange={handleChange} disabled={!editing} />
+          <input name="state" placeholder="State" value={formData.state || ""} onChange={handleChange} disabled={!editing} />
+          <input name="email" placeholder="Email" value={formData.email || ""} onChange={handleChange} disabled={!editing} />
+          <input name="phone" placeholder="Phone" value={formData.phone || ""} onChange={handleChange} disabled={!editing} />
+          <input name="website" placeholder="Website" value={formData.website || ""} onChange={handleChange} disabled={!editing} />
+          <input name="socialMedia" placeholder="Social Media Links" value={formData.socialMedia || ""} onChange={handleChange} disabled={!editing} />
+          <input name="topRecruiters" placeholder="Top Recruiters" value={formData.topRecruiters || ""} onChange={handleChange} disabled={!editing} />
+          <input name="highestPackage" placeholder="Highest Package" value={formData.highestPackage || ""} onChange={handleChange} disabled={!editing} />
+          <input name="avgPackage" placeholder="Average Package" value={formData.avgPackage || ""} onChange={handleChange} disabled={!editing} />
+          <input name="campusSize" placeholder="Campus Size" value={formData.campusSize || ""} onChange={handleChange} disabled={!editing} />
+          <input name="hostelFee" placeholder="Hostel Fee" value={formData.hostelFee || ""} onChange={handleChange} disabled={!editing} />
+          <input name="studentRating" placeholder="Student Rating" value={formData.studentRating || ""} onChange={handleChange} disabled={!editing} />
+          <input name="nirfRank" placeholder="NIRF Rank" value={formData.nirfRank || ""} onChange={handleChange} disabled={!editing} />
+        </section>
 
-            <h4>Banner Images</h4>
-            <div className="media-grid">
-              {profile.bannerImage?.length > 0 ? (
-                profile.bannerImage.map((img, idx) => (
-                  <img key={idx} src={img} alt={`Banner ${idx + 1}`} />
-                ))
-              ) : (
-                <p>No banner images uploaded</p>
-              )}
-            </div>
-          </div>
+        {/* Placements */}
+        <section>
+          <h3>Placements</h3>
+          <input name="placementRate" placeholder="Placement Rate (%)" value={formData.placementRate || ""} onChange={handleChange} disabled={!editing} />
+        </section>
+
+        {/* Facilities */}
+        <section>
+          <h3>Facilities</h3>
+          {formData.facilities?.length > 0 ? (
+            formData.facilities.map((f, i) => (
+              <div key={i} className="facility-item">
+                <strong>{f.name}:</strong>{" "}
+                {editing ? (
+                  <input
+                    value={f.description || ""}
+                    onChange={(e) => {
+                      const updatedFacilities = [...formData.facilities];
+                      updatedFacilities[i].description = e.target.value;
+                      setFormData({ ...formData, facilities: updatedFacilities });
+                    }}
+                  />
+                ) : (
+                  <span>{f.description}</span>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No facilities listed</p>
+          )}
+        </section>
+
+        {/* International Section */}
+        <section>
+          <h3>International</h3>
+          <input name="intlStudentOffice" placeholder="Intl. Student Office" value={formData.intlStudentOffice || ""} onChange={handleChange} disabled={!editing} />
+          <input name="countriesEnrolled" placeholder="Countries Enrolled" value={formData.countriesEnrolled || ""} onChange={handleChange} disabled={!editing} />
+          <input name="foreignMoUs" placeholder="Foreign MoUs" value={formData.foreignMoUs || ""} onChange={handleChange} disabled={!editing} />
+          <input name="languageSupport" placeholder="Language Support" value={formData.languageSupport || ""} onChange={handleChange} disabled={!editing} />
+          <input name="visaSupport" placeholder="Visa Support" value={formData.visaSupport || ""} onChange={handleChange} disabled={!editing} />
         </section>
       </form>
     </div>

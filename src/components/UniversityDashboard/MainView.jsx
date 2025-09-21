@@ -14,7 +14,6 @@ import RemoveScholarship from "./RemoveScholarship";
 import ScholarshipAnalytics from "./ScholarshipAnalytics";
 
 import "./MainView.css";
-import Scholar from "../../Pages/Scholarship";
 
 export default function MainView({ route }) {
   const [showAddStudent, setShowAddStudent] = useState(false); // 🔹 popup state
@@ -146,9 +145,9 @@ export default function MainView({ route }) {
 
           {/* Add Student Modal */}
           {showAddStudent && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <button className="close-btn" onClick={closeAddStudentPopup}>
+            <div className="add-modal-overlay">
+              <div className="add-modal-content">
+                <button className="add-close-btn" onClick={closeAddStudentPopup}>
                   ✖
                 </button>
                 <AddStudent />
