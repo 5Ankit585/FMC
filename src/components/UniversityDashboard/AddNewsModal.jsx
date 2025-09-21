@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"; 
 import "./AddNewsModal.css";
 
 export default function AddNewsModal({ onClose, onNewsAdded, editingNews }) {
+  const { id: universityId } = useParams();  // 👈 get current uni id
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("General");
@@ -29,6 +31,7 @@ export default function AddNewsModal({ onClose, onNewsAdded, editingNews }) {
       formData.append("description", description);
       formData.append("category", category);
       formData.append("date", date);
+      formData.append("universityId", universityId);  // ✅ attach uniId
       if (image) formData.append("image", image);
 
       const url = editingNews

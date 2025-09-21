@@ -66,7 +66,7 @@ const handleSubmit = async (e) => {
       if (formData[key]) formDataToSend.append(key, formData[key]);
     });
 
-    const res = await fetch("http://localhost:5000/api/students", {
+    const res = await fetch("http://localhost:5000/api/signup", {
       method: "POST",
       body: formDataToSend,
     });
