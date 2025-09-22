@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; // 👈 get university id
 import AddNewsModal from "./AddNewsModal";
 import "./LatestNews.css";
 
 export default function LatestNews() {
+  const { id: universityId } = useParams(); // 👈 extract :id from URL
   const [news, setNews] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingNews, setEditingNews] = useState(null);
 
-  // Fetch news on load
+  // Fetch news on load (scoped by university)
   useEffect(() => {
-    fetch("http://localhost:5000/api/news")
+    if (!universityId) return;
+
+    fetch(`http://localhost:5000/api/universities/${universityId}/news`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) setNews(data.news);
       })
       .catch((err) => console.error("Error fetching news:", err));
-  }, []);
+  }, [universityId]);
 
   // Add or update news
   const handleNewsSaved = (savedItem) => {
@@ -33,9 +37,12 @@ export default function LatestNews() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this news?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/news/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/universities/${universityId}/news/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
       const data = await res.json();
       if (data.success) {
         setNews((prev) => prev.filter((n) => n._id !== id));
@@ -107,6 +114,7 @@ export default function LatestNews() {
           }}
           onNewsAdded={handleNewsSaved}
           editingNews={editingNews}
+          universityId={universityId} // 👈 pass uniId so it saves correctly
         />
       )}
     </section>
