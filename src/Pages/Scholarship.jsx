@@ -1,17 +1,18 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import "./Scholarship.css";
 
 /* ---------------- Hero Section ---------------- */
 function HeroSection() {
   return (
-    <section className="scholar-hero-section">
-      <div className="scholar-hero-background" />
+    <header className="scholar-hero-section">
+      <div className="scholar-hero-overlay" />
+      <div className="scholar-hero-pattern" />
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="scholar-hero-content"
       >
         <h1 className="scholar-hero-title">Find the Perfect Scholarship</h1>
@@ -19,20 +20,17 @@ function HeroSection() {
           Search, filter, and apply for scholarships that match your profile.
         </p>
       </motion.div>
-      <div className="scholar-hero-blur-left" />
-      <div className="scholar-hero-blur-right" />
-    </section>
+    </header>
   );
 }
 
 /* ---------------- Search Bar ---------------- */
-function SearchBar({ onSearch, onToggleFilters }) {
+function SearchBar({ onSearch }) {
   const [q, setQ] = useState("");
   return (
     <div className="scholar-search-bar">
       <div className="scholar-search-container">
         <div className="scholar-search-brand">🎓 ScholarFind</div>
-
         <div className="scholar-search-input-group">
           <input
             value={q}
@@ -49,15 +47,6 @@ function SearchBar({ onSearch, onToggleFilters }) {
             Search
           </motion.button>
         </div>
-
-        {/* Filters button (toggles mobile drawer) */}
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="scholar-filter-button"
-          onClick={onToggleFilters}
-        >
-          Filters
-        </motion.button>
       </div>
     </div>
   );
@@ -67,107 +56,81 @@ function SearchBar({ onSearch, onToggleFilters }) {
 function SidebarFilterLeft({ values, onChange }) {
   return (
     <div className="scholar-filter-sidebar">
-      {/* Category */}
       <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">Category</h4>
-        <select
-          className="scholar-filter-select"
-          value={values.category}
-          onChange={(e) => onChange({ category: e.target.value })}
-        >
-          <option value="">Any</option>
-          <option>SC</option>
-          <option>ST</option>
-          <option>OBC</option>
-          <option>General</option>
-        </select>
-      </div>
-
-      {/* Family Income */}
-      <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">Family Income</h4>
-        <select
-          className="scholar-filter-select"
-          value={values.income}
-          onChange={(e) => onChange({ income: e.target.value })}
-        >
-          <option value="">Any</option>
-          <option value="1L-3L">1L to 3L</option>
-          <option value="4L-5L">4L to 5L</option>
-          <option value="6L-7L">6L to 7L</option>
-        </select>
-      </div>
-
-      {/* Education Level */}
-      <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">Education Level</h4>
-        <select
-          className="scholar-filter-select"
-          value={values.educationLevel}
-          onChange={(e) => onChange({ educationLevel: e.target.value })}
-        >
-          <option value="">Any</option>
-          <option>UG</option>
-          <option>PG</option>
-          <option>PhD</option>
-        </select>
-      </div>
-
-      {/* Scholarship Type */}
-      <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">Scholarship Type</h4>
-        <select
-          className="scholar-filter-select"
-          value={values.type}
-          onChange={(e) => onChange({ type: e.target.value })}
-        >
-          <option value="">Any</option>
-          <option>Merit</option>
-          <option>Need</option>
-          <option>Government</option>
-          <option>Private</option>
-        </select>
-      </div>
-
-      {/* State / Region */}
-      <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">State / Region</h4>
+        <h4 className="scholar-filter-title">State</h4>
         <select
           className="scholar-filter-select"
           value={values.region}
           onChange={(e) => onChange({ region: e.target.value })}
         >
-          <option value="">Any</option>
+          <option value="">Select State</option>
           <option>Maharashtra</option>
           <option>Karnataka</option>
           <option>Delhi</option>
           <option>Tamil Nadu</option>
         </select>
       </div>
-
-      {/* General Quota */}
       <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">General Quota</h4>
+        <h4 className="scholar-filter-title">Stream</h4>
         <select
           className="scholar-filter-select"
-          value={values.generalQuota}
-          onChange={(e) => onChange({ generalQuota: e.target.value })}
+          value={values.category}
+          onChange={(e) => onChange({ category: e.target.value })}
         >
-          <option value="">Any</option>
-          <option>Yes</option>
-          <option>No</option>
+          <option value="">Select Stream</option>
+          <option>SC</option>
+          <option>ST</option>
+          <option>OBC</option>
+          <option>General</option>
         </select>
       </div>
-
-      {/* Deadline */}
       <div className="scholar-filter-group">
-        <h4 className="scholar-filter-title">Deadline</h4>
+        <h4 className="scholar-filter-title">Level</h4>
+        <select
+          className="scholar-filter-select"
+          value={values.educationLevel}
+          onChange={(e) => onChange({ educationLevel: e.target.value })}
+        >
+          <option value="">Select Level</option>
+          <option>UG</option>
+          <option>PG</option>
+          <option>PhD</option>
+        </select>
+      </div>
+      <div className="scholar-filter-group">
+        <h4 className="scholar-filter-title">Exam Type</h4>
+        <select
+          className="scholar-filter-select"
+          value={values.type}
+          onChange={(e) => onChange({ type: e.target.value })}
+        >
+          <option value="">Select Exam Type</option>
+          <option>Merit</option>
+          <option>Need</option>
+          <option>Government</option>
+          <option>Private</option>
+        </select>
+      </div>
+      <div className="scholar-filter-group">
+        <h4 className="scholar-filter-title">Mode</h4>
+        <select
+          className="scholar-filter-select"
+          value={values.mode}
+          onChange={(e) => onChange({ mode: e.target.value })}
+        >
+          <option value="">Select Mode</option>
+          <option>Online</option>
+          <option>Offline</option>
+        </select>
+      </div>
+      <div className="scholar-filter-group">
+        <h4 className="scholar-filter-title">Date Range</h4>
         <select
           className="scholar-filter-select"
           value={values.deadlineState}
           onChange={(e) => onChange({ deadlineState: e.target.value })}
         >
-          <option value="">Any</option>
+          <option value="">Select Date Range</option>
           <option>Open</option>
           <option>Upcoming</option>
           <option>Closed</option>
@@ -179,61 +142,28 @@ function SidebarFilterLeft({ values, onChange }) {
 
 /* ---------------- Scholarship Card ---------------- */
 function ScholarshipCard({ data }) {
-  const { _id, name, provider, tags = [], benefits, deadline, status } = data;
+  const { _id, name, provider, deadline, status } = data;
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.25 }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className="scholar-card"
     >
       <div className="scholar-card-header">
-        <div>
+        <div className="scholar-card-content">
           <h3 className="scholar-card-title">{name}</h3>
-          <p className="scholar-card-provider">Provider: {provider}</p>
+          <p className="scholar-card-provider">Conducting Body: {provider}</p>
+          <p className="scholar-card-event">Next Event: {deadline}</p>
+          <p className="scholar-card-mode">Mode & Level: {status}</p>
         </div>
-        <span
-          className={`scholar-card-status ${
-            status === "Open"
-              ? "scholar-status-open"
-              : status === "Upcoming"
-              ? "scholar-status-upcoming"
-              : "scholar-status-closed"
-          }`}
-        >
-          {status}
-        </span>
-      </div>
-
-      <div className="scholar-card-tags">
-        {tags.map((t) => (
-          <span key={t} className="scholar-card-tag">
-            {t}
-          </span>
-        ))}
-      </div>
-
-      <div className="scholar-card-details">
-        <div className="scholar-card-benefit">
-          <p className="scholar-card-label">Benefits</p>
-          <p className="scholar-card-value">{benefits}</p>
+        <div className="scholar-card-actions">
+          <button className="scholar-card-button-details">Details</button>
+          <button className="scholar-card-button-apply">Apply</button>
+          <button className="scholar-card-button-alert">Set Alert</button>
         </div>
-        <div className="scholar-card-deadline">
-          <p className="scholar-card-label">Deadline</p>
-          <p className="scholar-card-value">{deadline}</p>
-        </div>
-      </div>
-
-      <div className="scholar-card-actions">
-        <Link to={`/scholarships/${_id}`} className="scholar-card-link">
-          <button className="scholar-card-button-details">View Details</button>
-        </Link>
-        <Link to="/Applynow" className="scholar-card-link">
-          <button className="scholar-card-button-apply">Apply Now</button>
-        </Link>
-        <button className="scholar-card-button-download">Download</button>
       </div>
     </motion.div>
   );
@@ -244,17 +174,16 @@ export default function Scholar() {
   const [scholarships, setScholarships] = useState([]);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState({
+    region: "",
     category: "",
-    income: "",
     educationLevel: "",
     type: "",
-    region: "",
-    generalQuota: "",
+    mode: "",
     deadlineState: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Upcoming");
 
   useEffect(() => {
     const fetchScholarships = async () => {
@@ -279,67 +208,43 @@ export default function Scholar() {
     return scholarships.filter((s) => {
       const name = (s.name || "").toLowerCase();
       const provider = (s.provider || "").toLowerCase();
-      const tags = (s.tags || []).map((t) => String(t).toLowerCase());
       const status = (s.status || "").toLowerCase();
 
       return (
-        (q === "" || name.includes(q) || provider.includes(q) || tags.some((t) => t.includes(q))) &&
+        (q === "" || name.includes(q) || provider.includes(q)) &&
+        (!filters.region || s.region?.toLowerCase() === filters.region.toLowerCase()) &&
         (!filters.category || s.category?.toLowerCase() === filters.category.toLowerCase()) &&
-        (!filters.income || s.income === filters.income) &&
         (!filters.educationLevel || s.educationLevel?.toLowerCase() === filters.educationLevel.toLowerCase()) &&
         (!filters.type || s.type?.toLowerCase() === filters.type.toLowerCase()) &&
-        (!filters.region || s.region?.toLowerCase() === filters.region.toLowerCase()) &&
-        (!filters.generalQuota || String(s.generalQuota || "").toLowerCase() === filters.generalQuota.toLowerCase()) &&
-        (!filters.deadlineState || status === filters.deadlineState.toLowerCase())
+        (!filters.mode || s.status?.toLowerCase() === filters.mode.toLowerCase()) &&
+        (!filters.deadlineState || status === filters.deadlineState.toLowerCase()) &&
+        (activeTab === "Upcoming" || activeTab === "Ongoing")
       );
     });
-  }, [scholarships, query, filters]);
+  }, [scholarships, query, filters, activeTab]);
 
   return (
     <div className="scholar-main">
       <HeroSection />
-      <SearchBar onSearch={setQuery} onToggleFilters={() => setFilterDrawerOpen(true)} />
+      <SearchBar onSearch={setQuery} />
 
       <div className="scholar-content">
-        {/* Desktop Filters */}
-        <div className="hidden lg:block">
-          <SidebarFilterLeft values={filters} onChange={(next) => setFilters((p) => ({ ...p, ...next }))} />
-        </div>
+        <SidebarFilterLeft values={filters} onChange={(next) => setFilters((p) => ({ ...p, ...next }))} />
 
-        {/* Mobile Drawer */}
-        <AnimatePresence>
-          {filterDrawerOpen && (
-            <motion.div
-              className="filter-drawer-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setFilterDrawerOpen(false)}
-            >
-              <motion.div
-                className="filter-drawer"
-                initial={{ x: "-100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "-100%" }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <SidebarFilterLeft
-                  values={filters}
-                  onChange={(next) => setFilters((p) => ({ ...p, ...next }))}
-                />
-                <button className="close-drawer" onClick={() => setFilterDrawerOpen(false)}>
-                  ✕ Close
-                </button>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Results Section */}
         <motion.div layout className="scholar-results">
           <div className="scholar-results-header">
-            <h2 className="scholar-results-title">Available Scholarships</h2>
-            {/* <span className="scholar-results-count">{filtered.length} results</span> */}
+            <h2 className="scholar-results-title">University Scholarships Dashboard.</h2>
+            <div className="scholar-tabs">
+              {["Upcoming", "Ongoing"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`scholar-tab ${activeTab === tab ? "scholar-tab-active" : ""}`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
           </div>
 
           {loading ? (
@@ -351,7 +256,10 @@ export default function Scholar() {
           ) : (
             <div className="scholar-grid">
               {filtered.map((s) => (
-                <ScholarshipCard key={s._id} data={s} />
+                <ScholarshipCard
+                  key={s._id}
+                  data={s}
+                />
               ))}
             </div>
           )}
