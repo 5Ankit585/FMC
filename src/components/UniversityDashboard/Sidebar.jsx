@@ -7,7 +7,7 @@ const MENU = [
   { id: "Courses & Fees", label: "Courses & Fees" },
   { id: "News", label: "News" },
   { id: "Applications", label: "Applications" },
-  { id: "Documents", label: "Documents" },
+  { id: "Gallery", label: "Gallery" },
   { id: "analytics", label: "Analytics" },
   { id: "Subscription", label: "Subscription" },
   { id: "settings", label: "Settings" },

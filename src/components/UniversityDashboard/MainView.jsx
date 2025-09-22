@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import ProfileForm from "./ProfileForm";
 import Courses from "./Courses";
 import LatestNews from "./LatestNews";
 import ApplicationBoard from "./ApplicationBoard";
-import Documents from "./Documents";
+import Gallery from "./Gallery";
 import AnalyticsDashboard from "./AnalyticsDashboard";
 import Subscription from "./Subscription";
 import Settings from "./Settings";
@@ -16,6 +17,7 @@ import ScholarshipAnalytics from "./ScholarshipAnalytics";
 import "./MainView.css";
 
 export default function MainView({ route }) {
+  const { id: universityId } = useParams();
   const [showAddStudent, setShowAddStudent] = useState(false); // 🔹 popup state
 
   const recentApplications = [
@@ -44,7 +46,8 @@ export default function MainView({ route }) {
       );
 
     case "Courses & Fees":
-      return <Courses />;
+      return <Courses universityId={universityId} />;
+
 
     case "News":
       return (
@@ -62,12 +65,13 @@ export default function MainView({ route }) {
         </div>
       );
 
-    case "Documents":
+    case "Gallery":
       return (
         <div className="ud-page">
-          <Documents />
+          <Gallery universityId={universityId} />
         </div>
       );
+
 
     case "analytics":
       return (

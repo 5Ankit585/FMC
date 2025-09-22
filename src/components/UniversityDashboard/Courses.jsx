@@ -1,207 +1,208 @@
-// src/components/UniversityDashboard/Courses.jsx
-import React, { useState } from "react";
-import * as XLSX from "xlsx";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faUpload, faPaperPlane, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faEdit,
+  faTrash,
+  faPlus,
+  faSave,
+  faTimes,
+  faUpload,
+} from "@fortawesome/free-solid-svg-icons";
+import * as XLSX from "xlsx";
 import "./Courses.css";
-import { db } from "../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-export default function Courses() {
-  const [courseData, setCourseData] = useState([]);
-  const [courseFileName, setCourseFileName] = useState("courses.xlsx");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [cloudinaryURL, setCloudinaryURL] = useState("");
+export default function Courses({ universityId }) {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [newCourse, setNewCourse] = useState({
+    courseName: "",
+    totalFees: "",
+    yearlyFees: "",
+    duration: "",
+    intake: "",
+    applyLink: "",
+  });
 
-  // Read Excel file for preview
-  const handleFileSelect = (e) => {
+  const baseUrl = "http://localhost:5000";
+
+  // Fetch courses
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        if (!universityId) return;
+        const res = await fetch(`${baseUrl}/api/universities/${universityId}/courses`);
+        const data = await res.json();
+        if (data.courses && Array.isArray(data.courses)) {
+          setCourses(data.courses);
+        }
+      } catch (err) {
+        console.error("❌ Error fetching courses:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, [universityId]);
+
+  const startEditing = (course) => {
+    setEditingId(course._id);
+    setEditData(course);
+  };
+
+  const saveCourse = async (id) => {
+    try {
+      await fetch(`${baseUrl}/api/universities/${universityId}/courses/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editData),
+      });
+      setCourses(courses.map((c) => (c._id === id ? editData : c)));
+      setEditingId(null);
+    } catch (err) {
+      console.error("❌ Error saving course:", err);
+    }
+  };
+
+  const deleteCourse = async (id) => {
+    try {
+      await fetch(`${baseUrl}/api/universities/${universityId}/courses/${id}`, {
+        method: "DELETE",
+      });
+      setCourses(courses.filter((c) => c._id !== id));
+    } catch (err) {
+      console.error("❌ Error deleting course:", err);
+    }
+  };
+
+  const addCourse = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/api/universities/${universityId}/courses`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newCourse),
+      });
+      const data = await res.json();
+      setCourses([data.course, ...courses]);
+      setNewCourse({
+        courseName: "",
+        totalFees: "",
+        yearlyFees: "",
+        duration: "",
+        intake: "",
+        applyLink: "",
+      });
+    } catch (err) {
+      console.error("❌ Error adding course:", err);
+    }
+  };
+
+  const handleExcelUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    setCourseFileName(file.name);
-    setSelectedFile(file);
-
     const reader = new FileReader();
-    reader.onload = (evt) => {
-      const bstr = evt.target.result;
-      const workbook = XLSX.read(bstr, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-      setCourseData(jsonData);
-    };
-    reader.readAsBinaryString(file);
-  };
+    reader.onload = async (evt) => {
+      const data = new Uint8Array(evt.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet);
 
-  // Upload file to Cloudinary
-  const uploadToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "universityproject"); // Unsigned preset
-    formData.append("folder", "courses");
-
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/dapjccnab/auto/upload`,
-      {
-        method: "POST",
-        body: formData,
+      try {
+        await fetch(`${baseUrl}/api/universities/${universityId}/courses/bulk`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ courses: json }),
+        });
+        setCourses(json);
+      } catch (err) {
+        console.error("❌ Bulk upload failed:", err);
       }
-    );
-
-    const data = await res.json();
-    return data.secure_url;
+    };
+    reader.readAsArrayBuffer(file);
   };
 
-  // Handle Submit button click
-  const handleSubmit = async () => {
-    if (!courseData || courseData.length === 0) {
-      alert("⚠️ Please select and edit file first.");
-      return;
-    }
-
-    try {
-      // Convert updated courseData to Excel Blob
-      const worksheet = XLSX.utils.json_to_sheet(courseData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Courses");
-
-      const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-      const blob = new Blob([wbout], { type: "application/octet-stream" });
-
-      // Upload new Excel file to Cloudinary
-      const formData = new FormData();
-      formData.append("file", blob, courseFileName);
-      formData.append("upload_preset", "universityproject");
-      formData.append("folder", "courses");
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/dapjccnab/auto/upload`,
-        { method: "POST", body: formData }
-      );
-
-      const data = await res.json();
-      const url = data.secure_url;
-      setCloudinaryURL(url);
-
-      // Save metadata in Firestore
-      await addDoc(collection(db, "coursesFiles"), {
-        fileName: courseFileName,
-        cloudinaryURL: url,
-        uploadedAt: serverTimestamp(),
-      });
-
-      alert("✅ File uploaded successfully with updates!");
-    } catch (error) {
-      console.error("Upload failed:", error);
-      alert("❌ Failed to upload updated file to Cloudinary");
-    }
-  };
-
-  const handleDownload = () => {
-    const worksheet = XLSX.utils.json_to_sheet(courseData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Courses");
-    XLSX.writeFile(workbook, courseFileName);
-  };
-
-  // Edit cell
-  const handleCellChange = (rowIndex, key, value) => {
-    const updatedData = [...courseData];
-    updatedData[rowIndex][key] = value;
-    setCourseData(updatedData);
-  };
-
-  // Add new row
-  const handleAddRow = () => {
-    if (courseData.length === 0) {
-      alert("Please upload a file first.");
-      return;
-    }
-    const newRow = {};
-    Object.keys(courseData[0]).forEach((key) => {
-      newRow[key] = "";
-    });
-    setCourseData([...courseData, newRow]);
-  };
-
-  const formatFee = (value) => {
-    if (!value || isNaN(value)) return value;
-    return `₹${Number(value).toLocaleString("en-IN")}`;
-  };
+  if (loading) return <p className="ud-courses-loading">Loading courses...</p>;
 
   return (
-    <div className="courses-page">
-      <h2 className="courses-title">Courses</h2>
-      <p className="courses-subtitle">Upload, edit, and manage your courses Excel file.</p>
+    <div className="ud-courses-page">
+      <h2 className="ud-courses-title">Courses & Fees</h2>
 
-      <div className="courses-card">
-        <label className="file-upload-btn">
-          <FontAwesomeIcon icon={faUpload} /> Select File
-          <input
-            type="file"
-            accept=".xls,.xlsx"
-            onChange={handleFileSelect}
-            hidden
-          />
+      <div className="ud-upload-section">
+        <label className="ud-upload-btn">
+          <FontAwesomeIcon icon={faUpload} /> Upload Excel
+          <input type="file" accept=".xlsx,.xls" hidden onChange={handleExcelUpload} />
         </label>
+      </div>
 
-        <button className="btn btn-submit" onClick={handleSubmit}>
-          <FontAwesomeIcon icon={faPaperPlane} /> Submit
-        </button>
-
-        {courseData.length > 0 && (
-          <div className="file-preview">
-            <p className="file-name">
-              Selected File: {courseFileName}{" "}
-              {cloudinaryURL && (
-                <a
-                  href={cloudinaryURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  (View on Cloudinary)
-                </a>
-              )}
-            </p>
-
-            <div className="table-container">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    {Object.keys(courseData[0]).map((key) => (
-                      <th key={key}>{key}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {courseData.map((row, i) => (
-                    <tr key={i}>
-                      {Object.entries(row).map(([key, value]) => (
-                        <td key={key}>
-                          <input
-                            type="text"
-                            value={value}
-                            onChange={(e) =>
-                              handleCellChange(i, key, e.target.value)
-                            }
-                          />
+      <div className="ud-courses-card">
+        <div className="ud-table-container">
+          <table className="ud-data-table">
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <th>Total Fees</th>
+                <th>Yearly Fees</th>
+                <th>Duration</th>
+                <th>Intake</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.length > 0 ? (
+                courses.map((course) => (
+                  <tr key={course._id}>
+                    {editingId === course._id ? (
+                      <>
+                        <td><input value={editData.courseName} onChange={(e) => setEditData({ ...editData, courseName: e.target.value })} /></td>
+                        <td><input value={editData.totalFees} onChange={(e) => setEditData({ ...editData, totalFees: e.target.value })} /></td>
+                        <td><input value={editData.yearlyFees} onChange={(e) => setEditData({ ...editData, yearlyFees: e.target.value })} /></td>
+                        <td><input value={editData.duration} onChange={(e) => setEditData({ ...editData, duration: e.target.value })} /></td>
+                        <td><input value={editData.intake} onChange={(e) => setEditData({ ...editData, intake: e.target.value })} /></td>
+                        <td>
+                          <div className="ud-action-buttons">
+                            <button onClick={() => saveCourse(course._id)}><FontAwesomeIcon icon={faSave} /></button>
+                            <button onClick={() => setEditingId(null)}><FontAwesomeIcon icon={faTimes} /></button>
+                          </div>
                         </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                      </>
+                    ) : (
+                      <>
+                        <td>{course.courseName}</td>
+                        <td>{course.totalFees}</td>
+                        <td>{course.yearlyFees}</td>
+                        <td>{course.duration}</td>
+                        <td>{course.intake}</td>
+                        <td>
+                          <div className="ud-action-buttons">
+                            <button onClick={() => startEditing(course)}><FontAwesomeIcon icon={faEdit} /></button>
+                            <button onClick={() => deleteCourse(course._id)}><FontAwesomeIcon icon={faTrash} /></button>
+                            <a href={course.applyLink || "#"} className="ud-courses-apply-btn" target="_blank" rel="noreferrer">
+                              <FontAwesomeIcon icon={faArrowRight} />
+                            </a>
+                          </div>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan="6">No courses available.</td></tr>
+              )}
 
-            <button className="btn btn-add" onClick={handleAddRow}>
-              <FontAwesomeIcon icon={faPlus} /> Add Row
-            </button>
-
-            <button className="btn btn-download" onClick={handleDownload}>
-              <FontAwesomeIcon icon={faDownload} /> Download
-            </button>
-          </div>
-        )}
+              {/* Add new row */}
+              <tr>
+                <td><input value={newCourse.courseName} onChange={(e) => setNewCourse({ ...newCourse, courseName: e.target.value })} /></td>
+                <td><input value={newCourse.totalFees} onChange={(e) => setNewCourse({ ...newCourse, totalFees: e.target.value })} /></td>
+                <td><input value={newCourse.yearlyFees} onChange={(e) => setNewCourse({ ...newCourse, yearlyFees: e.target.value })} /></td>
+                <td><input value={newCourse.duration} onChange={(e) => setNewCourse({ ...newCourse, duration: e.target.value })} /></td>
+                <td><input value={newCourse.intake} onChange={(e) => setNewCourse({ ...newCourse, intake: e.target.value })} /></td>
+                <td><button onClick={addCourse}><FontAwesomeIcon icon={faPlus} /></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

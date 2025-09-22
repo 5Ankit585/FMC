@@ -1,180 +1,106 @@
-/* ===== Theme Variables (Amber / Yellow) ===== */
-:root {
-  --analytics-hover: #b45309;     /* amber-700 */
-  --analytics-text: #78350f;      /* amber-900 */
-  --analytics-bg: #faf9f6;        /* white */
-  --analytics-border: #fef9c3;    /* light yellow */
-  --analytics-chart1: #fbbf24;    /* amber-400 */
-  --analytics-chart2: #f59e0b;    /* amber-500 */
-  --analytics-chart3: #d97706;    /* amber-600 */
-  --analytics-chart4: #b45309;    /* amber-700 */
+/* Wrapper */
+.ud-courses-page {
+  padding: 12px;
 }
 
-/* ================= COURSES PAGE ================= */
-.courses-page {
-  padding: 1rem;
-  background: var(--analytics-bg); /* #ffffff */
-  color: var(--analytics-text); /* #78350f */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.75rem;
-  border-radius: 8px;
-}
-
-/* ================= TITLES ================= */
-.courses-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 4px;
-}
-.courses-subtitle {
-  font-size: 0.8rem;
-  color: var(--analytics-hover); /* #b45309 */
-  margin-bottom: 1rem;
-}
-
-/* ================= CARD ================= */
-.courses-card {
-  background: var(--analytics-bg-alt); /* #f9fafb */
-  padding: 1rem;
-  border-radius: 8px;
-  max-width: 700px;
-  width: 100%;
-  border: 3px solid #1e293b;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-/* ================= FILE INPUT ================= */
-.file-input {
-  margin-bottom: 0.6rem;
-  width: 100%;
-}
-.file-preview {
+/* Title */
+.ud-courses-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
   text-align: center;
 }
-.file-name {
-  font-size: 0.7rem;
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: var(--analytics-text); /* #78350f */
+
+/* Card */
+.ud-courses-card {
+  background: #fffefc;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  padding: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* ================= TABLE ================= */
-.table-container {
-  max-height: 350px;
-  overflow-y: auto;
-  border: 3px solid #1e293b; /* #fef9c3 */
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-.data-table {
+/* Table */
+.ud-data-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.7rem;
-  min-width: 400px;
 }
-.data-table th,
-.data-table td {
-  padding: 0.45rem;
-  border-bottom: 3px solid #ecc94b; /* #fef9c3 */
+
+.ud-data-table thead {
+  background: #1e293b;
+  color: #fcd34d;
+}
+
+.ud-data-table th,
+.ud-data-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #fcd34d;
   text-align: left;
-  color: var(--analytics-text); /* #78350f */
-}
-.data-table th {
-  background: #1e293b; /* #fef9c3 */
-  font-weight: 600;
-  color: #ecc94b; /* #f59e0b */
-  text-transform: uppercase;
-  font-size: 0.7rem;
+  vertical-align: middle;
 }
 
-/* Row striping (Agent dashboard style) */
-.data-table tbody tr:nth-child(even) td {
-  background: var(--analytics-bg-alt); /* #f9fafb */
-}
-.data-table tbody tr:nth-child(odd) td {
-  background: var(--analytics-bg); /* #ffffff */
-}
-.data-table tbody tr:hover td {
-  background: #ecc94b; /* yellow-200 */
+/* Hover */
+.ud-data-table tbody tr:hover td {
+  background: #fef9c3;
 }
 
-/* ================= BUTTONS ================= */
-.courses-page .btn {
-  font-size: 0.7rem;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
-  display: inline-flex;
-  align-items: center;
+/* Actions inline */
+.ud-action-buttons {
+  display: flex;
   gap: 4px;
-  transition: all 0.2s ease;
-  background: #cfb042; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
-}
-
-.courses-page .btn:hover {
-  background: #ca8a04; /* #f59e0b */
-  color: white; /* Light text for visibility */
-}
-
-/* Select File button */
-.file-upload-btn {
-  background: #cfb042; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 3px solid var(--analytics-border); /* #fef9c3 */
 }
 
-.file-upload-btn:hover {
-  background: #ca8a04; /* #f59e0b */
+.ud-action-buttons button {
+  padding: 3px 6px;
+  font-size: 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f3f4f6;
+  border: 1px solid #ddd;
+}
+
+.ud-action-buttons button:hover {
+  background: #e5e7eb;
+}
+
+/* Apply button */
+.ud-courses-apply-btn {
+  padding: 3px 6px;
+  font-size: 0.65rem;
+  background: #fcd34d;
+  color: #000;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.ud-courses-apply-btn:hover {
+  background: #fde68a;
+}
+
+/* Upload button */
+.ud-upload-section {
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.ud-upload-btn {
+  background: #2563eb;
   color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
 }
 
-/* Submit button */
-.btn-submit {
-  background: #fef08a; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
-  margin-left: 8px;
+.ud-upload-btn:hover {
+  background: #1d4ed8;
 }
 
-.btn-submit:hover {
-  background: var(--analytics-chart2); /* #f59e0b */
-  color: white;
-}
-
-/* Download button */
-.btn-download {
-  background: #fef08a; /* Swapped to hover color */
-  color: #1F2937; /* Dark text for visibility */
-  padding: 6px 12px;
-}
-
-.btn-download:hover {
-  background: var(--analytics-chart1); /* #fbbf24 */
-  color: white;
-}
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 640px) {
-  .courses-card {
-    padding: 0.8rem;
-  }
-  .data-table {
-    font-size: 0.65rem;
-  }
-  .courses-page .btn {
-    padding: 4px 8px;
-    font-size: 0.65rem;
-  }
+/* Loading */
+.ud-courses-loading {
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 10px 0;
 }
