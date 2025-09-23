@@ -24,7 +24,6 @@ import Mahe from './FooterPages/topExam/Mahe'
 import Service from './FooterPages/topExam/Service'
 import Srm from './FooterPages/topExam/Srm'
 import Upes from './FooterPages/topExam/Upes'
-
 import CoursePage from './Pages/CoursePage'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -62,6 +61,7 @@ function App() {
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
           <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
+          <Route path="/agent-dashboard" element={<AgentDashboard />} />
 
           {/* University Profile */}
           <Route path="/university-profile/:id" element={<UniversityPage />} />
