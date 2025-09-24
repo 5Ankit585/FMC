@@ -1,332 +1,328 @@
-import React, { useState, useMemo } from "react";
-import ExploreColleges from "../Modals/ExploreColleges";
-import UniversitySearch from "../components/SearchBar";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
-import collegeData from "./CollegeData";
+import CollegeCard from "../components/CollegeCard";
 import "./ExploreCollegesPage.css";
-import { FaFilter } from "react-icons/fa";
 
 const ExploreCollegesPage = () => {
-  const [openModal, setOpenModal] = useState(true);
-  const [showUniSearch, setShowUniSearch] = useState(false);
-  const navigate = useNavigate();
+  const [universities, setUniversities] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [category, setCategory] = useState("All");
-  const [locationFilter, setLocationFilter] = useState("All");
-  const [courseFilter, setCourseFilter] = useState("All");
-  const [feesFilter, setFeesFilter] = useState("All");
-  const [ratingFilter, setRatingFilter] = useState("All");
-  const [scholarshipFilter, setScholarshipFilter] = useState("All");
+  const [degreeFilter, setDegreeFilter] = useState([]);
+  const [examFilter, setExamFilter] = useState([]);
+  const [specializationFilter, setSpecializationFilter] = useState([]);
+  const [cityFilter, setCityFilter] = useState([]);
+  const [stateFilter, setStateFilter] = useState([]);
+  const [instituteTypeFilter, setInstituteTypeFilter] = useState([]);
+  const [managementTypeFilter, setManagementTypeFilter] = useState([]);
+  const [activeTab, setActiveTab] = useState("degree");
+  const [loading, setLoading] = useState(true);
 
-  // Colleges list (defensive access in case structure differs)
-  const colleges = collegeData?.[0]?.colleges ?? [];
+  // Filter options
+  const degrees = ["BSc", "BA", "BCom", "MSc", "MA", "MCom", "PhD"];
+  const exams = ["JEE", "NEET", "CAT", "GATE", "UPSC"];
+  const specializations = ["Engineering", "Management", "Arts", "Science"];
+  const cities = ["Agartala", "Agra", "Ahmedabad", "Ahmednagar", "Aizawl", "Ajmer", "Aligarh", "Allahabad", "Amaravati", "Ambala", "Amritsar", "Anand", "Anantapur", "Annamalai", "Arkonam", "Aurangabad", "Bagalkot", "Balaghat", "Baleshwar", "Ballari", "Banga", "Bangalore", "Bankura", "Bardhaman", "Bareilly", "Bargarh", "Barmer", "Barnala", "Baroda", "Beawar", "Belagavi", "Berhampur", "Bhilai", "Bhimavaram", "Bhind", "Bhiwani", "Bhopal", "Bhubaneswar", "Bhuj", "Bikaner", "Bilaspur", "Bodh Gaya", "Bokaro", "Burdwan", "Calicut", "Chandigarh", "Chennai", "Chhindwara", "Chittorgarh", "Coimbatore", "Cooch Behar", "Cuddalore", "Darjeeling", "Darrang", "Dehradun", "Deoghar", "Dhanbad", "Dharamshala", "Dibrugarh", "Dindigul", "Diu", "Durg", "Erode", "Faridkot", "Gandhinagar", "Gangtok", "Gaya", "Ghaziabad", "Gokak", "Gondia", "Gopalganj", "Gudivada", "Gujarat", "Guntur", "Gurugram", "Gwalior", "Haldia", "Haldwani", "Hamirpur", "Haridwar", "Hassan", "Hazaribagh", "Hissar", "Howrah", "Hukumari", "Hyderabad", "Imphal", "Indore", "Itanagar", "Jabalpur", "Jaipur", "Jalandhar", "Jalgaon", "Jammu", "Jamnagar", "Jamshedpur", "Jangipur", "Jhajjar", "Jhunjhunu", "Jind", "Jodhpur", "Jorhat", "Junagadh", "Kadapa", "Kakinada", "Kalaburagi", "Kalahandi", "Kalburgi", "Kalyani", "Kangra", "Kannur", "Kanpur", "Karimnagar", "Karnal", "Karnataka", "Karur", "Kashipur", "Kavaratti", "Kerala", "Khammam", "Kharagpur", "Kheri", "Kochi", "Kohima", "Kolkata", "Kollam", "Kota", "Kottayam", "Kozhikode", "Kriganspalle", "Kurnool", "Kurukshetra", "Lalitpur", "Latur", "Laxmangarh", "Lohit", "Lucknow", "Ludhiana", "Lunglei", "Machilipatnam", "Madras", "Madurai", "Mahbubnagar", "Maldah", "Mandi", "Mandya", "Mango", "Mangalore", "Manipal", "Mathura", "Medinipur", "Meerut", "Midnapore", "Mizoram", "Moradabad", "Mumbai", "Mysore", "Nagercoil", "Nagpur", "Naihati", "Nalgonda", "Namakkal", "Nanded", "Nandurbar", "Nashik", "Navsari", "Nawada", "Nayagarh", "Nellore", "New Delhi", "Nizamabad", "Noida", "Ongole", "Palakkad", "Palam", "Palampur", "Palghar", "Palghat", "Palni", "Panchkula", "Panihati", "Panipat", "Panvel", "Pasighat", "Patan", "Pathankot", "Patiala", "Patna", "Pondicherry", "Port Blair", "Prakasam", "Pratapgarh", "Puducherry", "Pune", "Puri", "Purnia", "Puruliya", "Raebareli", "Raichur", "Raigad", "Raipur", "Raisen", "Rajahmundry", "Rajkot", "Rajmohan", "Rajpipla", "Ramanathapuram", "Ranchi", "Ranipet", "Ratnagiri", "Ravulapalem", "Rourkela", "Sagar", "Saharanpur", "Salem", "Sambalpur", "Sangli", "Sangrur", "Sankrail", "Sardarshahr", "Sasaram", "Sathyamangalam", "Satna", "Secunderabad", "Sehore", "Seoni", "Serampore", "Shahdol", "Shimla", "Shivamogga", "Sikar", "Silchar", "Siliguri", "Sindhudurg", "Singhbhum", "Sirsa", "Sivaganga", "Sivakasi", "Siwan", "Solapur", "Sonepat", "Sonitpur", "Srikakulam", "Srinagar", "Sundargarh", "Surat", "Surendranagar", "Tadpatri", "Tarn Taran", "Tezpur", "Thane", "Thanjavur", "Thiruvananthapuram", "Thoothukudi", "Thrissur", "Tinsukia", "Tiruchirappalli", "Tirunelveli", "Tirupati", "Tiruppur", "Tumkur", "Tura", "Udaipur", "Udalguri", "Udham Singh Nagar", "Udhna", "Udupi", "Ujjain", "Una", "Unnao", "Uttar Dinajpur", "Vadodara", "Vapi", "Varanasi", "Vellore", "Vijayawada", "Viluppuram", "Virudhunagar", "Visakhapatnam", "Vizianagaram", "Warangal", "Wardha", "Washim", "Yavatmal", "Yemmiganur"];
+  const states = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chandigarh",
+  "Chhattisgarh",
+  "Delhi",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jammu and Kashmir",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Ladakh",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Puducherry",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal"
+];
 
-  // Dynamic list of locations from data
-  const locations = useMemo(() => {
-    const setLoc = new Set();
-    colleges.forEach((c) => {
-      if (c.location) setLoc.add(c.location);
-    });
-    return ["All", ...Array.from(setLoc)];
-  }, [colleges]);
+ const instituteTypes = [
+  "Central University",
+  "State University",
+  "Private University",
+  "Deemed University",
+  "Autonomous University",
+  "Institute of National Importance",
+  "Open University"
+];
 
-  // Dynamic list of course types from data (keeps it in case your data has many values)
-  const courseTypes = useMemo(() => {
-    const setC = new Set();
-    colleges.forEach((c) => {
-      const val = c.courseType || c.stream || c.department || c.type;
-      if (val) setC.add(val);
-    });
-    return ["All", ...Array.from(setC)];
-  }, [colleges]);
+ const managementTypes = [
+  "Public",
+  "Private",
+  "Government-Aided",
+  "Autonomous",
+  "Deemed",
+  "Central",
+  "State",
+  "Community",
+  "Trust",
+  "Society"
+];
 
-  // EXTRA: curated/popular/detailed course-type options to show at top
-  const additionalCourseTypes = [
-    "Undergraduate",
-    "Postgraduate",
-    "Diploma",
-    "Certificate",
-    "PhD / Doctorate",
-    "Online / Distance Learning",
-    "Professional",
-    "Executive",
-    "B.Tech",
-    "B.E",
-    "B.Sc",
-    "B.Com",
-    "B.A",
-    "BCA",
-    "BBA",
-    "MBBS",
-    "B.Arch",
-    "M.Tech",
-    "MBA",
-    "M.Sc",
-    "M.A",
-    "M.Com",
-    "MCA",
-    "Short Term (6 months)",
-    "Continuing Education",
-  ];
 
-  const additionalSet = useMemo(
-    () => new Set(additionalCourseTypes.map((s) => s.toLowerCase())),
-    []
-  );
+  // ✅ Fetch universities from backend
+  useEffect(() => {
+    const fetchUniversities = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/universities");
+        if (res.data.success) {
+          setUniversities(res.data.data);
+        } else if (Array.isArray(res.data)) {
+          setUniversities(res.data);
+        }
+      } catch (err) {
+        console.error("❌ Error fetching universities:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUniversities();
+  }, []);
 
-  // utility: try multiple keys
-  const getProp = (college, candidates) => {
-    for (const k of candidates) {
-      if (college[k] !== undefined && college[k] !== null) return college[k];
-    }
-    return undefined;
-  };
+  // ✅ Filtering logic applied to universities
+  const filteredColleges = universities.filter((uni) => {
+    const matchesSearch = `${uni.instituteName} ${uni.city} ${uni.state}`
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
 
-  // parse fees robustly (numbers inside strings)
-  const parseFeeNumber = (val) => {
-    if (val == null) return null;
-    if (typeof val === "number") return val;
-    if (typeof val === "string") {
-      const digits = val.replace(/[^\d]/g, "");
-      if (!digits) return null;
-      return parseFloat(digits);
-    }
-    return null;
-  };
+    const matchesDegree =
+      degreeFilter.length === 0 ||
+      degreeFilter.some((deg) =>
+        uni.courses?.some((c) => c.courseName?.toLowerCase().includes(deg.toLowerCase()))
+      );
 
-  const matchesFees = (college) => {
-    if (feesFilter === "All") return true;
-    const fee = parseFeeNumber(
-      getProp(college, ["fees", "tuition", "annualFee", "fee"])
+    const matchesExam =
+      examFilter.length === 0 ||
+      examFilter.some((exam) =>
+        uni.admissions?.some((a) => a.eligibility?.toLowerCase().includes(exam.toLowerCase()))
+      );
+
+    const matchesSpecialization =
+      specializationFilter.length === 0 ||
+      specializationFilter.some((spec) =>
+        uni.admissions?.some((a) => a.specialization?.toLowerCase().includes(spec.toLowerCase()))
+      );
+
+    const matchesCity =
+      cityFilter.length === 0 || cityFilter.includes(uni.city);
+
+    const matchesState =
+      stateFilter.length === 0 || stateFilter.includes(uni.state);
+
+    const matchesInstituteType =
+      instituteTypeFilter.length === 0 || instituteTypeFilter.includes(uni.type);
+
+    const matchesManagementType =
+      managementTypeFilter.length === 0 || managementTypeFilter.includes(uni.ownership);
+
+    return (
+      matchesSearch &&
+      matchesDegree &&
+      matchesExam &&
+      matchesSpecialization &&
+      matchesCity &&
+      matchesState &&
+      matchesInstituteType &&
+      matchesManagementType
     );
-    if (fee == null) return true;
-    switch (feesFilter) {
-      case "Below ₹50,000":
-        return fee < 50000;
-      case "₹50,000 - ₹1,00,000":
-        return fee >= 50000 && fee <= 100000;
-      case "₹1,00,000 - ₹5,00,000":
-        return fee > 100000 && fee <= 500000;
-      case "Above ₹5,00,000":
-        return fee > 500000;
-      default:
-        return true;
-    }
-  };
-
-  const matchesRating = (college) => {
-    if (ratingFilter === "All") return true;
-    const rating = parseFloat(getProp(college, ["rating", "avgRating"]));
-    if (isNaN(rating)) return true;
-    switch (ratingFilter) {
-      case "4.5+":
-        return rating >= 4.5;
-      case "4.0+":
-        return rating >= 4.0;
-      case "3.5+":
-        return rating >= 3.5;
-      case "3.0+":
-        return rating >= 3.0;
-      default:
-        return true;
-    }
-  };
-
-  const matchesScholarship = (college) => {
-    if (scholarshipFilter === "All") return true;
-    const sch = getProp(college, [
-      "scholarship",
-      "hasScholarship",
-      "scholarshipsAvailable",
-      "scholarshipAvailable",
-    ]);
-    if (sch === undefined || sch === null) return true;
-    const bool =
-      typeof sch === "string" ? /yes|true/i.test(sch) : Boolean(sch);
-    return scholarshipFilter === "Yes" ? bool : !bool;
-  };
-
-  const matchesCourseType = (college) => {
-    if (courseFilter === "All") return true;
-    const ct = getProp(college, ["courseType", "stream", "department", "type"]);
-    if (!ct) return true;
-    return String(ct).toLowerCase().includes(courseFilter.toLowerCase());
-  };
-
-  const matchesCategory = (college) => {
-    if (category === "All") return true;
-    const cat = getProp(college, ["level", "degree", "category", "program"]);
-    if (!cat) return true;
-    return String(cat).toLowerCase().includes(category.toLowerCase());
-  };
-
-  const filteredColleges = colleges.filter((college) => {
-    const text = `${college.name || ""} ${college.location || ""} ${
-      college.tags || ""
-    }`.toLowerCase();
-    if (searchText.trim() && !text.includes(searchText.toLowerCase()))
-      return false;
-    if (!matchesCategory(college)) return false;
-    if (locationFilter !== "All" && String(college.location) !== locationFilter)
-      return false;
-    if (!matchesCourseType(college)) return false;
-    if (!matchesFees(college)) return false;
-    if (!matchesRating(college)) return false;
-    if (!matchesScholarship(college)) return false;
-    return true;
   });
 
+  // ✅ Handle checkbox toggle
+  const handleFilterChange = (filterType, value) => {
+    const setFunction = {
+      degree: setDegreeFilter,
+      exam: setExamFilter,
+      specialization: setSpecializationFilter,
+      city: setCityFilter,
+      state: setStateFilter,
+      institute: setInstituteTypeFilter,
+      management: setManagementTypeFilter,
+    }[filterType];
+
+    setFunction((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
   return (
-    <section className="explore-section">
+    <div className="explore-page">
       <Navbar />
-      {openModal && (
-        <div className="explore-modal-overlay">
-          <div className="explore-modal">
-            <button
-              className="explore-modal-close"
-              onClick={() => setOpenModal(false)}
-              aria-label="Close modal"
-            >
-              ✕
-            </button>
-            <ExploreColleges closeModal={setOpenModal} />
-          </div>
-        </div>
-      )}
-      <UniversitySearch open={showUniSearch} setOpen={setShowUniSearch} />
-      <div className="explore-header">
-        <div className="explore-header-container">
-          <h1 className="explore-title">Explore Colleges</h1>
-        </div>
-      </div>
-      <div className="explore-search-container">
-        <div className="explore-search-bar">
-          <select
-            className="search-category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="All">Select Category</option>
-            <option>Undergraduate</option>
-            <option>Postgraduate</option>
-            <option>PhD</option>
-          </select>
-          <div className="search-bar">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search colleges..."
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <button
-              className="filter-btn"
-              onClick={() => setShowUniSearch(true)}
-              title="Open advanced filters"
-            >
-              <FaFilter />
-            </button>
-          </div>
-          <button className="search-btn">Search</button>
-        </div>
-      </div>
+      <div className="explore-content">
+        <header className="explore-header">
+          <h1>
+            Top Colleges In India 2025 <sub>({filteredColleges.length})</sub>
+          </h1>
+          <p>
+            Top colleges offer a variety of programs for students interested in
+            diverse fields. Whether you're pursuing a degree in engineering,
+            management, or other specializations, these institutions provide a
+            strong academic foundation and robust career opportunities.
+          </p>
+        </header>
 
-      <div className="explore-filters">
-        <select
-          value={locationFilter}
-          onChange={(e) => setLocationFilter(e.target.value)}
-        >
-          <option value="All">Select Location</option>
-          {locations.map((loc, i) => (
-            <option key={i} value={loc}>
-              {loc}
-            </option>
-          ))}
-        </select>
+        <div className="main-layout">
+          {/* Filters Panel */}
+          <div className="filters-panel">
+            <h3>Filters</h3>
+            <div style={{ display: "flex", flex: 1 }}>
+              {/* Left Tabs */}
+              <div className="filters-tabs">
+                {[
+                  { key: "degree", label: "Degrees" },
+                  { key: "exam", label: "Exams" },
+                  { key: "specialization", label: "Specializations" },
+                  { key: "city", label: "City" },
+                  { key: "state", label: "State" },
+                  { key: "institute", label: "Institute Type" },
+                  { key: "management", label: "Management Type" },
+                ].map((tab) => (
+                  <div
+                    key={tab.key}
+                    className={`filter-tab ${activeTab === tab.key ? "active" : ""}`}
+                    onClick={() => setActiveTab(tab.key)}
+                  >
+                    {tab.label}
+                  </div>
+                ))}
+              </div>
 
-        {/* Expanded Course Type: curated popular/detailed + dynamic fallback from data */}
-        <select
-          value={courseFilter}
-          onChange={(e) => setCourseFilter(e.target.value)}
-        >
-          <option value="All">Select Course Type</option>
+              {/* Right Content */}
+              <div className="filters-content">
+                <div className="filter-search">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                </div>
 
-          <optgroup label="Popular / Detailed course types">
-            {additionalCourseTypes.map((c, i) => (
-              <option key={`add-${i}`} value={c}>
-                {c}
-              </option>
-            ))}
-          </optgroup>
+                <div className="filter-options">
+                  {activeTab === "degree" &&
+                    degrees.map((deg) => (
+                      <label key={deg}>
+                        <input
+                          type="checkbox"
+                          checked={degreeFilter.includes(deg)}
+                          onChange={() => handleFilterChange("degree", deg)}
+                        />
+                        {deg}
+                      </label>
+                    ))}
 
-          <optgroup label="Other (from college data)">
-            {courseTypes
-              .filter(
-                (ct) =>
-                  ct &&
-                  ct !== "All" &&
-                  !additionalSet.has(String(ct).toLowerCase())
-              )
-              .map((ct, i) => (
-                <option key={`dyn-${i}`} value={ct}>
-                  {ct}
-                </option>
-              ))}
-          </optgroup>
-        </select>
+                  {activeTab === "exam" &&
+                    exams.map((exam) => (
+                      <label key={exam}>
+                        <input
+                          type="checkbox"
+                          checked={examFilter.includes(exam)}
+                          onChange={() => handleFilterChange("exam", exam)}
+                        />
+                        {exam}
+                      </label>
+                    ))}
 
-        <select value={feesFilter} onChange={(e) => setFeesFilter(e.target.value)}>
-          <option value="All">Select Fees</option>
-          <option>Below ₹50,000</option>
-          <option>₹50,000 - ₹1,00,000</option>
-          <option>₹1,00,000 - ₹5,00,000</option>
-          <option>Above ₹5,00,000</option>
-        </select>
+                  {activeTab === "specialization" &&
+                    specializations.map((spec) => (
+                      <label key={spec}>
+                        <input
+                          type="checkbox"
+                          checked={specializationFilter.includes(spec)}
+                          onChange={() => handleFilterChange("specialization", spec)}
+                        />
+                        {spec}
+                      </label>
+                    ))}
 
-        <select value={ratingFilter} onChange={(e) => setRatingFilter(e.target.value)}>
-          <option value="All">Select Rating</option>
-          <option value="4.5+">4.5+</option>
-          <option value="4.0+">4.0+</option>
-          <option value="3.5+">3.5+</option>
-          <option value="3.0+">3.0+</option>
-        </select>
+                  {activeTab === "city" &&
+                    cities.map((city) => (
+                      <label key={city}>
+                        <input
+                          type="checkbox"
+                          checked={cityFilter.includes(city)}
+                          onChange={() => handleFilterChange("city", city)}
+                        />
+                        {city}
+                      </label>
+                    ))}
 
-        <select value={scholarshipFilter} onChange={(e) => setScholarshipFilter(e.target.value)}>
-          <option value="All">Select Scholarship</option>
-          <option>Yes</option>
-          <option>No</option>
-        </select>
-      </div>
+                  {activeTab === "state" &&
+                    states.map((state) => (
+                      <label key={state}>
+                        <input
+                          type="checkbox"
+                          checked={stateFilter.includes(state)}
+                          onChange={() => handleFilterChange("state", state)}
+                        />
+                        {state}
+                      </label>
+                    ))}
 
-      <div className="college-list">
-        {filteredColleges.length === 0 && (
-          <div className="no-results">No colleges found for selected filters.</div>
-        )}
-        {filteredColleges.map((college, index) => (
-          <div key={index} className="college-card">
-            <div className="college-left">
-              <img src={college.image} alt={college.name} className="college-img" />
-              <div className="college-info">
-                <h2 className="college-name">{college.name}</h2>
-                <p className="college-location">{college.location}</p>
-                <button
-                  className="view-btn"
-                  onClick={() => navigate("/universityDetails", { state: { college } })}
-                >
-                  View More
-                </button>
+                  {activeTab === "institute" &&
+                    instituteTypes.map((type) => (
+                      <label key={type}>
+                        <input
+                          type="checkbox"
+                          checked={instituteTypeFilter.includes(type)}
+                          onChange={() => handleFilterChange("institute", type)}
+                        />
+                        {type}
+                      </label>
+                    ))}
+
+                  {activeTab === "management" &&
+                    managementTypes.map((mgmt) => (
+                      <label key={mgmt}>
+                        <input
+                          type="checkbox"
+                          checked={managementTypeFilter.includes(mgmt)}
+                          onChange={() => handleFilterChange("management", mgmt)}
+                        />
+                        {mgmt}
+                      </label>
+                    ))}
+                </div>
               </div>
             </div>
-            <div className="college-separator" />
-            <div className="college-right">
-              {college.description ||
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vivamus eget magna vel elit dictum feugiat."}
-            </div>
           </div>
-        ))}
+
+          {/* Colleges Grid */}
+          <div className="college-grid">
+            {loading ? (
+              <p>Loading universities...</p>
+            ) : filteredColleges.length === 0 ? (
+              <p>No universities found.</p>
+            ) : (
+              filteredColleges.map((uni) => (
+                <CollegeCard key={uni._id} university={uni} />
+              ))
+            )}
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 
