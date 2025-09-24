@@ -15,12 +15,196 @@ const ExploreCollegesPage = () => {
   const [instituteTypeFilter, setInstituteTypeFilter] = useState([]);
   const [managementTypeFilter, setManagementTypeFilter] = useState([]);
   const [activeTab, setActiveTab] = useState("degree");
+  const [filterSearchText, setFilterSearchText] = useState("");
   const [loading, setLoading] = useState(true);
 
   // Filter options
-  const degrees = ["BSc", "BA", "BCom", "MSc", "MA", "MCom", "PhD"];
-  const exams = ["JEE", "NEET", "CAT", "GATE", "UPSC"];
-  const specializations = ["Engineering", "Management", "Arts", "Science"];
+  const degrees = [
+  "BA",
+  "BSc",
+  "BCom",
+  "BBA",
+  "BCA",
+  "BTech",
+  "BE",
+  "BArch",
+  "BDes",
+  "BFA",
+  "BHM",
+  "BPharm",
+  "BNursing",
+  "MBBS",
+  "BDS",
+  "BVSc",
+  "BA LLB",
+  "BSc LLB",
+  "BEd",
+  "BLIS",
+  "BPT",
+  "BAMS",
+  "BHMS",
+  "BSW",
+  "MA",
+  "MSc",
+  "MCom",
+  "MBA",
+  "MTech",
+  "ME",
+  "MDes",
+  "MFA",
+  "MHM",
+  "MPharm",
+  "MEd",
+  "MLIS",
+  "MPT",
+  "MSW",
+  "LLM",
+  "MD",
+  "MS",
+  "MCh",
+  "MPhil",
+  "PG Diploma",
+  "PGDM",
+  "Executive MBA",
+  "MSc (Research)",
+  "PhD",
+  "DPhil",
+  "DM",
+  "DrNB",
+  "FNB",
+  "Integrated MSc-PhD",
+  "Integrated MTech-PhD",
+  "Integrated BA-MA",
+  "Dual Degree",
+  "Certificate",
+  "Diploma",
+  "Advanced Diploma",
+  "Professional Certification"
+];
+  const exams = [
+  "JEE Main",
+  "JEE Advanced",
+  "NEET UG",
+  "NEET PG",
+  "CAT",
+  "XAT",
+  "MAT",
+  "CMAT",
+  "GATE",
+  "UPSC",
+  "SSC",
+  "CLAT",
+  "NIFT",
+  "NID",
+  "CUET",
+  "GMAT",
+  "GRE",
+  "LSAT India",
+  "CAPF",
+  "CLAT PG",
+  "NATA",
+  "JEM",
+  "IPMAT",
+  "SNAP",
+  "XIMB",
+  "MICAT",
+  "IIFT",
+  "CMAT PGDM",
+  "ATMA",
+  "AILET",
+  "JEE Advanced Foreign",
+  "NEET SS",
+  "NDA",
+  "CDSE",
+  "IIT JAM",
+  "JAM",
+  "UGC NET",
+  "CSIR NET",
+  "SET",
+  "SSC CGL",
+  "SSC CHSL",
+  "SSC JE",
+  "SSC CPO",
+  "IBPS PO",
+  "IBPS Clerk",
+  "SBI PO",
+  "SBI Clerk",
+  "RBI Grade B",
+  "CA Foundation",
+  "CA Intermediate",
+  "CA Final",
+  "CS Foundation",
+  "CS Executive",
+  "CS Professional",
+  "CMA Foundation",
+  "CMA Intermediate",
+  "CMA Final"
+];
+  const specializations = [
+  "Engineering",
+  "Management",
+  "Arts",
+  "Science",
+  "Law",
+  "Medicine",
+  "Pharmacy",
+  "Design",
+  "Architecture",
+  "Commerce",
+  "Education",
+  "Agriculture",
+  "Computer Applications",
+  "Hotel Management",
+  "Nursing",
+  "Dental Sciences",
+  "Ayurveda",
+  "Homeopathy",
+  "Unani",
+  "Physiotherapy",
+  "Allied Health Sciences",
+  "Journalism and Mass Communication",
+  "Media Studies",
+  "Fine Arts",
+  "Performing Arts",
+  "Economics",
+  "Political Science",
+  "Psychology",
+  "Sociology",
+  "History",
+  "Geography",
+  "Public Administration",
+  "Social Work",
+  "Environmental Science",
+  "Biotechnology",
+  "Microbiology",
+  "Zoology",
+  "Botany",
+  "Chemistry",
+  "Physics",
+  "Mathematics",
+  "Statistics",
+  "Data Science",
+  "Artificial Intelligence",
+  "Cyber Security",
+  "Information Technology",
+  "Hospitality and Tourism",
+  "Fashion Technology",
+  "Food Technology",
+  "Nutrition and Dietetics",
+  "Forestry",
+  "Fisheries Science",
+  "Veterinary Science",
+  "Library and Information Science",
+  "Event Management",
+  "Aviation",
+  "Maritime Studies",
+  "Defence and Strategic Studies",
+  "Public Health",
+  "Epidemiology",
+  "Philosophy",
+  "Linguistics",
+  "Anthropology"
+];
   const cities = ["Agartala", "Agra", "Ahmedabad", "Ahmednagar", "Aizawl", "Ajmer", "Aligarh", "Allahabad", "Amaravati", "Ambala", "Amritsar", "Anand", "Anantapur", "Annamalai", "Arkonam", "Aurangabad", "Bagalkot", "Balaghat", "Baleshwar", "Ballari", "Banga", "Bangalore", "Bankura", "Bardhaman", "Bareilly", "Bargarh", "Barmer", "Barnala", "Baroda", "Beawar", "Belagavi", "Berhampur", "Bhilai", "Bhimavaram", "Bhind", "Bhiwani", "Bhopal", "Bhubaneswar", "Bhuj", "Bikaner", "Bilaspur", "Bodh Gaya", "Bokaro", "Burdwan", "Calicut", "Chandigarh", "Chennai", "Chhindwara", "Chittorgarh", "Coimbatore", "Cooch Behar", "Cuddalore", "Darjeeling", "Darrang", "Dehradun", "Deoghar", "Dhanbad", "Dharamshala", "Dibrugarh", "Dindigul", "Diu", "Durg", "Erode", "Faridkot", "Gandhinagar", "Gangtok", "Gaya", "Ghaziabad", "Gokak", "Gondia", "Gopalganj", "Gudivada", "Gujarat", "Guntur", "Gurugram", "Gwalior", "Haldia", "Haldwani", "Hamirpur", "Haridwar", "Hassan", "Hazaribagh", "Hissar", "Howrah", "Hukumari", "Hyderabad", "Imphal", "Indore", "Itanagar", "Jabalpur", "Jaipur", "Jalandhar", "Jalgaon", "Jammu", "Jamnagar", "Jamshedpur", "Jangipur", "Jhajjar", "Jhunjhunu", "Jind", "Jodhpur", "Jorhat", "Junagadh", "Kadapa", "Kakinada", "Kalaburagi", "Kalahandi", "Kalburgi", "Kalyani", "Kangra", "Kannur", "Kanpur", "Karimnagar", "Karnal", "Karnataka", "Karur", "Kashipur", "Kavaratti", "Kerala", "Khammam", "Kharagpur", "Kheri", "Kochi", "Kohima", "Kolkata", "Kollam", "Kota", "Kottayam", "Kozhikode", "Kriganspalle", "Kurnool", "Kurukshetra", "Lalitpur", "Latur", "Laxmangarh", "Lohit", "Lucknow", "Ludhiana", "Lunglei", "Machilipatnam", "Madras", "Madurai", "Mahbubnagar", "Maldah", "Mandi", "Mandya", "Mango", "Mangalore", "Manipal", "Mathura", "Medinipur", "Meerut", "Midnapore", "Mizoram", "Moradabad", "Mumbai", "Mysore", "Nagercoil", "Nagpur", "Naihati", "Nalgonda", "Namakkal", "Nanded", "Nandurbar", "Nashik", "Navsari", "Nawada", "Nayagarh", "Nellore", "New Delhi", "Nizamabad", "Noida", "Ongole", "Palakkad", "Palam", "Palampur", "Palghar", "Palghat", "Palni", "Panchkula", "Panihati", "Panipat", "Panvel", "Pasighat", "Patan", "Pathankot", "Patiala", "Patna", "Pondicherry", "Port Blair", "Prakasam", "Pratapgarh", "Puducherry", "Pune", "Puri", "Purnia", "Puruliya", "Raebareli", "Raichur", "Raigad", "Raipur", "Raisen", "Rajahmundry", "Rajkot", "Rajmohan", "Rajpipla", "Ramanathapuram", "Ranchi", "Ranipet", "Ratnagiri", "Ravulapalem", "Rourkela", "Sagar", "Saharanpur", "Salem", "Sambalpur", "Sangli", "Sangrur", "Sankrail", "Sardarshahr", "Sasaram", "Sathyamangalam", "Satna", "Secunderabad", "Sehore", "Seoni", "Serampore", "Shahdol", "Shimla", "Shivamogga", "Sikar", "Silchar", "Siliguri", "Sindhudurg", "Singhbhum", "Sirsa", "Sivaganga", "Sivakasi", "Siwan", "Solapur", "Sonepat", "Sonitpur", "Srikakulam", "Srinagar", "Sundargarh", "Surat", "Surendranagar", "Tadpatri", "Tarn Taran", "Tezpur", "Thane", "Thanjavur", "Thiruvananthapuram", "Thoothukudi", "Thrissur", "Tinsukia", "Tiruchirappalli", "Tirunelveli", "Tirupati", "Tiruppur", "Tumkur", "Tura", "Udaipur", "Udalguri", "Udham Singh Nagar", "Udhna", "Udupi", "Ujjain", "Una", "Unnao", "Uttar Dinajpur", "Vadodara", "Vapi", "Varanasi", "Vellore", "Vijayawada", "Viluppuram", "Virudhunagar", "Visakhapatnam", "Vizianagaram", "Warangal", "Wardha", "Washim", "Yavatmal", "Yemmiganur"];
   const states = [
   "Andhra Pradesh",
@@ -81,7 +265,6 @@ const ExploreCollegesPage = () => {
   "Society"
 ];
 
-
   // ✅ Fetch universities from backend
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -100,6 +283,29 @@ const ExploreCollegesPage = () => {
     };
     fetchUniversities();
   }, []);
+
+  // Function to get filtered options for current tab
+  const getFilteredOptions = () => {
+    const lowerSearch = filterSearchText.toLowerCase();
+    switch (activeTab) {
+      case "degree":
+        return degrees.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      case "exam":
+        return exams.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      case "specialization":
+        return specializations.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      case "city":
+        return cities.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      case "state":
+        return states.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      case "institute":
+        return instituteTypes.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      case "management":
+        return managementTypes.filter(opt => opt.toLowerCase().includes(lowerSearch));
+      default:
+        return [];
+    }
+  };
 
   // ✅ Filtering logic applied to universities
   const filteredColleges = universities.filter((uni) => {
@@ -166,6 +372,8 @@ const ExploreCollegesPage = () => {
     );
   };
 
+  const filteredOptions = getFilteredOptions();
+
   return (
     <div className="explore-page">
       <Navbar />
@@ -214,14 +422,14 @@ const ExploreCollegesPage = () => {
                   <input
                     type="text"
                     placeholder="Search"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
+                    value={filterSearchText}
+                    onChange={(e) => setFilterSearchText(e.target.value)}
                   />
                 </div>
 
                 <div className="filter-options">
                   {activeTab === "degree" &&
-                    degrees.map((deg) => (
+                    filteredOptions.map((deg) => (
                       <label key={deg}>
                         <input
                           type="checkbox"
@@ -233,7 +441,7 @@ const ExploreCollegesPage = () => {
                     ))}
 
                   {activeTab === "exam" &&
-                    exams.map((exam) => (
+                    filteredOptions.map((exam) => (
                       <label key={exam}>
                         <input
                           type="checkbox"
@@ -245,7 +453,7 @@ const ExploreCollegesPage = () => {
                     ))}
 
                   {activeTab === "specialization" &&
-                    specializations.map((spec) => (
+                    filteredOptions.map((spec) => (
                       <label key={spec}>
                         <input
                           type="checkbox"
@@ -257,7 +465,7 @@ const ExploreCollegesPage = () => {
                     ))}
 
                   {activeTab === "city" &&
-                    cities.map((city) => (
+                    filteredOptions.map((city) => (
                       <label key={city}>
                         <input
                           type="checkbox"
@@ -269,7 +477,7 @@ const ExploreCollegesPage = () => {
                     ))}
 
                   {activeTab === "state" &&
-                    states.map((state) => (
+                    filteredOptions.map((state) => (
                       <label key={state}>
                         <input
                           type="checkbox"
@@ -281,7 +489,7 @@ const ExploreCollegesPage = () => {
                     ))}
 
                   {activeTab === "institute" &&
-                    instituteTypes.map((type) => (
+                    filteredOptions.map((type) => (
                       <label key={type}>
                         <input
                           type="checkbox"
@@ -293,7 +501,7 @@ const ExploreCollegesPage = () => {
                     ))}
 
                   {activeTab === "management" &&
-                    managementTypes.map((mgmt) => (
+                    filteredOptions.map((mgmt) => (
                       <label key={mgmt}>
                         <input
                           type="checkbox"
