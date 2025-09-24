@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./ViewScholarships.css";
 
 export default function ViewScholarships() {
+  const { id } = useParams();
   const [scholarships, setScholarships] = useState([]);
 
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/scholarships");
+        const res = await fetch(`http://localhost:5000/api/universities/${id}/scholarships`);
         const data = await res.json();
         setScholarships(data);
       } catch (err) {
@@ -15,7 +17,7 @@ export default function ViewScholarships() {
       }
     };
     fetchScholarships();
-  }, []);
+  }, [id]);
 
   return (
     <div className="ud-vs-page">
@@ -25,7 +27,6 @@ export default function ViewScholarships() {
             <h1 className="ud-vs-title">View Scholarships</h1>
             <p className="ud-vs-subtitle">Browse all available scholarships.</p>
           </div>
-
           <div className="ud-vs-list-container">
             <h2 className="ud-vs-list-title">Scholarships List</h2>
             {scholarships.length === 0 ? (

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import "./AddScholarship.css"; // Updated CSS
+import { useParams } from "react-router-dom";
+import "./AddScholarship.css";
 
 export default function AddScholarship() {
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     name: "",
     provider: "",
@@ -19,8 +20,6 @@ export default function AddScholarship() {
     generalQuota: "",
   });
 
-  const location = useLocation();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -33,10 +32,10 @@ export default function AddScholarship() {
     if (formData.income) tags.push(`≤${formData.income} income`);
     if (formData.educationLevel) tags.push(formData.educationLevel);
 
-    const newScholarship = { ...formData, tags };
+    const newScholarship = { ...formData, tags, universityId: id };
 
     try {
-      const res = await fetch("http://localhost:5000/api/scholarships", {
+      const res = await fetch(`http://localhost:5000/api/universities/${id}/scholarships`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newScholarship),
@@ -68,20 +67,15 @@ export default function AddScholarship() {
 
   return (
     <div className="uda-addsch-container">
-
       <div className="uda-addsch-main">
         <div className="uda-addsch-inner">
-          {/* Header */}
           <div className="uda-addsch-header">
             <h1 className="uda-addsch-title">Add Scholarship</h1>
             <p className="uda-addsch-subtitle">Create a new scholarship entry.</p>
           </div>
-
-          {/* Form Card */}
           <div className="uda-addsch-card">
             <h2 className="uda-addsch-card-title">Add New Scholarship</h2>
             <form onSubmit={handleSubmit} className="uda-addsch-form-grid">
-              {/* Fields */}
               <div className="uda-addsch-form-group">
                 <label>Scholarship Name</label>
                 <input
@@ -212,7 +206,6 @@ export default function AddScholarship() {
                   <option value="No">No</option>
                 </select>
               </div>
-
               <div className="uda-addsch-form-group uda-span-3">
                 <button type="submit" className="uda-addsch-submit-btn">
                   Add Scholarship
