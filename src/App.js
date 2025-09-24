@@ -6,7 +6,7 @@ import Home from "./Pages/Home";
 import ExploreCollegesPage from "./Pages/ExploreCollegesPage";
 import Counselling from "./Pages/Counselling";
 import Scholarship from "./Pages/Scholarship";
-import MyCourse from "./Pages/MyCourse";
+import ExploreCoursePage from "./Pages/ExploreCoursesPage";
 import ExamAt from "./Pages/ExamAt";
 import Companion from "./FooterPages/Companion";
 import AdminLogin from "./Pages/Admin/AdminLogin";
@@ -24,6 +24,7 @@ import Mahe from './FooterPages/topExam/Mahe'
 import Service from './FooterPages/topExam/Service'
 import Srm from './FooterPages/topExam/Srm'
 import Upes from './FooterPages/topExam/Upes'
+
 import CoursePage from './Pages/CoursePage'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,7 +49,7 @@ function App() {
           <Route path="/universityDetails" element={<UniversityDetails />} />
           <Route path="/counselling" element={<Counselling />} />
           <Route path="/scholarship" element={<Scholarship />} />
-          <Route path="/mycourse" element={<MyCourse />} />
+          <Route path="/courses" element={<ExploreCoursePage />} />
           <Route path="/examat" element={<ExamAt />} />
           <Route path="/companion" element={<Companion />} />
           <Route path="/adminlogin" element={<AdminLogin />} />
@@ -61,7 +62,6 @@ function App() {
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
           <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
-          <Route path="/agent-dashboard" element={<AgentDashboard />} />
 
           {/* University Profile */}
           <Route path="/university-profile/:id" element={<UniversityPage />} />

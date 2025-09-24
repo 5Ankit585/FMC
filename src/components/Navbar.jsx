@@ -10,7 +10,7 @@ import "./Navbar.css"; // <-- import the separate CSS
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/counselling", label: "Counselling" },
-  { to: "/mycourse", label: "Courses" },
+  { to: "/courses", label: "Courses" },
   { to: "/examat", label: "Exams" },
   { to: "/scholarship", label: "Scholarships" },
 ];
@@ -143,7 +143,7 @@ export default function Navbar() {
                 <div className="absolute right-0 top-full mt-2 w-48 rounded-lg shadow-lg py-2 z-50 dropdown-panel">
                   {[
                     { to: "/profile", label: "My Profile" },
-                    { to: "/mycourse", label: "Courses" },
+                    { to: "/courses", label: "Courses" },
                     { to: "/examat", label: "Exams" },
                     { to: "/scholarship", label: "Scholarships" },
                     { to: "/study-material", label: "Study Material" },

@@ -93,7 +93,6 @@
   padding: 16px;
   overflow: hidden; /* prevent double scroll */
   background: #fff;
-  border-radius: 8px;
   border: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
