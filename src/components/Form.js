@@ -1,5 +1,4 @@
 import React from "react";
-import SelectCountry from "./SelectCountry";
 import formImage from "../Images/Form-Image.jpg";
 import Axios from "axios";
 
@@ -124,10 +123,6 @@ const Form = () => {
             />
           </div>
 
-          {/* Country Selector */}
-          <div className="flex flex-col md:col-span-2 space-y-2">
-            <SelectCountry />
-          </div>
 
           {/* Level */}
           <div className="flex flex-col space-y-2">
