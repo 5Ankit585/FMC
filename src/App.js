@@ -62,6 +62,7 @@ function App() {
           <Route path="/university-dashboard" element={<UniversityDashboard />} />
           <Route path="/university-page/:id" element={<UniversityPage />} />
           <Route path="/university-register" element={<UniversityRegister />} />
+          <Route path="/agent-dashboard" element={<AgentDashboard />} />
 
           {/* University Profile */}
           <Route path="/university-profile/:id" element={<UniversityPage />} />
