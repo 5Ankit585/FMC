@@ -95,10 +95,10 @@ export default function CoursePage() {
         const parsed = {
           ...courseData,
           highlights: courseData.highlights ? courseData.highlights.split(",") : [],
-          specializations: courseData.specializations ? courseData.specializations.split(",") : [],
           careerRoles: courseData.careerRoles ? courseData.careerRoles.split(",") : [],
           topInstitutes: courseData.topInstitutes ? courseData.topInstitutes.split(",") : [],
           curriculum: courseData.curriculum ? courseData.curriculum.split(",") : [],
+          specializations: courseData.specializations || [], // Keep as array of objects
         };
 
         setCourse(parsed);
@@ -214,11 +214,12 @@ export default function CoursePage() {
         subtitle="Choose a focus area to align with career goals."
       >
         <div className="course-specializations-grid">
-          {course.specializationImages?.map((item, idx) => (
+          {course.specializations?.map((spec, idx) => (
             <Card
               key={idx}
-              title={item.description || course.specializations[idx] || `Specialization ${idx+1}`}
-              imgSrc={item.url ? `http://localhost:5000/${item.url}` : "/default-spec.jpeg"}
+              title={spec.name || `Specialization ${idx + 1}`}
+              desc={spec.description}
+              imgSrc={spec.image ? `http://localhost:5000/${spec.image}` : "/default-spec.jpeg"}
             />
           ))}
         </div>
@@ -255,7 +256,7 @@ export default function CoursePage() {
               {course.topInstituteImages?.map((item, idx) => (
                 <InstituteCard
                   key={idx}
-                  title={item.description || course.topInstitutes[idx] || `Institute ${idx+1}`}
+                  title={item.description || course.topInstitutes[idx] || `Institute ${idx + 1}`}
                   img={item.url ? `http://localhost:5000/${item.url}` : "/default-institute.jpeg"}
                 />
               ))}

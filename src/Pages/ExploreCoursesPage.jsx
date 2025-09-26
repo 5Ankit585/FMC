@@ -13,7 +13,6 @@ const CourseExplorer = () => {
     states: [],
     cities: [],
     exams: [],
-    programTypes: [],
     courses: [],
     specializations: [],
   });
@@ -24,7 +23,6 @@ const CourseExplorer = () => {
   const [availableLevels, setAvailableLevels] = useState([]);
   const [availableExams, setAvailableExams] = useState([]);
   const [availableSpecializations, setAvailableSpecializations] = useState([]);
-  const [availableProgramTypes, setAvailableProgramTypes] = useState([]);
   const [availableCities, setAvailableCities] = useState([]);
   const [availableStates, setAvailableStates] = useState([]);
 
@@ -39,8 +37,9 @@ const CourseExplorer = () => {
         setAvailableCourseTypes([...new Set(data.map(c => c.degreeType))].sort());
         setAvailableLevels([...new Set(data.map(c => c.level))].sort());
         setAvailableExams([...new Set(data.flatMap(c => c.exams || []))].sort());
-        setAvailableSpecializations([...new Set(data.flatMap(c => c.specializations ? c.specializations.split(',') : []))].sort());
-        setAvailableProgramTypes([...new Set(data.map(c => c.studyMode))].sort());
+        setAvailableSpecializations([
+          ...new Set(data.flatMap(c => (c.specializations || []).map(spec => spec.name)))
+        ].sort());
         setAvailableCities([...new Set(data.map(c => c.city).filter(Boolean))].sort());
         setAvailableStates([...new Set(data.map(c => c.state).filter(Boolean))].sort());
       } catch (err) {
@@ -51,8 +50,9 @@ const CourseExplorer = () => {
         setAvailableCourseTypes([...new Set(sampleData.map(c => c.degreeType))].sort());
         setAvailableLevels([...new Set(sampleData.map(c => c.level))].sort());
         setAvailableExams([...new Set(sampleData.flatMap(c => c.exams || []))].sort());
-        setAvailableSpecializations([...new Set(sampleData.flatMap(c => c.specializations ? c.specializations.split(',') : []))].sort());
-        setAvailableProgramTypes([...new Set(sampleData.map(c => c.studyMode))].sort());
+        setAvailableSpecializations([
+          ...new Set(sampleData.flatMap(c => (c.specializations || []).map(spec => spec.name)))
+        ].sort());
         setAvailableCities([...new Set(sampleData.map(c => c.city).filter(Boolean))].sort());
         setAvailableStates([...new Set(sampleData.map(c => c.state).filter(Boolean))].sort());
       } finally {
@@ -83,14 +83,24 @@ const CourseExplorer = () => {
 
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.courseTitle.toLowerCase().includes(searchText.toLowerCase());
+    
+    // If specializations are selected, prioritize courses with those specializations
+    if (filters.specializations.length > 0) {
+      return matchesSearch && 
+        (course.specializations &&
+          course.specializations.some(spec => filters.specializations.includes(spec.name)));
+    }
+
+    // Otherwise, apply all other filters
     const matchesFilters =
       (!filters.streams.length || filters.streams.includes(course.stream)) &&
       (!filters.courseType.length || filters.courseType.includes(course.degreeType)) &&
       (!filters.courseLevel.length || filters.courseLevel.includes(course.level)) &&
       (!filters.exams.length || (course.exams && course.exams.some(exam => filters.exams.includes(exam)))) &&
-      (!filters.programTypes.length || filters.programTypes.includes(course.studyMode)) &&
       (!filters.courses.length || filters.courses.includes(course.courseTitle)) &&
-      (!filters.specializations.length || (course.specializations && course.specializations.split(',').some(spec => filters.specializations.includes(spec.trim()))));
+      (!filters.states.length || filters.states.includes(course.state)) &&
+      (!filters.cities.length || filters.cities.includes(course.city));
+
     return matchesSearch && matchesFilters;
   });
 
@@ -150,7 +160,6 @@ const CourseExplorer = () => {
       { key: 'states', label: 'State', options: availableStates },
       { key: 'cities', label: 'City', options: availableCities },
       { key: 'exams', label: 'Entrance/Exam Accepted', options: availableExams },
-      { key: 'programTypes', label: 'Program Type', options: availableProgramTypes },
     ];
 
     return (
@@ -183,11 +192,31 @@ const CourseExplorer = () => {
   };
 
   const SpecializationsSection = () => {
-    if (availableSpecializations.length === 0) return null;
+    let filteredSpecs = [];
+
+    if (filters.courses.length > 0) {
+      // If a course is selected, show only specializations for the selected course(s)
+      const selectedCourses = courses.filter(course => filters.courses.includes(course.courseTitle));
+      filteredSpecs = [
+        ...new Set(selectedCourses.flatMap(course => (course.specializations || []).map(spec => spec.name)))
+      ].sort();
+    } else {
+      // Otherwise, show specializations based on selected streams and course types
+      const filteredCourses = courses.filter(course => 
+        (!filters.streams.length || filters.streams.includes(course.stream)) &&
+        (!filters.courseType.length || filters.courseType.includes(course.degreeType))
+      );
+      filteredSpecs = [
+        ...new Set(filteredCourses.flatMap(course => (course.specializations || []).map(spec => spec.name)))
+      ].sort();
+    }
+
+    if (filteredSpecs.length === 0) return null;
+
     return (
       <div className="ce-specializations mt-4">
         <span className="font-bold mr-2">Choose Specialization:</span>
-        {availableSpecializations.map(spec => (
+        {filteredSpecs.map(spec => (
           <span
             key={spec}
             className={`ce-spec-tag inline-block px-3 py-1 mr-2 mb-2 rounded-full cursor-pointer ${filters.specializations.includes(spec) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
@@ -204,15 +233,17 @@ const CourseExplorer = () => {
     <div className="ce-course-card">
       <h3 className="ce-course-title">{course.courseTitle}</h3>
       <div className="ce-tags">
-        {[course.duration, course.degreeType, course.studyMode, course.level].filter(Boolean).map(tag => (
+        {[course.duration, course.degreeType, course.level].filter(Boolean).map(tag => (
           <span key={tag} className="ce-tag">{tag}</span>
         ))}
       </div>
       <p className="ce-eligibility"><strong>Eligibility:</strong> {course.eligibility}</p>
       <p className="ce-description">{course.description}</p>
       <div className="ce-specializations">
-        {course.specializations?.split(',').map(spec => (
-          <span key={spec} className="ce-spec">{spec.trim()}</span>
+        {course.specializations?.map((spec, idx) => (
+          <span key={idx} className="ce-spec">
+            {spec.name}
+          </span>
         ))}
       </div>
       <div className="ce-card-footer">

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CourseRegister.css";
 
 export default function CourseRegister() {
-  const [specializationImages, setSpecializationImages] = useState([]);
+  const [specializations, setSpecializations] = useState([
+    { name: "", image: null, imagePreview: "", description: "" },
+  ]);
   const [topInstituteImages, setTopInstituteImages] = useState([]);
   const [formData, setFormData] = useState({
     courseTitle: "",
@@ -15,7 +17,6 @@ export default function CourseRegister() {
     highlights: "",
     internship: "",
     placement: "",
-    specializations: "",
     eligibility: "",
     admissionProcess: "",
     curriculum: "",
@@ -27,16 +28,64 @@ export default function CourseRegister() {
     applyLink: "",
   });
 
+  // === form handlers ===
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e, type) => {
-    const files = Array.from(e.target.files).map(f => ({ file: f, description: "" }));
-    if (type === "specialization") setSpecializationImages(files);
-    if (type === "topInstitute") setTopInstituteImages(files);
+  // Specialization handlers
+  const addSpecialization = () => {
+    setSpecializations((prev) => [
+      ...prev,
+      { name: "", image: null, imagePreview: "", description: "" },
+    ]);
   };
 
+  const removeSpecialization = (index) => {
+    setSpecializations((prev) => {
+      const removed = prev[index];
+      // revoke preview URL if present
+      if (removed?.imagePreview) URL.revokeObjectURL(removed.imagePreview);
+      const next = prev.filter((_, i) => i !== index);
+      return next.length ? next : [{ name: "", image: null, imagePreview: "", description: "" }];
+    });
+  };
+
+  const handleSpecializationNameChange = (index, value) => {
+    setSpecializations((prev) => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], name: value };
+      return copy;
+    });
+  };
+
+  const handleSpecializationDescChange = (index, value) => {
+    setSpecializations((prev) => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], description: value };
+      return copy;
+    });
+  };
+
+  const handleSpecializationFileChange = (index, file) => {
+    if (!file) return;
+    setSpecializations((prev) => {
+      const copy = [...prev];
+      // revoke previous preview if any
+      if (copy[index]?.imagePreview) URL.revokeObjectURL(copy[index].imagePreview);
+      const preview = URL.createObjectURL(file);
+      copy[index] = { ...copy[index], image: file, imagePreview: preview };
+      return copy;
+    });
+  };
+
+  // Top institute images (kept similar to your original)
+  const handleTopInstituteFileChange = (e) => {
+    const files = Array.from(e.target.files).map((f) => ({ file: f, description: "" }));
+    setTopInstituteImages(files);
+  };
+
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -44,14 +93,18 @@ export default function CourseRegister() {
       const data = new FormData();
 
       // Append text fields
-      Object.keys(formData).forEach(key => {
-        data.append(key, formData[key]);
-      });
+      Object.keys(formData).forEach((key) => data.append(key, formData[key]));
 
-      // Append specialization images + descriptions
-      specializationImages.forEach((item) => {
-        data.append("specializationImages", item.file);
-        data.append("specializationDescriptions", item.description);
+      // Append specializations (names + images + descriptions)
+      specializations.forEach((spec, i) => {
+        // Names (array)
+        data.append("specializationNames[]", spec.name || "");
+
+        // Images
+        if (spec.image) data.append("specializationImages", spec.image);
+
+        // Image descriptions
+        data.append("specializationDescriptions[]", spec.description || "");
       });
 
       // Append top institute images + descriptions
@@ -60,24 +113,58 @@ export default function CourseRegister() {
         data.append("topInstituteDescriptions", item.description);
       });
 
-      // Fetch request
       const res = await fetch("http://localhost:5000/api/courses", {
         method: "POST",
         body: data,
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to save course");
-      }
+      if (!res.ok) throw new Error("Failed to save course");
 
       const responseData = await res.json();
       console.log("✅ Course saved:", responseData);
       alert("✅ Course registered successfully!");
+
+      // Optional: reset form after success
+      setFormData({
+        courseTitle: "",
+        shortName: "",
+        description: "",
+        duration: "",
+        fees: "",
+        mode: "",
+        level: "",
+        highlights: "",
+        internship: "",
+        placement: "",
+        eligibility: "",
+        admissionProcess: "",
+        curriculum: "",
+        topInstitutes: "",
+        careerRoles: "",
+        scholarships: "",
+        abroadOptions: "",
+        faqs: "",
+        applyLink: "",
+      });
+
+      // clean up specializations previews
+      specializations.forEach((s) => s.imagePreview && URL.revokeObjectURL(s.imagePreview));
+      setSpecializations([{ name: "", image: null, imagePreview: "", description: "" }]);
+      setTopInstituteImages([]);
     } catch (error) {
       console.error("❌ Error:", error);
       alert("Something went wrong while saving the course!");
     }
   };
+
+  // Revoke object URLs on unmount
+  useEffect(() => {
+    return () => {
+      specializations.forEach((s) => s.imagePreview && URL.revokeObjectURL(s.imagePreview));
+      topInstituteImages.forEach((t) => t.preview && URL.revokeObjectURL(t.preview));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="course-register-container">
@@ -199,36 +286,54 @@ export default function CourseRegister() {
             />
           </div>
 
-          {/* Specializations */}
+          {/* === UPDATED SPECIALIZATIONS SECTION === */}
           <div className="form-group">
             <label>Specializations</label>
-            <textarea
-              name="specializations"
-              placeholder="List of specialization options"
-              value={formData.specializations}
-              onChange={handleChange}
-            />
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={(e) => handleFileChange(e, "specialization")}
-            />
-            {specializationImages.length > 0 && specializationImages.map((item, idx) => (
-              <div key={idx}>
-                {item?.file && <p>{item.file.name}</p>}
-                <input
-                  type="text"
-                  placeholder="Description for this image"
-                  value={item?.description || ""}
-                  onChange={(e) => {
-                    const newImages = [...specializationImages];
-                    newImages[idx].description = e.target.value;
-                    setSpecializationImages(newImages);
-                  }}
-                />
+
+            {specializations.map((spec, idx) => (
+              <div key={idx} className="specialization-row">
+                <div className="spec-controls">
+                  <input
+                    type="text"
+                    placeholder="Specialization name (e.g. Finance)"
+                    value={spec.name}
+                    onChange={(e) => handleSpecializationNameChange(idx, e.target.value)}
+                    required={idx === 0}
+                  />
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleSpecializationFileChange(idx, e.target.files?.[0] || null)}
+                  />
+
+                  {spec.imagePreview && (
+                    <div className="spec-preview">
+                      <img src={spec.imagePreview} alt={`spec-${idx}`} style={{ maxWidth: 150, maxHeight: 90 }} />
+                    </div>
+                  )}
+
+                  <input
+                    type="text"
+                    placeholder="Image description (optional)"
+                    value={spec.description}
+                    onChange={(e) => handleSpecializationDescChange(idx, e.target.value)}
+                  />
+
+                  <div className="spec-actions">
+                    <button type="button" onClick={() => removeSpecialization(idx)} className="spec-remove">
+                      Remove
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
+
+            <div style={{ marginTop: 8 }}>
+              <button type="button" onClick={addSpecialization} className="spec-add">
+                + Add more specialization
+              </button>
+            </div>
           </div>
 
           {/* Eligibility & Admission */}
@@ -272,27 +377,23 @@ export default function CourseRegister() {
               value={formData.topInstitutes}
               onChange={handleChange}
             />
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={(e) => handleFileChange(e, "topInstitute")}
-            />
-            {topInstituteImages.length > 0 && topInstituteImages.map((item, idx) => (
-              <div key={idx}>
-                {item?.file && <p>{item.file.name}</p>}
-                <input
-                  type="text"
-                  placeholder="Description for this image"
-                  value={item?.description || ""}
-                  onChange={(e) => {
-                    const newImages = [...topInstituteImages];
-                    newImages[idx].description = e.target.value;
-                    setTopInstituteImages(newImages);
-                  }}
-                />
-              </div>
-            ))}
+            <input type="file" multiple accept="image/*" onChange={handleTopInstituteFileChange} />
+            {topInstituteImages.length > 0 &&
+              topInstituteImages.map((item, idx) => (
+                <div key={idx}>
+                  {item?.file && <p>{item.file.name}</p>}
+                  <input
+                    type="text"
+                    placeholder="Description for this image"
+                    value={item?.description || ""}
+                    onChange={(e) => {
+                      const newImages = [...topInstituteImages];
+                      newImages[idx].description = e.target.value;
+                      setTopInstituteImages(newImages);
+                    }}
+                  />
+                </div>
+              ))}
           </div>
 
           {/* Career */}
@@ -331,12 +432,7 @@ export default function CourseRegister() {
           {/* FAQs */}
           <div className="form-group">
             <label>FAQs</label>
-            <textarea
-              name="faqs"
-              placeholder="Common student queries"
-              value={formData.faqs}
-              onChange={handleChange}
-            />
+            <textarea name="faqs" placeholder="Common student queries" value={formData.faqs} onChange={handleChange} />
           </div>
 
           {/* Apply Link */}
@@ -351,7 +447,9 @@ export default function CourseRegister() {
             />
           </div>
 
-          <button type="submit" className="course-submit">Submit</button>
+          <button type="submit" className="course-submit">
+            Submit
+          </button>
         </form>
       </div>
     </div>
