@@ -242,7 +242,7 @@ const CourseExplorer = () => {
             role="link"
             tabIndex={0}
           >
-            View Colleges
+            View Course
           </button>
           <button className="ce-btn-apply">Apply Now →</button>
         </div>
