@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './ExploreCoursesPage.css';
 
 const CourseExplorer = () => {
@@ -17,7 +18,6 @@ const CourseExplorer = () => {
     specializations: [],
   });
   const [loading, setLoading] = useState(true);
-
   const [availableStreams, setAvailableStreams] = useState([]);
   const [availableCourseTypes, setAvailableCourseTypes] = useState([]);
   const [availableLevels, setAvailableLevels] = useState([]);
@@ -26,12 +26,14 @@ const CourseExplorer = () => {
   const [availableCities, setAvailableCities] = useState([]);
   const [availableStates, setAvailableStates] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/courses');
         const data = res.data;
-
+        console.log('First course in response:', data[0]); // Inspect first item
         setCourses(data);
         setAvailableStreams([...new Set(data.map(c => c.stream))].sort());
         setAvailableCourseTypes([...new Set(data.map(c => c.degreeType))].sort());
@@ -59,7 +61,6 @@ const CourseExplorer = () => {
         setLoading(false);
       }
     };
-
     fetchCourses();
   }, []);
 
@@ -83,15 +84,11 @@ const CourseExplorer = () => {
 
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.courseTitle.toLowerCase().includes(searchText.toLowerCase());
-    
-    // If specializations are selected, prioritize courses with those specializations
     if (filters.specializations.length > 0) {
       return matchesSearch && 
         (course.specializations &&
           course.specializations.some(spec => filters.specializations.includes(spec.name)));
     }
-
-    // Otherwise, apply all other filters
     const matchesFilters =
       (!filters.streams.length || filters.streams.includes(course.stream)) &&
       (!filters.courseType.length || filters.courseType.includes(course.degreeType)) &&
@@ -100,7 +97,6 @@ const CourseExplorer = () => {
       (!filters.courses.length || filters.courses.includes(course.courseTitle)) &&
       (!filters.states.length || filters.states.includes(course.state)) &&
       (!filters.cities.length || filters.cities.includes(course.city));
-
     return matchesSearch && matchesFilters;
   });
 
@@ -124,7 +120,6 @@ const CourseExplorer = () => {
       { key: 'courseType', label: 'Course Type', options: availableCourseTypes },
       { key: 'courseLevel', label: 'Course Level', options: availableLevels },
     ];
-
     return (
       <div className="ce-sidebar md:w-1/4">
         <h2>Filters</h2>
@@ -161,7 +156,6 @@ const CourseExplorer = () => {
       { key: 'cities', label: 'City', options: availableCities },
       { key: 'exams', label: 'Entrance/Exam Accepted', options: availableExams },
     ];
-
     return (
       <div className="ce-searchbar">
         <div className="flex flex-col md:flex-row gap-4 items-center">
@@ -193,15 +187,12 @@ const CourseExplorer = () => {
 
   const SpecializationsSection = () => {
     let filteredSpecs = [];
-
     if (filters.courses.length > 0) {
-      // If a course is selected, show only specializations for the selected course(s)
       const selectedCourses = courses.filter(course => filters.courses.includes(course.courseTitle));
       filteredSpecs = [
         ...new Set(selectedCourses.flatMap(course => (course.specializations || []).map(spec => spec.name)))
       ].sort();
     } else {
-      // Otherwise, show specializations based on selected streams and course types
       const filteredCourses = courses.filter(course => 
         (!filters.streams.length || filters.streams.includes(course.stream)) &&
         (!filters.courseType.length || filters.courseType.includes(course.degreeType))
@@ -210,9 +201,7 @@ const CourseExplorer = () => {
         ...new Set(filteredCourses.flatMap(course => (course.specializations || []).map(spec => spec.name)))
       ].sort();
     }
-
     if (filteredSpecs.length === 0) return null;
-
     return (
       <div className="ce-specializations mt-4">
         <span className="font-bold mr-2">Choose Specialization:</span>
@@ -229,31 +218,37 @@ const CourseExplorer = () => {
     );
   };
 
-  const CourseCard = ({ course }) => (
-    <div className="ce-course-card">
-      <h3 className="ce-course-title">{course.courseTitle}</h3>
-      <div className="ce-tags">
-        {[course.duration, course.degreeType, course.level].filter(Boolean).map(tag => (
-          <span key={tag} className="ce-tag">{tag}</span>
-        ))}
+  const CourseCard = ({ course }) => {
+    const id = course._id || course.id; // Bulletproof ID handling
+    return (
+      <div className="ce-course-card">
+        <h3 className="ce-course-title">{course.courseTitle}</h3>
+        <div className="ce-tags">
+          {[course.duration, course.degreeType, course.level].filter(Boolean).map(tag => (
+            <span key={tag} className="ce-tag">{tag}</span>
+          ))}
+        </div>
+        <p className="ce-eligibility"><strong>Eligibility:</strong> {course.eligibility}</p>
+        <p className="ce-description">{course.description}</p>
+        <div className="ce-specializations">
+          {course.specializations?.map((spec, idx) => (
+            <span key={idx} className="ce-spec">{spec.name}</span>
+          ))}
+        </div>
+        <div className="ce-card-footer">
+          <button
+            className="ce-link"
+            onClick={() => navigate(`/coursepage/${id}`)}
+            role="link"
+            tabIndex={0}
+          >
+            View Colleges
+          </button>
+          <button className="ce-btn-apply">Apply Now →</button>
+        </div>
       </div>
-      <p className="ce-eligibility"><strong>Eligibility:</strong> {course.eligibility}</p>
-      <p className="ce-description">{course.description}</p>
-      <div className="ce-specializations">
-        {course.specializations?.map((spec, idx) => (
-          <span key={idx} className="ce-spec">
-            {spec.name}
-          </span>
-        ))}
-      </div>
-      <div className="ce-card-footer">
-        <a href={`/colleges?course=${course.id}`} className="ce-link">
-          View Colleges
-        </a>
-        <button className="ce-btn-apply">Apply Now →</button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="course-explorer">
@@ -271,7 +266,7 @@ const CourseExplorer = () => {
               ) : filteredCourses.length === 0 ? (
                 <p className="text-center text-gray-500 py-8">No courses found.</p>
               ) : (
-                filteredCourses.map(course => <CourseCard key={course.id} course={course} />)
+                filteredCourses.map(course => <CourseCard key={course._id || course.id} course={course} />)
               )}
             </div>
           </div>
