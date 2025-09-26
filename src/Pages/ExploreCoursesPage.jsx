@@ -8,26 +8,24 @@ const CourseExplorer = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
   const [filters, setFilters] = useState({
     streams: [],
-    avgFee: [],
     courseType: [],
-    courseDuration: [],
     courseLevel: [],
     states: [],
     cities: [],
     exams: [],
     programTypes: [],
+    courses: [],
+    specializations: [],
   });
   const [loading, setLoading] = useState(true);
 
   // Sample data
-  const streams = ['PCM', 'PCB', 'Commerce', 'Humanities/Arts', 'Engineering', 'Medical', 'Management'];
-  const avgFee = ['<1L', '1L-5L', '5L-10L', '>10L'];
-  const courseTypes = ['UG Degree', 'PG Degree', 'Diploma', 'Certificate'];
-  const courseDurations = ['3 Years', '4 Years', '2 Years', '1 Year'];
+  const streams = ['PCM', 'PCB', 'Commerce', 'Humanities/Arts', 'Engineering', 'Medical', 'Management', 'Law', 'Design', 'Agriculture'];
+  const courseTypes = ['UG Degree', 'PG Degree', 'Diploma', 'Certificate', 'Integrated Program', 'Short-Term Course', 'Professional Degree'];
   const courseLevels = ['Undergraduate', 'Postgraduate', 'Diploma', 'Certificate', 'PhD'];
   const cities = ['Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Kolkata'];
   const states = ['Delhi', 'Maharashtra', 'Karnataka', 'Tamil Nadu', 'West Bengal'];
-  const exams = ['JEE Main', 'NEET', 'CAT', 'CUET', 'TS DOST'];
+  const exams = ['JEE Main', 'NEET', 'CAT', 'CUET', 'TS DOST', 'CLAT', 'NID DAT', 'ICAR AIEEA'];
   const programTypes = ['Full Time', 'Part Time', 'Online', 'Distance'];
 
   useEffect(() => {
@@ -51,6 +49,8 @@ const CourseExplorer = () => {
             description:
               'BCom is a 3-year undergraduate course for students who have cleared 12th standard with a major in Commerce. The full form of BCom is Bachelor of Commerce. BCom Admissions are based on merit as well as entrance exams such as CUET, PU CET, NPAT, etc. BCom offers diverse career opportunities.',
             jobRoles: ['Chartered Accountant', 'Accounting Analyst', 'Equity Analyst', 'Financial Analyst'],
+            stream: 'Commerce',
+            specializations: ['Accounting and Finance', 'Marketing', 'Human Resource Management', 'E-commerce', 'Banking and Insurance', 'International Business', 'Entrepreneurship'],
           },
           {
             id: 2,
@@ -64,6 +64,98 @@ const CourseExplorer = () => {
             exams: ['CUET'],
             description: 'BCA is a 3-year undergraduate course focusing on computer applications and software development.',
             jobRoles: ['Software Developer', 'Web Designer', 'System Analyst'],
+            stream: 'Engineering',
+            specializations: ['Data Science', 'Artificial Intelligence', 'Cyber Security', 'Cloud Computing', 'Web Development', 'Data Analytics', 'Full Stack Development'],
+          },
+          {
+            id: 3,
+            title: 'Integrated B.Tech + M.Tech',
+            duration: '5 Years',
+            degreeType: 'Integrated Program',
+            studyMode: 'Full Time',
+            level: 'Undergraduate',
+            avgFee: '5L-10L',
+            eligibility: '10+2 with PCM | Entrance Exam: JEE Main',
+            exams: ['JEE Main'],
+            description: 'An integrated 5-year program combining B.Tech and M.Tech, focusing on advanced engineering concepts.',
+            jobRoles: ['Research Engineer', 'Technology Consultant', 'Project Manager'],
+            stream: 'Engineering',
+            specializations: ['Mechanical Engineering', 'Civil Engineering', 'Computer Science', 'Electronics', 'Aerospace Engineering'],
+          },
+          {
+            id: 4,
+            title: 'Certificate in Digital Marketing',
+            duration: '6 Months',
+            degreeType: 'Short-Term Course',
+            studyMode: 'Online',
+            level: 'Certificate',
+            avgFee: '<1L',
+            eligibility: '10+2 or equivalent',
+            exams: [],
+            description: 'A short-term course focusing on digital marketing strategies, SEO, and social media marketing.',
+            jobRoles: ['Digital Marketing Specialist', 'SEO Analyst', 'Content Marketer'],
+            stream: 'Management',
+            specializations: ['SEO', 'Social Media Marketing', 'Content Marketing', 'PPC Advertising'],
+          },
+          {
+            id: 5,
+            title: 'Bachelor of Dental Surgery [BDS]',
+            duration: '4 Years',
+            degreeType: 'Professional Degree',
+            studyMode: 'Full Time',
+            level: 'Undergraduate',
+            avgFee: '5L-10L',
+            eligibility: '10+2 with PCB | Entrance Exam: NEET',
+            exams: ['NEET'],
+            description: 'BDS is a 4-year professional degree program focusing on dental sciences and surgery.',
+            jobRoles: ['Dentist', 'Dental Surgeon', 'Orthodontist'],
+            stream: 'Medical',
+            specializations: ['Orthodontics', 'Periodontics', 'Endodontics', 'Prosthodontics'],
+          },
+          {
+            id: 6,
+            title: 'Bachelor of Laws [LLB]',
+            duration: '3 Years',
+            degreeType: 'Professional Degree',
+            studyMode: 'Full Time',
+            level: 'Undergraduate',
+            avgFee: '1L-5L',
+            eligibility: 'Graduation | Entrance Exam: CLAT',
+            exams: ['CLAT'],
+            description: 'LLB is a 3-year undergraduate law degree focusing on legal studies and practice.',
+            jobRoles: ['Lawyer', 'Legal Advisor', 'Corporate Counsel'],
+            stream: 'Law',
+            specializations: ['Criminal Law', 'Corporate Law', 'Constitutional Law', 'Intellectual Property Law', 'Environmental Law'],
+          },
+          {
+            id: 7,
+            title: 'Bachelor of Design [B.Des]',
+            duration: '4 Years',
+            degreeType: 'UG Degree',
+            studyMode: 'Full Time',
+            level: 'Undergraduate',
+            avgFee: '5L-10L',
+            eligibility: '10+2 | Entrance Exam: NID DAT',
+            exams: ['NID DAT'],
+            description: 'B.Des is a 4-year undergraduate program focusing on design disciplines like fashion, graphic, and product design.',
+            jobRoles: ['Fashion Designer', 'Graphic Designer', 'Product Designer'],
+            stream: 'Design',
+            specializations: ['Fashion Design', 'Graphic Design', 'Product Design', 'Interior Design', 'UX/UI Design'],
+          },
+          {
+            id: 8,
+            title: 'B.Sc Agriculture',
+            duration: '4 Years',
+            degreeType: 'UG Degree',
+            studyMode: 'Full Time',
+            level: 'Undergraduate',
+            avgFee: '1L-5L',
+            eligibility: '10+2 with PCB/PCM | Entrance Exam: ICAR AIEEA',
+            exams: ['ICAR AIEEA'],
+            description: 'B.Sc Agriculture is a 4-year program focusing on agricultural sciences and practices.',
+            jobRoles: ['Agronomist', 'Agricultural Consultant', 'Farm Manager'],
+            stream: 'Agriculture',
+            specializations: ['Agronomy', 'Horticulture', 'Soil Science', 'Agricultural Economics', 'Plant Breeding'],
           },
         ]);
       } finally {
@@ -77,25 +169,49 @@ const CourseExplorer = () => {
     setActiveAccordion(activeAccordion === category ? null : category);
   };
 
-  const handleFilterChange = (category, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [category]: prev[category].includes(value)
-        ? prev[category].filter((v) => v !== value)
-        : [...prev[category], value],
-    }));
+  const handleFilterChange = (category, value, isMulti = true) => {
+    setFilters((prev) => {
+      if (!isMulti) {
+        return {
+          ...prev,
+          [category]: value ? [value] : [],
+        };
+      }
+      return {
+        ...prev,
+        [category]: prev[category].includes(value)
+          ? prev[category].filter((v) => v !== value)
+          : [...prev[category], value],
+      };
+    });
   };
+
+  const getPreFilteredCourses = () => {
+    return courses.filter((course) => {
+      const matchesSearch = course.title.toLowerCase().includes(searchText.toLowerCase());
+      const matchesOtherFilters =
+        (!filters.streams.length || filters.streams.includes(course.stream)) &&
+        (!filters.courseType.length || filters.courseType.includes(course.degreeType)) &&
+        (!filters.courseLevel.length || filters.courseLevel.includes(course.level)) &&
+        (!filters.exams.length || course.exams.some((exam) => filters.exams.includes(exam))) &&
+        (!filters.programTypes.length || filters.programTypes.includes(course.studyMode)) &&
+        (!filters.courses.length || filters.courses.includes(course.title));
+      return matchesSearch && matchesOtherFilters;
+    });
+  };
+
+  const availableSpecializations = [...new Set(getPreFilteredCourses().flatMap((course) => course.specializations || []))].sort();
 
   const filteredCourses = courses.filter((course) => {
     const matchesSearch = course.title.toLowerCase().includes(searchText.toLowerCase());
     const matchesFilters =
-      (!filters.streams.length || filters.streams.includes('Commerce')) &&
-      (!filters.avgFee.length || filters.avgFee.includes(course.avgFee)) &&
+      (!filters.streams.length || filters.streams.includes(course.stream)) &&
       (!filters.courseType.length || filters.courseType.includes(course.degreeType)) &&
-      (!filters.courseDuration.length || filters.courseDuration.includes(course.duration)) &&
       (!filters.courseLevel.length || filters.courseLevel.includes(course.level)) &&
       (!filters.exams.length || course.exams.some((exam) => filters.exams.includes(exam))) &&
-      (!filters.programTypes.length || filters.programTypes.includes(course.studyMode));
+      (!filters.programTypes.length || filters.programTypes.includes(course.studyMode)) &&
+      (!filters.courses.length || filters.courses.includes(course.title)) &&
+      (!filters.specializations.length || (course.specializations && course.specializations.some((spec) => filters.specializations.includes(spec))));
     return matchesSearch && matchesFilters;
   });
 
@@ -110,7 +226,7 @@ const CourseExplorer = () => {
           <span>Course Finder</span>
         </button>
         <div className="ce-header-links">
-          {['All Courses', 'B.Tech', 'MBA', 'M.Tech', 'MBBS', 'B.Com', 'B.Sc', 'B.Sc (Nursing)', 'BA', 'BBA', 'BCA'].map(
+          {['All Courses', 'B.Tech', 'MBA', 'M.Tech', 'MBBS', 'B.Com', 'B.Sc', 'B.Sc (Nursing)', 'BA', 'BBA', 'BCA', 'BDS', 'LLB', 'B.Des', 'B.Sc Agriculture'].map(
             (link) => (
               <a key={link} href="#">
                 {link}
@@ -128,9 +244,7 @@ const CourseExplorer = () => {
   const SidebarFilters = () => {
     const filterCategories = [
       { key: 'streams', label: 'Stream', options: streams },
-      { key: 'avgFee', label: 'Avg Fee Per Year (in Rupees)', options: avgFee },
       { key: 'courseType', label: 'Course Type', options: courseTypes },
-      { key: 'courseDuration', label: 'Course Duration (in Years)', options: courseDurations },
       { key: 'courseLevel', label: 'Course Level', options: courseLevels },
     ];
 
@@ -181,7 +295,7 @@ const CourseExplorer = () => {
 
     return (
       <div className="ce-searchbar">
-        <div className="flex flex-col md:flex-row gap-4 items-center"> {/* Added items-center */}
+        <div className="flex flex-col md:flex-row gap-4 items-center">
           <input
             type="text"
             placeholder="Find your desired course"
@@ -195,7 +309,7 @@ const CourseExplorer = () => {
           {topFilters.map((filter) => (
             <select
               key={filter.key}
-              onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+              onChange={(e) => handleFilterChange(filter.key, e.target.value, false)}
             >
               <option value="">{filter.label}</option>
               {filter.options.map((option) => (
@@ -206,6 +320,24 @@ const CourseExplorer = () => {
             </select>
           ))}
         </div>
+      </div>
+    );
+  };
+
+  const SpecializationsSection = () => {
+    if (availableSpecializations.length === 0) return null;
+    return (
+      <div className="ce-specializations mt-4">
+        <span className="font-bold mr-2">Choose Specialization:</span>
+        {availableSpecializations.map((spec) => (
+          <span
+            key={spec}
+            className={`ce-spec-tag inline-block px-3 py-1 mr-2 mb-2 rounded-full cursor-pointer ${filters.specializations.includes(spec) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+            onClick={() => handleFilterChange('specializations', spec)}
+          >
+            {spec}
+          </span>
+        ))}
       </div>
     );
   };
@@ -244,6 +376,7 @@ const CourseExplorer = () => {
           <SidebarFilters />
           <div className="md:w-3/4">
             <SearchFilters />
+            {(filters.streams.length > 0 || filters.courses.length > 0) && <SpecializationsSection />}
             <div className="grid grid-cols-1 gap-6">
               {loading ? (
                 <p className="text-center text-gray-500 py-8">Loading courses...</p>
