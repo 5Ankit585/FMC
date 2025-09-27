@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { FiUpload, FiFileText, FiX, FiExternalLink, FiPlus } from 'react-icons/fi';
 import axios from 'axios';
-import { db, auth } from '../../firebase';
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 import './AddStudent.css';
 
 /* ---------- State & Constants ---------- */
@@ -89,8 +87,8 @@ function formatBytes(bytes) {
 const uploadToCloudinary = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', 'universityproject'); // <-- Replace with your preset
-  formData.append('folder', 'students'); // Optional folder
+  formData.append('upload_preset', 'universityproject');
+  formData.append('folder', 'students');
 
   try {
     const response = await axios.post('https://api.cloudinary.com/v1_1/dapjccnab/auto/upload', formData);
@@ -314,7 +312,7 @@ const AddStudentPopup = ({
       for (const docName of Object.keys(formData.documents)) {
         const file = formData.documents[docName];
         if (file) {
-          const url = await uploadToCloudinary(file); // Upload to Cloudinary
+          const url = await uploadToCloudinary(file);
           documentUrls[docName] = url;
         }
       }
@@ -325,28 +323,30 @@ const AddStudentPopup = ({
         paymentReceiptUrl = await uploadToCloudinary(formData.paymentReceipt);
       }
 
-      // ---------- Prepare student data ----------
-      const studentData = {
+      // ---------- Send to backend (instead of Firestore) ----------
+      const backendUrl = "http://localhost:5000/api/students";
+
+      const payload = {
         name: formData.fullName,
         email: formData.email,
         university: formData.university,
-        status: editingStudent ? editingStudent.status : 'Pending',
+        status: editingStudent ? editingStudent.status : "Pending",
         details: {
           ...formData,
           documents: documentUrls,
           paymentReceipt: paymentReceiptUrl,
         },
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       if (editingStudent) {
-        const studentDocRef = doc(db, 'students', editingStudent.id);
-        await updateDoc(studentDocRef, studentData);
-        onUpdateStudent(editingStudent.id, { id: editingStudent.id, ...studentData });
+        await axios.put(`${backendUrl}/${editingStudent.id}`, payload);
+        onUpdateStudent(editingStudent.id, { id: editingStudent.id, ...payload });
       } else {
-        const docRef = await addDoc(collection(db, 'students'), studentData);
-        onAddStudent({ id: docRef.id, ...studentData });
+        const res = await axios.post(backendUrl, payload);
+        const newId = res?.data?._id || res?.data?.id || null;
+        onAddStudent({ id: newId, ...payload });
       }
 
       onClose();
