@@ -10,10 +10,6 @@ import Reports from "./reports";
 import Announcements from "./Announcements";
 import Support from "./support";
 import Settings from "./settings";
-import ViewScholarships from "./ViewScholarships";
-import AddScholarship from "./AddScholarship";
-import RemoveScholarship from "./RemoveScholarship";
-import ScholarshipAnalytics from "./ScholarshipAnalytics";
 
 export default function MainView({ route, sidebarOpen }) {
   const [students, setStudents] = useState([
@@ -181,19 +177,6 @@ export default function MainView({ route, sidebarOpen }) {
       break;
     case "Settings":
       content = <Settings />;
-      break;
-
-    case "ViewScholarships":
-      content = <ViewScholarships />;
-      break;
-    case "AddScholarship":
-      content = <AddScholarship />;
-      break;
-    case "RemoveScholarship":
-      content = <RemoveScholarship />;
-      break;
-    case "ScholarshipAnalytics":
-      content = <ScholarshipAnalytics />;
       break;
     default:
       content = (

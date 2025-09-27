@@ -21,16 +21,14 @@
   min-width: 0;
 }
 
-/* Hover states */
 a, button {
   transition: color 0.2s ease;
 }
 
-
 .ad-footer {
-  margin-top: 3rem;
+  margin-top: auto; /* pushes footer to bottom */
   padding: 0.8rem 0;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   text-align: center;
   color: #000;
   border-top: 1px solid #d4af37;

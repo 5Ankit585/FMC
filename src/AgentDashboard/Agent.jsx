@@ -23,7 +23,11 @@ export default function AgentDashboard() {
         setSearch={setSearch}
       />
       <div className="ad-body">
-        <Sidebar sidebarOpen={sidebarOpen} setRoute={setRoute} currentRoute={route} />
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          setRoute={setRoute}
+          currentRoute={route}
+        />
         <main className="ad-main" id="main-content" tabIndex="-1">
           <MainView route={route} />
           <footer className="ad-footer text-yellow-500">
