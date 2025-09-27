@@ -1,31 +1,45 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./PartnerInstitutes.css";
 
-
 export default function PartnerInstitutes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedInstitute, setSelectedInstitute] = useState(null);
-
-  
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({ name: "", location: "", courses: "", commission: "" });
   const [error, setError] = useState("");
-
- 
   const [sort, setSort] = useState({ key: "name", dir: "asc" });
-
- 
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [institutes, setInstitutes] = useState([]);
 
-  
-  const [institutes, setInstitutes] = useState([
-    { id: 1, name: "ABC University", location: "New York, NY", courses: "MBA, B.Tech", commission: "10%" },
-    { id: 2, name: "XYZ College", location: "San Francisco, CA", courses: "BBA, MCA", commission: "8%" },
-    { id: 3, name: "Global Institute", location: "London, UK", courses: "MS, PhD", commission: "12%" },
-  ]);
+  const BASE_URL = "http://localhost:5000";
 
- 
+  useEffect(() => {
+    const fetchInstitutes = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/institutes`);
+        const data = await res.json();
+
+        if (data.success) {
+          const formatted = data.institutes.map((i) => ({
+            id: i._id,
+            name: i.name,
+            location: i.location,
+            courses: Array.isArray(i.courses) ? i.courses.join(", ") : i.courses,
+            commission: `${i.commission}%`,
+          }));
+          setInstitutes(formatted);
+        } else {
+          console.error("Failed to fetch institutes:", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching institutes:", err);
+      }
+    };
+
+    fetchInstitutes();
+  }, []);
+
   const toPercentNumber = (val) =>
     Math.max(0, Math.min(100, Number(String(val).replace(/[^\d.]/g, "")) || 0));
 
@@ -35,7 +49,6 @@ export default function PartnerInstitutes() {
       .map((s) => s.trim())
       .filter(Boolean);
 
- 
   const filtered = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
     if (!q) return institutes;
@@ -44,7 +57,6 @@ export default function PartnerInstitutes() {
     );
   }, [searchTerm, institutes]);
 
-  // Sort
   const sorted = useMemo(() => {
     const list = [...filtered];
     const { key, dir } = sort;
@@ -75,7 +87,6 @@ export default function PartnerInstitutes() {
   const start = (currentPage - 1) * rowsPerPage;
   const pageRows = sorted.slice(start, start + rowsPerPage);
 
-  
   const handleRowClick = (institute) => setSelectedInstitute(institute);
   const closeDetailsModal = () => setSelectedInstitute(null);
 
@@ -116,33 +127,59 @@ export default function PartnerInstitutes() {
   };
   const closeAddModal = () => setShowAddModal(false);
 
-  const submitAdd = (e) => {
+  const submitAdd = async (e) => {
     e.preventDefault();
     setError("");
 
     const name = form.name.trim();
     const location = form.location.trim();
     const courses = form.courses.trim();
-    let commission = form.commission.trim();
+    const commissionVal = toPercentNumber(form.commission);
 
-    if (!name || !location || !courses || !commission) {
+    if (!name || !location || !courses || form.commission === "") {
       setError("All fields are required.");
       return;
     }
-    const cNum = toPercentNumber(commission);
-    commission = `${cNum}%`;
 
-    const nextId = (institutes.reduce((m, i) => Math.max(m, i.id), 0) || 0) + 1;
-    setInstitutes((prev) => [
-      ...prev,
-      { id: nextId, name, location, courses, commission },
-    ]);
-    setShowAddModal(false);
-    setSearchTerm("");
-    setPage(1);
+    try {
+      const res = await fetch(`${BASE_URL}/api/institutes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          location,
+          courses: courses.split(",").map((c) => c.trim()),
+          commission: commissionVal,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        setError(data.message || "Failed to add institute.");
+        return;
+      }
+
+      const newInstitute = {
+        id: data.institute._id,
+        name: data.institute.name,
+        location: data.institute.location,
+        courses: Array.isArray(data.institute.courses)
+          ? data.institute.courses.join(", ")
+          : data.institute.courses,
+        commission: `${data.institute.commission}%`,
+      };
+
+      setInstitutes((prev) => [...prev, newInstitute]);
+      setShowAddModal(false);
+      setSearchTerm("");
+      setPage(1);
+    } catch (err) {
+      console.error("Error adding institute:", err);
+      setError("Something went wrong.");
+    }
   };
 
-  // Close modals with ESC
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -155,7 +192,7 @@ export default function PartnerInstitutes() {
   }, [selectedInstitute, showAddModal]);
 
   const SortIcon = ({ active, dir }) => (
-    <svg className="sort-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+    <svg className="pi-sort-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
       {active ? (
         dir === "asc" ? (
           <path d="M7 14l5-5 5 5H7z" fill="currentColor" />
@@ -175,34 +212,34 @@ export default function PartnerInstitutes() {
   );
 
   const headerSubtitle = (
-    <p className="header-subtitle">Manage, track and grow your partner network.</p>
+    <p className="pi-header-subtitle">Manage, track and grow your partner network.</p>
   );
 
   const header = (
-    <div className="partner-institutes-header">
+    <div className="pi-partner-institutes-header">
       <div>
         <h2>Partner Institutes</h2>
         {headerSubtitle}
       </div>
-      <div className="partner-institutes-actions">
-        <div className="input-with-icon">
+      <div className="pi-partner-institutes-actions">
+        <div className="pi-input-with-icon">
           <input
             type="text"
             placeholder="Search by name, location, or course…"
-            className="search-input"
+            className="pi-search-input"
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setPage(1); }}
             aria-label="Search institutes"
           />
           <SearchIcon />
         </div>
-        <button className="action-button secondary" onClick={resetFilters} title="Clear filters">
+        <button className="pi-action-button pi-secondary" onClick={resetFilters} title="Clear filters">
           Clear
         </button>
-        <button className="action-button secondary" onClick={exportCSV} title="Export CSV">
+        <button className="pi-action-button pi-secondary" onClick={exportCSV} title="Export CSV">
           Export
         </button>
-        <button className="action-button primary" onClick={openAddModal}>
+        <button className="pi-action-button pi-primary" onClick={openAddModal}>
           + Add Institute
         </button>
       </div>
@@ -212,24 +249,24 @@ export default function PartnerInstitutes() {
   const ariaSort = (key) => (sort.key === key ? (sort.dir === "asc" ? "ascending" : "descending") : "none");
 
   return (
-    <div className="partner-institutes-content">
+    <div className="pi-partner-institutes-content">
       {header}
 
-      <div className="partner-institutes-table">
-        <div className="ad-table-card">
+      <div className="pi-partner-institutes-table">
+        <div className="pi-ad-table-card">
           <h3>Institute List</h3>
 
-          <div className="table-scroll" role="region" aria-label="Partner institutes table">
+          <div className="pi-table-scroll" role="region" aria-label="Partner institutes table">
             <table role="grid">
               <thead>
                 <tr>
                   <th scope="col" aria-sort={ariaSort("name")}>
-                    <button className="th-sort" onClick={() => onSort("name")} aria-label={`Sort by name, current ${ariaSort("name")}`}>
+                    <button className="pi-th-sort" onClick={() => onSort("name")} aria-label={`Sort by name, current ${ariaSort("name")}`}>
                       Name <SortIcon active={sort.key === "name"} dir={sort.dir} />
                     </button>
                   </th>
                   <th scope="col" aria-sort={ariaSort("location")}>
-                    <button className="th-sort" onClick={() => onSort("location")} aria-label={`Sort by location, current ${ariaSort("location")}`}>
+                    <button className="pi-th-sort" onClick={() => onSort("location")} aria-label={`Sort by location, current ${ariaSort("location")}`}>
                       Location <SortIcon active={sort.key === "location"} dir={sort.dir} />
                     </button>
                   </th>
@@ -237,7 +274,7 @@ export default function PartnerInstitutes() {
                     Courses Offered
                   </th>
                   <th scope="col" aria-sort={ariaSort("commission")}>
-                    <button className="th-sort" onClick={() => onSort("commission")} aria-label={`Sort by commission, current ${ariaSort("commission")}`}>
+                    <button className="pi-th-sort" onClick={() => onSort("commission")} aria-label={`Sort by commission, current ${ariaSort("commission")}`}>
                       Commission <SortIcon active={sort.key === "commission"} dir={sort.dir} />
                     </button>
                   </th>
@@ -257,7 +294,7 @@ export default function PartnerInstitutes() {
                     return (
                       <tr
                         key={institute.id}
-                        className="institute-row"
+                        className="pi-institute-row"
                         onClick={() => handleRowClick(institute)}
                         tabIndex={0}
                         role="button"
@@ -265,24 +302,24 @@ export default function PartnerInstitutes() {
                         onKeyDown={(e) => e.key === "Enter" && handleRowClick(institute)}
                       >
                         <td>
-                          <div className="cell-name">
-                            <div className="avatar" aria-hidden="true">{initials}</div>
+                          <div className="pi-cell-name">
+                            <div className="pi-avatar" aria-hidden="true">{initials}</div>
                             <div>{institute.name}</div>
                           </div>
                         </td>
                         <td>{institute.location}</td>
                         <td>
-                          <div className="chips" aria-label={`Courses offered by ${institute.name}`}>
+                          <div className="pi-chips" aria-label={`Courses offered by ${institute.name}`}>
                             {courseList(institute.courses).map((c, idx) => (
-                              <span key={idx} className="chip">{c}</span>
+                              <span key={idx} className="pi-chip">{c}</span>
                             ))}
                           </div>
                         </td>
                         <td>
-                          <span className="commission" aria-label={`Commission ${percent}%`}>
+                          <span className="pi-commission" aria-label={`Commission ${percent}%`}>
                             {percent}%
-                            <span className="commission-bar" aria-hidden="true">
-                              <span className="commission-fill" style={{ width: `${percent}%` }} />
+                            <span className="pi-commission-bar" aria-hidden="true">
+                              <span className="pi-commission-fill" style={{ width: `${percent}%` }} />
                             </span>
                           </span>
                         </td>
@@ -291,7 +328,7 @@ export default function PartnerInstitutes() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="4" className="no-data" aria-live="polite">
+                    <td colSpan="4" className="pi-no-data" aria-live="polite">
                       No institutes found
                     </td>
                   </tr>
@@ -300,23 +337,22 @@ export default function PartnerInstitutes() {
             </table>
           </div>
 
-          {/* Footer with pagination */}
-          <div className="table-footer">
+          <div className="pi-table-footer">
             <div>
               Showing <strong>{pageRows.length}</strong> of <strong>{total}</strong>
             </div>
-            <div className="pagination">
-              <button className="page-btn" onClick={() => setPage(1)} disabled={currentPage === 1} aria-label="First page">«</button>
-              <button className="page-btn" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} aria-label="Previous page">‹</button>
+            <div className="pi-pagination">
+              <button className="pi-page-btn" onClick={() => setPage(1)} disabled={currentPage === 1} aria-label="First page">«</button>
+              <button className="pi-page-btn" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} aria-label="Previous page">‹</button>
               <span>Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong></span>
-              <button className="page-btn" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} aria-label="Next page">›</button>
-              <button className="page-btn" onClick={() => setPage(totalPages)} disabled={currentPage === totalPages} aria-label="Last page">»</button>
+              <button className="pi-page-btn" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} aria-label="Next page">›</button>
+              <button className="pi-page-btn" onClick={() => setPage(totalPages)} disabled={currentPage === totalPages} aria-label="Last page">»</button>
             </div>
             <div>
               <label htmlFor="rows" style={{ marginRight: 8, color: "var(--color-muted)" }}>Rows</label>
               <select
                 id="rows"
-                className="rows-select"
+                className="pi-rows-select"
                 value={rowsPerPage}
                 onChange={(e) => { setRowsPerPage(Number(e.target.value)); setPage(1); }}
               >
@@ -329,62 +365,88 @@ export default function PartnerInstitutes() {
         </div>
       </div>
 
-      {/* Details Modal */}
       {selectedInstitute && (
         <div
-          className="modal-overlay"
+          className="pi-modal-overlay"
           role="dialog"
           aria-labelledby="modal-title"
           aria-modal="true"
           onClick={closeDetailsModal}
         >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="pi-modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 id="modal-title">{selectedInstitute.name}</h3>
             <p><strong>Location:</strong> {selectedInstitute.location}</p>
             <p><strong>Courses Offered:</strong> {selectedInstitute.courses}</p>
             <p><strong>Commission Rate:</strong> {selectedInstitute.commission}</p>
-            <div className="form-actions">
-              <button className="action-button secondary" onClick={closeDetailsModal}>Close</button>
+            <div className="pi-form-actions">
+              <button className="pi-action-button pi-secondary" onClick={closeDetailsModal}>Close</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Add Institute Modal */}
       {showAddModal && (
         <div
-          className="modal-overlay"
+          className="pi-modal-overlay"
           role="dialog"
           aria-labelledby="add-modal-title"
           aria-modal="true"
           onClick={closeAddModal}
         >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="pi-modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 id="add-modal-title">Add New Institute</h3>
 
-            <form className="form-grid" onSubmit={submitAdd}>
-              <div className="form-field">
+            <form className="pi-form-grid" onSubmit={submitAdd}>
+              <div className="pi-form-field">
                 <label htmlFor="name">Name</label>
-                <input id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+                <input
+                  id="name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                  placeholder="Enter institute name"
+                />
               </div>
-              <div className="form-field">
+              <div className="pi-form-field">
                 <label htmlFor="loc">Location</label>
-                <input id="loc" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} required />
+                <input
+                  id="loc"
+                  value={form.location}
+                  onChange={(e) => setForm({ ...form, location: e.target.value })}
+                  required
+                  placeholder="Enter location"
+                />
               </div>
-              <div className="form-field">
+              <div className="pi-form-field">
                 <label htmlFor="courses">Courses (comma separated)</label>
-                <input id="courses" value={form.courses} onChange={(e) => setForm({ ...form, courses: e.target.value })} required />
+                <input
+                  id="courses"
+                  value={form.courses}
+                  onChange={(e) => setForm({ ...form, courses: e.target.value })}
+                  required
+                  placeholder="e.g., MBA, B.Tech"
+                />
               </div>
-              <div className="form-field">
+              <div className="pi-form-field">
                 <label htmlFor="commission">Commission (%)</label>
-                <input id="commission" inputMode="numeric" placeholder="e.g., 10 or 10%" value={form.commission} onChange={(e) => setForm({ ...form, commission: e.target.value })} required />
+                <input
+                  id="commission"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={form.commission}
+                  onChange={(e) => setForm({ ...form, commission: e.target.value })}
+                  required
+                  placeholder="Enter percentage"
+                />
               </div>
 
               {error && <div style={{ color: "#ff6b6b", fontWeight: 600 }}>{error}</div>}
 
-              <div className="form-actions">
-                <button type="button" className="action-button secondary" onClick={closeAddModal}>Cancel</button>
-                <button type="submit" className="action-button primary">Save</button>
+              <div className="pi-form-actions">
+                <button type="button" className="pi-action-button pi-secondary" onClick={closeAddModal}>Cancel</button>
+                <button type="submit" className="pi-action-button pi-primary">Save</button>
               </div>
             </form>
           </div>
