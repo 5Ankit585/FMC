@@ -25,6 +25,7 @@ const CourseExplorer = () => {
   const [availableSpecializations, setAvailableSpecializations] = useState([]);
   const [availableCities, setAvailableCities] = useState([]);
   const [availableStates, setAvailableStates] = useState([]);
+  const [expandedCourseId, setExpandedCourseId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -80,6 +81,10 @@ const CourseExplorer = () => {
           : [...prev[category], value],
       };
     });
+  };
+
+  const handleCourseClick = (courseId) => {
+    setExpandedCourseId(expandedCourseId === courseId ? null : courseId);
   };
 
   const filteredCourses = courses.filter(course => {
@@ -219,9 +224,13 @@ const CourseExplorer = () => {
   };
 
   const CourseCard = ({ course }) => {
-    const id = course._id || course.id; // Bulletproof ID handling
+    const id = course._id || course.id;
+
     return (
-      <div className="ce-course-card">
+      <div
+        className="ce-course-card cursor-pointer"
+        onClick={() => handleCourseClick(id)}
+      >
         <h3 className="ce-course-title">{course.courseTitle}</h3>
         <div className="ce-tags">
           {[course.duration, course.degreeType, course.level].filter(Boolean).map(tag => (
@@ -235,16 +244,50 @@ const CourseExplorer = () => {
             <span key={idx} className="ce-spec">{spec.name}</span>
           ))}
         </div>
+
+        {/* Expanded section for top institutes */}
+        {expandedCourseId === id && (
+          <div className="ce-top-institutes mt-3 p-3 border-t border-gray-200">
+            <h4 className="font-semibold mb-2">Top Institutes Offering {course.courseTitle}</h4>
+            {Array.isArray(course.topInstitutes) && course.topInstitutes.length > 0 ? (
+              <div className="flex flex-wrap gap-4">
+                {course.topInstitutes.map((inst, idx) => (
+                  <div key={idx} className="flex items-center space-x-2">
+                    <img
+                      src={inst.logo || '/default-logo.png'}
+                      alt={inst.description || 'Institute'}
+                      className="w-8 h-8 rounded-full"
+                      onError={(e) => (e.target.src = '/default-logo.png')}
+                    />
+                    <span>{inst.description || 'Unknown Institute'}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No top institutes data available.</p>
+            )}
+          </div>
+        )}
+
         <div className="ce-card-footer">
           <button
             className="ce-link"
-            onClick={() => navigate(`/coursepage/${id}`)}
-            role="link"
-            tabIndex={0}
+            onClick={(e) => {
+              e.stopPropagation(); // stop collapsing
+              navigate(`/coursepage/${id}`);
+            }}
           >
             View Course
           </button>
-          <button className="ce-btn-apply">Apply Now →</button>
+          <button
+            className="ce-btn-apply"
+            onClick={(e) => {
+              e.stopPropagation(); // stop collapsing
+              navigate(`/apply/${id}`);
+            }}
+          >
+            Apply Now →
+          </button>
         </div>
       </div>
     );
