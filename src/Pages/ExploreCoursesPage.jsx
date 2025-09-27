@@ -247,19 +247,26 @@ const CourseExplorer = () => {
 
         {/* Expanded section for top institutes */}
         {expandedCourseId === id && (
-          <div className="ce-top-institutes mt-3 p-3 border-t border-gray-200">
-            <h4 className="font-semibold mb-2">Top Institutes Offering {course.courseTitle}</h4>
+          <div className="ce-top-institutes mt-4 p-4 border-t border-gray-200 bg-gray-50 rounded-lg">
+            <h4 className="font-semibold text-lg mb-3">
+              Top Institutes Offering {course.courseTitle}
+            </h4>
             {Array.isArray(course.topInstituteImages) && course.topInstituteImages.length > 0 ? (
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-6">
                 {course.topInstituteImages.map((inst, idx) => (
-                  <div key={idx} className="flex items-center space-x-2">
+                  <div
+                    key={idx}
+                    className="flex items-center space-x-3 bg-white shadow-sm rounded-lg p-2 hover:shadow-md transition"
+                  >
                     <img
                       src={inst.url ? `http://localhost:5000/${inst.url}` : "/default-logo.png"}
                       alt={inst.description || "Institute"}
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="w-16 h-16 rounded-full object-cover border border-gray-300"
                       onError={(e) => (e.target.src = "/default-logo.png")}
                     />
-                    <span className="truncate max-w-[160px]">{inst.description || "Unknown Institute"}</span>
+                    <span className="font-medium text-gray-800 text-base">
+                      {inst.description || "Unknown Institute"}
+                    </span>
                   </div>
                 ))}
               </div>
