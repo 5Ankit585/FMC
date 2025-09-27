@@ -249,17 +249,17 @@ const CourseExplorer = () => {
         {expandedCourseId === id && (
           <div className="ce-top-institutes mt-3 p-3 border-t border-gray-200">
             <h4 className="font-semibold mb-2">Top Institutes Offering {course.courseTitle}</h4>
-            {Array.isArray(course.topInstitutes) && course.topInstitutes.length > 0 ? (
+            {Array.isArray(course.topInstituteImages) && course.topInstituteImages.length > 0 ? (
               <div className="flex flex-wrap gap-4">
-                {course.topInstitutes.map((inst, idx) => (
+                {course.topInstituteImages.map((inst, idx) => (
                   <div key={idx} className="flex items-center space-x-2">
                     <img
-                      src={inst.logo || '/default-logo.png'}
-                      alt={inst.description || 'Institute'}
-                      className="w-8 h-8 rounded-full"
-                      onError={(e) => (e.target.src = '/default-logo.png')}
+                      src={inst.url ? `http://localhost:5000/${inst.url}` : "/default-logo.png"}
+                      alt={inst.description || "Institute"}
+                      className="w-8 h-8 rounded-full object-cover"
+                      onError={(e) => (e.target.src = "/default-logo.png")}
                     />
-                    <span>{inst.description || 'Unknown Institute'}</span>
+                    <span className="truncate max-w-[160px]">{inst.description || "Unknown Institute"}</span>
                   </div>
                 ))}
               </div>
