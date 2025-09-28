@@ -16,6 +16,7 @@ export default function MainView({ route, sidebarOpen }) {
   const [students, setStudents] = useState([]);
   const [payments, setPayments] = useState([]);
 
+
   // fetch students from backend ONCE
   useEffect(() => {
     const fetchStudents = async () => {
@@ -43,24 +44,6 @@ export default function MainView({ route, sidebarOpen }) {
     setStudents((prev) => prev.filter((s) => s.id !== id));
   };
 
-  const addPayment = (payment) => {
-    setPayments((prev) => [
-      ...prev,
-      {
-        ...payment,
-        id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1,
-        date: new Date().toISOString().split("T")[0],
-      },
-    ]);
-  };
-
-  const updatePayment = (id, updated) => {
-    setPayments((prev) =>
-      prev.map((payment) =>
-        payment.id === id ? { ...payment, ...updated } : payment
-      )
-    );
-  };
 
   let content;
   switch (route) {
@@ -86,19 +69,13 @@ export default function MainView({ route, sidebarOpen }) {
         <Applications
           students={students}
           setStudents={setStudents}
-          addPayment={addPayment}
         />
       );
       break;
-    case "Payments":
-      content = (
-        <Payments
-          payments={payments}
-          addPayment={addPayment}
-          updatePayment={updatePayment}
-        />
-      );
-      break;
+case "Payments":
+  content = <Payments students={students} />;
+  break;
+
     case "commission-wallet":
       content = <Wallet />;
       break;

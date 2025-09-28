@@ -1,51 +1,23 @@
-import React from "react";
-import emailjs from "emailjs-com";
+import React, { useEffect, useState } from "react";
 import "./Payments.css";
 
-const Payments = ({ payments, addPayment, updatePayment }) => {
-  // Send Email via EmailJS
-  const sendEmail = (payment, newStatus) => {
-    const templateParams = {
-      to_email: payment.email,
-      studentName: payment.studentName,
-      course: payment.course,
-      amount: payment.amount,
-      status: newStatus,
-      date: payment.date,
-      message: `Your payment has been updated to "${newStatus}".`,
-    };
+const Payments = ({ students }) => {
+  const [payments, setPayments] = useState([]);
 
-    emailjs
-      .send(
-        "service_rbc4u72",
-        "template_163su2m",
-        templateParams,
-        "1HOFIU2nqy2IjgAzB"
-      )
-      .then(
-        (response) => console.log("✅ Email sent:", response.status, response.text),
-        (err) => console.error("❌ Email error:", err)
-      );
-  };
+useEffect(() => {
+  if (!students) return;
+  setPayments(
+    students.map((student) => ({
+      id: student.id,
+      studentName: student.name,
+      course: student.details?.course || "Not Assigned",
+      email: student.email || "N/A",
+      status: student.status || "Pending",
+      date: new Date().toISOString().split("T")[0],
+    }))
+  );
+}, [students]);
 
-  const handleStatusChange = (id, newStatus) => {
-    updatePayment(id, { status: newStatus });
-    const payment = payments.find((p) => p.id === id);
-    sendEmail(payment, newStatus);
-  };
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "Pending":
-        return "status-pending";
-      case "Completed":
-        return "status-completed";
-      case "Refunded":
-        return "status-refunded";
-      default:
-        return "";
-    }
-  };
 
   const handleDownloadReceipt = (payment) => {
     const receiptContent = `
@@ -55,7 +27,6 @@ ID: ${payment.id}
 Student: ${payment.studentName}
 Course: ${payment.course}
 Email: ${payment.email}
-Amount: $${payment.amount}
 Status: ${payment.status}
 Date: ${payment.date}
 ---------------`;
@@ -73,7 +44,6 @@ Date: ${payment.date}
 
   return (
     <div className="payments-container">
-      {/* 🔹 Panel Header */}
       <header className="payments-header">
         <h2 className="payments-title">Agent Panel — Payment Management</h2>
         <p className="payments-subtitle">
@@ -81,8 +51,7 @@ Date: ${payment.date}
         </p>
       </header>
 
-      {/* 🔹 Table */}
-      <div className="pyament-table-wrapper">
+      <div className="payment-table-wrapper">
         <table className="payments-table">
           <thead>
             <tr>
@@ -90,51 +59,41 @@ Date: ${payment.date}
               <th>Student Name</th>
               <th>Course</th>
               <th>Email</th>
-              <th>Amount ($)</th>
               <th>Status</th>
               <th>Date</th>
               <th>Receipt</th>
             </tr>
           </thead>
           <tbody>
-            {payments.map((payment) => (
-              <tr key={payment.id}>
-                <td>#{payment.id}</td>
-                <td className="strong-text">{payment.studentName}</td>
-                <td>{payment.course}</td>
-                <td>{payment.email}</td>
-                <td>${payment.amount}</td>
+            {payments.map((p) => (
+              <tr key={p.id}>
+                <td>#{String(p.id).slice(-4)}</td>
+                <td className="strong-text">{p.studentName}</td>
+                <td>{p.course}</td>
+                <td>{p.email}</td>
                 <td>
-                  <select
-                    value={payment.status}
-                    onChange={(e) =>
-                      handleStatusChange(payment.id, e.target.value)
-                    }
-                    className={`status-select ${getStatusClass(payment.status)}`}
-                  >
-                    <option value="Pending" className="status-pending">
-                      Pending
-                    </option>
-                    <option value="Completed" className="status-completed">
-                      Completed
-                    </option>
-                    <option value="Refunded" className="status-refunded">
-                      Refunded
-                    </option>
-                  </select>
+                  <span className={`status-badge status-${p.status?.toLowerCase()}`}>
+                    {p.status}
+                  </span>
                 </td>
-                <td>{payment.date}</td>
+                <td>{p.date}</td>
                 <td>
                   <button
                     className="download-btn"
-                    onClick={() => handleDownloadReceipt(payment)}
-                    title="Download Receipt"
+                    onClick={() => handleDownloadReceipt(p)}
                   >
                     ⬇
                   </button>
                 </td>
               </tr>
             ))}
+            {payments.length === 0 && (
+              <tr>
+                <td colSpan="7" style={{ textAlign: "center" }}>
+                  No payments found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
