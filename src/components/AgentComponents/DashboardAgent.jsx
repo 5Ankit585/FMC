@@ -100,9 +100,6 @@ export default function Dashboard() {
 
       {/* Action Buttons */}
       <div className="dashboard-actions">
-        <button className="action-button">+ Add New Student</button>
-        <button className="action-button">+ New Application</button>
-        <button className="action-button">Withdraw Commission</button>
         <button className="action-button">Download Statement</button>
       </div>
 
