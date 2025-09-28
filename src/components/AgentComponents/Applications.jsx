@@ -1,64 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import "./Applications.css";
 
-const Applications = ({ students, addPayment }) => {
-  const [applications, setApplications] = useState([]);
+const Applications = ({ students, setStudents, addPayment }) => {
+  const [paymentModal, setPaymentModal] = useState({ open: false, appId: null, selectedMethod: null });
+  const [viewModal, setViewModal] = useState({ open: false, student: null });
 
-  useEffect(() => {
-    setApplications(
-      students.map((student) => ({
-        id: student.id,
-        name: student.name || "Unknown",
-        course: student.details?.course || "Not Assigned",
-        status: student.status || "Pending",
-        submitted: new Date().toISOString().split("T")[0],
-        university: student.university || "",
-        email: student.email || "N/A",
-      }))
-    );
-  }, [students]);
-
-  const [paymentModal, setPaymentModal] = useState({
-    open: false,
-    appId: null,
-    selectedMethod: null,
-  });
-
-  const [viewModal, setViewModal] = useState({
-    open: false,
-    student: null,
-  });
-
-  const handleStatusChange = (id, status) => {
-    setApplications((prev) =>
-      prev.map((app) => (app.id === id ? { ...app, status } : app))
-    );
+  const handleStatusChange = async (id, status) => {
+    try {
+      await axios.put(`http://localhost:5000/api/students/${id}`, { status });
+      setStudents((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, status } : s))
+      );
+    } catch (err) {
+      console.error("Error updating status:", err);
+    }
   };
 
-  const openPaymentModal = (appId) => {
-    setPaymentModal({ open: true, appId, selectedMethod: null });
-    document.body.style.overflow = "hidden";
-  };
-
-  const closePaymentModal = () => {
-    setPaymentModal({ open: false, appId: null, selectedMethod: null });
-    document.body.style.overflow = "";
-  };
-
-  const selectMethod = (method) => {
-    setPaymentModal((prev) => ({ ...prev, selectedMethod: method }));
-  };
+  const openPaymentModal = (appId) => setPaymentModal({ open: true, appId, selectedMethod: null });
+  const closePaymentModal = () => setPaymentModal({ open: false, appId: null, selectedMethod: null });
+  const selectMethod = (method) => setPaymentModal((prev) => ({ ...prev, selectedMethod: method }));
 
   const proceedPayment = () => {
     const { appId, selectedMethod } = paymentModal;
     if (!selectedMethod) return;
 
-    const app = applications.find((a) => a.id === appId);
+    const app = students.find((s) => s.id === appId);
     if (!app) return;
 
     addPayment({
       studentName: app.name,
-      course: app.course,
+      course: app.details?.course,
       amount: 5000,
       status: "Pending",
       email: app.email,
@@ -66,17 +38,6 @@ const Applications = ({ students, addPayment }) => {
 
     alert(`Payment via ${selectedMethod.toUpperCase()} for Application ID: ${appId}`);
     closePaymentModal();
-  };
-
-  const openViewModal = (id) => {
-    const student = students.find((s) => s.id === id);
-    setViewModal({ open: true, student });
-    document.body.style.overflow = "hidden";
-  };
-
-  const closeViewModal = () => {
-    setViewModal({ open: false, student: null });
-    document.body.style.overflow = "";
   };
 
   return (
@@ -101,16 +62,16 @@ const Applications = ({ students, addPayment }) => {
               </tr>
             </thead>
             <tbody>
-              {applications.map((app) => (
-                <tr key={app.id}>
-                  <td>#{app.id}</td>
-                  <td className="app-strong">{app.name}</td>
-                  <td>{app.course}</td>
-                  <td>{app.university || "Not Assigned"}</td>
+              {students.map((s) => (
+                <tr key={s.id}>
+                  <td>#{s.id?.slice(-4)}</td>
+                  <td className="app-strong">{s.name}</td>
+                  <td>{s.details?.course || "Not Assigned"}</td>
+                  <td>{s.university || "Not Assigned"}</td>
                   <td>
                     <select
-                      value={app.status}
-                      onChange={(e) => handleStatusChange(app.id, e.target.value)}
+                      value={s.status}
+                      onChange={(e) => handleStatusChange(s.id, e.target.value)}
                       className="app-select"
                     >
                       <option value="Pending">Pending</option>
@@ -118,25 +79,20 @@ const Applications = ({ students, addPayment }) => {
                       <option value="Rejected">Rejected</option>
                     </select>
                   </td>
-                  <td>{app.submitted}</td>
+                  <td>{new Date(s.createdAt).toISOString().split("T")[0]}</td>
                   <td>
                     <div className="app-actions">
-                      <button
-                        className="btn btn-blue"
-                        onClick={() => openPaymentModal(app.id)}
-                      >
-                        Pay
-                      </button>
-                      <button
-                        className="btn btn-yellow"
-                        onClick={() => openViewModal(app.id)}
-                      >
-                        View
-                      </button>
+                      <button className="btn btn-blue" onClick={() => openPaymentModal(s.id)}>Pay</button>
+                      <button className="btn btn-yellow" onClick={() => setViewModal({ open: true, student: s })}>View</button>
                     </div>
                   </td>
                 </tr>
               ))}
+              {students.length === 0 && (
+                <tr>
+                  <td colSpan="7" style={{ textAlign: "center" }}>No applications found</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -150,13 +106,12 @@ const Applications = ({ students, addPayment }) => {
               <h2 className="app-modal-title">Choose Payment Method</h2>
               <button className="app-close" onClick={closePaymentModal}>×</button>
             </div>
-
             <div className="app-modal-body">
               <div className="app-method-grid">
-                {['bank','upi','paypal','netbanking'].map((m) => (
+                {["bank", "upi", "paypal", "netbanking"].map((m) => (
                   <button
                     key={m}
-                    className={`app-method ${paymentModal.selectedMethod === m ? 'active' : ''}`}
+                    className={`app-method ${paymentModal.selectedMethod === m ? "active" : ""}`}
                     onClick={() => selectMethod(m)}
                   >
                     {m.toUpperCase()}
@@ -164,12 +119,9 @@ const Applications = ({ students, addPayment }) => {
                 ))}
               </div>
             </div>
-
             <div className="app-modal-footer">
               <button className="btn btn-gray" onClick={closePaymentModal}>Cancel</button>
-              <button className="btn btn-blue" onClick={proceedPayment} disabled={!paymentModal.selectedMethod}>
-                Proceed
-              </button>
+              <button className="btn btn-blue" onClick={proceedPayment} disabled={!paymentModal.selectedMethod}>Proceed</button>
             </div>
           </div>
         </div>
@@ -177,7 +129,7 @@ const Applications = ({ students, addPayment }) => {
 
       {/* View Modal */}
       {viewModal.open && viewModal.student && (
-        <div className="app-modal-overlay" onClick={closeViewModal}>
+        <div className="app-modal-overlay" onClick={() => setViewModal({ open: false, student: null })}>
           <div className="app-modal view" onClick={(e) => e.stopPropagation()}>
             <div className="app-modal-body">
               <h3>Student Details</h3>
@@ -187,7 +139,7 @@ const Applications = ({ students, addPayment }) => {
               <p><strong>University:</strong> {viewModal.student.university || "N/A"}</p>
             </div>
             <div className="app-modal-footer">
-              <button className="btn btn-gray" onClick={closeViewModal}>Close</button>
+              <button className="btn btn-gray" onClick={() => setViewModal({ open: false, student: null })}>Close</button>
             </div>
           </div>
         </div>

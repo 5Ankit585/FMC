@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./MainView.css";
 import DashboardAgent from "./DashboardAgent";
 import PartnerInstitutes from "./PartnerInstitutes";
@@ -12,106 +13,34 @@ import Support from "./support";
 import Settings from "./settings";
 
 export default function MainView({ route, sidebarOpen }) {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "virendarrawat884@gmail.com",
-      status: "Active",
-      details: { course: "Computer Science" },
-      university: "MIT",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "kunalk2005k@gmail.com",
-      status: "Inactive",
-      details: { course: "Mathematics" },
-      university: "Stanford",
-    },
-    {
-      id: 3,
-      name: "Alice Johnson",
-      email: "kunalk2005k@gmail.com",
-      status: "Active",
-      details: { course: "Physics" },
-      university: "Harvard",
-    },
-  ]);
+  const [students, setStudents] = useState([]);
+  const [payments, setPayments] = useState([]);
 
-  const [payments, setPayments] = useState([
-    {
-      id: 1,
-      studentName: "John Doe",
-      course: "Computer Science",
-      amount: 5000,
-      status: "Pending",
-      date: "2025-08-10",
-      email: "virendarrawat884@gmail.com",
-    },
-    {
-      id: 2,
-      studentName: "Jane Smith",
-      course: "Mathematics",
-      amount: 4500,
-      status: "Pending",
-      date: "2025-08-12",
-      email: "kunalk2005k@gmail.com",
-    },
-    {
-      id: 3,
-      studentName: "Alice Johnson",
-      course: "Physics",
-      amount: 4800,
-      status: "Pending",
-      date: "2025-08-09",
-      email: "kunalk2005k@gmail.com",
-    },
-  ]);
+  // fetch students from backend ONCE
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/students");
+        setStudents(res.data.map((s) => ({ ...s, id: s._id })));
+      } catch (err) {
+        console.error("Error fetching students:", err);
+      }
+    };
+    fetchStudents();
+  }, []);
 
   const addStudent = (newStudent) => {
-    const studentWithId = {
-      ...newStudent,
-      id: students.length ? Math.max(...students.map((s) => s.id)) + 1 : 1,
-    };
-    setStudents((prev) => [...prev, studentWithId]);
-    setPayments((prev) => [
-      ...prev,
-      {
-        id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1,
-        studentName: newStudent.name,
-        course: newStudent.details?.course || "Not Assigned",
-        amount: 5000,
-        status: "Pending",
-        date: new Date().toISOString().split("T")[0],
-        email: newStudent.email || "N/A",
-      },
-    ]);
+    setStudents((prev) => [...prev, { ...newStudent, id: newStudent._id }]);
   };
 
   const updateStudent = (id, updatedStudent) => {
     setStudents((prev) =>
-      prev.map((student) =>
-        student.id === id ? { ...student, ...updatedStudent } : student
-      )
-    );
-    setPayments((prev) =>
-      prev.map((payment) =>
-        payment.id === id
-          ? {
-            ...payment,
-            studentName: updatedStudent.name,
-            course: updatedStudent.details?.course || "Not Assigned",
-            email: updatedStudent.email || "N/A",
-          }
-          : payment
-      )
+      prev.map((s) => (s.id === id ? { ...s, ...updatedStudent } : s))
     );
   };
 
   const deleteStudent = (id) => {
-    setStudents((prev) => prev.filter((student) => student.id !== id));
-    setPayments((prev) => prev.filter((payment) => payment.id !== id));
+    setStudents((prev) => prev.filter((s) => s.id !== id));
   };
 
   const addPayment = (payment) => {
@@ -145,6 +74,7 @@ export default function MainView({ route, sidebarOpen }) {
       content = (
         <Students
           students={students}
+          setStudents={setStudents}
           addStudent={addStudent}
           updateStudent={updateStudent}
           deleteStudent={deleteStudent}
@@ -152,7 +82,13 @@ export default function MainView({ route, sidebarOpen }) {
       );
       break;
     case "Applications":
-      content = <Applications students={students} addPayment={addPayment} />;
+      content = (
+        <Applications
+          students={students}
+          setStudents={setStudents}
+          addPayment={addPayment}
+        />
+      );
       break;
     case "Payments":
       content = (
