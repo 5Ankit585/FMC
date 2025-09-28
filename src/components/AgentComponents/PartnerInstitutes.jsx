@@ -121,15 +121,25 @@ export default function PartnerInstitutes() {
   };
 
   const openAddModal = () => {
+    if (institutes.length >= 10) {
+      alert("You can only add a maximum of 10 institutes.");
+      return;
+    }
     setForm({ name: "", location: "", courses: "", commission: "" });
     setError("");
     setShowAddModal(true);
   };
+
   const closeAddModal = () => setShowAddModal(false);
 
   const submitAdd = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (institutes.length >= 10) {
+      setError("Maximum 10 institutes allowed.");
+      return;
+    }
 
     const name = form.name.trim();
     const location = form.location.trim();
