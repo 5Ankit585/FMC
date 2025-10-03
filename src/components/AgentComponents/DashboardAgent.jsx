@@ -2,21 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./DashboardAgent.css";
 
-function RecentApplications() {
-  const [applications, setApplications] = useState([]);
-
-  useEffect(() => {
-    const fetchRecent = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/students/recent");
-        setApplications(res.data);
-      } catch (err) {
-        console.error("Error fetching recent applications:", err);
-      }
-    };
-    fetchRecent();
-  }, []);
-
+function RecentApplications({ applications }) {
   return (
     <div className="ad-table-card">
       <h3>Recent Applications</h3>
@@ -52,7 +38,6 @@ function RecentApplications() {
 }
 
 function RecentReceipts() {
-  // yaha payments collection add karne ke baad same fetch karna hoga
   const data = [
     { id: "#R001", student: "John Doe", institute: "ABC University", amount: "₹1,200" },
     { id: "#R002", student: "Jane Smith", institute: "XYZ College", amount: "₹900" },
@@ -89,7 +74,7 @@ function StatsCards() {
     applicationsThisMonth: 0,
     confirmedAdmissions: 0,
     commissionEarned: 0,
-    pendingApplications: 0, 
+    pendingApplications: 0,
   });
 
   useEffect(() => {
@@ -108,7 +93,7 @@ function StatsCards() {
     { label: "Applications This Month", value: stats.applicationsThisMonth },
     { label: "Confirmed Admissions", value: stats.confirmedAdmissions },
     { label: "Commission Earned", value: `₹${stats.commissionEarned}` },
-    { label: "Pending Applications", value: stats.pendingApplications }, // 👈 updated
+    { label: "Pending Applications", value: stats.pendingApplications },
   ];
 
   return (
@@ -124,14 +109,47 @@ function StatsCards() {
 }
 
 export default function DashboardAgent() {
+  const [applications, setApplications] = useState([]);
+
+  const handleDownloadApplication = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/students/ID123/pdf", {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "application.pdf");
+      document.body.appendChild(link);
+      link.click();
+    } catch (err) {
+      console.error("Error downloading PDF:", err);
+    }
+  };
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/students/recent");
+        setApplications(res.data);
+      } catch (err) {
+        console.error("Error fetching recent applications:", err);
+      }
+    };
+    fetchRecent();
+  }, []);
+
   return (
     <div className="dashboard-content">
       <StatsCards />
       <div className="dashboard-actions">
-        <button className="action-button">Download Application</button>
+        <button className="action-button" onClick={handleDownloadApplication}>
+          Download Application
+        </button>
       </div>
       <div className="dashboard-tables">
-        <RecentApplications />
+        <RecentApplications applications={applications} />
         <RecentReceipts />
       </div>
     </div>
