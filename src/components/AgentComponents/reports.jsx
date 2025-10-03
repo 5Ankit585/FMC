@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './reports.css';
 
 const Reports = () => {
   const [filter, setFilter] = useState('All'); 
+  const [reports, setReports] = useState([]); // dynamic data from backend
 
   const metrics = [
-    { label: 'Total Applications', value: 150 },
-    { label: 'Admissions Confirmed', value: 85 },
-    { label: 'Total Commissions ($)', value: 12500.75 },
-    { label: 'Pending Payments', value: 12 },
+    { label: 'Total Applications', value: reports.length },
+    { label: 'Admissions Confirmed', value: reports.filter(r => r.applicationStatus === 'Approved').length },
+    { label: 'Total Commissions ($)', value: reports.reduce((sum, r) => sum + (r.commission || 0), 0) },
+    { label: 'Pending Payments', value: reports.filter(r => r.paymentStatus === 'Pending').length },
   ];
 
-  const reports = [
-    { id: 'R001', student: 'John Doe', course: 'Computer Science', applicationStatus: 'Approved', paymentStatus: 'Completed', commission: 500, date: '2025-08-10' },
-    { id: 'R002', student: 'Jane Smith', course: 'Mathematics', applicationStatus: 'Pending', paymentStatus: 'Pending', commission: 0, date: '2025-08-12' },
-    { id: 'R003', student: 'Alice Johnson', course: 'Physics', applicationStatus: 'Rejected', paymentStatus: 'N/A', commission: 0, date: '2025-08-09' },
-    { id: 'R004', student: 'Bob Wilson', course: 'Biology', applicationStatus: 'Approved', paymentStatus: 'Completed', commission: 450, date: '2025-08-11' },
-  ];
+  // Fetch reports from backend
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/students'); // adjust your endpoint
+        const formattedReports = res.data.map(student => ({
+          id: student.id,
+          student: student.name,
+          course: student.details?.course || 'Not Assigned',
+          applicationStatus: student.status || 'Pending',
+          paymentStatus: student.paymentStatus || 'Pending',
+          commission: student.commission || 0,
+          date: student.date || new Date().toISOString().split('T')[0],
+        }));
+        setReports(formattedReports);
+      } catch (err) {
+        console.error('Error fetching reports:', err);
+      }
+    };
+
+    fetchReports();
+  }, []);
 
   const filteredReports = filter === 'All' 
     ? reports 
@@ -66,21 +84,30 @@ const Reports = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredReports.map(report => (
-              <tr key={report.id}>
-                <td>{report.id}</td>
-                <td>{report.student}</td>
-                <td>{report.course}</td>
-                <td>
-                  <span className={`status-badge ${report.applicationStatus.toLowerCase()}`}>
-                    {report.applicationStatus}
-                  </span>
+            {filteredReports.length > 0 ? (
+              filteredReports.map(report => (
+                <tr key={report.id}>
+  <td>#{String(report.id).slice(-4)}</td> {/* or use {report.id} */}
+  <td>{report.student}</td>
+  <td>{report.course}</td>
+  <td>
+    <span className={`status-badge ${report.applicationStatus.toLowerCase()}`}>
+      {report.applicationStatus}
+    </span>
+  </td>
+  <td>{report.paymentStatus}</td>
+  <td>{report.commission.toFixed(2)}</td>
+  <td>{report.date}</td>
+</tr>
+
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" style={{ textAlign: 'center' }}>
+                  No reports found
                 </td>
-                <td>{report.paymentStatus}</td>
-                <td>{report.commission.toFixed(2)}</td>
-                <td>{report.date}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
