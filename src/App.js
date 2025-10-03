@@ -15,6 +15,7 @@ import LoginModal from "./Modals/LoginModal";
 import SignupModal from "./Modals/SignupModal";
 import UniversityDetails from "./Pages/UniversityDetails";
 import CourseRegister from "./Pages/CourseRegister";
+import MyProfile from "./Pages/MyProfile";
 
 // footer page imports 
 import CollegeReview from './FooterPages/topExam/CollegeReview'
@@ -56,6 +57,7 @@ function App() {
           <Route path="/college-profile" element={<AdminHome />} />
           <Route path="/login" element={<LoginModal />} />
           <Route path="/signup" element={<SignupModal />} />
+          <Route path="/myprofile" element={<MyProfile />} />
 
           {/* University & Dashboard Routes */}
           <Route path="/university-dashboard/:id" element={<UniversityDashboard />} />
