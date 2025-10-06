@@ -7,50 +7,6 @@
   flex-direction: column;
 }
 
-/* ==== Header ==== */
-.ce-header {
-  background-color: #1a202c;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  padding: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.ce-header-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.ce-header-links {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-.ce-header-links a {
-  color: #ecc94b;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
-.ce-header-links a:hover {
-  color: #ca8a04;
-}
-.ce-btn-primary {
-  background-color: #ecc94b;
-  color: #1a202c;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  transition: background 0.2s ease;
-  white-space: nowrap;
-}
-.ce-btn-primary:hover {
-  background-color: #ca8a04;
-}
-
 /* ==== Main Wrapper ==== */
 .ce-main {
   max-width: 1800px;
@@ -256,16 +212,6 @@
     width: 100%; /* Full width on tablets */
     margin-bottom: 1.5rem;
   }
-  .ce-header-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-  .ce-header-links {
-    justify-content: center;
-    width: 100%;
-    gap: 0.5rem;
-  }
   .ce-searchbar {
     padding: 0.75rem;
   }
@@ -282,16 +228,6 @@
 }
 
 @media (max-width: 640px) {
-  .ce-header-container {
-    padding: 0.5rem;
-  }
-  .ce-header-links a {
-    font-size: 0.85rem;
-  }
-  .ce-btn-primary {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-  }
   .ce-title {
     font-size: 1.25rem;
   }

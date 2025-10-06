@@ -50,7 +50,6 @@ export default function ExamAlertsNotifications() {
 
   return (
     <div>
-      <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-blue-50 to-purple-50 p-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -24,7 +24,7 @@ export default function CounsellingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-    <Navbar/>
+    
       {/* Hero */}
       <section className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-20 px-6 text-center">
         <motion.h1

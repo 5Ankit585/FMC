@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './ExploreCoursesPage.css';
+import Navbar from "../components/Navbar";
 
 const CourseExplorer = () => {
   const [courses, setCourses] = useState([]);
@@ -104,20 +105,6 @@ const CourseExplorer = () => {
       (!filters.cities.length || filters.cities.includes(course.city));
     return matchesSearch && matchesFilters;
   });
-
-  const Header = () => (
-    <header className="ce-header">
-      <div className="ce-header-container">
-        <h1>Course Explorer</h1>
-        <div className="ce-header-links">
-          <a href="/home">Home</a>
-          <a href="/courses">Courses</a>
-          <a href="/about">About</a>
-          <button className="ce-btn-primary">Sign In</button>
-        </div>
-      </div>
-    </header>
-  );
 
   const SidebarFilters = () => {
     const filterCategories = [
@@ -302,7 +289,6 @@ const CourseExplorer = () => {
 
   return (
     <div className="course-explorer">
-      <Header />
       <div className="ce-main">
         <h1 className="ce-title">Top Courses in Indian Colleges 2025</h1>
         <div className="flex flex-col md:flex-row gap-6">
