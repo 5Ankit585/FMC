@@ -5,7 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import "./Navbar.css"; // <-- import the separate CSS
+import "./Navbar.css";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -142,7 +142,7 @@ export default function Navbar() {
               {userMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 rounded-lg shadow-lg py-2 z-50 dropdown-panel">
                   {[
-                    { to: "/profile", label: "My Profile" },
+                    { to: "/my-profile", label: "My Profile" },
                     { to: "/courses", label: "Courses" },
                     { to: "/examat", label: "Exams" },
                     { to: "/scholarship", label: "Scholarships" },
@@ -244,7 +244,7 @@ export default function Navbar() {
               <>
                 <li>
                   <NavLink
-                    to="/profile"
+                    to="/my-profile"
                     onClick={() => setIsOpen(false)}
                     className="nav-link"
                   >
