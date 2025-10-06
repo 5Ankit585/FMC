@@ -46,8 +46,8 @@ function App() {
     <BrowserRouter>
       <ToastContainer />
       {/* Navbar included globally */}
+      <Navbar />
 
-      
       <Routes>
         {/* Main Pages */}
         <Route path="/" element={<Home />} />
@@ -64,9 +64,9 @@ function App() {
         <Route path="/college-profile" element={<AdminHome />} />
         <Route path="/login" element={<LoginModal />} />
         <Route path="/signup" element={<SignupModal />} />
-        
+
         {/* My Profile */}
-        <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/myprofile" element={<MyProfile />} /> {/* <-- unified route with Navbar link */}
 
         {/* University & Dashboard Routes */}
         <Route path="/university-dashboard/:id" element={<UniversityDashboard />} />
@@ -85,7 +85,7 @@ function App() {
         <Route path="/mahe" element={<Mahe />} />
         <Route path="/srm" element={<Srm />} />
         <Route path="/coursepage/:id" element={<CoursePage />} />
-        <Route path="/CourseRegister" element={<CourseRegister />} />
+        <Route path="/courseregister" element={<CourseRegister />} />
       </Routes>
     </BrowserRouter>
   );
