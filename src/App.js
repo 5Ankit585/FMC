@@ -66,7 +66,7 @@ function App() {
         <Route path="/signup" element={<SignupModal />} />
 
         {/* My Profile */}
-        <Route path="/myprofile" element={<MyProfile />} /> {/* <-- unified route with Navbar link */}
+        <Route path="/myprofile/:id" element={<MyProfile />} />
 
         {/* University & Dashboard Routes */}
         <Route path="/university-dashboard/:id" element={<UniversityDashboard />} />

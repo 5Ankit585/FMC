@@ -1,36 +1,24 @@
 // src/pages/MyProfile.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const MyProfile = () => {
+  const { id } = useParams(); // Get the user ID from the URL
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "123-456-7890",
-    address: "123 Main St, City",
-    pincode: "12345",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    pincode: "",
     university: "",
     course: "",
     branch: "",
     academicDetails: "",
     counsellingBook: "",
   });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSave = () => {
-    setEditMode(false);
-    alert("Profile updated successfully ✅");
-  };
-
-  const handleCancel = () => {
-    setEditMode(false);
-  };
+  const [loading, setLoading] = useState(true);
 
   const universities = [
     "Delhi University",
@@ -43,7 +31,6 @@ const MyProfile = () => {
   ];
 
   const courses = ["B.Tech", "MBA", "B.Sc", "BBA", "M.Tech", "MCA", "Ph.D"];
-
   const branches = [
     "Computer Science",
     "Electronics", 
@@ -53,6 +40,52 @@ const MyProfile = () => {
     "Finance",
     "Human Resources",
   ];
+
+  // Fetch profile data from backend
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await axios.get(`http://localhost:5000/api/profile/${id}`);
+
+        setFormData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, [id]);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSave = async () => {
+    try {
+      await axios.put(`/api/profile/${id}`, formData);
+      setEditMode(false);
+      alert("Profile updated successfully ✅");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile ❌");
+    }
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+  };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-white">Loading profile...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-[#1f2230] py-8 px-4 sm:px-6 lg:px-8">
@@ -99,7 +132,6 @@ const MyProfile = () => {
           </div>
 
           {!editMode ? (
-            // View Mode - Basic Profile
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-400">Full Name</label>
@@ -123,8 +155,8 @@ const MyProfile = () => {
               </div>
             </div>
           ) : (
-            // Edit Mode - Basic Profile
             <div className="grid sm:grid-cols-2 gap-6">
+              {/* Form Inputs for editMode */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-white">Full Name *</label>
                 <input
@@ -180,7 +212,7 @@ const MyProfile = () => {
           )}
         </div>
 
-        {/* Academic Information Card */}
+        {/* Academic Card - same dynamic logic applies */}
         <div className="bg-[#2b2f3a] border border-white/10 text-white rounded-xl shadow-2xl p-6 sm:p-8">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center space-x-2">
             <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,32 +222,31 @@ const MyProfile = () => {
           </h3>
 
           {!editMode ? (
-            // View Mode - Academic
             <div className="grid sm:grid-cols-3 gap-6">
               <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-400">University</label>
-                <p className="text-white font-medium">{formData.university || ""}</p>
+                <p className="text-white font-medium">{formData.university || "-"}</p>
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-400">Course</label>
-                <p className="text-white font-medium">{formData.course || ""}</p>
+                <p className="text-white font-medium">{formData.course || "-"}</p>
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-400">Branch</label>
-                <p className="text-white font-medium">{formData.branch || ""}</p>
+                <p className="text-white font-medium">{formData.branch || "-"}</p>
               </div>
               <div className="space-y-1 sm:col-span-3">
                 <label className="text-sm font-medium text-gray-400">Academic Details</label>
-                <p className="text-white font-medium">{formData.academicDetails || "No academic details provided"}</p>
+                <p className="text-white font-medium">{formData.academicDetails || "-"}</p>
               </div>
               <div className="space-y-1 sm:col-span-3">
                 <label className="text-sm font-medium text-gray-400">Counselling Book</label>
-                <p className="text-white font-medium">{formData.counsellingBook || "No counselling book specified"}</p>
+                <p className="text-white font-medium">{formData.counsellingBook || "-"}</p>
               </div>
             </div>
           ) : (
-            // Edit Mode - Academic
             <div className="grid sm:grid-cols-3 gap-6">
+              {/* Academic edit inputs */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-white">University *</label>
                 <select
