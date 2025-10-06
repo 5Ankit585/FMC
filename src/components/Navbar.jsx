@@ -50,7 +50,6 @@ export default function Navbar() {
         const docRef = doc(db, "students", currentUser.uid);
         const snap = await getDoc(docRef);
         const profileData = snap.exists() ? snap.data() : null;
-
         const name = deriveName(
           profileData?.name,
           currentUser.displayName,
@@ -96,28 +95,28 @@ export default function Navbar() {
     } catch (_e) {}
   };
 
-  const displayLabel = displayName ? `Hi, ${displayName}` : "Account";
-
   return (
     <nav className="flex justify-center items-center h-20 mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 bg-[#141f33] text-white shadow-md relative">
       <div className="flex items-center justify-between w-full">
         {/* Logo */}
         <div className="flex items-center space-x-3">
           <img src={logo} alt="Vision Logo" className="h-10 w-auto" />
-          <span className="text-2xl font-extrabold tracking-wide">
-            Vision
-          </span>
+          <span className="text-2xl font-extrabold tracking-wide">Vision</span>
         </div>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex flex-1 justify-center ml-6">
-          <ul className="flex space-x-8 font-medium">
+        <div className="hidden md:flex flex-1 justify-center">
+          <ul className="flex items-center gap-6 lg:gap-8 font-medium">
             {navLinks.map(({ to, label }) => (
               <li key={to}>
                 <NavLink
                   to={to}
                   className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
+                    `inline-block py-2 transition-colors ${
+                      isActive
+                        ? "text-yellow-500 hover:underline font-semibold"
+                        : "text-white/90 hover:text-yellow-500 hover:underline"
+                    }`
                   }
                 >
                   {label}
@@ -127,75 +126,122 @@ export default function Navbar() {
           </ul>
         </div>
 
-        {/* User Menu */}
+        {/* Desktop User Menu */}
         <div className="hidden md:flex relative" ref={userMenuRef}>
           {user ? (
             <>
               <button
-                onClick={() => setUserMenuOpen((prev) => !prev)}
-                className="px-4 py-2 rounded-lg btn-accent font-medium max-w-[220px] truncate"
-                title={displayName || "Account"}
+                onClick={() => setUserMenuOpen((p) => !p)}
+                className="px-3 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-700 font-medium max-w-[220px] truncate focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                title={displayName}
+                aria-haspopup="menu"
+                aria-expanded={userMenuOpen}
               >
-                {displayLabel}
+                {"Hi, " + displayName}
               </button>
 
-              {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 rounded-lg shadow-lg py-2 z-50 dropdown-panel">
-                  {[
-                    { to: "/my-profile", label: "My Profile" },
-                    { to: "/courses", label: "Courses" },
-                    { to: "/examat", label: "Exams" },
-                    { to: "/scholarship", label: "Scholarships" },
-                    { to: "/study-material", label: "Study Material" },
-                    { to: "/settings", label: "Settings" },
-                  ].map(({ to, label }) => (
-                    <NavLink
-                      key={to}
-                      to={to}
-                      onClick={() => setUserMenuOpen(false)}
-                      className="block px-4 py-2 dropdown-item"
-                    >
-                      {label}
-                    </NavLink>
-                  ))}
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left block px-4 py-2 text-red-500 hover:text-red-400"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
+              <div
+                className={`absolute left-0 top-full mt-2 w-52 bg-gray-800 rounded-lg shadow-lg py-0 transition-all origin-top-right z-20 ${
+                  userMenuOpen
+                    ? "scale-100 opacity-100"
+                    : "scale-95 opacity-0 pointer-events-none"
+                }`}
+                role="menu"
+              >
+                <NavLink
+                  to="/myprofile"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
+                  role="menuitem"
+                >
+                  My Profile
+                </NavLink>
+                <NavLink
+                  to="/course"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
+                  role="menuitem"
+                >
+                  My Courses
+                </NavLink>
+                <NavLink
+                  to="/scholarshiploan"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
+                  role="menuitem"
+                >
+                  Scholarships
+                </NavLink>
+                <NavLink
+                  to="/study-material"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
+                  role="menuitem"
+                >
+                  Study Material
+                </NavLink>
+                <NavLink
+                  to="/exam"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
+                  role="menuitem"
+                >
+                  Exams
+                </NavLink>
+                <NavLink
+                  to="/settings"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-1 hover:bg-yellow-600 cursor-pointer"
+                  role="menuitem"
+                >
+                  Settings
+                </NavLink>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left block px-4 py-2 text-yellow-500 hover:bg-yellow-600 rounded-b-lg cursor-pointer"
+                  role="menuitem"
+                >
+                  Logout
+                </button>
+              </div>
             </>
           ) : (
             <>
               <button
-                onClick={() => setUserMenuOpen((prev) => !prev)}
-                className="focus:outline-none"
+                onClick={() => setUserMenuOpen((p) => !p)}
+                className="focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded p-1"
                 aria-label="User menu"
-                title="Account"
+                aria-haspopup="menu"
+                aria-expanded={userMenuOpen}
               >
-                <FaUserCircle className="w-8 h-8 user-icon" />
+                <FaUserCircle className="w-8 h-8 text-yellow-500 hover:text-yellow-700" />
               </button>
 
-              {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-40 rounded-lg shadow-lg py-2 z-50 dropdown-panel">
-                  <NavLink
-                    to="/login"
-                    onClick={() => setUserMenuOpen(false)}
-                    className="block px-4 py-2 dropdown-item"
-                  >
-                    Login
-                  </NavLink>
-                  <NavLink
-                    to="/signup"
-                    onClick={() => setUserMenuOpen(false)}
-                    className="block px-4 py-2 dropdown-item"
-                  >
-                    Signup
-                  </NavLink>
-                </div>
-              )}
+              <div
+                className={`absolute right-0 top-full mt-2 w-44 bg-gray-800 rounded-lg shadow-lg py-2 transition-all origin-top-right ${
+                  userMenuOpen
+                    ? "scale-100 opacity-100"
+                    : "scale-95 opacity-0 pointer-events-none"
+                }`}
+                role="menu"
+              >
+                <NavLink
+                  to="/login"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 rounded-t-lg"
+                  role="menuitem"
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  onClick={() => setUserMenuOpen(false)}
+                  className="block px-4 py-2 hover:bg-yellow-600 rounded-b-lg"
+                  role="menuitem"
+                >
+                  Signup
+                </NavLink>
+              </div>
             </>
           )}
         </div>
@@ -240,40 +286,9 @@ export default function Navbar() {
                 </NavLink>
               </li>
             ))}
-            {user && (
-              <>
-                <li>
-                  <NavLink
-                    to="/my-profile"
-                    onClick={() => setIsOpen(false)}
-                    className="nav-link"
-                  >
-                    My Profile
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/study-material"
-                    onClick={() => setIsOpen(false)}
-                    className="nav-link"
-                  >
-                    Study Material
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/settings"
-                    onClick={() => setIsOpen(false)}
-                    className="nav-link"
-                  >
-                    Settings
-                  </NavLink>
-                </li>
-              </>
-            )}
           </ul>
 
-          {/* User Section in Mobile */}
+          {/* Mobile User Section */}
           <div className="flex flex-col gap-3 px-6 pb-4">
             {user ? (
               <>
