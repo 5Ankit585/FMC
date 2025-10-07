@@ -144,12 +144,12 @@ export default function Navbar() {
                   My Courses
                 </NavLink>
                 <NavLink
-                  to="/scholarshiploan"
+                  to="/saved-scholarships"
                   onClick={() => setUserMenuOpen(false)}
                   className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
                   role="menuitem"
                 >
-                  Scholarships
+                 My Scholarships
                 </NavLink>
                 <NavLink
                   to="/study-material"

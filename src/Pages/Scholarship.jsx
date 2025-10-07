@@ -153,8 +153,27 @@ function ScholarshipCard({ data }) {
   const logo = universityId?.logo?.[0];
   const program = data.category || "BCA";
 
-  // state for save/bookmark
-  const [saved, setSaved] = useState(false);
+  // Persistent save state
+  const [saved, setSaved] = useState(() => {
+    const savedList = JSON.parse(localStorage.getItem("savedScholarships") || "[]");
+    return savedList.includes(_id);
+  });
+
+  const toggleSave = () => {
+    setSaved((prev) => {
+      const savedList = JSON.parse(localStorage.getItem("savedScholarships") || "[]");
+      let updated;
+      if (prev) {
+        // remove
+        updated = savedList.filter((id) => id !== _id);
+      } else {
+        // add
+        updated = [...savedList, _id];
+      }
+      localStorage.setItem("savedScholarships", JSON.stringify(updated));
+      return !prev;
+    });
+  };
 
   return (
     <motion.div
@@ -167,11 +186,11 @@ function ScholarshipCard({ data }) {
     >
       {/* ---- Save Icon ---- */}
       <button
-        className="scholar-save-btn"
-        onClick={() => setSaved((prev) => !prev)}
+        className={`scholar-save-btn ${saved ? "bg-green-500 text-white" : "bg-gray-200"}`}
+        onClick={toggleSave}
         title={saved ? "Remove from Saved" : "Save Scholarship"}
       >
-        {saved ? <BookmarkCheck size={20} color="#007bff" /> : <Bookmark size={20} />}
+        {saved ? <BookmarkCheck size={20} /> : <Bookmark size={20} />}
       </button>
 
       <div className="scholar-card-uni">
