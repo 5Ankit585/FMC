@@ -28,6 +28,8 @@ const CourseExplorer = () => {
   const [availableStates, setAvailableStates] = useState([]);
   const [expandedCourseId, setExpandedCourseId] = useState(null);
   const [savedCourses, setSavedCourses] = useState(new Set());
+  // ✅ New: userId state
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
 
   const navigate = useNavigate();
 
@@ -67,12 +69,27 @@ const CourseExplorer = () => {
     fetchCourses();
   }, []);
 
-  // Load saved courses from localStorage on mount (extract IDs for Set)
+  // ✅ Updated: Load saved courses (API + localStorage fallback)
   useEffect(() => {
+    // Fallback to localStorage
     const saved = localStorage.getItem("savedCourses");
     if (saved) {
       const savedArray = JSON.parse(saved);
       setSavedCourses(new Set(savedArray.map(c => c._id || c.id)));
+    }
+
+    // Fetch from backend if logged in
+    const uid = localStorage.getItem("userId");
+    if (uid) {
+      setUserId(uid);
+      axios.get(`http://localhost:5000/api/savedCourses/${uid}`)
+        .then(res => {
+          setSavedCourses(new Set(res.data.map(c => c.courseId.toString())));
+        })
+        .catch(err => {
+          console.error('Error fetching saved courses:', err);
+          // Fallback to localStorage already handled above
+        });
     }
   }, []);
 
@@ -98,23 +115,39 @@ const CourseExplorer = () => {
     setExpandedCourseId(expandedCourseId === courseId ? null : courseId);
   };
 
-  const handleSaveToggle = (course) => {
-    const courseId = course._id || course.id;
-    const currentSavedArray = JSON.parse(localStorage.getItem("savedCourses") || "[]");
-    const newMap = new Map(currentSavedArray.map(c => [c._id || c.id, c]));
-
-    if (newMap.has(courseId)) {
-      newMap.delete(courseId);
-    } else {
-      newMap.set(courseId, { 
-        _id: courseId,
-        courseTitle: course.courseTitle,
-        eligibility: course.eligibility 
-      });
+  // ✅ Updated: Use API for toggle
+  const handleSaveToggle = async (course) => {
+    if (!userId) {
+      alert("Please login to save courses");
+      navigate("/login");
+      return;
     }
-    const updatedCourses = Array.from(newMap.values());
-    localStorage.setItem("savedCourses", JSON.stringify(updatedCourses));
-    setSavedCourses(new Set(updatedCourses.map(c => c._id || c.id)));
+
+    const courseId = (course._id || course.id).toString();
+    const isSaved = savedCourses.has(courseId);
+
+    try {
+      if (isSaved) {
+        // Remove
+        await axios.delete(`http://localhost:5000/api/savedCourses/${userId}/${courseId}`);
+        setSavedCourses(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(courseId);
+          return newSet;
+        });
+      } else {
+        // Add
+        await axios.post(`http://localhost:5000/api/savedCourses/${userId}`, {
+          courseId: course._id || course.id,
+          courseTitle: course.courseTitle,
+          eligibility: course.eligibility
+        });
+        setSavedCourses(prev => new Set([...prev, courseId]));
+      }
+    } catch (err) {
+      console.error('Error toggling saved course:', err);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   const filteredCourses = courses.filter(course => {
@@ -359,7 +392,7 @@ const CourseExplorer = () => {
                   <CourseCard
                     key={course._id || course.id}
                     course={course}
-                    isSaved={savedCourses.has(course._id || course.id)}
+                    isSaved={savedCourses.has((course._id || course.id).toString())}
                     onSaveToggle={handleSaveToggle}
                   />
                 ))
