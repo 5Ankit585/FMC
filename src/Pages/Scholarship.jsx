@@ -1,5 +1,6 @@
 // Scholarship.jsx
 import React, { useMemo, useState, useEffect } from "react";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import "./Scholarship.css";
@@ -142,12 +143,18 @@ function SidebarFilterLeft({ values, onChange }) {
 }
 
 /* ---------------- Scholarship Card ---------------- */
+
 function ScholarshipCard({ data }) {
   const { _id, name, provider, deadline, status, universityId } = data;
   const instituteName = universityId?.instituteName || "Unknown University";
-  const location = universityId?.city ? `${universityId.city}, ${universityId.state || universityId.region || 'India'}` : 'India';
+  const location = universityId?.city
+    ? `${universityId.city}, ${universityId.state || universityId.region || "India"}`
+    : "India";
   const logo = universityId?.logo?.[0];
-  const program = data.category || 'BCA'; // Use category or default to BCA
+  const program = data.category || "BCA";
+
+  // state for save/bookmark
+  const [saved, setSaved] = useState(false);
 
   return (
     <motion.div
@@ -158,13 +165,18 @@ function ScholarshipCard({ data }) {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="scholar-card"
     >
+      {/* ---- Save Icon ---- */}
+      <button
+        className="scholar-save-btn"
+        onClick={() => setSaved((prev) => !prev)}
+        title={saved ? "Remove from Saved" : "Save Scholarship"}
+      >
+        {saved ? <BookmarkCheck size={20} color="#007bff" /> : <Bookmark size={20} />}
+      </button>
+
       <div className="scholar-card-uni">
         {logo ? (
-          <img
-            src={logo}
-            alt={instituteName}
-            className="scholar-card-uni-logo"
-          />
+          <img src={logo} alt={instituteName} className="scholar-card-uni-logo" />
         ) : (
           <div className="scholar-card-uni-placeholder">🏛️</div>
         )}
@@ -186,9 +198,7 @@ function ScholarshipCard({ data }) {
       </div>
 
       <div className="scholar-card-footer">
-        <span className={`scholar-status ${status?.toLowerCase()}`}>
-          {status || 'Open'}
-        </span>
+        <span className={`scholar-status ${status?.toLowerCase()}`}>{status || "Open"}</span>
         <div className="scholar-card-actions">
           <button className="scholar-card-button counselling">Get Counselling</button>
           <button className="scholar-card-button explore">Explore Now</button>
