@@ -17,6 +17,7 @@ import Counselling from "./Pages/Counselling";
 import Scholarship from "./Pages/Scholarship";
 import ExploreCoursePage from "./Pages/ExploreCoursesPage";
 import ExamAt from "./Pages/ExamAt";
+import MyCourses from "./Pages/MyCourses"; // ✅ New import
 import Companion from "./FooterPages/Companion";
 import AdminLogin from "./Pages/Admin/AdminLogin";
 import AdminHome from "./Pages/Admin/AdminHome";
@@ -69,6 +70,9 @@ function App() {
         {/* My Profile - ✅ Updated routes */}
         <Route path="/myprofile" element={<RedirectToProfile />} />
         <Route path="/myprofile/:id" element={<MyProfile />} />
+
+        {/* ✅ New My Courses Route */}
+        <Route path="/my-courses" element={<MyCourses />} />
 
         {/* University & Dashboard Routes */}
         <Route path="/university-dashboard/:id" element={<UniversityDashboard />} />

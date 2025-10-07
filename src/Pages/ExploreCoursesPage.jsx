@@ -27,6 +27,7 @@ const CourseExplorer = () => {
   const [availableCities, setAvailableCities] = useState([]);
   const [availableStates, setAvailableStates] = useState([]);
   const [expandedCourseId, setExpandedCourseId] = useState(null);
+  const [savedCourses, setSavedCourses] = useState(new Set());
 
   const navigate = useNavigate();
 
@@ -66,6 +67,15 @@ const CourseExplorer = () => {
     fetchCourses();
   }, []);
 
+  // Load saved courses from localStorage on mount (extract IDs for Set)
+  useEffect(() => {
+    const saved = localStorage.getItem("savedCourses");
+    if (saved) {
+      const savedArray = JSON.parse(saved);
+      setSavedCourses(new Set(savedArray.map(c => c._id || c.id)));
+    }
+  }, []);
+
   const toggleAccordion = (category) => {
     setActiveAccordion(activeAccordion === category ? null : category);
   };
@@ -86,6 +96,25 @@ const CourseExplorer = () => {
 
   const handleCourseClick = (courseId) => {
     setExpandedCourseId(expandedCourseId === courseId ? null : courseId);
+  };
+
+  const handleSaveToggle = (course) => {
+    const courseId = course._id || course.id;
+    const currentSavedArray = JSON.parse(localStorage.getItem("savedCourses") || "[]");
+    const newMap = new Map(currentSavedArray.map(c => [c._id || c.id, c]));
+
+    if (newMap.has(courseId)) {
+      newMap.delete(courseId);
+    } else {
+      newMap.set(courseId, { 
+        _id: courseId,
+        courseTitle: course.courseTitle,
+        eligibility: course.eligibility 
+      });
+    }
+    const updatedCourses = Array.from(newMap.values());
+    localStorage.setItem("savedCourses", JSON.stringify(updatedCourses));
+    setSavedCourses(new Set(updatedCourses.map(c => c._id || c.id)));
   };
 
   const filteredCourses = courses.filter(course => {
@@ -210,7 +239,19 @@ const CourseExplorer = () => {
     );
   };
 
-  const CourseCard = ({ course }) => {
+  const BookmarkIcon = ({ isSaved }) => (
+    <svg
+      className={`ce-save-icon ${isSaved ? 'text-green-500' : 'text-gray-400'}`}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      width="1.5rem"
+      height="1.5rem"
+    >
+      <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+    </svg>
+  );
+
+  const CourseCard = ({ course, isSaved, onSaveToggle }) => {
     const id = course._id || course.id;
 
     return (
@@ -265,23 +306,35 @@ const CourseExplorer = () => {
 
         <div className="ce-card-footer">
           <button
-            className="ce-link"
+            className="ce-save-btn"
             onClick={(e) => {
-              e.stopPropagation(); // stop collapsing
-              navigate(`/coursepage/${id}`);
+              e.stopPropagation();
+              onSaveToggle(course);
             }}
+            aria-label="Save course"
           >
-            View Course
+            <BookmarkIcon isSaved={isSaved} />
           </button>
-          <button
-            className="ce-btn-apply"
-            onClick={(e) => {
-              e.stopPropagation(); // stop collapsing
-              navigate(`/apply/${id}`);
-            }}
-          >
-            Apply Now →
-          </button>
+          <div className="ce-footer-actions">
+            <button
+              className="ce-link"
+              onClick={(e) => {
+                e.stopPropagation(); // stop collapsing
+                navigate(`/coursepage/${id}`);
+              }}
+            >
+              View Course
+            </button>
+            <button
+              className="ce-btn-apply"
+              onClick={(e) => {
+                e.stopPropagation(); // stop collapsing
+                navigate(`/apply/${id}`);
+              }}
+            >
+              Apply Now →
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -302,7 +355,14 @@ const CourseExplorer = () => {
               ) : filteredCourses.length === 0 ? (
                 <p className="text-center text-gray-500 py-8">No courses found.</p>
               ) : (
-                filteredCourses.map(course => <CourseCard key={course._id || course.id} course={course} />)
+                filteredCourses.map(course => (
+                  <CourseCard
+                    key={course._id || course.id}
+                    course={course}
+                    isSaved={savedCourses.has(course._id || course.id)}
+                    onSaveToggle={handleSaveToggle}
+                  />
+                ))
               )}
             </div>
           </div>

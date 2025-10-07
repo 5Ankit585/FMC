@@ -136,7 +136,7 @@ export default function Navbar() {
                   My Profile
                 </NavLink>
                 <NavLink
-                  to="/course"
+                  to="/my-courses"
                   onClick={() => setUserMenuOpen(false)}
                   className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
                   role="menuitem"
