@@ -1,46 +1,82 @@
+// Pages/SavedScholarships.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 export default function SavedScholarships() {
   const [scholarships, setScholarships] = useState([]);
-  const [savedIds, setSavedIds] = useState(() => {
-    const saved = localStorage.getItem("savedScholarships");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // ✅ Quick fix: Get user from individual localStorage keys
+  const user = {
+    userId: localStorage.getItem("userId"),
+    name: localStorage.getItem("name"),
+    email: localStorage.getItem("email"),
+  };
+
   useEffect(() => {
-    const fetchScholarships = async () => {
+    const fetchSavedScholarships = async () => {
+      if (!user?.userId) {
+        setError("Please log in to view saved scholarships.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await fetch("http://localhost:5000/api/scholarships");
-        if (!res.ok) throw new Error("Failed to fetch scholarships");
-        const data = await res.json();
-        setScholarships(data);
+        const res = await fetch(`http://localhost:5000/api/savedScholarships/${user.userId}`);
+        if (!res.ok) throw new Error("Failed to fetch saved scholarships");
+        const { savedScholarships } = await res.json();
+        setScholarships(savedScholarships);
       } catch (err) {
         console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchScholarships();
-  }, []);
 
-  const savedList = scholarships.filter((s) => savedIds.includes(s._id));
+    fetchSavedScholarships();
+  }, [user?.userId]);
 
-  const toggleSave = (id) => {
-    setSavedIds((prev) => {
-      const updated = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
-      localStorage.setItem("savedScholarships", JSON.stringify(updated));
-      return updated;
-    });
+  const toggleSave = async (scholarshipId) => {
+    if (!user?.userId) {
+      alert("Please log in to save scholarships.");
+      return;
+    }
+
+    try {
+      const method = scholarships.some(s => s._id === scholarshipId) ? "DELETE" : "POST";
+      const res = await fetch(
+        `http://localhost:5000/api/savedScholarships/${user.userId}/${scholarshipId}`,
+        { method }
+      );
+      if (!res.ok) throw new Error("Failed to update saved scholarships");
+
+      const { savedScholarships } = await res.json();
+      // Update local state: remove if unsaving
+      setScholarships(prev => 
+        prev.filter(s => s._id !== scholarshipId)
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Error updating saved scholarships.");
+    }
   };
+
+  if (loading) return <div className="px-4 md:px-20 py-6">Loading saved scholarships...</div>;
+  if (error) return <div className="px-4 md:px-20 py-6 text-red-500">{error}</div>;
+
+  const savedList = scholarships; // Already filtered by user
 
   return (
     <div>
-      
+    
       <div className="px-4 md:px-20 py-6">
         <h1 className="text-2xl font-bold mb-6">Saved Scholarships</h1>
         {savedList.length === 0 ? (
-          <p>You have no saved scholarships.</p>
+          <p>You have no saved scholarships. <a href="/scholarship" className="text-blue-500 underline">Browse scholarships</a>.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {savedList.map((sch) => (
@@ -53,11 +89,11 @@ export default function SavedScholarships() {
 
                 <button
                   className={`absolute top-3 right-3 p-1 rounded-full ${
-                    savedIds.includes(sch._id) ? "bg-green-500 text-white" : "bg-gray-200"
+                    savedList.some(s => s._id === sch._id) ? "bg-green-500 text-white" : "bg-gray-200"
                   }`}
                   onClick={() => toggleSave(sch._id)}
                 >
-                  {savedIds.includes(sch._id) ? "Saved" : "Save"}
+                  Saved
                 </button>
 
                 <button

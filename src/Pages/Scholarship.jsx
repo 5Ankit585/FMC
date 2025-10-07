@@ -1,8 +1,8 @@
-// Scholarship.jsx
+// Pages/Scholarship.jsx
 import React, { useMemo, useState, useEffect } from "react";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Scholarship.css";
 
 /* ---------------- Hero Section ---------------- */
@@ -143,8 +143,7 @@ function SidebarFilterLeft({ values, onChange }) {
 }
 
 /* ---------------- Scholarship Card ---------------- */
-
-function ScholarshipCard({ data }) {
+function ScholarshipCard({ data, user, onToggleSave, savedScholarships }) {
   const { _id, name, provider, deadline, status, universityId } = data;
   const instituteName = universityId?.instituteName || "Unknown University";
   const location = universityId?.city
@@ -153,26 +152,26 @@ function ScholarshipCard({ data }) {
   const logo = universityId?.logo?.[0];
   const program = data.category || "BCA";
 
-  // Persistent save state
-  const [saved, setSaved] = useState(() => {
-    const savedList = JSON.parse(localStorage.getItem("savedScholarships") || "[]");
-    return savedList.includes(_id);
-  });
+  const saved = savedScholarships.some(id => id.toString() === _id);
 
-  const toggleSave = () => {
-    setSaved((prev) => {
-      const savedList = JSON.parse(localStorage.getItem("savedScholarships") || "[]");
-      let updated;
-      if (prev) {
-        // remove
-        updated = savedList.filter((id) => id !== _id);
-      } else {
-        // add
-        updated = [...savedList, _id];
-      }
-      localStorage.setItem("savedScholarships", JSON.stringify(updated));
-      return !prev;
-    });
+  const toggleSave = async () => {
+    if (!user?.userId) {
+      alert("Please log in to save scholarships.");
+      return;
+    }
+
+    try {
+      const method = saved ? "DELETE" : "POST";
+      const res = await fetch(
+        `http://localhost:5000/api/savedScholarships/${user.userId}/${_id}`,
+        { method }
+      );
+      if (!res.ok) throw new Error("Failed to update saved scholarships");
+      onToggleSave(_id, !saved); // Callback to update parent state
+    } catch (err) {
+      console.error(err);
+      alert("Error updating saved scholarships.");
+    }
   };
 
   return (
@@ -228,8 +227,9 @@ function ScholarshipCard({ data }) {
 }
 
 /* ---------------- Main Component ---------------- */
-export default function Scholar() {
+export default function Scholarship() {
   const [scholarships, setScholarships] = useState([]);
+  const [savedScholarships, setSavedScholarships] = useState([]); // User's saved IDs/objects
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState({
     region: "",
@@ -242,6 +242,13 @@ export default function Scholar() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("Upcoming");
+
+  // ✅ Quick fix: Get user from individual localStorage keys
+  const user = {
+    userId: localStorage.getItem("userId"),
+    name: localStorage.getItem("name"),
+    email: localStorage.getItem("email"),
+  };
 
   useEffect(() => {
     const fetchScholarships = async () => {
@@ -260,6 +267,30 @@ export default function Scholar() {
     };
     fetchScholarships();
   }, []);
+
+  // Fetch user's saved scholarships if logged in
+  useEffect(() => {
+    const fetchSaved = async () => {
+      if (!user?.userId) return;
+      try {
+        const res = await fetch(`http://localhost:5000/api/savedScholarships/${user.userId}`);
+        if (!res.ok) throw new Error("Failed to fetch saved scholarships");
+        const { savedScholarships } = await res.json();
+        setSavedScholarships(savedScholarships || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    if (user?.userId) fetchSaved();
+  }, [user?.userId]);
+
+  const handleToggleSave = (scholarshipId, isSaved) => {
+    if (isSaved) {
+      setSavedScholarships(prev => [...prev, scholarshipId]);
+    } else {
+      setSavedScholarships(prev => prev.filter(id => id.toString() !== scholarshipId.toString()));
+    }
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -317,6 +348,9 @@ export default function Scholar() {
                 <ScholarshipCard
                   key={s._id}
                   data={s}
+                  user={user}
+                  savedScholarships={savedScholarships}
+                  onToggleSave={handleToggleSave}
                 />
               ))}
             </div>
