@@ -2,8 +2,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { auth } from "../firebase"; // adjust path if needed
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
-/* --- No Firebase imports needed anymore --- */
+/* --- Providers --- */
+const googleProvider = new GoogleAuthProvider();
 
 export default function StudentLogin({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
@@ -53,6 +59,40 @@ export default function StudentLogin({ onLogin = () => {} }) {
     });
   };
 
+  // Google login
+  const handleGoogleLogin = async () => {
+    setErr("");
+    setInfo("");
+    setLoading(true);
+
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Send Firebase user info to backend
+      const response = await axios.post("http://localhost:5000/api/signup/google-login", {
+        email: user.email,
+        name: user.displayName,
+        firebaseId: user.uid,
+      });
+
+      // Save MongoDB userId in localStorage
+      localStorage.setItem("userId", response.data.userId);
+      localStorage.setItem("name", response.data.name || "");
+      localStorage.setItem("email", response.data.email || "");
+
+      onLogin(response.data);
+
+      // Redirect to profile page
+      navigate(`/myprofile/${response.data.userId}`);
+    } catch (error) {
+      setErr(error.message || "Google sign-in failed");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Forgot password (kept for now, but would need backend endpoint)
   const handleForgotPassword = () => {
     withUiState(async () => {
@@ -63,11 +103,6 @@ export default function StudentLogin({ onLogin = () => {} }) {
   };
 
   // Social logins: quick note — these still use Firebase; align with backend if needed
-  const handleGoogleLogin = () => {
-    setErr("");
-    setInfo("Google sign-in requires backend integration. Use email/password for now.");
-  };
-
   const handleFacebookLogin = () => {
     setErr("");
     setInfo("Facebook sign-in requires backend integration. Use email/password for now.");
