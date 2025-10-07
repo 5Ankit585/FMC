@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import "./StudentSignup.css";
-
 
 const StudentSignup = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +23,8 @@ const StudentSignup = () => {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [info, setInfo] = useState("");
+
+  const navigate = useNavigate();
 
   const universities = [
     "Delhi University",
@@ -54,50 +56,59 @@ const StudentSignup = () => {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setErr("");
-  setInfo("");
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErr("");
+    setInfo("");
+    setLoading(true);
 
-  try {
-    const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (formData[key]) formDataToSend.append(key, formData[key]);
-    });
+    try {
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key]) formDataToSend.append(key, formData[key]);
+      });
 
-    const res = await fetch("http://localhost:5000/api/signup", {
-      method: "POST",
-      body: formDataToSend,
-    });
+      const res = await fetch("http://localhost:5000/api/signup", {
+        method: "POST",
+        body: formDataToSend,
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) throw new Error(data.error || "Signup failed");
+      if (!res.ok) throw new Error(data.error || "Signup failed");
 
-    setInfo("Student signed up successfully!");
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      password: "",
-      address: "",
-      pincode: "",
-      university: "",
-      course: "",
-      branch: "",
-      academicDetails: "",
-      documents: null,
-      counsellingBook: "",
-      scholarshipDoc: null,
-    });
-  } catch (error) {
-    setErr(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+      // Save user info to localStorage for persistent login
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("email", data.email);
 
+      setInfo("Student signed up successfully!");
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        password: "",
+        address: "",
+        pincode: "",
+        university: "",
+        course: "",
+        branch: "",
+        academicDetails: "",
+        documents: null,
+        counsellingBook: "",
+        scholarshipDoc: null,
+      });
+
+      // Redirect to profile page after signup (auto-login)
+      setTimeout(() => {
+        navigate(`/myprofile/${data.userId}`);
+      }, 1500); // Brief delay to show success message
+    } catch (error) {
+      setErr(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="student-signup-container">
