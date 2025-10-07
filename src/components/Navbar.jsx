@@ -1,10 +1,8 @@
+// src/components/Navbar.jsx
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import logo from "../Images/logoo.png";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
 import "./Navbar.css";
 
 const navLinks = [
@@ -18,12 +16,11 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [displayName, setDisplayName] = useState("");
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const auth = getAuth();
 
   const hideOnDashboard = useMemo(() => {
     const p = (location?.pathname || "").toLowerCase();
@@ -36,37 +33,17 @@ export default function Navbar() {
   }, [location.pathname]);
 
   useEffect(() => {
-    let isMounted = true;
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      setUserMenuOpen(false);
+    // Read from localStorage on mount
+    const storedUserId = localStorage.getItem("userId");
+    const storedName = localStorage.getItem("name");
+    const storedEmail = localStorage.getItem("email");
 
-      if (!currentUser) {
-        if (isMounted) setDisplayName("");
-        return;
-      }
-
-      try {
-        const docRef = doc(db, "students", currentUser.uid);
-        const snap = await getDoc(docRef);
-        const profileData = snap.exists() ? snap.data() : null;
-        const name = deriveName(
-          profileData?.name,
-          currentUser.displayName,
-          currentUser.email
-        );
-        if (isMounted) setDisplayName(name);
-      } catch (_e) {
-        const fallback = deriveName("", currentUser.displayName, currentUser.email);
-        if (isMounted) setDisplayName(fallback);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-      unsubscribe();
-    };
-  }, [auth]);
+    if (storedUserId) {
+      setUserId(storedUserId);
+      const nameToUse = deriveName(storedName, storedEmail);
+      setDisplayName(nameToUse);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -80,20 +57,22 @@ export default function Navbar() {
 
   if (hideOnDashboard) return null;
 
-  function deriveName(profileName, authDisplayName, email) {
+  function deriveName(profileName, email) {
     if (profileName && profileName.trim()) return profileName.trim();
-    if (authDisplayName && authDisplayName.trim()) return authDisplayName.trim();
     if (email) return String(email).split("@")[0];
     return "Student";
   }
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      setDisplayName("");
-      navigate("/login");
-    } catch (_e) {}
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+    setUserId(null);
+    setDisplayName("");
+    navigate("/login");
   };
+
+  const isLoggedIn = !!userId;
 
   return (
     <nav className="flex justify-center items-center h-20 mx-auto px-4 md:pl-20 md:pr-12 lg:pr-24 bg-[#141f33] text-white shadow-md relative">
@@ -128,7 +107,7 @@ export default function Navbar() {
 
         {/* Desktop User Menu */}
         <div className="hidden md:flex relative" ref={userMenuRef}>
-          {user ? (
+          {isLoggedIn ? (
             <>
               <button
                 onClick={() => setUserMenuOpen((p) => !p)}
@@ -149,7 +128,7 @@ export default function Navbar() {
                 role="menu"
               >
                 <NavLink
-                  to="/myprofile"
+                  to={`/myprofile/${userId}`}
                   onClick={() => setUserMenuOpen(false)}
                   className="block px-4 py-2 hover:bg-yellow-600 cursor-pointer"
                   role="menuitem"
@@ -290,7 +269,7 @@ export default function Navbar() {
 
           {/* Mobile User Section */}
           <div className="flex flex-col gap-3 px-6 pb-4">
-            {user ? (
+            {isLoggedIn ? (
               <>
                 <div className="px-4 py-2 rounded-lg bg-[rgba(255,255,255,0.1)] text-center text-white">
                   {displayName || "Account"}

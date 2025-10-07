@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const MyProfile = () => {
-  const { id } = useParams(); // Get the user ID from the URL
+  const { id: paramId } = useParams(); // Get the user ID from the URL
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -19,6 +19,9 @@ const MyProfile = () => {
     counsellingBook: "",
   });
   const [loading, setLoading] = useState(true);
+
+  // ✅ Use paramId first, else fallback to logged-in userId from localStorage
+  const userId = paramId || localStorage.getItem("userId");
 
   const universities = [
     "Delhi University",
@@ -44,12 +47,12 @@ const MyProfile = () => {
   // Fetch profile data from backend
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!id) {
+      if (!userId) {
         setLoading(false);
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:5000/api/profile/${id}`);
+        const response = await axios.get(`http://localhost:5000/api/profile/${userId}`);
 
         setFormData(response.data);
         setLoading(false);
@@ -59,7 +62,7 @@ const MyProfile = () => {
       }
     };
     fetchProfile();
-  }, [id]);
+  }, [userId]);
 
   const handleChange = (e) => {
     setFormData({
@@ -70,7 +73,7 @@ const MyProfile = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`/api/profile/${id}`, formData);
+      await axios.put(`http://localhost:5000/api/profile/${userId}`, formData);
       setEditMode(false);
       alert("Profile updated successfully ✅");
     } catch (error) {

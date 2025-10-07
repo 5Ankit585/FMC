@@ -1,20 +1,9 @@
-// src/components/StudentLogin.jsx
+// src/components/LoginModal.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase"; // adjust path if needed
+import axios from "axios";
 
-import {
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  sendPasswordResetEmail,
-} from "firebase/auth";
-
-/* --- Providers --- */
-const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
-// optional: facebookProvider.addScope('email'); facebookProvider.setCustomParameters({ display: 'popup' });
+/* --- No Firebase imports needed anymore --- */
 
 export default function StudentLogin({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
@@ -34,8 +23,8 @@ export default function StudentLogin({ onLogin = () => {} }) {
     try {
       await fn();
     } catch (e) {
-      // Friendly error messages for common firebase errors
-      const msg = e?.message || String(e);
+      // Friendly error messages for common errors
+      const msg = e?.response?.data?.message || e?.message || String(e);
       setErr(msg);
       console.error(e);
     } finally {
@@ -44,47 +33,46 @@ export default function StudentLogin({ onLogin = () => {} }) {
   };
 
   // Email/password login
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     withUiState(async () => {
-      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      const response = await axios.post("http://localhost:5000/api/signup/login", {
+        email,
+        password
+      });
+
+      // ✅ Save user ID to localStorage
+      localStorage.setItem("userId", response.data.userId);
+      localStorage.setItem("name", response.data.name);     // optional
+      localStorage.setItem("email", response.data.email);   // optional
+
       setInfo("Login successful!");
-      onLogin(userCred.user);
-      // Redirect to root (http://localhost:3000/)
-      navigate("/");
+      onLogin(response.data); // Pass user data
+      // Redirect to profile page
+      navigate(`/myprofile/${response.data.userId}`);
     });
   };
 
-  // Forgot password
+  // Forgot password (kept for now, but would need backend endpoint)
   const handleForgotPassword = () => {
     withUiState(async () => {
       if (!email) throw new Error("Please enter your email to receive a password reset link.");
-      await sendPasswordResetEmail(auth, email);
-      setInfo("Password reset email sent — check your inbox.");
+      // TODO: Implement backend forgot password endpoint
+      setInfo("Password reset email sent — check your inbox. (Backend TODO)");
     });
   };
 
-  // Google
+  // Social logins: quick note — these still use Firebase; align with backend if needed
   const handleGoogleLogin = () => {
-    withUiState(async () => {
-      const result = await signInWithPopup(auth, googleProvider);
-      setInfo("Signed in with Google");
-      onLogin(result.user);
-      navigate("/");
-    });
+    setErr("");
+    setInfo("Google sign-in requires backend integration. Use email/password for now.");
   };
 
-  // Facebook
   const handleFacebookLogin = () => {
-    withUiState(async () => {
-      const result = await signInWithPopup(auth, facebookProvider);
-      setInfo("Signed in with Facebook");
-      onLogin(result.user);
-      navigate("/");
-    });
+    setErr("");
+    setInfo("Facebook sign-in requires backend integration. Use email/password for now.");
   };
 
-  // LinkedIn: quick note — we show a message; full LinkedIn sign-in needs extra setup (see below)
   const handleLinkedInClick = () => {
     setErr("");
     setInfo(
@@ -157,7 +145,9 @@ export default function StudentLogin({ onLogin = () => {} }) {
                     className="w-full bg-[#2b2f3a] placeholder-white/40 text-white border border-white/10 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400/50 transition pr-10"
                     required
                   />
-                  <span className="absolute inset-y-0 right-3 flex items-center text-white/50 pointer-events-none">{showPassword ? <EyeOffIcon /> : <EyeIcon />}</span>
+                  <span className="absolute inset-y-0 right-3 flex items-center text-white/50 pointer-events-none">
+                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </span>
                 </div>
               </div>
 
@@ -211,12 +201,28 @@ export default function StudentLogin({ onLogin = () => {} }) {
 }
 
 /* Inline SVG Icons (same as your previous SVGs) */
-function EyeIcon() { /* ... */ return (
-  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"> <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" /> <circle cx="12" cy="12" r="3" strokeWidth="2" /> </svg>
-); }
-function EyeOffIcon() { /* ... */ return (
-  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"> <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" /> <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42M9.88 5.09A10.45 10.45 0 0112 5c7 0 11 7 11 7a16.2 16.2 0 01-4.35 4.96M6.1 6.1A16.2 16.2 0 001 12s4 7 11 7a10.7 10.7 0 005.47-1.5"/></svg>
-); }
-function GoogleIcon() { return (<svg className="h-5 w-5" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">/* ... */</svg>); }
-function FacebookIcon() { return (<svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">/* ... */</svg>); }
-function LinkedInIcon() { return (<svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">/* ... */</svg>); }
+function EyeIcon() { 
+  return (
+    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"> 
+      <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" /> 
+      <circle cx="12" cy="12" r="3" strokeWidth="2" /> 
+    </svg>
+  ); 
+}
+function EyeOffIcon() { 
+  return (
+    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"> 
+      <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" /> 
+      <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42M9.88 5.09A10.45 10.45 0 0112 5c7 0 11 7 11 7a16.2 16.2 0 01-4.35 4.96M6.1 6.1A16.2 16.2 0 001 12s4 7 11 7a10.7 10.7 0 005.47-1.5"/>
+    </svg>
+  ); 
+}
+function GoogleIcon() { 
+  return (<svg className="h-5 w-5" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">/* ... */</svg>); 
+}
+function FacebookIcon() { 
+  return (<svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">/* ... */</svg>); 
+}
+function LinkedInIcon() { 
+  return (<svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">/* ... */</svg>); 
+}

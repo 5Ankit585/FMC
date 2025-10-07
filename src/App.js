@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Components
 import Navbar from "./components/Navbar";
+import RedirectToProfile from "./components/RedirectToProfile"; // ✅ New import
 
 // Pages
 import PasswordReset from "./Pages/PasswordReset";
@@ -65,7 +66,8 @@ function App() {
         <Route path="/login" element={<LoginModal />} />
         <Route path="/signup" element={<SignupModal />} />
 
-        {/* My Profile */}
+        {/* My Profile - ✅ Updated routes */}
+        <Route path="/myprofile" element={<RedirectToProfile />} />
         <Route path="/myprofile/:id" element={<MyProfile />} />
 
         {/* University & Dashboard Routes */}
