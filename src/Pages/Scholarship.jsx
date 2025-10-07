@@ -1,3 +1,4 @@
+// Scholarship.jsx
 import React, { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -142,7 +143,12 @@ function SidebarFilterLeft({ values, onChange }) {
 
 /* ---------------- Scholarship Card ---------------- */
 function ScholarshipCard({ data }) {
-  const { _id, name, provider, deadline, status } = data;
+  const { _id, name, provider, deadline, status, universityId } = data;
+  const instituteName = universityId?.instituteName || "Unknown University";
+  const location = universityId?.city ? `${universityId.city}, ${universityId.state || universityId.region || 'India'}` : 'India';
+  const logo = universityId?.logo?.[0];
+  const program = data.category || 'BCA'; // Use category or default to BCA
+
   return (
     <motion.div
       layout
@@ -152,17 +158,40 @@ function ScholarshipCard({ data }) {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="scholar-card"
     >
-      <div className="scholar-card-header">
-        <div className="scholar-card-content">
-          <h3 className="scholar-card-title">{name}</h3>
-          <p className="scholar-card-provider">Conducting Body: {provider}</p>
-          <p className="scholar-card-event">Next Event: {deadline}</p>
-          <p className="scholar-card-mode">Mode & Level: {status}</p>
+      <div className="scholar-card-uni">
+        {logo ? (
+          <img
+            src={logo}
+            alt={instituteName}
+            className="scholar-card-uni-logo"
+          />
+        ) : (
+          <div className="scholar-card-uni-placeholder">🏛️</div>
+        )}
+        <div className="scholar-card-uni-info">
+          <h4 className="scholar-card-uni-name">{instituteName}</h4>
+          <p className="scholar-card-uni-location">{location}</p>
         </div>
+      </div>
+
+      <div className="scholar-card-content">
+        <h3 className="scholar-card-title">{name}</h3>
+        <p className="scholar-card-provider">
+          <strong>Provider:</strong> {provider}
+        </p>
+        <p className="scholar-card-event">
+          <strong>Deadline:</strong> {deadline || "N/A"}
+        </p>
+        <span className="scholar-card-program">{program}</span>
+      </div>
+
+      <div className="scholar-card-footer">
+        <span className={`scholar-status ${status?.toLowerCase()}`}>
+          {status || 'Open'}
+        </span>
         <div className="scholar-card-actions">
-          <button className="scholar-card-button-details">Details</button>
-          <button className="scholar-card-button-apply">Apply</button>
-          <button className="scholar-card-button-alert">Set Alert</button>
+          <button className="scholar-card-button counselling">Get Counselling</button>
+          <button className="scholar-card-button explore">Explore Now</button>
         </div>
       </div>
     </motion.div>
