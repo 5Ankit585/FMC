@@ -326,3 +326,32 @@
     text-align: center;
   }
 }
+
+/* ==== Save Icon Styling (Bookmark Style) ==== */
+.ce-save-icon-wrapper {
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.ce-save-icon-wrapper:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.2);
+}
+
+.ce-save-icon-wrapper.saved {
+  background: #fff7ed;
+  box-shadow: 0 0 0 2px #f97316 inset;
+}
+
+.ce-save-icon {
+  width: 22px;
+  height: 22px;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}

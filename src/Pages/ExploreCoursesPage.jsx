@@ -273,15 +273,25 @@ const CourseExplorer = () => {
   };
 
   const BookmarkIcon = ({ isSaved }) => (
-    <svg
-      className={`ce-save-icon ${isSaved ? 'text-green-500' : 'text-gray-400'}`}
-      fill="currentColor"
-      viewBox="0 0 24 24"
-      width="1.5rem"
-      height="1.5rem"
+    <div
+      className={`ce-save-icon-wrapper ${isSaved ? 'saved' : ''}`}
+      title={isSaved ? 'Saved' : 'Save Course'}
     >
-      <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
-    </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill={isSaved ? "#f97316" : "none"}
+        viewBox="0 0 24 24"
+        strokeWidth="2"
+        stroke={isSaved ? "#f97316" : "#374151"}
+        className="ce-save-icon"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"
+        />
+      </svg>
+    </div>
   );
 
   const CourseCard = ({ course, isSaved, onSaveToggle }) => {
