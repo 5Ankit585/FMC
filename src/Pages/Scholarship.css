@@ -106,7 +106,7 @@ body {
   padding: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 100;
+  z-index: 10; /* Lowered from 100 to allow profile dropdown to appear on top */
 }
 
 .scholar-search-container {
@@ -226,7 +226,7 @@ body {
   border-right: 1px solid #e5e7eb;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  z-index: 10;
+  z-index: 5; /* Lowered from 10 to allow profile dropdown to appear on top */
 }
 
 .scholar-filter-group {
