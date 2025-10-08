@@ -352,6 +352,24 @@ body {
   transform: scale(1.1);
 }
 
+/* When scholarship is saved - dimmed/blurred state */
+.scholar-save-btn.saved {
+  background: #e5e7eb; /* light gray background */
+  opacity: 0.6;
+  filter: blur(0.5px);
+  transform: none; /* prevent hover scale */
+  box-shadow: none;
+}
+
+/* Override hover for saved state to keep it dimmed */
+.scholar-save-btn.saved:hover {
+  background: #d1d5db;
+  opacity: 0.7;
+  filter: blur(0.5px);
+  transform: none;
+  box-shadow: none;
+}
+
 .scholar-card {
   background: #fff;
   border-radius: 12px;
