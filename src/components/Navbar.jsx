@@ -12,7 +12,7 @@ const navLinks = [
   { to: "/counselling", label: "Counselling" },
   { to: "/scholarship", label: "Scholarships" },
   { to: "/courses", label: "Courses" },
-  { to: "/colleges", label: "Colleges" },
+  { to: "/explorecollegespage", label: "Colleges" },
   { to: "/exams", label: "Exams" },
   { to: "/newsfeed", label: "News & Feed" },
 ];
