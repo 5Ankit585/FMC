@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 import RedirectToProfile from "./components/RedirectToProfile"; // ✅ New import
 import Counselling from './components/Counselling';
+import Exams from './components/Exams';
 
 
 // Pages
@@ -17,7 +18,6 @@ import Home from "./Pages/Home";
 import ExploreCollegesPage from "./Pages/ExploreCollegesPage";
 import Scholarship from "./Pages/Scholarship";
 import ExploreCoursePage from "./Pages/ExploreCoursesPage";
-import ExamAt from "./Pages/ExamAt";
 import MyCourses from "./Pages/MyCourses"; // ✅ New import
 import Companion from "./FooterPages/Companion";
 import AdminLogin from "./Pages/Admin/AdminLogin";
@@ -60,13 +60,13 @@ function App() {
         <Route path="/universityDetails" element={<UniversityDetails />} />
         <Route path="/scholarship" element={<Scholarship />} />
         <Route path="/courses" element={<ExploreCoursePage />} />
-        <Route path="/examat" element={<ExamAt />} />
         <Route path="/companion" element={<Companion />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/college-profile" element={<AdminHome />} />
         <Route path="/login" element={<LoginModal />} />
         <Route path="/signup" element={<SignupModal />} />
         <Route path="/counselling" element={<Counselling />} />
+        <Route path="/exams" element={<Exams />} />
 
         {/* My Profile - ✅ Updated routes */}
         <Route path="/myprofile" element={<RedirectToProfile />} />
