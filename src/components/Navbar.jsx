@@ -1,9 +1,10 @@
+// src/components/Navbar.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 // ✅ FIXED import path for Firebase 12
-import { getFirestore, doc, getDoc } from "firebase/firestore/lite";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const navLinks = [
@@ -20,11 +21,11 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [displayName, setDisplayName] = useState("");
+  const [userId, setUserId] = useState(null); // ✅ Initialize as null
+  const [displayName, setDisplayName] = useState(""); // ✅ Initialize as empty
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
   const auth = getAuth();
-  const firestore = getFirestore();
 
   const deriveName = (profileName, authDisplayName, email) => {
     if (profileName?.trim()) return profileName.trim();
@@ -33,7 +34,7 @@ const Navbar = () => {
     return "Student";
   };
 
-  // ✅ Detect logged-in user and fetch Firestore profile
+  // ✅ Detect logged-in user and fetch Firestore profile, sync with localStorage
   useEffect(() => {
     let isMounted = true;
 
@@ -42,12 +43,22 @@ const Navbar = () => {
       setUserMenuOpen(false);
 
       if (!currentUser) {
-        if (isMounted) setDisplayName("");
+        if (isMounted) {
+          setDisplayName("");
+          setUserId(null);
+        }
+        // ✅ Clear localStorage if no currentUser (prevents stale data)
+        localStorage.removeItem("userId");
+        localStorage.removeItem("displayName");
         return;
       }
 
+      // ✅ Set userId from Firebase UID only if valid currentUser
+      if (isMounted) setUserId(currentUser.uid);
+
       try {
-        const docRef = doc(db || firestore, "students", currentUser.uid);
+        // ✅ Use db directly for docRef
+        const docRef = doc(db, "students", currentUser.uid);
         const snap = await getDoc(docRef);
 
         const profileData = snap.exists() ? snap.data() : null;
@@ -58,13 +69,22 @@ const Navbar = () => {
         );
 
         if (isMounted) setDisplayName(name);
+
+        // ✅ Update localStorage for persistence
+        localStorage.setItem("userId", currentUser.uid);
+        localStorage.setItem("displayName", name);
       } catch (error) {
+        console.error("Error fetching profile:", error);
         const fallback = deriveName(
           "",
           currentUser.displayName,
           currentUser.email
         );
         if (isMounted) setDisplayName(fallback);
+
+        // ✅ Update localStorage with fallback
+        localStorage.setItem("userId", currentUser.uid);
+        localStorage.setItem("displayName", fallback);
       }
     });
 
@@ -72,7 +92,7 @@ const Navbar = () => {
       isMounted = false;
       unsubscribe();
     };
-  }, [auth, firestore]);
+  }, [auth]);
 
   // Close dropdown if clicking outside
   useEffect(() => {
@@ -88,7 +108,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setDisplayName("");
+      // ✅ States already cleared by onAuthStateChanged
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -126,16 +146,16 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* User Menu */}
+        {/* User Menu - Desktop */}
         <div className="hidden md:flex relative" ref={userMenuRef}>
-          {user ? (
+          {userId ? (
             <>
               <button
                 onClick={() => setUserMenuOpen((prev) => !prev)}
                 className="px-4 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-500 font-medium max-w-[220px] truncate"
                 title={displayName}
               >
-                {"Hi, " + displayName || "Account"}
+                {"Hi, " + displayName}
               </button>
 
               {userMenuOpen && (
@@ -267,13 +287,16 @@ const Navbar = () => {
           </ul>
 
           <div className="flex flex-col gap-3 px-6 pb-4">
-            {user ? (
+            {userId ? (
               <>
                 <div className="px-4 py-2 rounded-lg bg-gray-700 text-center">
                   {displayName || "Account"}
                 </div>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
                   className="px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-center"
                 >
                   Logout

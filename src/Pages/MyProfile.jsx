@@ -1,12 +1,14 @@
 // src/pages/MyProfile.jsx
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getAuth } from "firebase/auth"; // ✅ Import Firebase Auth
+import { doc, getDoc, updateDoc } from "firebase/firestore"; // ✅ Import for Firestore (with updateDoc)
+import { db } from "../firebase"; // ✅ Import db
 import Navbar from "../components/Navbar";
 
 const MyProfile = () => {
-  const { id: paramId } = useParams(); // Get the user ID from the URL
-  const navigate = useNavigate(); // For redirecting if needed
+  const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -21,14 +23,17 @@ const MyProfile = () => {
     counsellingBook: "",
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(""); // Enhanced error handling
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // ✅ Improved userId logic: paramId first, then localStorage fallback
-  let userId = paramId || localStorage.getItem("userId");
-  
-  // Log for debugging (remove in production if desired)
-  console.log("Fetching profile for userId:", userId, "from paramId:", paramId);
+  // ✅ Use Firebase Auth for Firestore userId
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+  const firebaseUid = currentUser?.uid;
+
+  // ✅ Use localStorage for backend MongoDB userId
+  const mongodbId = localStorage.getItem("userId");
 
   const universities = [
     "Delhi University",
@@ -54,79 +59,88 @@ const MyProfile = () => {
   // Base API URL
   const API_BASE = "http://localhost:5000/api";
 
-  // Fetch profile data with robust error handling
+  // Validate MongoDB ObjectId format
+  const isValidMongoId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+  // Fetch profile data with Firebase + Backend sync
   useEffect(() => {
     const fetchProfile = async () => {
-      // ✅ Early check: Ensure valid userId before API call
-      if (!userId) {
-        setError("User not logged in. Please log in to view your profile.");
+      // ✅ Check valid Firebase UID for Firestore
+      if (!firebaseUid) {
+        setError("No valid user logged in via Firebase. Please log in again.");
         setLoading(false);
-        // Optional: Redirect to login
-        // navigate("/login");
         return;
       }
 
-      // ✅ Basic client-side validation for ObjectId format (24 hex chars)
-      const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
-      if (!isValidObjectId(userId)) {
-        console.error("Invalid userId format:", userId);
-        setError("Invalid user ID. Please log in again.");
+      // ✅ Check valid MongoDB ID for backend
+      if (!mongodbId || !isValidMongoId(mongodbId)) {
+        setError("Invalid backend user ID. Please log in again.");
+        localStorage.removeItem("userId"); // Clear invalid
         setLoading(false);
-        // Optional: Clear invalid localStorage and redirect
-        if (!paramId) {
-          localStorage.removeItem("userId");
-          // navigate("/login");
-        }
         return;
       }
+
+      console.log("Fetching profile for Firebase UID:", firebaseUid, "MongoDB ID:", mongodbId); // ✅ Debug log
 
       try {
         setLoading(true);
         setError("");
-        const response = await axios.get(`${API_BASE}/profile/${userId}`);
 
-        // Ensure response has all expected fields
+        // 🔹 Try Firestore first (using Firebase UID)
+        let firestoreData = {};
+        try {
+          const docRef = doc(db, "students", firebaseUid);
+          const snap = await getDoc(docRef);
+          firestoreData = snap.exists() ? snap.data() : {};
+        } catch (firestoreErr) {
+          console.warn("Firestore fetch failed:", firestoreErr);
+        }
+
+        // 🔹 Try backend API (using MongoDB ID)
+        let backendData = {};
+        try {
+          const response = await axios.get(`${API_BASE}/profile/${mongodbId}`);
+          backendData = response.data;
+        } catch (backendErr) {
+          console.error("Backend fetch failed:", backendErr);
+          if (backendErr.response?.status === 400) {
+            setError("Backend rejected user ID format. Please log in again.");
+            localStorage.removeItem("userId");
+          } else {
+            setError("Failed to fetch profile from backend.");
+          }
+        }
+
+        // 🔹 Merge Firestore + Backend data
         const userData = {
-          name: response.data.name || "",
-          email: response.data.email || "",
-          phone: response.data.phone || "",
-          address: response.data.address || "",
-          pincode: response.data.pincode || "",
-          university: response.data.university || "",
-          course: response.data.course || "",
-          branch: response.data.branch || "",
-          academicDetails: response.data.academicDetails || "",
-          counsellingBook: response.data.counsellingBook || "",
+          name: firestoreData.name || backendData.name || "",
+          email: backendData.email || firestoreData.email || "",
+          phone: backendData.phone || firestoreData.phone || "",
+          address: backendData.address || firestoreData.address || "",
+          pincode: backendData.pincode || firestoreData.pincode || "",
+          university: backendData.university || firestoreData.university || "",
+          course: backendData.course || firestoreData.course || "",
+          branch: backendData.branch || firestoreData.branch || "",
+          academicDetails: backendData.academicDetails || firestoreData.academicDetails || "",
+          counsellingBook: backendData.counsellingBook || firestoreData.counsellingBook || "",
         };
         setFormData(userData);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        if (error.response?.status === 400) {
-          setError("Invalid user ID format. Please log in again.");
-          // Clear localStorage if fallback used
-          if (!paramId) localStorage.removeItem("userId");
-        } else if (error.response?.status === 404) {
-          setError("Profile not found. Please check if you're logged in with the correct account.");
-        } else {
-          setError("Failed to fetch profile. Please try again later.");
-        }
+        setError("Failed to fetch profile. Please try again later.");
+      } finally {
         setLoading(false);
-        // Optional: Redirect to login on auth errors
-        // if (error.response?.status === 401 || error.response?.status === 403) {
-        //   navigate("/login");
-        // }
       }
     };
     fetchProfile();
-  }, [userId, navigate, paramId, API_BASE]);
+  }, [firebaseUid, mongodbId, API_BASE]);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    if (error) setError(""); // Clear errors on input
+    if (error) setError("");
   };
 
   const validateForm = () => {
@@ -155,38 +169,72 @@ const MyProfile = () => {
     return true;
   };
 
+  // ✅ Robust handleSave with Firestore + Backend sync
   const handleSave = async () => {
     if (!validateForm()) return;
 
+    if (!firebaseUid || !mongodbId || !isValidMongoId(mongodbId)) {
+      setError("Invalid user session. Please log in again.");
+      return;
+    }
+
+    console.log("Saving profile for Firebase UID:", firebaseUid, "MongoDB ID:", mongodbId); // ✅ Debug log
+
     try {
+      setSaving(true);
       setError("");
-      const response = await axios.put(`${API_BASE}/profile/${userId}`, formData);
-      
-      // Update formData with any server-side changes (e.g., validation)
-      const updatedData = {
-        ...formData,
-        ...response.data, // Merge any updates from server
-      };
+      setSuccessMessage(""); // Clear previous success
+
+      // 🔹 Update backend first (using MongoDB ID)
+      let backendData = {};
+      try {
+        const response = await axios.put(`${API_BASE}/profile/${mongodbId}`, formData);
+        backendData = response.data;
+      } catch (backendErr) {
+        console.error("Backend save failed:", backendErr);
+        if (backendErr.response?.status === 400) {
+          setError("Backend rejected user ID format. Please log in again.");
+          localStorage.removeItem("userId");
+        } else {
+          throw new Error("Failed to update backend profile.");
+        }
+      }
+
+      // 🔹 Update formData with backend response
+      const updatedData = { ...formData, ...backendData };
       setFormData(updatedData);
-      
+
+      // 🔹 Sync name to Firestore for Navbar (using Firebase UID)
+      try {
+        const docRef = doc(db, "students", firebaseUid);
+        await updateDoc(docRef, { name: updatedData.name });
+        console.log("Firestore sync successful");
+      } catch (firestoreErr) {
+        console.warn("Firestore sync failed (non-critical):", firestoreErr);
+        // Don't throw—saving to backend is primary
+      }
+
       setEditMode(false);
       setSuccessMessage("Profile updated successfully! ✅");
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Error updating profile:", error);
-      if (error.response?.status === 400) {
-        setError("Invalid user ID or data format. Please try again.");
-      } else if (error.response?.status === 404) {
-        setError("Profile not found. Please log in again.");
-      } else {
-        setError("Failed to update profile. Please try again.");
-      }
+      const msg = error.message || "Failed to update profile. Please try again.";
+      setError(msg);
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleCancel = () => {
     setEditMode(false);
     setError("");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId"); // ✅ Clear backend ID
+    auth.signOut();
+    navigate("/login");
   };
 
   if (loading) {
@@ -197,13 +245,12 @@ const MyProfile = () => {
     );
   }
 
-  // If no userId and not loading, show login prompt
-  if (!userId && !loading) {
+  if (!firebaseUid || !mongodbId || !isValidMongoId(mongodbId)) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-[#1f2230]">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Profile Not Available</h2>
-          <p className="mb-4">Please log in to view your profile.</p>
+          <p className="mb-4">Invalid session. Please log in to view your profile.</p>
           <button 
             onClick={() => navigate("/login")}
             className="bg-purple-500 hover:bg-purple-600 px-6 py-2 rounded-md text-white font-semibold"
@@ -247,21 +294,29 @@ const MyProfile = () => {
               
               <div className="flex items-center space-x-3">
                 {!editMode ? (
-                  <button 
-                    onClick={() => setEditMode(true)}
-                    className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-md text-white font-semibold transition-colors disabled:opacity-50"
-                    disabled={!userId || loading}
-                  >
-                    Edit Profile
-                  </button>
+                  <>
+                    <button 
+                      onClick={() => setEditMode(true)}
+                      className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-md text-white font-semibold transition-colors disabled:opacity-50"
+                      disabled={loading || saving}
+                    >
+                      Edit Profile
+                    </button>
+                    <button 
+                      onClick={handleLogout}
+                      className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-white font-semibold transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </>
                 ) : (
                   <>
                     <button 
                       onClick={handleSave}
                       className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-white font-semibold transition-colors mr-2 disabled:opacity-50"
-                      disabled={loading}
+                      disabled={saving}
                     >
-                      {loading ? "Saving..." : "Save Changes"}
+                      {saving ? "Saving..." : "Save Changes"}
                     </button>
                     <button 
                       onClick={handleCancel}
@@ -359,7 +414,7 @@ const MyProfile = () => {
             )}
           </div>
 
-          {/* Academic Card - unchanged for brevity, but same error handling applies */}
+          {/* Academic Card */}
           <div className="bg-[#2b2f3a] border border-white/10 text-white rounded-xl shadow-2xl p-6 sm:p-8">
             <h3 className="text-xl font-bold text-white mb-6 flex items-center space-x-2">
               <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
