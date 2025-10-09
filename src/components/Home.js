@@ -10,9 +10,9 @@ import Newsletter from "../components/Newsletter";
 import PlaceCard from "../components/PlaceCard";
 
 import RegistrationModal from "../Modals/RegistrationModal";
-import NewsAlerts from "../components/NewsAlerts";
+import NewsAlerts from "./NewsAlerts.jsx";
 import Testimonials from "../components/Testimonials";
-
+import TopColleges from "../components/TopColleges";
 
 const Home = () => {
   const [showPopup, setShowPopup] = useState(false);
