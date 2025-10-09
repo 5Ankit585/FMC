@@ -7,13 +7,14 @@ import "react-toastify/dist/ReactToastify.css";
 // Components
 import Navbar from "./components/Navbar";
 import RedirectToProfile from "./components/RedirectToProfile"; // ✅ New import
+import Counselling from './components/Counselling';
+
 
 // Pages
 import PasswordReset from "./Pages/PasswordReset";
 import Contact from "./Pages/Contact";
 import Home from "./Pages/Home";
 import ExploreCollegesPage from "./Pages/ExploreCollegesPage";
-import Counselling from "./Pages/Counselling";
 import Scholarship from "./Pages/Scholarship";
 import ExploreCoursePage from "./Pages/ExploreCoursesPage";
 import ExamAt from "./Pages/ExamAt";
@@ -48,8 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       <ToastContainer />
-      {/* Navbar included globally */}
-      <Navbar />
+      
 
       <Routes>
         {/* Main Pages */}
@@ -58,7 +58,6 @@ function App() {
         <Route path="/passwordreset" element={<PasswordReset />} />
         <Route path="/explorecollegespage" element={<ExploreCollegesPage />} />
         <Route path="/universityDetails" element={<UniversityDetails />} />
-        <Route path="/counselling" element={<Counselling />} />
         <Route path="/scholarship" element={<Scholarship />} />
         <Route path="/courses" element={<ExploreCoursePage />} />
         <Route path="/examat" element={<ExamAt />} />
@@ -67,6 +66,7 @@ function App() {
         <Route path="/college-profile" element={<AdminHome />} />
         <Route path="/login" element={<LoginModal />} />
         <Route path="/signup" element={<SignupModal />} />
+        <Route path="/counselling" element={<Counselling />} />
 
         {/* My Profile - ✅ Updated routes */}
         <Route path="/myprofile" element={<RedirectToProfile />} />

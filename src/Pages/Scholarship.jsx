@@ -185,7 +185,7 @@ function ScholarshipCard({ data, user, onToggleSave, savedScholarships }) {
     >
       {/* ---- Save Icon ---- */}
       <button
-        className={`scholar-save-btn ${saved ? "saved" : ""}`}
+        className={`scholar-save-btn ${saved ? "bg-green-500 text-white" : "bg-gray-200"}`}
         onClick={toggleSave}
         title={saved ? "Remove from Saved" : "Save Scholarship"}
       >
