@@ -4,27 +4,7 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import "./Scholarship.css";
-
-/* ---------------- Hero Section ---------------- */
-function HeroSection() {
-  return (
-    <header className="scholar-hero-section">
-      <div className="scholar-hero-overlay" />
-      <div className="scholar-hero-pattern" />
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="scholar-hero-content"
-      >
-        <h1 className="scholar-hero-title">Find the Perfect Scholarship</h1>
-        <p className="scholar-hero-subtitle">
-          Search, filter, and apply for scholarships that match your profile.
-        </p>
-      </motion.div>
-    </header>
-  );
-}
+import Navbar from "../components/Navbar";
 
 /* ---------------- Search Bar ---------------- */
 function SearchBar({ onSearch }) {
@@ -185,7 +165,7 @@ function ScholarshipCard({ data, user, onToggleSave, savedScholarships }) {
     >
       {/* ---- Save Icon ---- */}
       <button
-        className={`scholar-save-btn ${saved ? "bg-green-500 text-white" : "bg-gray-200"}`}
+        className={`scholar-save-btn ${saved ? "saved" : ""}`}
         onClick={toggleSave}
         title={saved ? "Remove from Saved" : "Save Scholarship"}
       >
@@ -314,48 +294,52 @@ export default function Scholarship() {
 
   return (
     <div className="scholar-main">
-      <HeroSection />
+      <div className="scholar-navbar-wrapper">
+        <Navbar />
+      </div>
       <SearchBar onSearch={setQuery} />
 
-      <div className="scholar-content">
-        <SidebarFilterLeft values={filters} onChange={(next) => setFilters((p) => ({ ...p, ...next }))} />
+      <div className="scholar-content-wrapper">
+        <div className="scholar-content">
+          <SidebarFilterLeft values={filters} onChange={(next) => setFilters((p) => ({ ...p, ...next }))} />
 
-        <motion.div layout className="scholar-results">
-          <div className="scholar-results-header">
-            <h2 className="scholar-results-title">University Scholarships Dashboard.</h2>
-            <div className="scholar-tabs">
-              {["Upcoming", "Ongoing"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`scholar-tab ${activeTab === tab ? "scholar-tab-active" : ""}`}
-                >
-                  {tab}
-                </button>
-              ))}
+          <motion.div layout className="scholar-results">
+            <div className="scholar-results-header">
+              <h2 className="scholar-results-title">University Scholarships Dashboard.</h2>
+              <div className="scholar-tabs">
+                {["Upcoming", "Ongoing"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`scholar-tab ${activeTab === tab ? "scholar-tab-active" : ""}`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {loading ? (
-            <div className="scholar-loading">Loading scholarships...</div>
-          ) : error ? (
-            <div className="scholar-error">Error: {error}</div>
-          ) : filtered.length === 0 ? (
-            <div className="scholar-empty">No scholarships found for your filters.</div>
-          ) : (
-            <div className="scholar-grid">
-              {filtered.map((s) => (
-                <ScholarshipCard
-                  key={s._id}
-                  data={s}
-                  user={user}
-                  savedScholarships={savedScholarships}
-                  onToggleSave={handleToggleSave}
-                />
-              ))}
-            </div>
-          )}
-        </motion.div>
+            {loading ? (
+              <div className="scholar-loading">Loading scholarships...</div>
+            ) : error ? (
+              <div className="scholar-error">Error: {error}</div>
+            ) : filtered.length === 0 ? (
+              <div className="scholar-empty">No scholarships found for your filters.</div>
+            ) : (
+              <div className="scholar-grid">
+                {filtered.map((s) => (
+                  <ScholarshipCard
+                    key={s._id}
+                    data={s}
+                    user={user}
+                    savedScholarships={savedScholarships}
+                    onToggleSave={handleToggleSave}
+                  />
+                ))}
+              </div>
+            )}
+          </motion.div>
+        </div>
       </div>
     </div>
   );
