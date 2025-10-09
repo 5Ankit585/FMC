@@ -11,6 +11,7 @@ import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import Navbar from "../components/Navbar";
 
 export default function StudentLogin({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
@@ -126,11 +127,13 @@ export default function StudentLogin({ onLogin = () => {} }) {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#2d351f] via-[#353623] to-[#1a1c27] flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md">
-        <div className="backdrop-blur-xl bg-[rgb(36,39,49,0.8)] border border-white/10 text-white rounded-2xl shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="px-8 pt-8 pb-4 text-center">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-[#2d351f] via-[#353623] to-[#1a1c27] flex items-center justify-center px-4 py-10">
+        <div className="w-full max-w-md">
+          <div className="backdrop-blur-xl bg-[rgb(36,39,49,0.8)] border border-white/10 text-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="px-8 pt-8 pb-4 text-center">
             <div className="mx-auto h-12 w-12 rounded-xl bg-yellow-500/20 flex items-center justify-center mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -274,6 +277,7 @@ export default function StudentLogin({ onLogin = () => {} }) {
         </p>
       </div>
     </div>
+    </>
   );
 }
 

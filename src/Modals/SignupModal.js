@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import FormInput from "../components/FormInput";
+import Navbar from "../components/Navbar";
 
 const StudentSignup = () => {
   const [formData, setFormData] = useState({
@@ -28,66 +29,88 @@ const StudentSignup = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErr("");
-    setInfo("");
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErr("");
+  setInfo("");
+  setLoading(true);
 
-    try {
-      // 1) Create user
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
+  try {
+    // 1) Create Firebase Auth user
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+    const user = userCredential.user;
 
-      // 2) Upload files if any
-      let documentUrl = "";
-      let scholarshipUrl = "";
+    // 2) Upload files if any
+    let documentUrl = "";
+    let scholarshipUrl = "";
 
-      if (formData.documents) {
-        const docRef = ref(storage, `students/${user.uid}/documents_${Date.now()}.pdf`);
-        await uploadBytes(docRef, formData.documents);
-        documentUrl = await getDownloadURL(docRef);
-      }
+    if (formData.documents) {
+      const docRef = ref(storage, `students/${user.uid}/documents_${Date.now()}.pdf`);
+      await uploadBytes(docRef, formData.documents);
+      documentUrl = await getDownloadURL(docRef);
+    }
 
-      if (formData.scholarshipDoc) {
-        const schRef = ref(storage, `students/${user.uid}/scholarship_${Date.now()}.pdf`);
-        await uploadBytes(schRef, formData.scholarshipDoc);
-        scholarshipUrl = await getDownloadURL(schRef);
-      }
+    if (formData.scholarshipDoc) {
+      const schRef = ref(storage, `students/${user.uid}/scholarship_${Date.now()}.pdf`);
+      await uploadBytes(schRef, formData.scholarshipDoc);
+      scholarshipUrl = await getDownloadURL(schRef);
+    }
 
-      // 3) Save to Firestore
-      await setDoc(doc(db, "students", user.uid), {
-        uid: user.uid,
+    // 3) Save to Firestore
+    await setDoc(doc(db, "students", user.uid), {
+      uid: user.uid,
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      address: formData.address,
+      pincode: formData.pincode,
+      createdAt: new Date(),
+    });
+
+    // 4) Save to MongoDB via backend API
+    const response = await fetch("http://localhost:5000/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
+        password: formData.password, // hashed in backend
+        firebaseId: user.uid,
         address: formData.address,
         pincode: formData.pincode,
-        createdAt: new Date(),
-      });
+      }),
+    });
 
-      setInfo("Student signed up successfully!");
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        password: "",
-        address: "",
-        pincode: "",
-      });
-    } catch (error) {
-      console.error("Signup Error:", error);
-      setErr(error?.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+    const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || "MongoDB save failed");
     }
-  };
+
+    setInfo("✅ Student signed up successfully!");
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+      address: "",
+      pincode: "",
+    });
+  } catch (error) {
+    console.error("Signup Error:", error);
+    setErr(error?.message || "Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-[#2c301f] via-[#232736] to-[#1a1c27] flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left welcome panel */}
@@ -231,6 +254,7 @@ const StudentSignup = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
