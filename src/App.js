@@ -18,7 +18,7 @@ import Home from "./Pages/Home";
 import ExploreCollegesPage from "./Pages/ExploreCollegesPage";
 import Scholarship from "./Pages/Scholarship";
 import ExploreCoursePage from "./Pages/ExploreCoursesPage";
-import MyCourses from "./Pages/MyCourses"; // ✅ New import
+import MySavedCourses from "./Pages/MySavedCourses"; // ✅ New import
 import Companion from "./FooterPages/Companion";
 import AdminLogin from "./Pages/Admin/AdminLogin";
 import AdminHome from "./Pages/Admin/AdminHome";
@@ -74,7 +74,7 @@ function App() {
 
 
         {/* ✅ New My Courses Route - Updated to match Navbar /course */}
-        <Route path="/course" element={<MyCourses />} /> {/* ✅ Changed from /my-courses to /course to match Navbar */}
+        <Route path="/course" element={<MySavedCourses />} /> {/* ✅ Changed from /my-courses to /course to match Navbar */}
 
         <Route path="/saved-scholarships" element={<SavedScholarships />} />
 
