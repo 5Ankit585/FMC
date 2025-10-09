@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import RedirectToProfile from "./components/RedirectToProfile"; // ✅ New import
 import Counselling from './components/Counselling';
 import Exams from './components/Exams';
+import NewsFeed from "./components/NewsFeed";
 
 
 // Pages
@@ -67,6 +68,8 @@ function App() {
         <Route path="/signup" element={<SignupModal />} />
         <Route path="/counselling" element={<Counselling />} />
         <Route path="/exams" element={<Exams />} />
+        <Route path="/NewsFeed" element={<NewsFeed />} />
+
 
         {/* My Profile - ✅ Updated routes */}
         <Route path="/myprofile" element={<RedirectToProfile />} />
