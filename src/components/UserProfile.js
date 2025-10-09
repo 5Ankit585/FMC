@@ -6,7 +6,7 @@ const UserProfile = ({Profile}) => {
     <>
       <div className="bg-white p-4 rounded-lg shadow-md w-64">
         <div className="text-center">
-          {Profile ? <div><div className="w-20 h-20 mx-auto bg-blue-500 rounded-full flex items-center justify-center text-white overflow-hidden font-bold text-2xl">
+          {Profile ? <div><div className="w-20 h-20 mx-auto bg-yellow-500 rounded-full flex items-center justify-center text-white overflow-hidden font-bold text-2xl">
             <img src={Profile.image} alt="profile" className="overflow-hidden " />
           </div>  
           <div>
@@ -24,7 +24,7 @@ const UserProfile = ({Profile}) => {
        <div className="w-20 h-20 mx-auto  rounded-full flex items-center justify-center text-white font-bold text-2xl overflow-hidden">
             <img src="./candidate.png" alt="profile" className=" overflow-hidden" />
           </div> 
-          <button "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full my-3" onClick={()=>navigate('/login')}>
+          <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full w-full my-3" onClick={()=>navigate('/login')}>
   Login/Register
 </button>
           </div>
