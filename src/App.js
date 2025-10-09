@@ -11,7 +11,6 @@ import Counselling from './components/Counselling';
 import Exams from './components/Exams';
 import NewsFeed from "./components/NewsFeed";
 
-
 // Pages
 import PasswordReset from "./Pages/PasswordReset";
 import Contact from "./Pages/Contact";
@@ -50,7 +49,6 @@ function App() {
   return (
     <BrowserRouter>
       <ToastContainer />
-      
 
       <Routes>
         {/* Main Pages */}
@@ -68,15 +66,16 @@ function App() {
         <Route path="/signup" element={<SignupModal />} />
         <Route path="/counselling" element={<Counselling />} />
         <Route path="/exams" element={<Exams />} />
-        <Route path="/NewsFeed" element={<NewsFeed />} />
+        <Route path="/newsfeed" element={<NewsFeed />} /> {/* ✅ Fixed path to match Navbar: /newsfeed (lowercase) */}
+
+        {/* ✅ Updated My Profile Routes to match Navbar */}
+        <Route path="/myprofile" element={<MyProfile />} />
+<Route path="/myprofile/:id" element={<MyProfile />} />
 
 
-        {/* My Profile - ✅ Updated routes */}
-        <Route path="/myprofile" element={<RedirectToProfile />} />
-        <Route path="/myprofile/:id" element={<MyProfile />} />
+        {/* ✅ New My Courses Route - Updated to match Navbar /course */}
+        <Route path="/course" element={<MyCourses />} /> {/* ✅ Changed from /my-courses to /course to match Navbar */}
 
-        {/* ✅ New My Courses Route */}
-        <Route path="/my-courses" element={<MyCourses />} />
         <Route path="/saved-scholarships" element={<SavedScholarships />} />
 
         {/* University & Dashboard Routes */}
@@ -97,6 +96,11 @@ function App() {
         <Route path="/srm" element={<Srm />} />
         <Route path="/coursepage/:id" element={<CoursePage />} />
         <Route path="/courseregister" element={<CourseRegister />} />
+
+        {/* ✅ TODO: Add missing routes for Navbar dropdown if needed */}
+        {/* <Route path="/study-material" element={<StudyMaterial />} /> */}
+        {/* <Route path="/exam" element={<Exams />} /> - Already exists as /exams, consider alias or update Navbar */}
+        {/* <Route path="/settings" element={<Settings />} /> */}
       </Routes>
     </BrowserRouter>
   );

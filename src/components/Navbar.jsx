@@ -141,7 +141,7 @@ const Navbar = () => {
               {userMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-2 z-50">
                   <NavLink
-                    to="/profile"
+                    to="/myprofile"
                     onClick={() => setUserMenuOpen(false)}
                     className="block px-4 py-2 hover:bg-yellow-500"
                   >
@@ -162,7 +162,7 @@ const Navbar = () => {
                     Scholarships
                   </NavLink>
                   <NavLink
-                    to="/study-material"
+                    to="/Savedscholarships"
                     onClick={() => setUserMenuOpen(false)}
                     className="block px-4 py-2 hover:bg-yellow-500"
                   >
