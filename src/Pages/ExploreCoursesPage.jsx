@@ -384,6 +384,8 @@ const CourseExplorer = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="course-explorer">
       <div className="ce-main">
         <h1 className="ce-title">Top Courses in Indian Colleges 2025</h1>
@@ -412,6 +414,7 @@ const CourseExplorer = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
