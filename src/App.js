@@ -38,6 +38,9 @@ import Mahe from './FooterPages/topExam/Mahe';
 import Service from './FooterPages/topExam/Service';
 import Srm from './FooterPages/topExam/Srm';
 import Upes from './FooterPages/topExam/Upes';
+import Privacy from "./FooterPages/Privacy";
+import ContactUs from "./FooterPages/ContactUs";
+import Abtnv from "./FooterPages/Abtnv";
 
 // University & Dashboard
 import AgentDashboard from "./AgentDashboard/Agent";
@@ -96,6 +99,9 @@ function App() {
         <Route path="/srm" element={<Srm />} />
         <Route path="/coursepage/:id" element={<CoursePage />} />
         <Route path="/courseregister" element={<CourseRegister />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/about" element={<Abtnv />} />
 
         {/* ✅ TODO: Add missing routes for Navbar dropdown if needed */}
         {/* <Route path="/study-material" element={<StudyMaterial />} /> */}

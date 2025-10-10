@@ -91,7 +91,7 @@ const Footer = () => {
         <ul className="flex space-x-6 text-gray-300 font-medium">
           <li><Link to="/" className="hover:text-yellow-500 hover:underline ">Home</Link></li>
           <li><Link to="/privacy" className="hover:text-yellow-500 hover:underline ">Privacy</Link></li>
-          <li><Link to="/contact" className="hover:text-yellow-500 hover:underline ">Contact</Link></li>
+          <li><Link to="/contactus" className="hover:text-yellow-500 hover:underline ">Contact</Link></li>
           <li><Link to="/about" className="hover:text-yellow-500 hover:underline ">About</Link></li>
         </ul>
 
