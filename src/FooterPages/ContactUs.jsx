@@ -44,41 +44,41 @@ const ContactUs = () => {
       >
       <section className="flex flex-col items-center justify-center text-center py-2 px-0 animate-fadeIn">
         <h1 className="text-4xl md:text-5xl font-bold mb-7 text-black drop-shadow-lg">
-          We’d Love to Hear From You
+          We’d Love to Hear from You
         </h1>
         <p className="text-xl md:text-2xl max-w-xl text-yellow-500 font-semibold">
           Whether you’re a student, institute, or partner — we’re here to help.
         </p>
-        <div className="max-w-full bg-gray-900 flex-col items-center justify-center text-center py-2 px-2 mt-6 grid grid-cols-1 md:grid-cols-4 gap-6 ">
+        <div className="max-w-6xl mx-auto bg-gray-900 flex items-center justify-center py-8 px-4 mt-6 grid grid-cols-1 md:grid-cols-4 gap-6 rounded-lg shadow-lg">
          {[
           {
-            icon: <i className="fa-solid fa-location-dot"></i>,
+            icon: <i className="fa-solid fa-location-dot text-yellow-400"></i>,
             label: "Office Address",
             detail: "123 Edu Tower, Connaught Place, New Delhi, India",
           },
           {
-            icon: <i className="fa-solid fa-phone-volume"></i>,
+            icon: <i className="fa-solid fa-phone-volume text-yellow-400"></i>,
             label: "Phone",
             detail: "+91 xxxxxxxx (Mon–Sat, 9 AM – 7 PM)",
           },
           {
-            icon: <i className="fa-solid fa-envelope"></i>,
+            icon: <i className="fa-solid fa-envelope text-yellow-400"></i>,
             label: "Email",
             detail: (
               <a
                 href="mailto:support@yourdomain.com"
-                className="underline hover:text-yellow-500"
+                className="underline hover:text-yellow-300"
               >
                 support@yourdomain.com
               </a>
             ),
           },
           {
-            icon: <i className="fa-solid fa-comment-dots"></i>,
+            icon: <i className="fa-solid fa-comment-dots text-yellow-400"></i>,
             label: "Live Chat",
             detail: (
               <button
-                className="underline text-white hover:text-yellow-500"
+                className="underline hover:text-yellow-300"
                 onClick={() => alert("Launching live chat widget...")}
               >
                 Click here to chat now
@@ -88,66 +88,17 @@ const ContactUs = () => {
         ].map(({ icon, label, detail }) => (
           <div
             key={label}
-            className="hover:border-yellow-500 transition-all duration-500 animate-slideUp"
+            className="text-center text-white hover:text-yellow-300 transition-all duration-500 animate-slideUp"
           >
-            <span className="text-3xl">{icon}</span>
-            <h3 className="font-bold text-yellow-500 text-lg">{label}</h3>
-            <p className="text-smtext-yellow-500">{detail}</p>
+            <span className="text-3xl block mb-2">{icon}</span>
+            <h3 className="font-bold text-sm mb-1">{label}</h3>
+            <p className="text-xs">{detail}</p>
           </div>
         ))}
         </div>
 
       </section>
       </header>
-
-      {/* Quick Contact Info */}
-      <section className="max-w-6xl mx-auto py-10 px-2 grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-        {[
-          {
-            icon: <i className="fa-solid fa-location-dot"></i>,
-            label: "Office Address",
-            detail: "123 Edu Tower, Connaught Place, New Delhi, India",
-          },
-          {
-            icon: <i className="fa-solid fa-phone-volume"></i>,
-            label: "Phone",
-            detail: "+91 xxxxxxxx (Mon–Sat, 9 AM – 7 PM)",
-          },
-          {
-            icon: <i className="fa-solid fa-envelope"></i>,
-            label: "Email",
-            detail: (
-              <a
-                href="mailto:support@yourdomain.com"
-                className="underline hover:text-yellow-500"
-              >
-                support@yourdomain.com
-              </a>
-            ),
-          },
-          {
-            icon: <i className="fa-solid fa-comment-dots"></i>,
-            label: "Live Chat",
-            detail: (
-              <button
-                className="underline text-gray-800 hover:text-yellow-500"
-                onClick={() => alert("Launching live chat widget...")}
-              >
-                Click here to chat now
-              </button>
-            ),
-          },
-        ].map(({ icon, label, detail }) => (
-          <div
-            key={label}
-            className="hover:border-yellow-500 transition-all duration-500 animate-slideUp"
-          >
-            <span className="text-3xl">{icon}</span>
-            <h3 className="font-bold text-gray-800 text-lg">{label}</h3>
-            <p className="text-sm text-gray-800">{detail}</p>
-          </div>
-        ))}
-      </section>
 
       {/* Contact Section */}
       <section

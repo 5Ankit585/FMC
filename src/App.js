@@ -10,6 +10,7 @@ import RedirectToProfile from "./components/RedirectToProfile"; // ✅ New impor
 import Counselling from './components/Counselling';
 import Exams from './components/Exams';
 import NewsFeed from "./components/NewsFeed";
+import Examat from "./Pages/ExamAt";
 
 // Pages
 import PasswordReset from "./Pages/PasswordReset";
@@ -29,7 +30,6 @@ import CourseRegister from "./Pages/CourseRegister";
 import MyProfile from "./Pages/MyProfile";
 import CoursePage from "./Pages/CoursePage";
 import SavedScholarships from "./Pages/SavedScholarships";
-import ExamAt from "./Pages/ExamAt";
 
 // Footer Pages
 import CollegeReview from './FooterPages/topExam/CollegeReview';
@@ -70,9 +70,8 @@ function App() {
         <Route path="/signup" element={<SignupModal />} />
         <Route path="/counselling" element={<Counselling />} />
         <Route path="/exams" element={<Exams />} />
+        <Route path="/examat" element={<Examat />} />
         <Route path="/newsfeed" element={<NewsFeed />} /> {/* ✅ Fixed path to match Navbar: /newsfeed (lowercase) */}
-        <Route path="/examat" element={<ExamAt />} />
-
 
         {/* ✅ Updated My Profile Routes to match Navbar */}
         <Route path="/myprofile" element={<MyProfile />} />

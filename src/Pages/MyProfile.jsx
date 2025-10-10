@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../components/Navbar";
 
 const MyProfile = () => {
   const { id: paramId } = useParams(); // Get the user ID from the URL
@@ -91,11 +92,13 @@ const MyProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#1f2230] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Basic Profile Card */}
-        <div className="bg-[#2b2f3a] border border-white/10 text-white rounded-xl shadow-2xl p-6 sm:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-[#1f2230] py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Basic Profile Card */}
+          <div className="bg-[#2b2f3a] border border-white/10 text-white rounded-xl shadow-2xl p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex items-center space-x-4">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-2xl font-bold text-white">
                 {formData.name.charAt(0).toUpperCase()}
@@ -319,6 +322,7 @@ const MyProfile = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

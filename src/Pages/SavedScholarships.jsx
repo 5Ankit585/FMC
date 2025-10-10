@@ -72,7 +72,7 @@ export default function SavedScholarships() {
 
   return (
     <div>
-    
+      <Navbar />
       <div className="px-4 md:px-20 py-6">
         <h1 className="text-2xl font-bold mb-6">Saved Scholarships</h1>
         {savedList.length === 0 ? (

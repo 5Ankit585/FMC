@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";  // ✅ Ensure this import is there
+import Navbar from "../components/Navbar";
 
 const MyCourses = () => {
   const [savedCourses, setSavedCourses] = useState([]);
@@ -37,11 +38,13 @@ const MyCourses = () => {
   }
 
   return (
-    <div className="px-6 py-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">My Saved Courses</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {savedCourses.map((course) => (
-          <div
+    <>
+      <Navbar />
+      <div className="px-6 py-8 max-w-5xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6">My Saved Courses</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {savedCourses.map((course) => (
+            <div
             key={course.courseId}  // Use courseId
             className="border p-4 rounded-lg shadow hover:shadow-md cursor-pointer"
             onClick={() => navigate(`/coursepage/${course.courseId}`)}  // Use courseId
@@ -52,6 +55,7 @@ const MyCourses = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 
