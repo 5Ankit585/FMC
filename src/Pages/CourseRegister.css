@@ -80,3 +80,57 @@
 .course-submit:hover {
   background: linear-gradient(to right, #4338CA, #6D28D9);
 }
+
+/* Additional styles for dynamic sections */
+.specialization-row,
+.top-institute-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #C7D2FE;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.spec-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spec-preview,
+.institute-preview {
+  max-width: 150px;
+  max-height: 90px;
+  border-radius: 0.25rem;
+}
+
+.spec-add,
+.spec-remove {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.spec-add {
+  background: #4F46E5;
+  color: white;
+}
+
+.spec-add:hover {
+  background: #4338CA;
+}
+
+.spec-remove {
+  background: #EF4444;
+  color: white;
+}
+
+.spec-remove:hover {
+  background: #DC2626;
+}

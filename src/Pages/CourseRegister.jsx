@@ -85,6 +85,14 @@ export default function CourseRegister() {
     setTopInstituteImages(files);
   };
 
+  const handleTopInstituteDescChange = (index, value) => {
+    setTopInstituteImages((prev) => {
+      const copy = [...prev];
+      copy[index].description = value;
+      return copy;
+    });
+  };
+
   // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +118,7 @@ export default function CourseRegister() {
       // Append top institute images + descriptions
       topInstituteImages.forEach((item) => {
         data.append("topInstituteImages", item.file);
-        data.append("topInstituteDescriptions", item.description);
+        data.append("topInstituteDescriptions[]", item.description);
       });
 
       const res = await fetch("http://localhost:5000/api/courses", {
@@ -380,17 +388,13 @@ export default function CourseRegister() {
             <input type="file" multiple accept="image/*" onChange={handleTopInstituteFileChange} />
             {topInstituteImages.length > 0 &&
               topInstituteImages.map((item, idx) => (
-                <div key={idx}>
+                <div key={idx} className="top-institute-row">
                   {item?.file && <p>{item.file.name}</p>}
                   <input
                     type="text"
-                    placeholder="Description for this image"
+                    placeholder="Institute description (optional)"
                     value={item?.description || ""}
-                    onChange={(e) => {
-                      const newImages = [...topInstituteImages];
-                      newImages[idx].description = e.target.value;
-                      setTopInstituteImages(newImages);
-                    }}
+                    onChange={(e) => handleTopInstituteDescChange(idx, e.target.value)}
                   />
                 </div>
               ))}
