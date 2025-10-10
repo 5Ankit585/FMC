@@ -91,6 +91,9 @@ const handleSubmit = async (e) => {
       throw new Error(result.error || "MongoDB save failed");
     }
 
+    // Save MongoDB _id in localStorage
+localStorage.setItem("userId", result.data._id);
+
     setInfo("✅ Student signed up successfully!");
     setFormData({
       name: "",
