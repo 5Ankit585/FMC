@@ -117,7 +117,29 @@ export default function CoursePage() {
           careerRoles: courseData.careerRoles ? courseData.careerRoles.split(",") : [],
           topInstitutes: courseData.topInstitutes ? courseData.topInstitutes.split(",") : [],
           curriculum: courseData.curriculum ? courseData.curriculum.split(",") : [],
-          specializations: courseData.specializations || [], // Keep as array of objects
+          eligibilityItems: courseData.eligibility
+            ? courseData.eligibility.split("\n").filter(item => item.trim())
+            : [],
+          admissionItems: courseData.admissionProcess
+            ? courseData.admissionProcess.split("\n").filter(item => item.trim())
+            : [],
+          scholarshipsItems: courseData.scholarships
+            ? courseData.scholarships.split("\n").filter(item => item.trim())
+            : [],
+          abroadItems: courseData.abroadOptions
+            ? courseData.abroadOptions.split("\n").filter(item => item.trim())
+            : [],
+          faqsBlocks: courseData.faqs
+            ? courseData.faqs.split("\n\n").map(block => {
+                const lines = block.split("\n");
+                return {
+                  question: lines[0] || "",
+                  answer: lines.slice(1).join("\n") || ""
+                };
+              }).filter(faq => faq.question && faq.answer)
+            : [],
+          specializations: courseData.specializations || [], // Always array
+          topInstituteImages: courseData.topInstituteImages || [], // Always array
         };
 
         setCourse(parsed);
@@ -270,7 +292,7 @@ export default function CoursePage() {
                 <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-yellow-50 blur-2xl" />
                 <h3 className="text-lg font-semibold text-gray-900">Key Highlights</h3>
                 <ul className="mt-3 space-y-2 text-sm text-gray-800">
-                  {course.highlights.map((item, idx) => (
+                  {(course.highlights || []).map((item, idx) => (
                     <li key={idx}>{item.trim()}</li>
                   ))}
                 </ul>
@@ -290,7 +312,7 @@ export default function CoursePage() {
           subtitle="Choose a focus area to align with career goals."
         >
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {course.specializations?.map((spec, idx) => (
+            {(course.specializations || []).map((spec, idx) => (
               <Card
                 key={idx}
                 title={spec.name || `Specialization ${idx + 1}`}
@@ -311,19 +333,17 @@ export default function CoursePage() {
             <div className="rounded-2xl border border-white/30 bg-white/40 p-6 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
               <h4 className="text-lg font-semibold text-gray-900">Eligibility</h4>
               <ul className="mt-3 space-y-2 text-gray-800 text-sm">
-                <li>- Completed 10+2 from a recognized board</li>
-                <li>- Minimum aggregate typically 50% (varies by institute)</li>
-                <li>- Background in any stream (Commerce preferred but not mandatory)</li>
-                <li>- English proficiency as per institute norms</li>
+                {(course.eligibilityItems || []).map((item, idx) => (
+                  <li key={idx}>{item.trim()}</li>
+                ))}
               </ul>
             </div>
             <div className="rounded-2xl border border-white/30 bg-white/40 p-6 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
               <h4 className="text-lg font-semibold text-gray-900">Entrance & Admission</h4>
               <ul className="mt-3 space-y-2 text-gray-800 text-sm">
-                <li>- Common exams: CUET-UG, IPU CET, NPAT, SET, Christ Entrance (varies by college)</li>
-                <li>- Selection: Entrance score and/or merit, interview, SOP</li>
-                <li>- Deadlines: Typically Mar–Jun for most universities</li>
-                <li>- Lateral entries as per institute policy</li>
+                {(course.admissionItems || []).map((item, idx) => (
+                  <li key={idx}>{item.trim()}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -352,7 +372,7 @@ export default function CoursePage() {
           subtitle="Core subjects and electives."
         >
           <div className="grid gap-6 lg:grid-cols-3">
-            {course.curriculum.map((item, idx) => (
+            {(course.curriculum || []).map((item, idx) => (
               <div key={idx} className="rounded-2xl border border-white/30 bg-white/40 p-6 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
                 <h4 className="text-lg font-semibold text-gray-900">Subject {idx + 1}</h4>
                 <ul className="mt-3 space-y-2 text-sm text-gray-800">
@@ -378,11 +398,11 @@ export default function CoursePage() {
                 style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}
               >
                 <div className="contents lg:[&>*]:w-[calc((100vw-2rem-2rem-2rem)/3)] xl:[&>*]:w-[calc((72rem-2rem-2rem-2rem)/3)]">
-                  {course.topInstituteImages?.map((item, idx) => (
+                  {(course.topInstituteImages || []).map((item, idx) => (
                     <InstituteCard
                       key={idx}
-                      title={item.description || course.topInstitutes[idx] || `Institute ${idx + 1}`}
-                      img={item.url ? `http://localhost:5000/${item.url}` : INSTITUTE_IMAGES[course.topInstitutes[idx]] || "/default-institute.jpeg"}
+                      title={item.description || course.topInstitutes?.[idx] || `Institute ${idx + 1}`}
+                      img={item.url ? `http://localhost:5000/${item.url}` : INSTITUTE_IMAGES[course.topInstitutes?.[idx]] || "/default-institute.jpeg"}
                     />
                   ))}
                 </div>
@@ -401,7 +421,7 @@ export default function CoursePage() {
             <div className="rounded-2xl border border-white/30 bg-gray-100 p-6 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
               <h4 className="text-lg font-semibold text-gray-900">Popular Roles</h4>
               <ul className="mt-3 space-y-2 text-sm text-gray-800">
-                {course.careerRoles.map((role, idx) => (
+                {(course.careerRoles || []).map((role, idx) => (
                   <li key={idx}>{role.trim()}</li>
                 ))}
               </ul>
@@ -419,19 +439,17 @@ export default function CoursePage() {
             <div className="rounded-2xl border border-white/30 bg-white/50 p-6 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
               <h4 className="text-lg font-semibold text-gray-900">Scholarships</h4>
               <ul className="mt-3 space-y-2 text-gray-800 text-sm">
-                <li>- Institute merit and need-based schemes</li>
-                <li>- Govt scholarships as per category/policy</li>
-                <li>- Private foundations and CSR programs</li>
-                <li>- Fee waivers for high performers</li>
+                {(course.scholarshipsItems || []).map((item, idx) => (
+                  <li key={idx}>{item.trim()}</li>
+                ))}
               </ul>
             </div>
             <div className="rounded-2xl border border-white/30 bg-white/50 p-6 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
               <h4 className="text-lg font-semibold text-gray-900">Study Abroad & Exchange</h4>
               <ul className="mt-3 space-y-2 text-gray-800 text-sm">
-                <li>- Semester exchange with partner universities</li>
-                <li>- Global immersion/short study tours</li>
-                <li>- Credit transfer as per MoUs</li>
-                <li>- English proficiency: IELTS/TOEFL as needed</li>
+                {(course.abroadItems || []).map((item, idx) => (
+                  <li key={idx}>{item.trim()}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -440,22 +458,12 @@ export default function CoursePage() {
         {/* FAQs */}
         <Section id="faqs" title="FAQs" subtitle="Quick answers to common queries.">
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-white/30 bg-gray-200 p-5 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
-              <h4 className="font-semibold text-gray-900">What is the duration of BBA?</h4>
-              <p className="mt-1 text-sm text-gray-800">Typically 3 years (6 semesters), varying by university.</p>
-            </div>
-            <div className="rounded-xl border border-white/30 bg-gray-200 p-5 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
-              <h4 className="font-semibold text-gray-900">Is BBA open to non-Commerce students?</h4>
-              <p className="mt-1 text-sm text-gray-800">Yes, students from any stream can apply unless specified otherwise.</p>
-            </div>
-            <div className="rounded-xl border border-white/30 bg-gray-200 p-5 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
-              <h4 className="font-semibold text-gray-900">Are internships mandatory?</h4>
-              <p className="mt-1 text-sm text-gray-800">Most programs include an internship or capstone in later semesters.</p>
-            </div>
-            <div className="rounded-xl border border-white/30 bg-gray-200 p-5 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
-              <h4 className="font-semibold text-gray-900">Is BBA valid abroad?</h4>
-              <p className="mt-1 text-sm text-gray-800">Recognition depends on institution and country; many graduates pursue master’s abroad.</p>
-            </div>
+            {(course.faqsBlocks || []).map((faq, idx) => (
+              <div key={idx} className="rounded-xl border border-white/30 bg-gray-200 p-5 shadow-sm backdrop-blur-sm ring-1 ring-yellow-100">
+                <h4 className="font-semibold text-gray-900">{faq.question}</h4>
+                <p className="mt-1 text-sm text-gray-800">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </Section>
 
