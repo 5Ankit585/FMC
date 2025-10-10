@@ -287,7 +287,7 @@ export default function Scholarship() {
         (!filters.type || s.type?.toLowerCase() === filters.type.toLowerCase()) &&
         (!filters.mode || s.status?.toLowerCase() === filters.mode.toLowerCase()) &&
         (!filters.deadlineState || status === filters.deadlineState.toLowerCase()) &&
-        (activeTab === "Upcoming" || activeTab === "Ongoing")
+        (activeTab === "Upcoming" || activeTab === "Ongoing" || activeTab === "Closed")
       );
     });
   }, [scholarships, query, filters, activeTab]);
@@ -307,7 +307,7 @@ export default function Scholarship() {
             <div className="scholar-results-header">
               <h2 className="scholar-results-title">University Scholarships Dashboard.</h2>
               <div className="scholar-tabs">
-                {["Upcoming", "Ongoing"].map((tab) => (
+                {["Upcoming", "Ongoing", "Closed"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}

@@ -8,6 +8,19 @@ import Footer from "../components/Footer";
 // Hero Section
 // -------------------
 function HeroSection() {
+const handleScrollToBooking = () => {
+  const element = document.getElementById('booking');
+  if (element) {
+    const headerOffset = 80;
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+};
   return (
     <section className="text-center py-5 px-6">
       <motion.h1
@@ -29,6 +42,7 @@ function HeroSection() {
         personalized, and trusted.
       </motion.p>
       <motion.button
+        onClick={handleScrollToBooking}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="px-8 py-3 rounded-xl bg-gradient-to-r from-gray-900 to-gray-900 text-yellow-400 font-semibold shadow-lg hover:shadow-xl transition"
@@ -146,7 +160,7 @@ function FreeAddOns() {
             className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none"
           />
             <input
-            type="percentage"
+            type="text"
             placeholder="Grades"
             className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none"
           />
@@ -347,9 +361,67 @@ function TrustSafety() {
 // -------------------
 function BookingFlow() {
   const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    mobileNumber: '',
+    ageDob: '',
+    cityState: '',
+    counselingType: '',
+    sessionMode: '',
+    sessionDate: '',
+    timeSlot: '',
+    currentClass: '',
+    intendedCourse: '',
+    questions: '',
+    paymentMethod: '',
+    agreeTerms: false,
+    understandNonRefundable: false,
+  });
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const validateStep = () => {
+    switch (step) {
+      case 1:
+        return formData.fullName && formData.email && formData.mobileNumber && formData.ageDob && formData.cityState;
+      case 2:
+        return formData.counselingType;
+      case 3:
+        return formData.sessionMode;
+      case 4:
+        return formData.sessionDate && formData.timeSlot;
+      case 5:
+        return formData.currentClass && formData.intendedCourse && formData.questions;
+      case 6:
+        return formData.paymentMethod;
+      case 7:
+        return formData.agreeTerms && formData.understandNonRefundable;
+      default:
+        return true;
+    }
+  };
+
+  const handleNext = () => {
+    if (validateStep()) {
+      setStep(step + 1);
+    } else {
+      alert('Please fill all required fields before proceeding.');
+    }
+  };
+
+  const handleBook = () => {
+    if (validateStep()) {
+      setStep(8);
+    } else {
+      alert('Please fill all required fields before booking.');
+    }
+  };
 
   return (
-    <section className="max-w-4xl mx-auto py-16 px-6">
+    <section id="booking" className="max-w-4xl mx-auto py-16 px-6">
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -368,22 +440,34 @@ function BookingFlow() {
             </h3>
             <input
               placeholder="Full Name"
+              value={formData.fullName}
+              onChange={(e) => handleChange('fullName', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
             <input
               placeholder="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={(e) => handleChange('email', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
             <input
               placeholder="Mobile Number"
+              type="tel"
+              value={formData.mobileNumber}
+              onChange={(e) => handleChange('mobileNumber', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
             <input
               placeholder="Age / Date of Birth"
+              value={formData.ageDob}
+              onChange={(e) => handleChange('ageDob', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
             <input
               placeholder="City & State"
+              value={formData.cityState}
+              onChange={(e) => handleChange('cityState', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
           </div>
@@ -394,10 +478,15 @@ function BookingFlow() {
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               2. Counseling Type
             </h3>
-            <select className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400">
-              <option>Career Counseling</option>
-              <option>Education Counseling</option>
-              <option>Study Abroad Counseling</option>
+            <select 
+              value={formData.counselingType}
+              onChange={(e) => handleChange('counselingType', e.target.value)}
+              className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="">Select Counseling Type</option>
+              <option value="Career Counseling">Career Counseling</option>
+              <option value="Education Counseling">Education Counseling</option>
+              <option value="Study Abroad Counseling">Study Abroad Counseling</option>
             </select>
           </div>
         )}
@@ -407,10 +496,15 @@ function BookingFlow() {
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               3. Preferred Session Mode
             </h3>
-            <select className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400">
-              <option>Video Call (Zoom/Google Meet)</option>
-              <option>Audio Call</option>
-              <option>Chat Counseling</option>
+            <select 
+              value={formData.sessionMode}
+              onChange={(e) => handleChange('sessionMode', e.target.value)}
+              className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="">Select Session Mode</option>
+              <option value="Video Call (Zoom/Google Meet)">Video Call (Zoom/Google Meet)</option>
+              <option value="Audio Call">Audio Call</option>
+              <option value="Chat Counseling">Chat Counseling</option>
             </select>
           </div>
         )}
@@ -422,12 +516,19 @@ function BookingFlow() {
             </h3>
             <input
               type="date"
+              value={formData.sessionDate}
+              onChange={(e) => handleChange('sessionDate', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
-            <select className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400">
-              <option>Morning (10–1)</option>
-              <option>Afternoon (2–5)</option>
-              <option>Evening (6–9)</option>
+            <select 
+              value={formData.timeSlot}
+              onChange={(e) => handleChange('timeSlot', e.target.value)}
+              className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="">Select Time Slot</option>
+              <option value="Morning (10–1)">Morning (10–1)</option>
+              <option value="Afternoon (2–5)">Afternoon (2–5)</option>
+              <option value="Evening (6–9)">Evening (6–9)</option>
             </select>
           </div>
         )}
@@ -437,18 +538,28 @@ function BookingFlow() {
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               5. Additional Information
             </h3>
-            <select className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400">
-              <option>Class 10</option>
-              <option>Class 12</option>
-              <option>UG</option>
-              <option>PG</option>
+            <select 
+              value={formData.currentClass}
+              onChange={(e) => handleChange('currentClass', e.target.value)}
+              className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="">Select Current Stage</option>
+              <option value="Class 10">Class 10</option>
+              <option value="Class 12">Class 12</option>
+              <option value="UG">UG</option>
+              <option value="PG">PG</option>
             </select>
             <input
               placeholder="Intended Course/Field"
+              value={formData.intendedCourse}
+              onChange={(e) => handleChange('intendedCourse', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
             <textarea
               placeholder="Questions / Concerns"
+              rows={3}
+              value={formData.questions}
+              onChange={(e) => handleChange('questions', e.target.value)}
               className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
             />
           </div>
@@ -462,10 +573,15 @@ function BookingFlow() {
             <p className="mb-3 font-medium text-gray-900">
               First Session Fee: ₹49 only
             </p>
-            <select className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400">
-              <option>UPI</option>
-              <option>Debit / Credit Card</option>
-              <option>Net Banking</option>
+            <select 
+              value={formData.paymentMethod}
+              onChange={(e) => handleChange('paymentMethod', e.target.value)}
+              className="w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="">Select Payment Method</option>
+              <option value="UPI">UPI</option>
+              <option value="Debit / Credit Card">Debit / Credit Card</option>
+              <option value="Net Banking">Net Banking</option>
             </select>
           </div>
         )}
@@ -478,6 +594,8 @@ function BookingFlow() {
             <label className="flex items-center mb-2 text-gray-900">
               <input
                 type="checkbox"
+                checked={formData.agreeTerms}
+                onChange={(e) => handleChange('agreeTerms', e.target.checked)}
                 className="mr-2 accent-yellow-400"
               />{" "}
               I agree to the Terms & Conditions
@@ -485,6 +603,8 @@ function BookingFlow() {
             <label className="flex items-center mb-2 text-gray-900">
               <input
                 type="checkbox"
+                checked={formData.understandNonRefundable}
+                onChange={(e) => handleChange('understandNonRefundable', e.target.checked)}
                 className="mr-2 accent-yellow-400"
               />{" "}
               I understand the fee is non-refundable if missed
@@ -516,7 +636,7 @@ function BookingFlow() {
           )}
           {step < 7 && (
             <button
-              onClick={() => setStep(step + 1)}
+              onClick={handleNext}
               className="ml-auto px-6 py-2 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow hover:bg-yellow-500 transition"
             >
               Next
@@ -524,7 +644,7 @@ function BookingFlow() {
           )}
           {step === 7 && (
             <button
-              onClick={() => setStep(8)}
+              onClick={handleBook}
               className="ml-auto px-6 py-2 bg-yellow-500 text-gray-900 font-semibold rounded-lg shadow hover:bg-yellow-600 transition"
             >
               Book My Session – Pay ₹49

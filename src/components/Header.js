@@ -114,7 +114,7 @@ export default function Header() {
               </button>
 
               <a
-                href="#explore"
+                href="explorecollegespage"
                 className="inline-flex items-center justify-center h-11 sm:h-12 px-5 sm:px-6 rounded-lg
                            border border-yellow-400/70 text-yellow-500 hover:bg-gray-300
                            transition-colors"

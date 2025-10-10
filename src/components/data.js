@@ -108,7 +108,7 @@ export const infodata = [
         id:6,
         heading: "Education News And Exam Updates",
         para: "Just one single click will lead you to the page that consists of all the latest news and exam updates",
-        link:""
+        link:"newsfeed"
     },
     
 ]
