@@ -104,7 +104,7 @@ export default function Header() {
             <div className="mt-6 sm:mt-8 flex flex-col xs:flex-row sm:flex-row gap-3 sm:gap-4 animate-float">
               <button
                 type="button"
-                onClick={() => navigate("/contact")}
+                onClick={() => navigate("/contactus")}
                 className="inline-flex items-center justify-center h-11 sm:h-12 px-5 sm:px-6 rounded-lg
                            bg-yellow-500 hover:bg-gray-700 active:bg-gray-600
                            text-black font-semibold shadow-[0_6px_20px_-5px_rgba(20,184,166,0.6)]
